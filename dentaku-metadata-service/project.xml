@@ -56,11 +56,6 @@
 
         <dependency>
             <groupId>dentaku</groupId>
-            <artifactId>dentaku-event-cartridge</artifactId>
-            <version>0.8</version>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
             <artifactId>gentaku</artifactId>
             <version>0.8</version>
         </dependency>
