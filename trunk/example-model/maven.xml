@@ -60,7 +60,7 @@
         <path id="maven.compile.src.set">
             <pathelement location="src/java"/>
             <pathelement location="target/src"/>
-            <pathelement location="target/xdoclet/hibernatedoclet"/>
+<!--            <pathelement location="target/xdoclet/hibernatedoclet"/>-->
         </path>
     </preGoal>
 </project>
