@@ -25,6 +25,11 @@
         </dependency>
         <dependency>
             <groupId>dentaku</groupId>
+            <artifactId>dentaku-persistence-service</artifactId>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>dentaku</groupId>
             <artifactId>dentaku-foundation</artifactId>
             <version>${pom.currentVersion}</version>
             <type>ejb</type>

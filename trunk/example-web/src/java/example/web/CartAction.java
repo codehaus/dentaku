@@ -1,6 +1,6 @@
 /*
  * CartAction.java
- * Copyright 2002-2004 Bill2, Inc.
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dentaku.foundation.connector.DirectConnector;
 import org.dentaku.services.container.ContainerManager;
-import org.dentaku.services.persistence.PersistenceManager;
+import org.dentaku.services.persistence.PersistenceManagerStorage;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,7 +80,7 @@ public class CartAction extends DispatchAction {
 
         if (item == null) {
             // create and populate a new line item entity
-            PersistenceManager pm = (PersistenceManager) ContainerManager.getInstance().getContainer().lookup(PersistenceManager.ROLE);
+            PersistenceManagerStorage pm = (PersistenceManagerStorage) ContainerManager.getInstance().getContainer().lookup(PersistenceManagerStorage.ROLE);
             SKUFactory skuFactory = (SKUFactory) pm.getPersistenceFactory(SKUFactory.class.getName());
             SKU sku = (SKU) skuFactory.findByPrimaryKey(skuID);
             pm.releaseSession();
