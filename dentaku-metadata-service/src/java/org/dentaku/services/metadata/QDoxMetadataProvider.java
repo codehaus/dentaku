@@ -246,7 +246,7 @@ public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDo
             addStereotype(stereotype, binaryBuilder);
         }
 
-        for (Iterator it = ((ModelElementImpl) classifier).getTaggedValues().iterator(); it.hasNext();) {
+        for (Iterator it = ((ModelElementImpl) classifier).getTaggedValue().iterator(); it.hasNext();) {
             TaggedValueImpl taggedValue = (TaggedValueImpl) it.next();
             if (taggedValue.getName().startsWith("@")) {
                 binaryBuilder.addJavaDocTag(new TagDef(taggedValue.getName().substring(1), taggedValue.getValue()));
