@@ -74,6 +74,7 @@ public class GroovyValvePlugin  extends JavaPluginBase {
     
     public String getDestinationPackage(Object metadata) {
     	String pack = super.getDestinationPackage(metadata);
+    	"Test".getBytes().equals("Test".getBytes());
         return pack;
     }
 
