@@ -9,6 +9,12 @@
         <component>
             <role>org.dentaku.services.persistence.PersistenceManagerStorage</role>
             <implementation>org.dentaku.services.persistence.synthetic.SyntheticPersistenceManagerStorage</implementation>
+            <requirements>
+                <requirement>
+                    <role>org.dentaku.services.persistence.PersistenceFactory</role>
+                    <field-name>factories</field-name>
+                </requirement>
+            </requirements>
         </component>
     </components>
 </plexus>

@@ -6,11 +6,14 @@
 
     <goal name="dentaku:test-gentaku">
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
-        <gentaku model="${maven.src.dir}/test/uml/model.xml.zip">
-            <component classname="org.dentaku.gentaku.cartridge.entity.EntityBasePlugin" destdir="${maven.build.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.entity.EntityPlugin" destdir="${maven.src.dir}/java"/>
-            <component classname="org.dentaku.gentaku.cartridge.entity.EntityFactoryPlugin" destdir="${maven.build.src}"/>
+        <gentaku model="${maven.src.dir}/test/uml/TestModel.xml.zip">
+            <component classname="org.dentaku.gentaku.cartridge.entity.EntityBasePlugin" destdir="${dentaku.test.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.EntityFactoryPlugin" destdir="${dentaku.test.src}"/>
         </gentaku>
+        <path id="maven.test.compile.src.set">
+            <pathelement location="src/test/java"/>
+            <pathelement location="${dentaku.test.src}"/>
+        </path>
     </goal>
 
     <preGoal name="test:compile">
