@@ -26,40 +26,35 @@ import java.util.Vector;
  * Extends the UMLDefaultHelper with a set of operations that are useful
  * for exploring the static parts of UML v1.4 based object models.
  *
- *@author    Anthony Mowers
+ * @author Anthony Mowers
  */
 public class UMLStaticHelper extends UMLDefaultHelper {
 
     /**
-    * Returns the name of a model element fully qualified by the
-    * name of the package that contains it. If the model element
-    * is a primitive type it will return the primitive type itself.
-    *
-    *@param object model element
-    *@return fully qualifed name
-    */
+     * Returns the name of a model element fully qualified by the
+     * name of the package that contains it. If the model element
+     * is a primitive type it will return the primitive type itself.
+     *
+     * @param object model element
+     * @return fully qualifed name
+     */
     public String getFullyQualifiedName(Object object) {
         if ((object == null) || !(object instanceof ModelElement)) {
             return null;
         }
-
         ModelElement modelElement = (ModelElement) object;
-
         String fullName = modelElement.getName();
-
         if (isPrimitiveType(fullName)) {
             return fullName;
         }
-
         String packageName = getPackageName(modelElement);
         fullName =
-            "".equals(packageName) ? fullName : packageName + "." + fullName;
-
+                "".equals(packageName) ? fullName : packageName + "." + fullName;
         return fullName;
     }
 
     private boolean isPrimitiveType(String name) {
-        return (   "void".equals(name)
+        return ("void".equals(name)
                 || "char".equals(name)
                 || "byte".equals(name)
                 || "short".equals(name)
@@ -67,7 +62,7 @@ public class UMLStaticHelper extends UMLDefaultHelper {
                 || "long".equals(name)
                 || "float".equals(name)
                 || "double".equals(name)
-                || "boolean".equals(name) );
+                || "boolean".equals(name));
     }
 
     /**
@@ -75,15 +70,12 @@ public class UMLStaticHelper extends UMLDefaultHelper {
      *
      * @param object model element
      * @return Collection of org.omg.uml.foundation.core.TaggedValue
-     *
      */
     public Collection getTaggedValues(Object object) {
         if ((object == null) || !(object instanceof ModelElement)) {
             return Collections.EMPTY_LIST;
         }
-
         ModelElement modelElement = (ModelElement) object;
-
         return modelElement.getTaggedValue();
     }
 
@@ -92,15 +84,13 @@ public class UMLStaticHelper extends UMLDefaultHelper {
      * name
      *
      * @param taggedValues of taggedValues
-     * @param tagName name of tag for which to search
-     *
+     * @param tagName      name of tag for which to search
      * @return value of tag, null if tag not found
      */
     public String findTagValue(Collection taggedValues, String tagName) {
         for (Iterator i = taggedValues.iterator(); i.hasNext();) {
             TaggedValue taggedValue = (TaggedValue) i.next();
             String tgvName = getName(taggedValue);
-
             if (tagName.equals(tgvName)) {
                 Iterator it = taggedValue.getDataValue().iterator();
                 if (it.hasNext()) {
@@ -109,7 +99,6 @@ public class UMLStaticHelper extends UMLDefaultHelper {
                 return null;
             }
         }
-
         return null;
     }
 
@@ -118,9 +107,8 @@ public class UMLStaticHelper extends UMLDefaultHelper {
      * the specified model element.
      *
      * @param modelElement model element
-     * @param tagName  name of the tag
+     * @param tagName      name of the tag
      * @return String value of tag, <b>null</b> if tag not found
-     *
      */
     public String findTagValue(ModelElement modelElement, String tagName) {
         return findTagValue(getTaggedValues(modelElement), tagName);
@@ -129,101 +117,88 @@ public class UMLStaticHelper extends UMLDefaultHelper {
     /**
      * Returns Association information from the perspective of
      * a particular end of the association.
-     *
+     * <p/>
      * <p>The returned object can answers information about
      * whether the assocation is one2many, many2one, ...
      * </p>
      *
      * @param object assocation end
      * @return DirectionalAssociationEnd directional association data
-     *
      */
     public DirectionalAssociationEnd getAssociationData(Object object) {
         if ((object == null) || !(object instanceof AssociationEnd)) {
             return null;
         }
-
         AssociationEnd ae = (AssociationEnd) object;
-
         return new DirectionalAssociationEnd(this, ae);
     }
 
     /**
      * Searches the given class feature (operation or attribute) for
      * the specified tag.
-     *
+     * <p/>
      * <p>If the follow boolean is set to true then the search will
      * continue from the class feature to the class itself and then
      * up the class hiearchy.</p>
      *
      * @param feature attribute or operation object
      * @param tagName name of the tag to search for
-     * @param follow <b>true</b> if search should follow inheritance
-     * hierarchy
+     * @param follow  <b>true</b> if search should follow inheritance
+     *                hierarchy
      * @return String value of tag, <b>null</b> if tag not found
-     *
      */
-    public String findTagValue(
-        StructuralFeature feature,
-        String tagName,
-        boolean follow) {
+    public String findTagValue(StructuralFeature feature,
+                               String tagName,
+                               boolean follow) {
         if (feature == null)
             return null;
-
         String value = findTagValue(getTaggedValues(feature), tagName);
-        for(ModelElement element = feature.getType(); value == null && element != null; element = getGeneralization(element)) {
+        for (ModelElement element = feature.getType(); value == null && element != null; element = getGeneralization(element)) {
             value = findTagValue(element, tagName);
         }
-
         return value;
     }
 
     /**
      * Returns the collection of dependencies for a given model element.
-     *
+     * <p/>
      * <p>Abstraction/Interface implements dependencies will not be
      * included in this collection.</b>
      *
-     *@param  object  model element
-     *@return Collection of org.omg.uml.foundation.core.Dependency
+     * @param object model element
+     * @return Collection of org.omg.uml.foundation.core.Dependency
      */
     public Collection getDependencies(Object object) {
         if ((object == null) || !(object instanceof ModelElement)) {
             return Collections.EMPTY_LIST;
         }
-
         ModelElement modelElement = (ModelElement) object;
-
         Collection clientDependencies =
-            model.getCore().getAClientClientDependency().getClientDependency(
-                modelElement);
-
+                model.getCore().getAClientClientDependency().getClientDependency(modelElement);
         return new FilteredCollection(clientDependencies) {
             protected boolean accept(Object object) {
                 return (object instanceof Dependency)
-                    && !(object instanceof Abstraction);
+                        && !(object instanceof Abstraction);
             }
         };
     }
 
     /**
-     *  Gets the attributes of the specified Classifier object.
+     * Gets the attributes of the specified Classifier object.
      *
-     *@param  object  Classifier object
-     *@return  Collection of org.omg.uml.foundation.core.Attribute
+     * @param object Classifier object
+     * @return Collection of org.omg.uml.foundation.core.Attribute
      */
     public Collection getAttributes(Object object) {
         if ((object == null) || !(object instanceof Classifier)) {
             return Collections.EMPTY_LIST;
         }
-
         Classifier classifier = (Classifier) object;
         Collection features = new FilteredCollection(classifier.getFeature()) {
             protected boolean accept(Object object) {
                 return isAttribute(object);
             }
         };
-
         return features;
     }
 
@@ -252,21 +227,19 @@ public class UMLStaticHelper extends UMLDefaultHelper {
     /**
      * Gets the operations of the specified Classifier object.
      *
-     *@param  object  Classifier object
-     *@return  Collection of org.omg.uml.foundation.core.Operation
+     * @param object Classifier object
+     * @return Collection of org.omg.uml.foundation.core.Operation
      */
     public Collection getOperations(Object object) {
         if ((object == null) || !(object instanceof Classifier)) {
             return Collections.EMPTY_LIST;
         }
-
         Classifier classifier = (Classifier) object;
         Collection features = new FilteredCollection(classifier.getFeature()) {
             protected boolean accept(Object object) {
                 return object instanceof Operation;
             }
         };
-
         return features;
     }
 
@@ -274,17 +247,15 @@ public class UMLStaticHelper extends UMLDefaultHelper {
      * Gets the assocation ends that are attached to the specified
      * Classifier object.
      *
-     *@param  object  Classifier object
-     *@return  Collection of org.omg.uml.foundation.core.AssociationEnd
+     * @param object Classifier object
+     * @return Collection of org.omg.uml.foundation.core.AssociationEnd
      */
     public Collection getAssociationEnds(Object object) {
         if ((object == null) || !(object instanceof Classifier)) {
             return Collections.EMPTY_LIST;
         }
-
         Classifier classifier = (Classifier) object;
-        return model.getCore().getAParticipantAssociation().getAssociation(
-            classifier);
+        return model.getCore().getAParticipantAssociation().getAssociation(classifier);
     }
 
     /**
@@ -298,15 +269,12 @@ public class UMLStaticHelper extends UMLDefaultHelper {
         if ((object == null) || !(object instanceof GeneralizableElement)) {
             return null;
         }
-
         GeneralizableElement element = (GeneralizableElement) object;
         Iterator i = element.getGeneralization().iterator();
-           
         if (i.hasNext()) {
             Generalization generalization = (Generalization) i.next();
             return generalization.getParent();
         }
-
         return null;
     }
 
@@ -314,20 +282,16 @@ public class UMLStaticHelper extends UMLDefaultHelper {
      * Returns the collection of interfaces implemented by the given
      * Classifier object.
      *
-     * @param object  Class
+     * @param object Class
      * @return Collection of Interfaces
      */
     public Collection getAbstractions(Object object) {
         if ((object == null) || !(object instanceof Classifier)) {
             return Collections.EMPTY_LIST;
         }
-
         ModelElement modelElement = (ModelElement) object;
-
         Collection clientDependencies =
-            model.getCore().getAClientClientDependency().getClientDependency(
-                modelElement);
-
+                model.getCore().getAClientClientDependency().getClientDependency(modelElement);
         return new FilteredCollection(clientDependencies) {
             public boolean add(Object object) {
                 Abstraction abstraction = (Abstraction) object;
@@ -345,26 +309,25 @@ public class UMLStaticHelper extends UMLDefaultHelper {
      * elements of type <code>org.omg.uml.foundation.core.UMLClass</code>.
      *
      * @return a collection containing only
-     *  <code>org.omg.uml.foundation.core.UMLClass</code> instances
+     *         <code>org.omg.uml.foundation.core.UMLClass</code> instances
      */
-    public Collection getAllClasses()
-    {
+    public Collection getAllClasses() {
         return model.getCore().getUmlClass().refAllOfType();
     }
 
     /**
-     *  Filters a collection of objects so that the collection
+     * Filters a collection of objects so that the collection
      * contains only those objects that pass the 'accept' test.
-     *
+     * <p/>
      * <p>It is useful for filtering the results of a query.</p>
      *
-     *@author    Anthony Mowers
+     * @author Anthony Mowers
      */
     private static abstract class FilteredCollection extends Vector {
         /**
-         *  Constructor for the FilterCollection object
+         * Constructor for the FilterCollection object
          *
-         *@param  c  Description of the Parameter
+         * @param c Description of the Parameter
          */
         public FilteredCollection(Collection c) {
             for (Iterator i = c.iterator(); i.hasNext();) {
@@ -376,10 +339,10 @@ public class UMLStaticHelper extends UMLDefaultHelper {
         }
 
         /**
-         *  Description of the Method
+         * Description of the Method
          *
-         *@param  object  Description of the Parameter
-         *@return         Description of the Return Value
+         * @param object Description of the Parameter
+         * @return Description of the Return Value
          */
         protected abstract boolean accept(Object object);
     }

@@ -74,7 +74,6 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #set ( $attcolumnname = $tgv.value )
 #end
 #end
-    protected $atttypename ${att.name};
 
    /**
 #generateDocumentation ($att "    ")
@@ -82,6 +81,8 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #set ($attjdbctype   = $transform.findAttributeJDBCType($att))
 #set ($attsqltype    = $transform.findAttributeSQLType($att))
 #if ($transform.getStereotype($att.id) == "PrimaryKey")
+#set ($attname =  "id")
+#set ($atttypename = "java.lang.Object")
 #foreach ( $tgv in $att.taggedValues )
 #if ($tgv.tag == "gentaku.sequence.name")
     * @hibernate.generator-param name="sequence" value="$tgv.value"
@@ -89,20 +90,22 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #end
     * @hibernate.id generator-class="native"
 #else
+#set ($attname =  ${att.name})
     * @hibernate.property
 #end
     *     column="$attcolumnname"
     * @hibernate.column name="$attcolumnname" sql-type="$attsqltype"
     */
-    public $atttypename get${str.upperCaseFirstLetter(${att.name})}()
+    public $atttypename get${str.upperCaseFirstLetter(${attname})}()
     {
-        return this.${att.name};
+        return this.${attname};
     }
 
-    public void set${str.upperCaseFirstLetter(${att.name})}(${atttypename} newValue)
+    public void set${str.upperCaseFirstLetter(${attname})}(${atttypename} newValue)
     {
-        this.${att.name} = newValue;
+        this.${attname} = newValue;
     }
+    protected $atttypename ${attname};
 
 
 #end

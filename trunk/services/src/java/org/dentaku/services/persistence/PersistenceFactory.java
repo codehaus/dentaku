@@ -23,7 +23,7 @@ public interface PersistenceFactory {
 
     ModelEntity create() throws PersistenceException;
     ModelEntity create(Object source) throws PersistenceException;
-    ModelEntity findByPrimaryKey(Long pk) throws PersistenceException;
+    ModelEntity findByPrimaryKey(java.io.Serializable pk) throws PersistenceException;
 
     void setManager(PersistenceManager manager);
 }

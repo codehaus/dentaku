@@ -35,7 +35,7 @@ public class HibernatePersistenceManager extends AbstractPersistenceManager {
             if (object.getId() != null) {
                 sessionProvider.getSession().saveOrUpdate(object);
             } else {
-                Long pk = (Long) sessionProvider.getSession().save(object);
+                Object pk = sessionProvider.getSession().save(object);
                 object.setId(pk);
             }
         } catch (HibernateException e) {
