@@ -44,13 +44,13 @@ public class VisitorTest extends MetadataTestBase {
             int state = 1;
             public void visit(Namespace element, Object context) throws VisitorException {
                 if (state != 3) {
-                    fail("visit(UMLClass...) was not called third");
+                    fail("visit(Namespace...) was not called third");
                 }
             }
 
             public void visit(GeneralizableElement element, Object context) throws VisitorException {
                 if (state != 2) {
-                    fail("visit(UMLClass...) was not called second");
+                    fail("visit(GeneralizableElement...) was not called second");
                 }
                 state = 3;
             }
