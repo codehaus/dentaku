@@ -74,9 +74,6 @@ public class PullToolPlugin extends JavaPluginBase {
 		}
 		if(metadata!=null) {
 	        m.put(SummitHelper.SCRN_NAME, ((TaggedValueImpl)metadata.getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
-	        m.put("qualifiedScreenName", 
-	        		metadataProvider.getOriginalPackageName(metadata)
-	        		+ ((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
     	}
     }
     public String getDestinationPackage(Object metadata) {

@@ -2,17 +2,26 @@
    
 #macro( fetchselector $classView  )
 		#set ( $arraycount = 0 )
-		String filter = new String(); 
+
+	    String filter = new String(); 
 		#foreach($selectorname in ${classView.selectorNames})
-			#set ( $type = ${classView.selectorTypes}.get($arraycount) )
-			#set ( $selectorname = $Q$selectorname$Q )
-			#if($arraycount == 0)
-			filter = $Q${selectorname} == aData.getParameters().getString(${selectorname})$Q );
-			#else
-			filter += $Q && ${selectorname} == aData.getParameters().getString(${selectorname})$Q );
+			#set ( $typecount = 0 )
+			#foreach($typeentry in ${classView.selectorTypes})
+				#if($typecount == $arraycount)
+					#set ( $type = $typeentry )
+				#end
+				#set ( $typecount = $typecount+1 )
 			#end
-			#set ($arraycount =  $arraycount + 1 )
+			#if($arraycount == 0)
+
+		filter = $Q${selectorname} == aData.getParameters().getString(${selectorname})${Q} );
+			#else
+
+		filter += $Q && ${selectorname} == aData.getParameters().getString(${selectorname})${Q} );
+			#end
+			#set ( $arraycount =  $arraycount + 1 )
 		#end
+
 		Query q = pm.newQuery (${classView.entityclassname}.class, filter);
 		// Have to assume there is only one
 		q.setUnique (true);
@@ -21,21 +30,20 @@
  
 /**
  * $dontedit
- * Be nice to supply a base class and allow user to extend, but most extensions can be 
- * managed by adding valves to pipeline 
+ * Be nice to supply a base class and allow user to extend, 
+ * but most extensions can be managed by adding valves to pipeline 
  */
-package ${qualifiedScreenName}.action;
+package ${metadata.packageName}.action;
 
 #set ( $entitieswithcrud = $SummitHelper.getCrudList() )
-#set ( $viewrefclasses = $rootClassView.getAllDependentClassView() )
+#set ( $viewrefclasses = $rootClassView.getAllDependentClassEntity() )
 
-#set ( $packagename = $qualifiedScreenName )
-package $packagename.actions;
+package ${metadata.packageName}.actions;
 
 import org.codehaus.dentaku.summit.modules.actions.CrudAction;
 import org.codehaus.dentaku.summit.modules.actions.FkException;
-import $packagename.model.*;
-import $packagename.util.*;
+import ${metadata.packageName}.model.*;
+import ${metadata.packageName}.util.*;
 
 import org.codehaus.plexus.summit.parameters.SummitRequestParameterParser;
 import org.codehaus.plexus.summit.rundata.RunData;
@@ -52,11 +60,11 @@ import java.util.*;
  * Insert/Update/Delete instances of domain records
  * then populate the context ready to be rendered by the Velocity page.
  */
-public class Crud${SummitHelper.screenname}} extends CrudAction {
+public class Crud${ScreenName}} extends CrudAction {
 
 	private JDOService jdos;
 
-    public Crud${SummitHelper.screenname}} {
+    public Crud${ScreenName} {
 		jdos = { JDOService ) lookup( JDOService.ROLE );
 	}
 
@@ -66,7 +74,7 @@ public class Crud${SummitHelper.screenname}} extends CrudAction {
      */
     public void doCreate${viewclass.entityclassname}(RunData aData, Context aContext) {
         try {
-            logParameters(aData, $QCrud${viewclass.entityclassname}.create()$Q);
+            logParameters(aData, ${Q}Crud${viewclass.entityclassname}.create()${Q});
 
             ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
 
@@ -77,12 +85,6 @@ public class Crud${SummitHelper.screenname}} extends CrudAction {
             ParameterParser parser = aData.getParameters();
             parser.setProperties(instance);
 
-            if (err.length() != 0) {
-                contextMessage(aContext, err);
-                populateContext(aData, aContext);
-				return;
-            }
-
 			PersistanceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
 			try {
                 tx.begin();       
@@ -97,18 +99,17 @@ public class Crud${SummitHelper.screenname}} extends CrudAction {
                 pm.close();
 			}
             try {
-            #foreach (${parentclass} in ${viewclass.parents})
-                populateContextWith${parentclass.entityclassname}(aData, aContext);
-            #end
-                populateContextWithSelected${viewclass.entityclassname}(instance,
-                    aData, aContext);
+				populateContextWithSelected${viewclass.entityclassname}(instance, aData, aContext);
+#foreach (${parentclass} in ${viewclass.ancestors})
+	            populateContextWith${parentclass.entityclassname}(aData, aContext);
+#end
             } catch (Exception e) {
-                handleException(aContext, $QCrud${viewclass.entityclassname}.doCreate{entityclass.name}()$Q,
-                    $QUnable to populate context with ${viewclass.entityclassname} details$Q, e);
+                handleException(aContext, ${Q}Crud${ScreenName}.doCreate${viewclass.entityclassname}()${Q},
+                    ${Q}Unable to populate context with ${viewclass.entityclassname} details${Q}, e);
             }
         } catch (Exception e) {
-            handleException(aContext, $QCrud${viewclass.entityclassname}.doCreate()$Q,
-                $QUnable to create ${viewclass.entityclassname}$Q, e);
+            handleException(aContext, ${Q}Crud${ScreenName}.doCreate()${Q},
+                ${Q}Unable to create ${viewclass.entityclassname}${Q}, e);
         }
     }
 
@@ -118,7 +119,7 @@ public class Crud${SummitHelper.screenname}} extends CrudAction {
      */
     public void doUpdate${viewclass.entityclassname}(RunData aData, Context aContext) {
         try {
-            logParameters(aData, $Q${viewclass.entityclassname}.update()$Q);
+            logParameters(aData, ${Q}${viewclass.entityclassname}.update()${Q});
 
             ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
             ParameterParser parser = aData.getParameters();
@@ -139,17 +140,17 @@ public class Crud${SummitHelper.screenname}} extends CrudAction {
 			}
 
             try {
-            #foreach (${parentclass} in ${viewclass.parents})
+				populateContextFollowingUpdateWith${viewclass.entityclassname}(instance, aData, aContext);
+#foreach (${parentclass} in ${viewclass.ancestors})
                 populateContextWith${parentclass.entityclassname}(aData, aContext);
-            #end
-                populateContextFollowingUpdateWith${parentclass.entityclassname}(instance, aData, aContext);
-            } catch (Exception e) {
-                handleException(aContext, $QCrud${viewclass.entityclassname}.doUpdate()$Q,
-                    $QUnable to populate context with instance details$Q, e);
+#end
+         } catch (Exception e) {
+                handleException(aContext, ${Q}Crud${ScreenName}.doUpdate${viewclass.entityclassname}()${Q},
+                    ${Q}Unable to populate context with instance details${Q}, e);
             }
         } catch (Exception e) {
-            handleException(aContext, $QCrud${viewclass.entityclassname}.doUpdate()$Q,
-                $QUnable to update instance$Q, e);
+            handleException(aContext, ${Q}Crud${ScreenName}.doUpdate${viewclass.entityclassname}()${Q},
+                ${Q}Unable to update instance${Q}, e);
         }
     }
 
@@ -158,7 +159,7 @@ public class Crud${SummitHelper.screenname}} extends CrudAction {
      */
     public void doDelete${viewclass.entityclassname}(RunData aData, Context aContext) {
         try {
-            logParameters(aData, $QCrud${viewclass.entityclassname}.delete()$Q);
+            logParameters(aData, ${Q}Crud${viewclass.entityclassname}.delete()${Q});
 
             ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
             ParameterParser parser = aData.getParameters();
@@ -179,16 +180,14 @@ public class Crud${SummitHelper.screenname}} extends CrudAction {
 			}
 
             contextMessage(aContext,
-                $QConfirmed deletion of record named \$Q$Q +
-                ${class.displayname} + \$Q$Q);
-            #foreach (${parentclass} in ${viewclass.parents})
-                populateContextWith${parentclass.entityclassname}(aData, aContext);
-            #end
-                populateContextWithSelected${viewclass.entityclassname}(null,
-                    aData, aContext);
-        } catch (Exception e) {
-            handleException(aContext, $QCrudRecord.doDelete()$Q,
-                $QUnable to delete record$Q, e);
+                ${Q}Confirmed deletion of record named ${viewclass.entityclassname}${Q});
+				populateContextWithSelected${viewclass.entityclassname}(null, aData, aContext);
+#foreach (${parentclass} in ${viewclass.ancestors})
+				populateContextWith${parentclass.entityclassname}(aData, aContext);
+#end
+	    } catch (Exception e) {
+            handleException(aContext, ${Q}Crud${ScreenName}.doDelete${viewclass.entityclassname}()${Q},
+                ${Q}Unable to delete record${Q}, e);
             populateContext(aData, aContext);
         }
     }
@@ -202,9 +201,9 @@ public class Crud${SummitHelper.screenname}} extends CrudAction {
      * the record. The template then renders the page with the objects fields.
      */
     public void doPerform(RunData aData, Context aContext) {
-        logParameters(aData, $QCrud${SummitHelper.getScreenName}.doPerform()$Q);
+        logParameters(aData, ${Q}Crud${ScreenName}.doPerform()${Q});
 
-        String selectionType = aData.getParameters().getString($QselectionType$Q);
+        String selectionType = aData.getParameters().getString(${Q}selectionType${Q});
 
         /*
            This method is invoked when the user modifies a drop-down list.
@@ -212,23 +211,23 @@ public class Crud${SummitHelper.screenname}} extends CrudAction {
            (e.g. like doSubmit_blah), so instead the javascript sets a
            hidden parameter to identify which drop-down was used.
          */
-        if (selectionType.equals($Qselect${rootClassView.entityclassname}$Q)) {
-            // The user has updated the rootselectable list
+        if (selectionType.equals(${Q}select${rootClassView.entityclassname}${Q})) {
+            // The user has updated the ${rootClassView.entityclassname} list
             // In this case we only populate the context
             // with the selected rootselectable type, and effectively
             // remove all other selections from the context
             populateContextWith${rootClassView.entityclassname}(aData, aContext);
         } 
-        #foreach($viewrefclass in $viewrefclasses)
-        else if (selectionType.equals($Qselect${viewrefclass.entityclassname}$Q)) {
-            // An event has originated from the ${viewrefclass.entityclassname} drop-down
+#foreach($viewrefclass1 in $viewrefclasses)
+		else if (selectionType.equals(${Q}selected${viewrefclass1.entityclassname}${Q})) {
+            // An event has originated from the ${viewrefclass1.entityclassname} drop-down
             // In this case, we want to populate the context with
-            // the selection down to the ${viewrefclass.entityclassname} lists,
+            // the selection down to the ${viewrefclass1.entityclassname} lists,
             // but not beyond, since these will be invalid now
-            // that a new ${viewrefclass.entityclassname} has been chosen.
-            populateContextWith${viewrefclass.entityclassname}(aData, aContext);
+            // that a new ${viewrefclass1.entityclassname} has been chosen.
+            populateContextWith${viewrefclass1.entityclassname}(aData, aContext);
         } 
-        #end
+#end
     }
     /**
      * The selector attribute should always reside in the context so that drop-down
@@ -237,57 +236,62 @@ public class Crud${SummitHelper.screenname}} extends CrudAction {
     protected void populateContextWith${rootClassView.entityclassname}(RunData aData, Context aContext) {
 		#fetchselector($rootClassView)
         if (aObject != null) {
-            aContext.put($Qselected${rootClassView.entityclassname}$Q, aObject);
-            ${rootClassView}.setSelectedObject(aObject);
+            aContext.put(${Q}selected${rootClassView.entityclassname}${Q}, aObject);
+            ${rootClassView.entityclassname}.setSelectedObject(aObject);
         }
     }
 	protected void populateContextFollowingUpdateWith${rootClassView.entityclassname}(
 		${rootClassView.entityclassname}instance, RunData aData, Context aContext) {
 		// Updated root object and currently selected child objects put into RunData
         if (instance != null) {
-            aContext.put($Qselected${rootClassView.entityclassname}$Q, instance);
-            ${rootClassView}.setSelectedObject(instance);
+            aContext.put(${Q}selected${rootClassView.entityclassname}${Q}, instance);
+            ${rootClassView.entityclassname}.setSelectedObject(instance);
         }
-        #set ( ${childclasses} = ${rootClassView}.children )
-        #foreach ( ${childclass} in ${childclasses} )
+#set ( ${childclasses} = ${rootClassView.children} )
+#foreach ( ${childclass} in ${childclasses} )
 		${childclass.entityclassname} instance = new ${childclass.entityclassname}();
 		ParameterParser parser = aData.getParameters();
 		parser.setProperties(instance);
         populateContextWithSelected${childclass.entityclassname}(instance, aData, aContext);
-        #end
+#end
+
 	}
 
-#foreach(${viewrefclass} in ${viewrefclasses})
+#foreach($viewrefclass2 in $viewrefclasses)
     /**
      * The selector attribute should always reside in the context so that drop-down
      * lists can be populated by a pull tool
      */
-    protected void populateContextWith${viewrefclass.entityclassname}(RunData aData, Context aContext) {
-		#fetchselector($viewrefclass)
+    protected void populateContextWith${viewrefclass2.entityclassname}(RunData aData, Context aContext) {
+		#fetchselector($viewrefclass2)
         if (aObject != null) {
-            aContext.put($Qselected${viewrefclass.entityclassname}$Q, aObject);
-            ${viewrefclass}.setSelectedObject(aObject);
+            aContext.put(${Q}selected${viewrefclass2.entityclassname}${Q}, aObject);
+            //${viewrefclass2.entityclassname}.setSelectedObject(aObject);
         }
     }
-    protected void populateContextWithSelected${viewrefclass.entityclassname}(${viewrefclass.entityclassname} instance, RunData aData, Context aContext) {
+    protected void populateContextWithSelected${viewrefclass2.entityclassname}(${viewrefclass2.entityclassname} instance, RunData aData, Context aContext) {
         if (instance != null) {
-            aContext.put($Qselected${viewrefclass.entityclassname}$Q, instance);
-            ${viewrefclass}.setSelectedObject(instance);
+            aContext.put(${Q}selected${viewrefclass2.entityclassname}${Q}, instance);
+            //${viewrefclass2.entityclassname}.setSelectedObject(instance);
         }
     }
 #end
 
     /**
      * Normally used for recovering the screen values after an exception
-	 * pays no attention to current context. Will be improved by 
-	 * returning objects currently in context with the error message
+	 * pays no attention to current context.
+	 * Returns objects currently in context along with the error message
      */
     protected void populateContext(RunData aData, Context aContext) {
         // This could be done with javascript, but stick with the convention
-        #foreach (${parentclass} in ${parentclasses})
-            populateContextWith${parentclass.entityclassname}(aData, aContext);
-        #end
-            populateContextWithSelected${rootClassView.entityclassname}(null,
-                aData, aContext);
+		${rootClassView.entityclassname} instance = new ${rootClassView.entityclassname}();
+		ParameterParser parser = aData.getParameters();
+		parser.setProperties(instance);
+        populateContextWithSelected${rootClassView.entityclassname}(instance, aData, aContext);
+#foreach ($viewrefclass3 in $viewrefclasses)
+		${viewrefclass3.entityclassname} instance = new ${viewrefclass3.entityclassname}();
+		parser.setProperties(instance);
+        populateContextWith${viewrefclass3.entityclassname}(instance, aData, aContext);
+#end
     }
 }

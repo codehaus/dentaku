@@ -2,173 +2,216 @@
 #set( $D = '$' )
 #set( $P = '#' )
 #set( $N = '!' )
-
-#macro ( $setwidget $entry $viewentity $listOfObjects $key $displayname)
-	    #if ($entry.getSterotype() == "Singleline" )
-    		$PTextWidget ( $colspan $Q${entry.attributename}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
-        #elseif ($entry.getSterotype() == "Dropdown" )
-    		$PDropdown ( $colspan $Q${entry.attributename}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
-        #elseif ($entry.getSterotype() == "ViewSelector" )
-    		$PViewSelector ( $colspan $Q${viewentity}$Q $Q$key$Q $Q$D$listOfObjects$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
-        #elseif ($entry.getSterotype() == "ViewSelectorName" )
-			#set ( $keyFields = $viewentity.getKeyFields() )
-    		$PViewSelectorName ( $colspan $Q${viewentity}$Q $Q$displayname$Q $Q$D$listOfObjects$Q $Q$D$Nselected${viewentity.entityclassname}$Q $Q$keyFields$Q)
-        #elseif ($entry.getSterotype() == "Dropdown" )
-    		$PViewList ( $colspan $Q${entry.attributename}$Q $Q$Dlist${viewentity.entityclassname}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
-        #elseif ($entry.getSterotype() == "Radiobutton" )
-    		$PRadiobutton ( $colspan $Q${entry.attributename}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
-        #elseif ($entry.getSterotype() == "Checkbox" )
-    		$PCheckboxWidget ( $colspan $Q${entry.attributename}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
-        #elseif ($entry.getSterotype() == "Multiline" )
-    		$PTextAreaWidget ( $colspan  $Q${entry.attributename}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q $Q50$Q)
-		#end
+#set( $C = ']' )
+#if(!$separator) 
+	#set ( $separator = '|' )
 #end
-
-#macro  ( $tablelayout $viewClass $listOfObjects)
-    #set ( $endOfRow=false )
-    #set ( $startOfRow=true )
-    #set ( $defaultColSpan=$viewClass.getColumncount() )
-    #set ( $currentColSpan=0 )
-	#foreach( $entry in $viewClass.attributes )
-		$colspan = $entry.getColspan()
-		$currentColSpan=$currentColSpan+$colspan+1
-	
-		#if($currentColSpan>$defaultColSpan)
-			$diffSpan=$currentColSpan-$defaultColSpan
-		<td colspan="$diffSpan"></td>
-		</tr>
-			#set ( $startOfRow=true )
-			#set ( $currentColSpan=0 )
-		#end
-		#if($startOfRow)
-	<tr>
-			#set ( $startOfRow=false )	
-		#end
-	$PLabelCell ($Q${entry.attributename}$Q)
-	#setwidget(${entry} ${viewClass} ${listOfObjects} ${key} ${displayname})
-		#if($currentColSpan==$defaultColSpan)
-		</tr>
-			#set ( $startOfRow=true )		
-			#set ( $currentColSpan=0 )
-		#end
-	#end
+## Start of macros
+## buildnamesarray sets up an array of display attribute names
+#macro ( buildnamearray $elems $name)
+#set($first = true)
+#foreach( $dispname in $elems )
+#if($first==true)
+    #set ( $list = "[${Q}${dispname}${Q}" )
+    #set ( $first=false )
+#else
+	#set ( $list = "${list}, ${Q}${dispname}${Q}" )
 #end
-
-#set ( $screenname = $SummitHelper.screenname )
-#set ( $rootclass = $rootClassView.getRootEntityName() )
+#end
+	        ${P}set (${D}$name = ${list}${C} )
+#end
+##
+## buildlistsarray builds a Velocity array in the form - #set (["value1", ... "valuen"])
+#macro( buildlistsarray $names )
+#foreach( $listname in ${names} )
+#set($first = true)
+#foreach($listelems in $SummitHelper.getList(${listname}))
+#if($first==true)
+    #set ( $list = "[${Q}${listelems}${Q}" )
+    #set ( $first=false )
+#else
+	#set ( $list = "${list}, ${Q}${listelems}${Q}" )
+#end
+#end
+${P}set ( ${D}${listname}List = ${list}${C} )
+#end
+#end
+##
+## setwidget sets up the different widget type macro calls, macros are in GlobalMacros.vm
+#macro ( setwidget $qcolspan $entry $viewentity $tagstyle)
+#if ($entry.getSterotype() == "Singleline" )
+    	    ${P}TextWidget ( ${Q}$qcolspan${Q} ${Q}${entry.attributename}${Q} $Q$D${N}selected${viewentity.entityclassname}.${entry.attributename}${Q} ${Q}$tagstyle${Q})
+#elseif ($entry.getSterotype() == "ViewSelector" )
+            ${P}ViewSelector ( ${Q}$qcolspan${Q} ${Q}${entry.attributename}${Q} $Q$D${viewentity.entityclassname}s$Q $Q$D${N}selected${viewentity.entityclassname}.${entry.attributename}${Q} ${Q}$tagstyle${Q})
+#elseif ($entry.getSterotype() == "List" )
+#set($size = 1)
+#set($size = ${viewentity.size})
+#set($mult = false)
+#set($mult = ${viewentity.multiple})
+            ${P}ViewList ( ${Q}$qcolspan${Q} $Q${entry.attributename}$Q ${D}${entry.attributename}List $Q$D${N}selected${viewentity.entityclassname}.${entry.attributename}$Q $mult $size ${Q}$tagstyle${Q})
+#elseif ($entry.getSterotype() == "Radiobutton" )
+            ${P}Radiobutton ( ${Q}$qcolspan${Q} $Q${entry.attributename}$Q $Q$D${N}selected${viewentity.entityclassname}.${entry.attributename}${Q} ${Q}$tagstyle${Q})
+#elseif ($entry.getSterotype() == "Checkbox" )
+            ${P}CheckboxWidget ( ${Q}$qcolspan${Q} $Q${entry.attributename}$Q $Q$D${N}selected${viewentity.entityclassname}.${entry.attributename}${Q} ${Q}$tagstyle${Q})
+#elseif ($entry.getSterotype() == "Multiline" )
+            ${P}TextAreaWidget ( ${Q}$qcolspan${Q}  ${Q}${entry.attributename}$Q $Q$D${N}selected${viewentity.entityclassname}.${entry.attributename}${Q} ${Q}50${Q} ${Q}$tagstyle${Q})
+#end
+#end
+##
+## tablelayout lays out each ClassView object that represents an entity on screen, it calls screenwidget & viewselectorwidget
+#macro ( tablelayout $viewClass)
+#set ( $startOfRow = true )
+#set ( $defaultColSpan = ${viewClass.columncount} )
+#set ( $currentColSpan = 0 )
+#foreach( $entry in ${viewClass.attributes} )
+#if($entry.position)
+#set( $nicefinish = false )
+#set($colspan = ${entry.colspan})
+#set($currentColSpan = $currentColSpan + $colspan + 1)
+#if($currentColSpan > $defaultColSpan)
+#set($diffSpan = $currentColSpan - $defaultColSpan)
+#if($diffSpan == 1)
+	        <td></td>
+#else
+	        <td colspan=${Q}$diffSpan${Q}></td>
+#end
+	    </tr>
+#set ( $startOfRow = true )
+#set ( $currentColSpan = $colspan + 1 )
+#end
+#if($startOfRow == true)
+		<tr>
+#set ( $startOfRow = false )	
+#end
+#if(${entry.divstartlabel})
+		    <div class=${Q}${entry.divstartlabel}${Q}>
+#end
+#set($label = ${entry.attributename} )
+#set($label = ${entry.label} )
+#if(${entry.labelstyle})
+		    ${P}LabelCellClass ($Q${entry.labelstyle}$Q $Q${label}${Q})
+#else
+		    ${P}LabelCell ($Q${label}${Q})
+#end
+#if(${entry.divendlabel})
+			</div>
+#end
+#if(${entry.divstarttag})
+		    <div class=${Q}${entry.divstartlabel}${Q}>
+#end
+#set($tagstyle = "")
+#set($tagstyle = ${entry.tagstyle})
+#if ($entry.getSterotype() == "ViewSelectorName" )
+#buildnamearray(${viewClass.getSelectorDisplay()} "${viewClass.entityclassname}Disp") 
+            ${P}ViewSelectorName ( ${Q}$colspan${Q} $Q$D${viewClass.entityclassname}Disp$Q $Q$D${viewClass.entityclassname}s$Q $Q$D${N}selected${viewClass.entityclassname}$Q $Q$D${viewClass.entityclassname}Names$Q $Q$tagstyle$Q)
+#else
+#setwidget(${colspan} ${entry} ${viewClass} ${tagstyle})
+#end
+#if(${entry.divendtag})
+			</div>
+#end	
+#if($currentColSpan == $defaultColSpan)
+		</tr>
+#set ( $startOfRow = true )		
+#set ( $currentColSpan = 0 )
+#set ($nicefinish = true)
+#end 
+#end ## if(entry.position
+#end ## foreach( $entry...
+#if($currentColSpan < $defaultColSpan && $nicefinish != true)
+#set($diffSpan = $defaultColSpan - $currentColSpan)
+#if($diffSpan == 1)
+	        <td></td>
+#else
+	        <td colspan=${Q}$diffSpan${Q}></td>
+#end
+	    </tr>
+#end
+#end
+##
+## main Velocity context calls, objects placed there by the plugin class
+#set ( $rootclassname = ${rootClassView.entityclassname} )
 ## Has an ordered list of related classes to root class on display
-#set ( $classesnotroot = $rootClassView.getAllDependentClassView() )
-
-#set ( $listnames = $SummitHelper.getValueListnames($rootclass) )
-#foreach( $listname in listnames )
-	#set ( $Dlist${listname} = $SummitHelper.getList($listname) )
-#end
-
-$P$P Get the collection of existing ${rootclass.name}, and 
-$P$P make the first ${rootclass.name} selected, if no ${rootclass.name}
+#set ( $viewclassesnotroot = ${rootClassView.getAllDependentClassView()} )
+#set ( $classesnotroot = ${rootClassView.getAllDependentClassEntity()} )
+#set ( $listnames = $SummitHelper.getValueListnames(${rootClassView}) )
+##
+## Start of actual screen template output
+#buildlistsarray( $listnames )
+${P}${P} Get the collection of existing ${rootclassname}, and 
+$P$P make the first ${rootclassname} selected, if no ${rootclassname}
 $P$P has already been selected
-$Pset ( $D${rootclass.name} = ${screenname}PullTool.getAll${rootclass.name}() )
-$Pif ($N$Dselected${rootclass.name} && ($D${rootclass.name}s.size()>0) )
-	$Pset ( $Dselected${rootclass.name} = $D${rootclass.name}s.get(0) )
-$Pend
-$Pset ( $Dselected${rootclass.name}Id = $Dselected${rootclass.name}.get${rootclass.name}Id() )
-
+${P}set ( $D${rootclassname}s = $D${ScreenName}PullTool.getAll${rootclassname}() )
+${P}if ($N${D}selected${rootclassname} && ($D${rootclassname}s.size() > 0) )
+${P}set ( ${D}selected${rootclassname} = $D${rootclassname}s.get(0) )
+${P}end
+#buildnamearray(${rootClassView.getSelectorNames()} "${rootClassView.entityclassname}Names") 
+${P}set ( ${D}selected${rootclassname}Id = $Q${P}buildKey(${D}${rootClassView.entityclassname}Names ${D}selected${rootclassname})$Q )
+#foreach($allchildview in $viewclassesnotroot)
+#set ( $listnames = $SummitHelper.getValueListnames(${allchildview}) )
+#buildlistsarray( $listnames )
+#end
 #foreach($childentity in $classesnotroot)
 $P$P Get the collection of existing ${childentity.entityclassname}, and 
 $P$P make the first ${childentity.entityclassname} selected, if no ${childentity.entityclassname}
 $P$P has already been selected
-$Pset ( $D${childentity.entityclassname}s = $D${screenname}PullTool.get${childentity.entityclassname}For${childentity.parentname}($Dselected${childentity.parentname}.${childentity.parentpkname}) )
-$Pif ($N$Dselected${childentity.entityclassname} && ($D${childentity.entityclassname}s.size()>0) )
-	$Pset ( $Dselected${childentity.entityclassname} = $D${childentity.entityclassname}s.get(0) )
-$Pend
-	#foreach($selectorname in ${childentity.selectorNames}
-	$Pset ( $Dselected${selectorname} = $Dselected${childentity.entityclassname}.${selectorname} )
-	#end
+${P}set ( $D${childentity.entityclassname}s = $D${ScreenName}PullTool.get${childentity.entityclassname}For${childentity.parentsEntityname}("${D}selected${childentity.parentsEntityname}Id") )
+${P}if ($N${D}selected${childentity.entityclassname} && ($D${childentity.entityclassname}s.size()>0) )
+	${P}set ( ${D}selected${childentity.entityclassname} = $D${childentity.entityclassname}s.get(0) )
+${P}end
+#buildnamearray(${childentity.getSelectorNames()} "${childentity.entityclassname}Names") 
+${P}set ( ${D}selected${childentity.entityclassname}Id = "Q"${P}buildKey(${D}${childentity.entityclassname}Names ${D}selected${childentity.entityclassname})$Q )
 #end
 
-#set ( $linkname = "link.setPage($Q${screenname}.vm" )
-<form method=$Qpost$Q action=$Q$D$linkname$Q).setAction($QCrud${rootclass.name}$Q)$Q>
+#set ( $linkname = "link.setPage($Q${ScreenName}.vm" )
+<form method=${Q}post${Q} action=$Q$D$linkname${Q}).setAction(${Q}Crud${ScreenName}${Q})${Q}>
 
-	#foreach($selectorname in ${childentity.selectorNames}
-	$Pset ( $Dselected${selectorname} = $Dselected${childentity.entityclassname}.${selectorname} )
-	#end
-	<input type=$Qhidden$Q name=$Q${class.selectorname}$Q value=$Q$!selected${rootclass.selectorname}$Q/>
-	<table width=$Q$ui.screenTableWidth$Q cellspacing=$Q5$Q>
-	<tr>
-		$PLabelCell (${rootclass.name})
-		<td width=$Q$Dui.screenWidgetWidth$Q >
-			<select name=$Qselected${rootclass.name}Name$Q>
-				$Pforeach ($D${rootclass.name} in ${rootclass.name}s)
-					$Pif ($D{$rootclass.name}.get{$rootclass.name}Id() == $Dselected${rootclass.name}Id)
-						<option value=$D{$rootclass}.getSelectorValue() selected>$D${rootclass.name}.getDisplayValue()</option>
-					$Pelse
-						<option value=$D{$rootclass}.getSelectorValue()>$D${rootclass.name}.getDisplayValue()</option>
-					$Pend
-				$Pend
-			</select>
-		</td>
-	</tr>
-#tablelayout($D$rootViewClass $D${rootclass.name}s)
-#if( $startOfRow=false )
-	#if($currentColSpan<$defaultColSpan)
-		$diffSpan=$defaultColSpan-$currentColSpan
-		<td colspan="$diffSpan"></td>
-	#end
-	</tr>
+	<input type=${Q}hidden${Q} name=$Q${rootClassView.entityclassname}Id$Q value=$Q$D${rootClassView.entityclassname}Id$Q/>
+	<input type=${Q}hidden${Q} name=${Q}selectiontype${Q} value=${Q}initial${Q}/>
+	<table width=${Q}${D}ui.screenTableWidth${Q} cellspacing=${Q}5${Q}>
+#tablelayout($rootClassView)
+#if( ${rootClassView.CRUD} )
+	    <tr>
+		    ${P}LabelCell ($Q${Q})
+#set ( $CrudCol = ${rootClassView.columncount} - 1 )
+	        ${P}CrudButtons(${Q}$CrudCol${Q} $Q${rootClassView.entityclassname}$Q)
+	    </tr>
 #end
-#if( $rootclass.hasCRUD() )
-	<tr>
-		$PLabelCell ($Q$Q)
-		$PCrudButtons($defaultColSpan-1 ${rootViewClass.entityclassname})
-	</tr>
+#foreach($childentity in $viewclassesnotroot)
+#if(${childentity.sterotype} == "ChildSelectable")
+	    <input type=${Q}hidden${Q} name=${Q}${childentity.entityclassname}Id${Q} value=${Q}${D}!selected${childentity.entityclassname}Id${Q}/>
+#tablelayout($childentity)
+#if( ${childentity.CRUD} )
+	    <tr>
+			${P}LabelCell (${Q}${Q})
+#set ( $CrudCol = ${childentity.columncount} - 1 )
+	        ${P}CrudButtons(${Q}$CrudCol${Q} $Q${childentity.entityclassname}$Q)
+		</tr>
 #end
-#foreach($childentity in $classesnotroot)
-#if($childentity.getSterotype()=="ChildSelectable")
-	<input type=$Qhidden$Q name=$Q${childentity.name}$Q value=$Q$!selected${childentity.name}Id$Q/>
-	<input type=$Qhidden$Q name=$Qselectiontype$Q value=$Qinitial$Q/>
-	<table width=$Q$ui.screenTableWidth$Q cellspacing=$Q5$Q>
-	<tr>
-		$PLabelCell (${childentity.name})
-		<td width=$Q$Dui.screenWidgetWidth$Q >
-			<select name=$Qselected{$childentity.name}Name$Q>
-				$Pforeach ($D$childentity.name} in ${childentity.name}s)
-					$Pif ($D{$childentity.name}.get{$childentity.name}Id() == $Dselected{$childentity.name}Id)
-						<option value=$D{$childentity}.getSelectorValue() selected>$D{$childentity.name}.getDisplayValue()</option>
-					$Pelse
-						<option value=$D{$childentity}.getSelectorValue()>$D{$childentity.name}.getDisplayValue()</option>
-					$Pend
-				$Pend
-			</select>
-		</td>
-	</tr>
-#tablelayout($D$childentity $D${childentity.entityclassname}s)
-	#if( $childentity.hasCRUD() )
-	<tr>
-		$PLabelCell ($Q$Q)
-		$PCrudButtons($defaultColSpan-1 ${childentity.classname})
-	</tr>
-	#end
-#elseif($childentity.getSterotype()=="ChildTable")
-	<tr>
-		$PLabelCellW ($Q${childentity.name}$Q $Q$ui.screenLabelWidth$Q)
-		<td colspan=$Q$defaultColSpan-1$Q>
-			<table cellpadding=$Q3$Q border=$Q2$Q>
-				<tr>
-				$attributes = ${childentity}.getAttributes()
-				#foreach($attribute in $attributes)
-				    <td><b>$attribute.attributename</b></td>
-				#end
-				</tr>
-				#Pforeach ($D${childentity.attributename} in $D${childentity.attributename}s)
-				<tr>
-				#foreach ($attribute in $attributes)
-					<td>$D${childentity.attributename}.get$attribute.getValue()</td>
-				#end
-				</tr>
-				#Pend
-			</table>
-		</td>
-	</tr>
+#elseif(${childentity.sterotype}=="ChildTable")
+		<tr>
+			${P}LabelCellW ($Q${childentity.entityclassname}${Q} ${Q}${D}ui.screenLabelWidth${Q})
+#set ( $TableCol = ${childentity.columncount} - 1 )
+	        <td colspan=$Q${TableCol}${Q}>
+			    <table cellpadding=${Q}3${Q} border=${Q}2${Q}>
+				    <tr>
+#set ($attributes = ${childentity.attributes} )
+#foreach($attribute in $attributes)
+#set($label = ${attribute.attributename} )
+#set($label = ${attribute.label} )
+				        <td><b>${label}</b></td>
+#end
+				    </tr>
+				    ${P}foreach (${D}a${childentity.entityclassname} in $D${childentity.entityclassname}s)
+				    <tr>
+#foreach ($attribute in $attributes)
+					    <td>${D}{a${childentity.entityclassname}.${attribute.attributename}}</td>
+#end
+				    </tr>
+				    ${P}end
+			    </table>
+		    </td>
+	    </tr>
 #end
 #end
 	</table>

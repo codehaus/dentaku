@@ -19,6 +19,8 @@
 
 package org.dentaku.gentaku.cartridge.summit;
 
+import java.util.ArrayList;
+
 /**
  * @author <a href="mailto:david@dwynter.plus.com">David Wynter</a>
  *
@@ -29,10 +31,22 @@ package org.dentaku.gentaku.cartridge.summit;
 public class AttributeView {
 	private String attributename;
 	private String sterotype;
+	private String divstartlabel;
+	private String divendlabel;
+	private String divstarttag;
+	private String divendtag;
+	private String tagstyle;
+	private String labelstyle;
 	private Integer position;
+	private Integer size;
+	private Boolean multiple;
 	private String label;
-	private String[] listvalues;
+	private ArrayList listvalues;
 	private Integer colspan;
+	
+	public AttributeView() {
+		colspan= new Integer(1);
+	}
 	
 	public void setAttributename(String name) {
 		attributename = name;
@@ -73,14 +87,14 @@ public class AttributeView {
 	/**
 	 * @return Returns the listvalues.
 	 */
-	public String[] getListvalues() {
+	public ArrayList getListvalues() {
 		return listvalues;
 	}
 	/**
-	 * @param listvalues The listvalues to set.
+	 * @param listItems The listvalues to set.
 	 */
-	public void setListvalues(String[] listvalues) {
-		this.listvalues = listvalues;
+	public void setListvalues(ArrayList listItems) {
+		this.listvalues = listItems;
 	}
 	/**
 	 * @return Returns the colspan.
@@ -93,5 +107,107 @@ public class AttributeView {
 	 */
 	public void setColspan(Integer colspan) {
 		this.colspan = colspan;
+	}
+	/**
+	 * @return Returns the divendlabel.
+	 */
+	public String getDivendlabel() {
+		return divendlabel;
+	}
+	/**
+	 * @param divendlabel The divendlabel to set.
+	 */
+	public void setDivendlabel(String divendlabel) {
+		this.divendlabel = divendlabel;
+	}
+	/**
+	 * @return Returns the divendtag.
+	 */
+	public String getDivendtag() {
+		return divendtag;
+	}
+	/**
+	 * @param divendtag The divendtag to set.
+	 */
+	public void setDivendtag(String divendtag) {
+		this.divendtag = divendtag;
+	}
+	/**
+	 * @return Returns the divstartag.
+	 */
+	public String getDivstartag() {
+		return divstarttag;
+	}
+	/**
+	 * @param divstartag The divstartag to set.
+	 */
+	public void setDivstarttag(String divstarttag) {
+		this.divstarttag = divstarttag;
+	}
+	/**
+	 * @return Returns the divstartlabel.
+	 */
+	public String getDivstartlabel() {
+		return divstartlabel;
+	}
+	/**
+	 * @param divstartlabel The divstartlabel to set.
+	 */
+	public void setDivstartlabel(String divstartlabel) {
+		this.divstartlabel = divstartlabel;
+	}
+	/**
+	 * @return Returns the labelstyle.
+	 */
+	public String getLabelstyle() {
+		return labelstyle;
+	}
+	/**
+	 * @param labelstyle The labelstyle to set.
+	 */
+	public void setLabelstyle(String labelstyle) {
+		this.labelstyle = labelstyle;
+	}
+	/**
+	 * @return Returns the tagstyle.
+	 */
+	public String getTagstyle() {
+		return tagstyle;
+	}
+	/**
+	 * @param tagstyle The tagstyle to set.
+	 */
+	public void setTagstyle(String tagstyle) {
+		this.tagstyle = tagstyle;
+	}
+	/**
+	 * @return Returns the size.
+	 */
+	public Integer getSize() {
+		return size;
+	}
+	/**
+	 * @param size The size to set.
+	 */
+	public void setSize(Integer size) {
+		this.size = size;
+	}
+	/**
+	 * @return Returns the divstarttag.
+	 */
+	public String getDivstarttag() {
+		return divstarttag;
+	}
+	/**
+	 * @return Returns the multiple.
+	 */
+	public Boolean getMultiple() {
+		return multiple;
+	}
+	/**
+	 * @param multiple The multiple to set.
+	 */
+	public void setMultiple(Boolean multiple) {
+		this.multiple = multiple;
 	}
 }
