@@ -20,12 +20,6 @@
             <version>${pom.currentVersion}</version>
             <type>ejb</type>
         </dependency>
-        <dependency>
-            <groupId>xdoclet</groupId>
-            <artifactId>maven-xdoclet-plugin</artifactId>
-            <version>1.2.2-SNAPSHOT</version>
-            <type>plugin</type>
-        </dependency>
         <!--        werkflow-->
         <dependency>
             <groupId>werkflow</groupId>
@@ -49,9 +43,19 @@
             <version>2.3</version>
         </dependency>
         <dependency>
-            <groupId>jboss</groupId>
-            <artifactId>jboss-j2ee</artifactId>
-            <version>3.2.3</version>
+            <id>geronimo-spec+j2ee</id>
+            <version>1.4-SNAPSHOT</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>activemq</groupId>
+            <artifactId>activemq-core</artifactId>
+            <version>2.0-SNAPSHOT</version>
+            <properties>
+                <ejb.bundle>true</ejb.bundle>
+            </properties>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
@@ -209,48 +213,6 @@
             </properties>
         </dependency>
 
-        <!--        only for testing-->
-        <dependency>
-            <groupId>cactus</groupId>
-            <artifactId>cactus</artifactId>
-            <version>13-1.6dev</version>
-        </dependency>
-        <dependency>
-            <groupId>aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <!--       end only for testing-->
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-jboss-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-web-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-ejb-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>xdoclet</groupId>
-            <artifactId>xdoclet-jmx-module</artifactId>
-            <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xjavadoc</artifactId>
-          <version>1.0.3</version>
-        </dependency>
     </dependencies>
     <build>
         <unitTest>

@@ -23,6 +23,4 @@ public interface Connector {
     public static final String ROLE = Connector.class.getName();
 
     void fireEvent(AbstractEvent event) throws Exception;
-
-    Pipeline getPipeline();
 }

@@ -3,10 +3,10 @@
  */
 package org.dentaku.foundation;
 
-import org.dentaku.foundation.connector.EJBConnector;
-import org.dentaku.foundation.connector.EJBConnectorHome;
-import org.dentaku.foundation.connector.EJBConnectorSession;
-import org.dentaku.foundation.connector.EJBConnectorUtil;
+import org.dentaku.foundation.connector.ejb.EJBConnector;
+import org.dentaku.foundation.connector.ejb.EJBConnectorHome;
+import org.dentaku.foundation.connector.ejb.EJBConnectorSession;
+import org.dentaku.foundation.connector.ejb.EJBConnectorUtil;
 import org.mockejb.MockContainer;
 import org.mockejb.SessionBeanDescriptor;
 import org.mockejb.jndi.MockContextFactory;
@@ -52,8 +52,6 @@ public class EJBConnectorTest extends FoundationTestBase {
 
         // create the bean
         EJBConnector sampleService = home.create();
-        // check the pipeline
-        assertTrue(sampleService.getPipeline().getValves().size() > 0);
         // call the method
         sampleService.fireEvent(new DummyEvent());
 
