@@ -51,8 +51,4 @@ public interface PersistenceManagerStorage {
 
     void endTrans();
     void endTrans(boolean somethingUnknown);
-
-    ModelEntity createEntity(String name, Class clazz);
-    Attribute createField(String s, Class aClass, boolean b);
-    Association createRelation(Class r1, Class r2);
 }
