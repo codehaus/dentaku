@@ -12,30 +12,41 @@
             <artifactId>dentaku-services</artifactId>
             <version>SNAPSHOT</version>
             <type>ejb</type>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-event-cartridge</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
-<!--            <groupId>jpox</groupId>-->
-<!--            <artifactId>jpox</artifactId>-->
-<!--            <version>1.1.0-beta-1</version>-->
-                <id>jpox</id>
+			<groupId>jpox</groupId>-->
+			<artifactId>jpox</artifactId>
+			<version>1.1.0-beta-1</version>
         </dependency>
 
-        <!--        hibernate-->
+        <!--hibernate-->
         <dependency>
             <groupId>hibernate</groupId>
             <artifactId>hibernate</artifactId>
@@ -96,9 +107,12 @@
         <!--       end only for testing-->
 
         <!--        axion-->
-        <dependency>
-            <id>mockejb</id>
-        </dependency>
+
+		<dependency>
+			<groupId>mockejb</groupId>
+			<artifactId>mockejb</artifactId>
+			<version>0.5</version>
+		</dependency>
         <dependency>
             <groupId>axion</groupId>
             <artifactId>axion</artifactId>
@@ -111,22 +125,10 @@
             <version>3.2.3</version>
         </dependency>
         <dependency>
-<!--        <dependency>-->
-<!--            <groupId>hsqldb</groupId>-->
-<!--            <artifactId>hsqldb</artifactId>-->
-<!--            <version>1.7.2.2</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.0.3</version>
         </dependency>
-<!--        using 3.0-->
-<!--        <dependency>-->
-<!--            <groupId>commons-collections</groupId>-->
-<!--            <artifactId>commons-collections</artifactId>-->
-<!--            <version>2.1</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>commons-primitives</groupId>
             <artifactId>commons-primitives</artifactId>

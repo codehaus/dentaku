@@ -7,33 +7,51 @@
             <groupId>${pom.groupId}</groupId>
             <artifactId>example-model</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
             <version>SNAPSHOT</version>
             <type>ejb</type>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-persistence-service</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-foundation</artifactId>
             <version>SNAPSHOT</version>
             <type>ejb</type>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
          <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>commons-el</groupId>
@@ -165,9 +183,12 @@
         </dependency>
 
         <!-- all of these should be turned off for production -->
-        <dependency>
-            <id>mockejb</id>
-            <properties>
+
+		<dependency>
+			<groupId>mockejb</groupId>
+			<artifactId>mockejb</artifactId>
+			<version>0.5</version>
+			<properties>
                 <war.bundle>true</war.bundle>
             </properties>
         </dependency>

@@ -1,2 +1,12 @@
-mdr.log
-velocity.log
+build.properties
+.project
+.classpath
+.settings
+*.jpage
+*.jws
+*.ipr
+*.iml
+*.log
+*.log.*
+junit*.properties
+target

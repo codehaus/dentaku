@@ -7,11 +7,17 @@
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>jaxen</groupId>

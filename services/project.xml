@@ -11,15 +11,23 @@
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-event-cartridge</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
-        <dependency>
-            <id>mockejb</id>
-        </dependency>
+		<dependency>
+			<groupId>mockejb</groupId>
+			<artifactId>mockejb</artifactId>
+			<version>0.5</version>
+		</dependency>
         <dependency>
             <groupId>drools</groupId>
             <artifactId>drools-jsr94</artifactId>
@@ -56,13 +64,17 @@
             <version>2.0b1</version>
         </dependency>
         <dependency>
-            <id>jsr94</id>
+			<groupId>jsr</groupId>
+			<artifactId>jsr94</artifactId>
+			<version>1.0</version>
             <properties>
                 <bin_dist>true</bin_dist>
             </properties>
         </dependency>
         <dependency>
-            <id>cccssl</id>
+			<groupId>cccssl</groupId>
+            <artifactId>cccssl</artifactId>
+			<version>UNKNOWN</version>
             <properties>
                 <bin_dist>true</bin_dist>
             </properties>

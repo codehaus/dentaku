@@ -34,18 +34,27 @@
       <artifactId>dentaku-metadata-service</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>dentaku-event-cartridge</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>gentaku</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
     </dependency>
     <dependency>
       <groupId>jpox</groupId>
@@ -58,6 +67,9 @@
       <artifactId>dentaku-cartridge-generator</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
     </dependency>
     <dependency>
       <groupId>commons-el</groupId>
