@@ -1,0 +1,28 @@
+<plexus>
+    <logging>
+        <implementation>org.codehaus.plexus.logging.ConsoleLoggerManager</implementation>
+        <logger>
+            <threshold>DEBUG</threshold>
+        </logger>
+    </logging>
+    <components>
+        <component>
+            <role>org.dentaku.services.persistence.hibernate.SessionProvider</role>
+            <implementation>org.dentaku.services.persistence.hibernate.NullSessionProvider</implementation>
+        </component>
+        <component>
+            <role>org.dentaku.services.persistence.PersistenceManager</role>
+            <implementation>org.dentaku.services.persistence.synthetic.SyntheticPersistenceManager</implementation>
+            <requirements>
+                <requirement>
+                    <role>org.dentaku.services.persistence.PersistenceFactory</role>
+                    <field-name>factories</field-name>
+                </requirement>
+                <requirement>
+                    <role>org.dentaku.services.persistence.hibernate.SessionProvider</role>
+                    <field-name>sessionProvider</field-name>
+                </requirement>
+            </requirements>
+        </component>
+    </components>
+</plexus>
