@@ -27,11 +27,20 @@ abstract public class TaggedValueImpl extends ModelElementImpl implements Tagged
     }
     public String getValue() {
         StringBuffer sb = new StringBuffer();
+        for (Iterator it = getReferenceValue().iterator(); it.hasNext();) {
+            Object o = (Object) it.next();
+            if (sb.length() > 0) {
+                sb.append(" ");
+            }
+            sb.append(o.toString());
+        }
         for (Iterator i = getDataValue().iterator(); i.hasNext();) {
             Object v = i.next();
-            sb.append(v.toString());
-            if (i.hasNext()) {
-                sb.append(" ");
+            if (v.toString().length() > 0) {
+                if (sb.length() > 0) {
+                    sb.append(" ");
+                }
+                sb.append(v.toString());
             }
         }
         return sb.toString();

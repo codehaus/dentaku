@@ -89,7 +89,7 @@ public class PluginOutputVisitor {
                     if (element instanceof Namespace || element instanceof Feature) {
                         parent = element;
                     } else {
-                        System.out.println("we got here?");
+                        throw new AssertionError("Please report this to Brian");
                     }
 
                     Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
