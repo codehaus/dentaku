@@ -16,19 +16,18 @@
  */
 package org.dentaku.gentaku.ant;
 
-import org.apache.tools.ant.types.FileSet;
-import org.dentaku.gentaku.Gentaku;
-import org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader;
-import org.dentaku.services.metadata.nbmdr.XMIInputConfigImpl;
-import org.generama.Generama;
-import org.generama.ant.AbstractGeneramaTask;
-import org.generama.defaults.FileWriterMapper;
-import org.picocontainer.MutablePicoContainer;
-
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.apache.tools.ant.types.FileSet;
+import org.dentaku.gentaku.Gentaku;
+import org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader;
+import org.generama.Generama;
+import org.generama.ant.AbstractGeneramaTask;
+import org.generama.defaults.FileWriterMapper;
+import org.picocontainer.MutablePicoContainer;
 
 public class GentakuTask extends AbstractGeneramaTask {
     private String encoding = System.getProperty("file.encoding");

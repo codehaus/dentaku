@@ -5,35 +5,119 @@
 // See: http://dentaku.codehaus.org/gentaku
 //
 
-
 package ${class.packageName};
 
 public interface ${plugin.getDestinationClassname($class)} {
 
-#foreach ( $att in $class.attributes )
+## Atributtes
+#foreach( $att in $class.attributes )
 
-	#if ( $att.ownerScope == $SK_CLASSIFIER )
-		##	If an attribute, in an interface, is static its in fact a constant.
-		## does not matter if its public or not.
-		public static final $att.type.fullyQualifiedName $att.name = $att.initialValue.body ;
+  #if ( $att.isOne() )
+  	  #if( $att.ownerScope == $SK_CLASSIFIER )
+	      ##	If an attribute, in an interface, is static its in fact a constant.
+  	    ## does not matter if its public or not.
+	  		    public static final $att.type.fullyQualifiedName $att.name = $att.initialValue.body ;
+    	#else
+      		## Just private fields (which means property) are generated.
+    		  #if( $att.visibility == $VK_PRIVATE )
+      		  #if ( ( $att.changeability == $CK_CHANGEABLE ) || ( $att.changeability == $CK_FROZEN ) )
+      		    				public $att.type.fullyQualifiedName get${plugin.upperCaseFirstLetter($att.name)}();
+    		    #end
 
-	#else
+        		#if ( ( $att.changeability == $CK_CHANGEABLE ) || ( $att.changeability == $CK_ADD_ONLY ) )
+      		    				public void set${plugin.upperCaseFirstLetter($att.name)}($att.type.fullyQualifiedName value);
+        						#end
+    						  #end
+  		  	#end
+  		#else
+    ## anything to many
+  		  #set( $isItArray = false )
+    #if ( $jmiHelper.getTaggedSingleValue( $att, "collectionClass" ) != "" )
+      ## Custom Collection
+      #set( $type = $jmiHelper.getTaggedSingleValue( $att, "collectionClass" ) )
+    #elseif ( $jmiHelper.getTaggedSingleValue( $att, "isArray" ) == "true" )
+      ## Is it array?
+    		  #set( $isItArray = true )
+      #set( $type = "${att.type.fullyQualifiedName}[]"  )
+    #elseif ( $att.ordering == $OK_ORDERED )
+      ## Ordered collection
+      #set( $type = "java.util.List" )
+    #else
+      ## Ordered type
+      #set( $type = "java.util.Collection" )
+    #end
 
-		## Just private fields (which means property) are generated.
-		#if ( $att.visibility == $VK_PRIVATE )
+  	  #if( $att.ownerScope == $SK_CLASSIFIER )
+	      ##	If an attribute, in an interface, is static its in fact a constant.
+  	    ## does not matter if its public or not.
+	  		    public static final $type $att.name = $att.initialValue.body ;
+    	#else
+      		## Just private fields (which means property) are generated.
+    		  #if( $att.visibility == $VK_PRIVATE )
+    		  
+    		    #if( $isItArray )
+    		      ## Yes, it is an array.
+        		  #if ( ( $att.changeability == $CK_CHANGEABLE ) || ( $att.changeability == $CK_FROZEN ) )
+        		    				public $att.type.fullyQualifiedName get${plugin.upperCaseFirstLetter($att.name)}();
+    		      #end
 
-			#if ( ( $att.changeability == $CK_CHANGEABLE ) || ( $att.changeability == $CK_FROZEN ) )
-				public $att.type.fullyQualifiedName get${plugin.upperCaseFirstLetter($att.name)}();
-			#end
-
-			#if ( ( $att.changeability == $CK_CHANGEABLE ) || ( $att.changeability == $CK_ADD_ONLY ) )
-				public void set${plugin.upperCaseFirstLetter($att.name)}($att.type.fullyQualifiedName value);
-			#end
-
-		#end
-		
-	#end
-	
+          		#if ( ( $att.changeability == $CK_CHANGEABLE ) || ( $att.changeability == $CK_ADD_ONLY ) )
+        		    				public void set${plugin.upperCaseFirstLetter($att.name)}($att.type.fullyQualifiedName value);
+          						#end
+        #else
+          ## Its not an array
+      		    				public $type get${plugin.upperCaseFirstLetter($att.name)}();
+      		  #end
+    						  #end
+  		  	#end
+  		#end
 #end
+
+	## Associations
+	#foreach( $ass in $class.targetEnds )
+
+  #if( $ass.isNavigable() )
+      ## Anything to One
+  	    #if( $ass.targetScope == 	$SK_INSTANCE )
+        		## Just private fields (which means property) are generated.
+        		#if( $ass.visibility == $VK_PRIVATE )
+        		  #if ( $ass.isOne2One() || $ass.isOne2Many() )
+        		    ## anything to one
+        		    #if ( ( $ass.changeability == $CK_CHANGEABLE ) || ( $ass.changeability == $CK_FROZEN ) )
+          		    				public $ass.participant.fullyQualifiedName get${plugin.upperCaseFirstLetter($ass.name)}();
+          		  #end
+
+            		#if ( ( $ass.changeability == $CK_CHANGEABLE ) || ( $ass.changeability == $CK_ADD_ONLY ) )
+          		    				public void set${plugin.upperCaseFirstLetter($ass.name)}($ass.participant.fullyQualifiedName value);
+            						#end
+          #else
+            ## anything to many
+            #if ( $jmiHelper.getTaggedSingleValue( $ass, "collectionClass" ) != "" )
+              ## Custom Collection
+              public $jmiHelper.getTaggedSingleValue( $ass, "collectionClass" ) get${plugin.upperCaseFirstLetter($ass.name)}();
+            #elseif ( $jmiHelper.getTaggedSingleValue( $ass, "isArray" ) == "true" )
+              ## Is it array?
+            		  #if ( ( $ass.changeability == $CK_CHANGEABLE ) || ( $ass.changeability == $CK_FROZEN ) )
+      		          				public ${ass.participant.fullyQualifiedName}[] get${plugin.upperCaseFirstLetter($ass.name)}();
+          		    #end
+
+              		#if ( ( $ass.changeability == $CK_CHANGEABLE ) || ( $ass.changeability == $CK_ADD_ONLY ) )
+      		          				public void set${plugin.upperCaseFirstLetter($ass.name)}(${ass.participant.fullyQualifiedName}[] value);
+              						#end
+            #elseif ( $ass.ordering == $OK_ORDERED )
+              ## Ordered collection
+              public java.util.List get${plugin.upperCaseFirstLetter($ass.name)}();
+            #else
+              ## Ordered type
+              public java.util.Collection get${plugin.upperCaseFirstLetter($ass.name)}();
+            #end
+          		#end
+        #end
+  		    	#end
+  #end
+
+	#end
+
+
 
 }
