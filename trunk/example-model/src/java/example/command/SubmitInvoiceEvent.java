@@ -35,7 +35,7 @@ public class SubmitInvoiceEvent extends SubmitInvoiceEventBase {
             Invoice inv = getInvoice();
 
             // relate the country
-            CountryFactory countryFactory = (CountryFactory) pm.getPersistenceFactory(CountryFactory.class.getName());
+            CountryFactory countryFactory = (CountryFactory) pm.getPersistenceFactory(Country.class.getName());
             Country c = (Country)countryFactory.findByCountryAbbr("US").iterator().next();
             //YUCK
             inv.getBillAddress().setCountry(c);

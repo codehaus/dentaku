@@ -96,9 +96,10 @@
 
         <!--        axion-->
         <dependency>
-            <groupId>axion</groupId>
-            <artifactId>axion</artifactId>
-            <version>1.0-M3-dev</version>
+            <id>axion</id>
+<!--            <groupId>axion</groupId>-->
+<!--            <artifactId>axion</artifactId>-->
+<!--            <version>1.0-M3-dev</version>-->
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>

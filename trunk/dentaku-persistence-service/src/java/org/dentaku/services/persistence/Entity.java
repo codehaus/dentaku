@@ -32,8 +32,8 @@ public abstract class Entity {
 //        try {
 //            Session sess = ThreadLocalSessionProvider.getThreadLocalSession();
 //            sess.refresh(this);
-//        } catch (HibernateException e) {
-//            throw new PersistenceException(e);
+//        } catch (HibernateException entity) {
+//            throw new PersistenceException(entity);
 //        }
         return o;
     }

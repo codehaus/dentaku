@@ -14,11 +14,26 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.dentaku.services.persistence;
+package org.dentaku.services.persistence.tranql;
 
-public interface TranQLPersistenceFactory extends PersistenceFactory {
-    String dataSourceName = "java:comp/env/jdbc/DentakuDataSource";
+import org.tranql.query.UpdateCommand;
+import org.tranql.ql.Query;
+import org.tranql.ql.QueryException;
+import org.tranql.cache.InTxCache;
+import org.tranql.field.Row;
 
-    public org.tranql.schema.Entity getEntity();
-    public org.tranql.sql.Table getTable();
+public class DentakuUpdateCommand implements UpdateCommand {
+    private final Query query;
+
+    public DentakuUpdateCommand(Query query) {
+        this.query = query;
+    }
+
+    public Query getQuery() {
+        return query;
+    }
+
+    public int execute(InTxCache cache, Row params) throws QueryException {
+        throw new UnsupportedOperationException();
+    }
 }

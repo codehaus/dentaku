@@ -81,7 +81,7 @@ public class CartAction extends DispatchAction {
         if (item == null) {
             // create and populate a new line item entity
             PersistenceManagerStorage pm = (PersistenceManagerStorage) ContainerManager.getInstance().getContainer().lookup(PersistenceManagerStorage.ROLE);
-            SKUFactory skuFactory = (SKUFactory) pm.getPersistenceFactory(SKUFactory.class.getName());
+            SKUFactory skuFactory = (SKUFactory) pm.getPersistenceFactory(SKU.class.getName());
             SKU sku = (SKU) skuFactory.findByPrimaryKey(skuID);
             pm.releaseSession();
 

@@ -16,41 +16,69 @@
  */
 package org.dentaku.services.persistence.tranql;
 
+import org.dentaku.services.persistence.AbstractPersistenceManagerStorage;
 import org.dentaku.services.persistence.Entity;
 import org.dentaku.services.persistence.PersistenceException;
 import org.dentaku.services.persistence.TranQLPersistenceFactory;
-import org.dentaku.services.persistence.AbstractPersistenceManagerStorage;
 import org.tranql.field.FieldAccessor;
-import org.tranql.field.FieldTransform;
+import org.tranql.field.Row;
 import org.tranql.ql.Query;
 import org.tranql.ql.QueryBuilder;
 import org.tranql.ql.QueryException;
+import org.tranql.query.CommandTransform;
+import org.tranql.query.ObjectResultHandler;
+import org.tranql.query.QueryCommand;
+import org.tranql.query.SchemaMapper;
+import org.tranql.sql.SQLSchema;
+import org.tranql.sql.jdbc.JDBCQueryCommand;
+import org.tranql.sql.sql92.SQL92Schema;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public class TranQLPersistenceManagerStorage extends AbstractPersistenceManagerStorage {
-    protected org.tranql.schema.Schema schema;
+    protected Schema schema;
+    protected SQLSchema sqlSchema;
+    private CommandTransform mapper;
 
     public void initialize() throws Exception {
         super.initialize();
 
+        // set up SQL schema
+        Context context = new InitialContext();
+        sqlSchema = new SQL92Schema("local", (DataSource) context.lookup(TranQLPersistenceFactory.dataSourceName));
+
+        // set up local schema
+        schema = new Schema();
+        for (Iterator it = factories.values().iterator(); it.hasNext();) {
+            TranQLPersistenceFactory factory = (TranQLPersistenceFactory) it.next();
+            schema.addEntity(factory.getEntity());
+            sqlSchema.addTable(factory.getTable());
+        }
+        mapper = new SchemaMapper(sqlSchema);
+
     }
 
     public Object load(Class theClass, Serializable id) throws PersistenceException {
-        QueryBuilder qb = QueryBuilder.buildSelectById(((TranQLPersistenceFactory)factories.get(theClass.getName())).getEntity(), false);
-        Query query = new Query(new FieldTransform[]{new FieldAccessor(0, theClass)}, null);
-//        query.addChild(new Select(false).addChild(theClass.)
-        return doQuery(query);
-    }
+        TranQLPersistenceFactory tranQLPersistenceFactory = ((TranQLPersistenceFactory) factories.get(theClass.getName() + "Factory"));
+        QueryBuilder qb = QueryBuilder.buildSelectById(tranQLPersistenceFactory.getEntity(), false);
 
-    private Object doQuery(Query query) throws PersistenceException {
+//        Query query = new Query(new FieldTransform[]{new FieldAccessor(0, theClass)}, null);
+//        query.addChild(new Select(false).addChild(theClass.)
+        Object result;
         try {
-            return schema.getCommandFactory().createQuery(query).execute(null,null,null);
+            QueryCommand command = mapper.transform(new DentakuQueryCommand(qb.getQuery()));
+            System.out.println("Query = " + ((JDBCQueryCommand) command).getSQLText());
+            result = command.execute(new ObjectResultHandler(new FieldAccessor(0, theClass)), new Row(new Object[]{id}), null);
         } catch (QueryException e) {
             throw new PersistenceException(e);
         }
+        return result;
     }
 
     public void saveOrUpdate(Entity object) throws PersistenceException {

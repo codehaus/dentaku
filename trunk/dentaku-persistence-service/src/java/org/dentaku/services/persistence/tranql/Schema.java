@@ -7,8 +7,18 @@ import org.tranql.schema.*;
 import org.tranql.query.CommandFactory;
 
 import java.util.Map;
+import java.util.HashMap;
 
 public class Schema implements org.tranql.schema.Schema {
+    private Map entityMap;
+    private final CommandFactory commandFactory;
+
+    public Schema() {
+        entityMap = new HashMap();
+        commandFactory = new DentakuCommandFactory();
+    }
+
+
     public String getName() {
         return null;
     }
@@ -26,10 +36,10 @@ public class Schema implements org.tranql.schema.Schema {
     }
 
     public CommandFactory getCommandFactory() {
-        return null;
+        return commandFactory;
     }
 
-    public ModelEntity getModelEntity(String name) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+    public void addEntity(Entity entity) {
+        entityMap.put(entity.getName(), entity);
     }
 }

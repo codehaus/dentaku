@@ -12,6 +12,10 @@ import org.dentaku.services.persistence.tranql.ModelEntity;
 import org.dentaku.services.persistence.tranql.Relationship;
 import org.tranql.schema.Association;
 import org.tranql.schema.Entity;
+import org.tranql.sql.Column;
+import org.tranql.sql.EndTable;
+import org.tranql.sql.JoinTable;
+import org.tranql.sql.Table;
 
 import java.util.LinkedHashMap;
 
@@ -36,22 +40,37 @@ import java.util.LinkedHashMap;
  */
 public class ${class.name}Factory implements TranQLPersistenceFactory, Initializable {
     protected PersistenceManagerStorage pm = null;
-    protected ModelEntity e = null;
+    protected ModelEntity entity = null;
+    protected Table table = null;
 
     public Entity getEntity() {
-        return e;
+        return entity;
+    }
+
+    public Table getTable() {
+        return table;
     }
 
     public void initialize() throws Exception {
 ##        e = new ModelEntity("${class.name}", ${class.name}.class);
-        e = new ModelEntity("${class.name}", "${class.name}");
-        // attributes
+        // schema
+        entity = new ModelEntity("${class.name}", "${class.name}");
 #foreach ( $att in $class.attributes)
 #set ($attname =  ${plugin.fromDatabaseAttributeName(${att.name}, "_")})
 #if ($plugin.matchesStereotype($att, "PrimaryKey"))
-        e.addField(new Field("$attname", "$attname", ${att.type.fullyQualifiedName}.class, true));
+        entity.addField(new Field("$attname", "$attname", ${att.type.fullyQualifiedName}.class, true));
 #else
-        e.addField(new Field("$attname", "$attname", ${att.type.fullyQualifiedName}.class, false));
+        entity.addField(new Field("$attname", "$attname", ${att.type.fullyQualifiedName}.class, false));
+#end
+#end
+        // table
+        table = new Table("${class.name}");
+#foreach ( $att in $class.attributes)
+#set ($attname =  ${plugin.fromDatabaseAttributeName(${att.name}, "_")})
+#if ($plugin.matchesStereotype($att, "PrimaryKey"))
+        table.addColumn(new Column("$attname", "$attname", ${att.type.fullyQualifiedName}.class, true));
+#else
+        table.addColumn(new Column("$attname", "$attname", ${att.type.fullyQualifiedName}.class, false));
 #end
 #end
     }
@@ -60,16 +79,32 @@ public class ${class.name}Factory implements TranQLPersistenceFactory, Initializ
 #foreach ( $assoc in $class.associationLinks )
 #if ($assoc.target.navigable == true)
 #set ($targettypename = $assoc.target.participant.fullyQualifiedName)
-        e.addRelation(createRelation(pm, ${class.name}.class, ${targettypename}.class));
+        entity.addRelation(createRelation(pm, ${targettypename}.class));
+#end
+#end
+#foreach ( $assoc in $class.associationLinks )
+#if ($assoc.target.navigable == true)
+#set ($targettypename = $assoc.target.participant.fullyQualifiedName)
+        table.addEndTable(createEndTable(pm, ${targettypename}.class));
 #end
 #end
     }
 
-    private Association createRelation(PersistenceManagerStorage pm, Class r1, Class r2) throws PersistenceException {
-        Entity entity1 = ((TranQLPersistenceFactory) pm.getPersistenceFactory(r1.getName())).getEntity();
-        Entity entity2 = ((TranQLPersistenceFactory) pm.getPersistenceFactory(r2.getName())).getEntity();
+    private Association createRelation(PersistenceManagerStorage pm, Class r2) throws PersistenceException {
+        Entity relation = ((TranQLPersistenceFactory) pm.getPersistenceFactory(r2.getName())).getEntity();
 
-        return new Relationship(new Association.JoinDefinition(entity1, entity2, new LinkedHashMap()));
+        return new Relationship(new Association.JoinDefinition(getEntity(), relation, new LinkedHashMap()));
+    }
+
+    private EndTable createEndTable(PersistenceManagerStorage pm, Class relationClass) throws PersistenceException {
+        LinkedHashMap pkToFk = new LinkedHashMap();
+//        pkToFk.put(pkFieldA1, new FKColumn("fka1", String.class));
+//        pkToFk.put(pkFieldA2, new FKColumn("fka2", String.class));
+        Table relation = ((TranQLPersistenceFactory) pm.getPersistenceFactory(relationClass.getName())).getTable();
+        JoinTable joinTable = new JoinTable(new Association.JoinDefinition(this.getTable(), relation, pkToFk));
+
+        EndTable endTable = new EndTable(relationClass.getName(), this.getTable(), true, false, joinTable, false);
+        return endTable;
     }
 
    // ---------------- create methods --------------------

@@ -30,8 +30,9 @@ public class TranQLPersistenceManagerTest extends PersistenceServiceTestBase {
         assertNotNull(pm);
     }
 
-    public void testNothing() throws Exception {
-
+    public void testLoad() throws Exception {
+        Root r = (Root)pm.load(Root.class, new Long(1));
+        assertNotNull(r);
     }
 
 }
