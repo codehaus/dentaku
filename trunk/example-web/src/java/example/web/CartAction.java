@@ -45,6 +45,7 @@ import java.util.Iterator;
  * @struts.action	name="cartForm" path="/cart"
  * scope="session"
  * validate="false"
+ * unknown="false"
  * parameter="m"
  * @struts.action-forward name="basket" path="/cart/cart.jsp"
  * @struts.action-forward name="billing" path="/cart/checkout-billing.jsp"
