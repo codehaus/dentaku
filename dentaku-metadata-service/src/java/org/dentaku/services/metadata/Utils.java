@@ -16,11 +16,23 @@
  */
 package org.dentaku.services.metadata;
 
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.io.InputStream;
-import java.io.IOException;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
+import org.netbeans.jmiimpl.omg.uml.modelmanagement.ModelImpl;
+import org.omg.uml.foundation.core.UmlClass;
+import org.omg.uml.foundation.core.CorePackage;
+import org.omg.uml.foundation.core.TaggedValue;
+import org.omg.uml.foundation.core.ModelElement;
+import org.omg.uml.foundation.core.TagDefinition;
+import org.omg.uml.modelmanagement.UmlPackage;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class Utils {
     public static String getRootDir() {
@@ -51,5 +63,49 @@ public class Utils {
             } catch (MalformedURLException e) { }
         }
         return result;
+    }
+
+    public static ClassifierImpl findUmlClass(org.omg.uml.UmlPackage umlPackage, String pkgName, final String entityName, boolean create) {
+        // set up our superclass package structure
+        ModelImpl model = (ModelImpl)Utils.getModelRoot(umlPackage);
+        UmlPackage newPackage = model.getChildPackage(pkgName, create);
+
+        ClassifierImpl result = (ClassifierImpl) CollectionUtils.find(newPackage.getOwnedElement(), new Predicate() {
+            public boolean evaluate(Object object) {
+                return (object instanceof UmlClass && ((UmlClass) object).getName().equals(entityName));
+            }
+        });
+        // create the entity
+        if (result == null) {
+            CorePackage core = umlPackage.getCore();
+            result = (ClassifierImpl) core.getUmlClass().createUmlClass();
+            result.setName(entityName);
+            core.getANamespaceOwnedElement().add(newPackage, result);
+        }
+        return result;
+    }
+
+    public static TaggedValue createTaggedValue(CorePackage core, ModelElement owner, TagDefinition tagdefType, final String key, String value) {
+        TaggedValue taggedValue = core.getTaggedValue().createTaggedValue();
+        taggedValue.setName(key);
+        taggedValue.getDataValue().add(value);
+
+        if (tagdefType == null) {
+            tagdefType = core.getTagDefinition().createTagDefinition();
+            tagdefType.setTagType("String");
+        }
+        taggedValue.setType(tagdefType);
+
+        core.getAModelElementTaggedValue().add(owner, taggedValue);
+        return taggedValue;
+    }
+
+    public static ModelImpl getModelRoot(org.omg.uml.UmlPackage model) {
+        ModelImpl m = (ModelImpl) CollectionUtils.find(model.getCore().getNamespace().refAllOfType(), new Predicate() {
+            public boolean evaluate(Object o) {
+                if (((ModelElementImpl) o).getNamespace() == null) return true; else return false;
+            }
+        });
+        return m;
     }
 }

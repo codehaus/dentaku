@@ -131,11 +131,6 @@
       <version>SNAPSHOT</version>
       <type>jar</type>
     </dependency>
-    <dependency>
-      <groupId>xstream</groupId>
-      <artifactId>xstream</artifactId>
-      <version>1.0.3.2-dev</version>
-    </dependency>
   </dependencies>
   <build>
     <unitTest>

@@ -21,6 +21,7 @@ import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.functors.InstanceofPredicate;
 import org.dentaku.gentaku.cartridge.GenerationException;
 import org.dentaku.gentaku.cartridge.GeneratorSupport;
+import org.dentaku.services.metadata.Utils;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.AssociationEndImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
@@ -29,13 +30,11 @@ import org.omg.uml.foundation.core.AssociationEnd;
 import org.omg.uml.foundation.core.Attribute;
 import org.omg.uml.foundation.core.CorePackage;
 import org.omg.uml.foundation.core.Generalization;
-import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.Stereotype;
 import org.omg.uml.foundation.core.TagDefinition;
 import org.omg.uml.foundation.core.TaggedValue;
 import org.omg.uml.foundation.core.UmlClass;
 import org.omg.uml.foundation.datatypes.MultiplicityRange;
-import org.omg.uml.modelmanagement.UmlPackage;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -51,15 +50,16 @@ import java.util.LinkedList;
 public class EntityGenerator extends GeneratorSupport {
     // add the items that we implicitly generate for Entity objects
     public void preProcessModel(ModelImpl model) throws GenerationException {
-        CorePackage core = ((org.omg.uml.UmlPackage) model.refOutermostPackage()).getCore();
+        final org.omg.uml.UmlPackage umlPackage = (org.omg.uml.UmlPackage)model.refOutermostPackage();
+        CorePackage core = ((org.omg.uml.UmlPackage) umlPackage).getCore();
         Stereotype classifierStereotype = (Stereotype) CollectionUtils.find(core.getStereotype().refAllOfType(), new Predicate() {
             public boolean evaluate(Object object) {
                 return ((ModelElementImpl) object).getName().equals("Entity");
             }
         });
 
-        ClassifierImpl odspEntity = findUmlClass(core, model, "org.dentaku.services.persistence", "Entity", true);
-        ClassifierImpl javaUtilList = findUmlClass(core, model, "java.util", "List", true);
+        ClassifierImpl odspEntity = Utils.findUmlClass(umlPackage, "org.dentaku.services.persistence", "Entity", true);
+        ClassifierImpl javaUtilList = Utils.findUmlClass(umlPackage, "java.util", "List", true);
 
         Collection extendedElements = new LinkedList(core.getAStereotypeExtendedElement().getExtendedElement(classifierStereotype));
 
@@ -78,17 +78,17 @@ public class EntityGenerator extends GeneratorSupport {
             // update our superclass structure to accurately reflect what we are generating
             String entityName = classifier.getName();
             classifier.setName(entityName + "Base");
-            ClassifierImpl subclass = (ClassifierImpl) findUmlClass(core, model, ((ModelElementImpl) classifier.getNamespace()).getFullyQualifiedName(), entityName, true);
+            ClassifierImpl subclass = (ClassifierImpl) Utils.findUmlClass(umlPackage, ((ModelElementImpl) classifier.getNamespace()).getFullyQualifiedName(), entityName, true);
             subclass.getStereotype().add(classifierStereotype);
-            createTaggedValue(core, subclass, findStereotypeTagdef(classifierStereotype, "class.name"), "class.name", "${parent.name}");
-            createTaggedValue(core, subclass, findStereotypeTagdef(classifierStereotype, "class.persistence-capable-superclass"), "class.persistence-capable-superclass", ((ModelElementImpl) classifier).getFullyQualifiedName());
-            createTaggedValue(core, subclass, null, "gentaku.generate", "false");
+            Utils.createTaggedValue(core, subclass, findStereotypeTagdef(classifierStereotype, "class.name"), "class.name", "${parent.name}");
+            Utils.createTaggedValue(core, subclass, findStereotypeTagdef(classifierStereotype, "class.persistence-capable-superclass"), "class.persistence-capable-superclass", ((ModelElementImpl) classifier).getFullyQualifiedName());
+            Utils.createTaggedValue(core, subclass, null, "gentaku.generate", "false");
 
             // handle the fields
             Collection attributes = CollectionUtils.select(classifier.getFeature(), new InstanceofPredicate(Attribute.class));
             for (Iterator attIterator = attributes.iterator(); attIterator.hasNext();) {
                 Attribute attribute = (Attribute) attIterator.next();
-                TaggedValue taggedValue = createTaggedValue(core, attribute, findStereotypeTagdef(classifierStereotype, "field.name"), "field.name", "${parent.name}");
+                TaggedValue taggedValue = Utils.createTaggedValue(core, attribute, findStereotypeTagdef(classifierStereotype, "field.name"), "field.name", "${parent.name}");
                 attribute.getTaggedValue().add(taggedValue);
             }
 
@@ -107,7 +107,7 @@ public class EntityGenerator extends GeneratorSupport {
             ClassifierImpl classifier = (ClassifierImpl) modelElement;
             String fullyQualifiedName = classifier.getFullyQualifiedName();
             String subclassName = fullyQualifiedName.substring(0, fullyQualifiedName.lastIndexOf("Base"));
-            ClassifierImpl subclass = findUmlClass(core, model, subclassName, false);
+            ClassifierImpl subclass = findUmlClass(umlPackage, subclassName, false);
             // handle the associations
             for (Iterator assIter = subclass.getTargetEnds().iterator(); assIter.hasNext();) {
                 AssociationEndImpl end = (AssociationEndImpl) assIter.next();
@@ -122,14 +122,14 @@ public class EntityGenerator extends GeneratorSupport {
                         newAttr.setName(name);
                     }
 
-                    createTaggedValue(core, newAttr, findStereotypeTagdef(classifierStereotype, "field.name"), "field.name", "${parent.name}");
+                    Utils.createTaggedValue(core, newAttr, findStereotypeTagdef(classifierStereotype, "field.name"), "field.name", "${parent.name}");
                     if (end.getMultiplicity() != null) {
                         MultiplicityRange multiplicityRange = (MultiplicityRange) end.getMultiplicity().getRange().iterator().next();
                         int lower = multiplicityRange.getLower();
                         int upper = multiplicityRange.getUpper();
                         if (upper - lower > 1 || upper == -1) {
-                            createTaggedValue(core, newAttr, findStereotypeTagdef(classifierStereotype, "collection.element-type"), "collection.element-type", endClass.getFullyQualifiedName());
-                            createTaggedValue(core, newAttr, findStereotypeTagdef(classifierStereotype, "join"), "join", "");
+                            Utils.createTaggedValue(core, newAttr, findStereotypeTagdef(classifierStereotype, "collection.element-type"), "collection.element-type", endClass.getFullyQualifiedName());
+                            Utils.createTaggedValue(core, newAttr, findStereotypeTagdef(classifierStereotype, "join"), "join", "");
                             core.getATypedFeatureType().add(newAttr, javaUtilList);
                         } else {
                             core.getATypedFeatureType().add(newAttr, endClass);
@@ -151,48 +151,15 @@ public class EntityGenerator extends GeneratorSupport {
         g.setParent(parent);
     }
 
-    private ClassifierImpl findUmlClass(CorePackage core, ModelImpl m, String fqn, boolean create) {
+    private ClassifierImpl findUmlClass(org.omg.uml.UmlPackage umlPackage, String fqn, boolean create) {
         int indexOf = fqn.lastIndexOf(".");
         if (indexOf == -1) {
-            return findUmlClass(core, m, "", fqn, true);
+            return Utils.findUmlClass(umlPackage, "", fqn, true);
         } else {
             String entityName = fqn.substring(indexOf + 1);
             String pkgName = fqn.substring(0, indexOf);
-            return findUmlClass(core, m, pkgName, entityName, create);
+            return Utils.findUmlClass(umlPackage, pkgName, entityName, create);
         }
-    }
-
-    private ClassifierImpl findUmlClass(CorePackage core, ModelImpl m, String pkgName, final String entityName, boolean create) {
-        // set up our superclass package structure
-        UmlPackage newPackage = m.getChildPackage(pkgName, create);
-
-        ClassifierImpl result = (ClassifierImpl) CollectionUtils.find(newPackage.getOwnedElement(), new Predicate() {
-            public boolean evaluate(Object object) {
-                return (object instanceof UmlClass && ((UmlClass) object).getName().equals(entityName));
-            }
-        });
-        // create the entity
-        if (result == null) {
-            result = (ClassifierImpl) core.getUmlClass().createUmlClass();
-            result.setName(entityName);
-            core.getANamespaceOwnedElement().add(newPackage, result);
-        }
-        return result;
-    }
-
-    private TaggedValue createTaggedValue(CorePackage core, ModelElement owner, TagDefinition tagdefType, final String key, String value) {
-        TaggedValue taggedValue = core.getTaggedValue().createTaggedValue();
-        taggedValue.setName(key);
-        taggedValue.getDataValue().add(value);
-
-        if (tagdefType == null) {
-            tagdefType = core.getTagDefinition().createTagDefinition();
-            tagdefType.setTagType("String");
-        }
-        taggedValue.setType(tagdefType);
-
-        core.getAModelElementTaggedValue().add(owner, taggedValue);
-        return taggedValue;
     }
 
     private TagDefinition findStereotypeTagdef(Stereotype stereotype, final String key) {

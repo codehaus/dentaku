@@ -59,7 +59,7 @@
         <dependency>
             <groupId>commons-jelly</groupId>
             <artifactId>commons-jelly-tags-define</artifactId>
-            <version>SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>commons-jelly</groupId>
@@ -82,49 +82,49 @@
         <dependency>
 			<groupId>netbeans</groupId>
             <artifactId>jmi</artifactId>
-			<version>unknow</version>
+			<version>20050203.145116</version>
 			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
 			<groupId>netbeans</groupId>
             <artifactId>jmiuml14di</artifactId>
-			<version>unknow</version>
+			<version>20050203.145116</version>
 			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
 			<groupId>netbeans</groupId>
             <artifactId>jmiutils</artifactId>
-			<version>unknow</version>
+			<version>20050203.145116</version>
 			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
 			<groupId>netbeans</groupId>
             <artifactId>mdr</artifactId>
-			<version>unknow</version>
+			<version>20050203.145116</version>
 			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
 			<groupId>netbeans</groupId>
             <artifactId>mof</artifactId>
-			<version>unknow</version>
+			<version>20050203.145116</version>
 			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
 			<groupId>netbeans</groupId>
             <artifactId>openide-util</artifactId>
-			<version>unknow</version>
+			<version>20050203.145116</version>
 			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
 			<groupId>netbeans</groupId>
             <artifactId>org-netbeans-api-mdr</artifactId>
-			<version>unknow</version>
+			<version>20050203.145116</version>
 			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
 			<groupId>netbeans</groupId>
             <artifactId>org-netbeans-modules-jmiutils</artifactId>
-			<version>unknow</version>
+			<version>20050203.145116</version>
 			<url>http://www.netbeans.org</url>
         </dependency>
 
@@ -192,7 +192,7 @@
         <dependency>
             <groupId>commons-jelly</groupId>
             <artifactId>commons-jelly</artifactId>
-            <version>1.0-beta-4-SNAPSHOT</version>
+            <version>1.0-RC2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>dom4j</groupId>
@@ -212,13 +212,13 @@
         <dependency>
             <groupId>commons-jelly</groupId>
             <artifactId>commons-jelly-tags-xml</artifactId>
-            <version>20030211.142705</version>
+            <version>1.0</version>
             <url>http://jakarta.apache.org/jelly/</url>
         </dependency>
         <dependency>
             <groupId>commons-jelly</groupId>
             <artifactId>commons-jelly-tags-define</artifactId>
-            <version>SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>

@@ -16,11 +16,15 @@
  */
 package org.dentaku.services.metadata;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
+import com.thoughtworks.qdox.model.ClassLibrary;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaClassCache;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.ModelBuilder;
+import com.thoughtworks.qdox.parser.structs.ClassDef;
+import com.thoughtworks.qdox.parser.structs.FieldDef;
+import com.thoughtworks.qdox.parser.structs.MethodDef;
+import com.thoughtworks.qdox.parser.structs.TagDef;
 import org.generama.GeneramaException;
 import org.generama.QDoxCapableMetadataProvider;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
@@ -35,23 +39,15 @@ import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.Operation;
 import org.omg.uml.foundation.core.Stereotype;
 import org.omg.uml.foundation.core.TaggedValue;
+import org.xdoclet.JavaSourceProvider;
 
-import com.thoughtworks.qdox.model.AbstractJavaEntity;
-import com.thoughtworks.qdox.model.ClassLibrary;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaClassCache;
-import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.model.ModelBuilder;
-import com.thoughtworks.qdox.parser.structs.ClassDef;
-import com.thoughtworks.qdox.parser.structs.FieldDef;
-import com.thoughtworks.qdox.parser.structs.MethodDef;
-import com.thoughtworks.qdox.parser.structs.TagDef;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDoxCapableMetadataProvider, JavaClassCache {
+
     private ClassLibrary classLibrary = new ClassLibrary(this);
     private Collection metadata;
-    private Map classes;
-    private Map qdoxJMIMap;
 
     public QDoxMetadataProvider() {
     }
@@ -60,46 +56,35 @@ public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDo
         super(reader);
     }
 
+    public QDoxMetadataProvider(RepositoryReader reader, JavaSourceProvider fileProvider) {
+        super(reader, fileProvider);
+    }
+
     public Collection getMetadata() throws GeneramaException {
-        setupMetadata();
         return classes.values();
     }
 
     public Collection getJMIMetadata() {
-        setupMetadata();
         return metadata;
     }
 
-    private void setupMetadata() {
+    public void start() {
+        super.start();
         try {
-            if (classes == null) {
-                metadata = getModel().getCore().getModelElement().refAllOfType();
-                classLibrary.addDefaultLoader();
-                Collection c = getModel().getCore().getClassifier().refAllOfType();
-                classes = new HashMap(c.size());
-                qdoxJMIMap = new HashMap(c.size());
-                for (Iterator ot = c.iterator(); ot.hasNext();) {
-                    Classifier classifier = (Classifier) ot.next();
-                    JavaClass qdoxClass = createJMIClass(classifier);
-                    classes.put(classifier.getName(), qdoxClass);
-                    qdoxJMIMap.put(qdoxClass, classifier);
+            metadata = getModel().getCore().getModelElement().refAllOfType();
+            classLibrary.addDefaultLoader();
+            Collection c = getModel().getCore().getClassifier().refAllOfType();
+            for (Iterator ot = c.iterator(); ot.hasNext();) {
+                ClassifierImpl classifier = (ClassifierImpl) ot.next();
+                if (qdoxJMIMap.containsValue(classifier)) {
+                    continue;
                 }
+                JavaClass qdoxClass = createJMIClass(classifier);
+                classes.put(qdoxClass.getFullyQualifiedName(), qdoxClass);
+                qdoxJMIMap.put(qdoxClass, classifier);
             }
-        } catch (Exception e) {
+        } catch (RepositoryException e) {
             throw new GeneramaException("problem loading metadata", e);
-        }
-    }
-
-    /**
-     * This method is used to map to other known types
-     * @param object
-     * @return
-     */
-    public Classifier mapObjectToClassifier(Object object) {
-        if (object instanceof AbstractJavaEntity) {
-            return (Classifier)qdoxJMIMap.get(object);
-        } else {
-            throw new IllegalArgumentException("Unknown type to map");
         }
     }
 

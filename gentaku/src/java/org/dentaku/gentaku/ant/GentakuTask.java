@@ -28,6 +28,7 @@ import org.generama.Generama;
 import org.generama.ant.AbstractGeneramaTask;
 import org.generama.defaults.FileWriterMapper;
 import org.picocontainer.MutablePicoContainer;
+import org.xdoclet.ant.AntSourceProvider;
 
 public class GentakuTask extends AbstractGeneramaTask {
     private String encoding = System.getProperty("file.encoding");
@@ -35,13 +36,15 @@ public class GentakuTask extends AbstractGeneramaTask {
     private Collection filesets = new ArrayList();
 
     protected Generama createGenerama() {
-        return new Gentaku(FileWriterMapper.class) {
+        return new Gentaku(AntSourceProvider.class, FileWriterMapper.class) {
             public void composeContainer(MutablePicoContainer pico, Object scope) {
                 super.composeContainer(pico, scope);
                 pico.registerComponentInstance(getProject());
                 pico.registerComponentInstance(encoding);
                 pico.registerComponentInstance(filesets);
-                pico.registerComponentInstance(modelURL);
+                if (modelURL != null) {
+                    pico.registerComponentInstance(modelURL);
+                }
                 pico.registerComponentImplementation(MagicDrawRepositoryReader.class);
             }
         };

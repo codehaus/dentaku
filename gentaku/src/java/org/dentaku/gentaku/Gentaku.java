@@ -26,12 +26,15 @@ import org.picocontainer.MutablePicoContainer;
  *
  */
 public class Gentaku extends Generama {
+    private Class javaSourceProviderClass;
 
-    public Gentaku(Class writerMapperClass) {
+    public Gentaku(Class fileProviderClass, Class writerMapperClass) {
         super(QDoxMetadataProvider.class, writerMapperClass);
+        javaSourceProviderClass = fileProviderClass;
     }
 
     public void composeContainer(MutablePicoContainer pico, Object scope) {
         super.composeContainer(pico, scope);
+        pico.registerComponentImplementation(javaSourceProviderClass);
     }
 }
