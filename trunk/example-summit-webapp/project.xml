@@ -50,30 +50,45 @@
       <artifactId>gentaku</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>dentaku-metadata-service</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>dentaku-persistence-service</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
     </dependency>
     <dependency>
         <groupId>${pom.groupId}</groupId>
         <artifactId>dentaku-event-cartridge</artifactId>
         <version>SNAPSHOT</version>
         <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>gentaku-summit-cartridge</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
     </dependency>
     <!-- Plexus -->
     <dependency>
@@ -118,18 +133,29 @@
       <artifactId>gentaku</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>dentaku-cartridge-generator</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
     </dependency>
     <dependency>
       <groupId>commons-el</groupId>
       <artifactId>jsp-api</artifactId>
       <version>SNAPSHOT</version>
       <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>mockejb</groupId>
+      <artifactId>mockejb</artifactId>
+      <version>0.5</version>
     </dependency>
   </dependencies>
   <build>

@@ -9,6 +9,9 @@
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
 
         <!-- Build/Test time only -->

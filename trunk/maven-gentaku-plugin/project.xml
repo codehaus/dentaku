@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
-    <groupId>dentaku</groupId>
 	<groupId>dentaku</groupId>
     <artifactId>maven-gentaku-plugin</artifactId>
     <name>Maven Gentaku Plug-in</name>

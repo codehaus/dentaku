@@ -10,32 +10,59 @@
             <artifactId>dentaku-foundation</artifactId>
             <version>SNAPSHOT</version>
             <type>ejb</type>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
             <version>SNAPSHOT</version>
             <type>ejb</type>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-persistence-service</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-event-cartridge</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
             <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
+        </dependency>
+
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>gentaku</artifactId>
+            <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
         </dependency>
 
         <dependency>
@@ -45,13 +72,8 @@
             <type>plugin</type>
         </dependency>
 
-        <dependency>
-            <groupId>${pom.groupId}</groupId>
-            <artifactId>gentaku</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
 
-<!--        cgen-->
+		<!--        cgen-->
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-cartridge-generator</artifactId>
@@ -154,10 +176,12 @@
             <version>1.1.1</version>
         </dependency>
         <!--       end only for testing-->
-        <dependency>
-            <id>mockejb</id>
-        </dependency>
 
+		<dependency>
+			<groupId>mockejb</groupId>
+			<artifactId>mockejb</artifactId>
+			<version>0.5</version>
+		</dependency>
         <dependency>
             <groupId>struts</groupId>
             <artifactId>struts</artifactId>
