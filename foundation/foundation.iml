@@ -28,7 +28,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="XStream" level="application" />
+    <orderEntry type="library" name="XStream-1.0" level="application" />
     <orderEntryProperties />
   </component>
 </module>

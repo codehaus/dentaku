@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <project>
 	<pomVersion>3</pomVersion>
-	<id>dentaku-main</id>
 	<groupId>dentaku</groupId>
-	<currentVersion>0.5</currentVersion>
+	<currentVersion>0.9-SNAPSHOT</currentVersion>
 	<name>Dentaku Project</name>
 	<!-- ################################################################ -->
 	<!--        Project management section                                -->
@@ -19,14 +18,12 @@
 	<url/>
 	<issueTrackingUrl>http://www.dentaku.org</issueTrackingUrl>
 	<siteAddress>http://www.dentaku.org</siteAddress>
-	<siteDirectory/>
+    <siteDirectory>/home/projects/dentaku/public_html/sites/${pom.artifactId}</siteDirectory>
 	<distributionDirectory>/dentaku/dist/${pom.artifactId}/</distributionDirectory>
-	<!--
     <repository>
-        <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:maven</connection>
-        <url>http://cvs.apache.org/viewcvs/maven/</url>
+        <connection>scm:cvs:pserver:anonymous@cvs.dentaku.codehaus.org:/home/projects/dentaku/scm:dentaku</connection>
+        <url>http://cvs.dentaku.codehaus.org/</url>
     </repository>
-    -->
 	<versions/>
 	<mailingLists/>
 	<developers>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module version="4" relativePaths="false">
+<module version="4" relativePaths="false" type="JAVA_MODULE">
   <component name="ModuleRootManager" />
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/target/classes" />
@@ -50,8 +50,7 @@
     <orderEntry type="library" name="Clover" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
     <orderEntry type="library" name="Generama" level="application" />
-    <orderEntry type="module" module-name="dentaku-foundation" />
-    <orderEntry type="module" module-name="dentaku-services" />
+    <orderEntryProperties />
   </component>
 </module>
 

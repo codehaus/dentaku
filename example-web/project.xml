@@ -1,11 +1,7 @@
 <project>
-    <pomVersion>3</pomVersion>
-    <groupId>dentaku</groupId>
-    <currentVersion>0.7</currentVersion>
+    <extend>${basedir}/../project.xml</extend>
     <artifactId>example-web</artifactId>
     <name>example-web</name>
-    <siteAddress>www.dentaku.org</siteAddress>
-    <siteDirectory>/home/projects/dentaku/public_html/sites/${pom.artifactId}</siteDirectory>
     <dependencies>
         <dependency>
             <groupId>plexus</groupId>
@@ -18,19 +14,19 @@
         <dependency>
             <groupId>dentaku</groupId>
             <artifactId>example-model</artifactId>
-            <version>0.7</version>
+            <version>${pom.currentVersion}</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>dentaku</groupId>
             <artifactId>dentaku-services</artifactId>
-            <version>0.7</version>
+            <version>${pom.currentVersion}</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>dentaku</groupId>
             <artifactId>dentaku-foundation</artifactId>
-            <version>0.7</version>
+            <version>${pom.currentVersion}</version>
             <type>ejb</type>
         </dependency>
 
@@ -254,10 +250,6 @@
 <!--        end for admin project-->
     </dependencies>
     <build>
-        <nagEmailAddress>dev@dentaku.codehaus.org</nagEmailAddress>
-        <sourceDirectory>${basedir}/src/java</sourceDirectory>
-        <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
-
         <unitTest>
             <includes>
                 <include>**/*Test.java</include>
@@ -280,8 +272,4 @@
             </resource>
         </resources>
     </build>
-    <reports>
-        <report>maven-clover-plugin</report>
-        <report>maven-javadoc-plugin</report>
-    </reports>
 </project>

@@ -1,18 +1,10 @@
 <?xml version="1.0"?>
 
 <project>
-<!--    <extend>${basedir}/../project.xml</extend>-->
-    <pomVersion>3</pomVersion>
-    <groupId>dentaku</groupId>
-    <currentVersion>0.8</currentVersion>
+    <extend>${basedir}/../project.xml</extend>
     <artifactId>dentaku-metadata-service</artifactId>
     <name>Metadata Service for Dentaku</name>
     <package>org.dentaku.services.metadata.*</package>
-
-    <description>Metadata Service for Dentaku</description>
-    <shortDescription>Metadata Service for Dentaku</shortDescription>
-    <siteAddress>www.dentaku.org</siteAddress>
-    <siteDirectory>/home/projects/dentaku/public_html/sites/${pom.artifactId}</siteDirectory>
 
     <dependencies>
         <dependency>
@@ -47,18 +39,13 @@
         <dependency>
             <groupId>xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>SNAPSHOT</version>
+            <version>1.0-SNAPSHOT</version>
             <properties>
                 <ejb.bundle>true</ejb.bundle>
             </properties>
         </dependency>
 <!--        plexus-->
 
-        <dependency>
-            <groupId>dentaku</groupId>
-            <artifactId>gentaku</artifactId>
-            <version>0.8</version>
-        </dependency>
         <dependency>
             <groupId>generama</groupId>
             <artifactId>generama</artifactId>
@@ -115,11 +102,6 @@
             <version>SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>commons-digester</groupId>
             <artifactId>commons-digester</artifactId>
             <version>1.4.1</version>
@@ -132,11 +114,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
-        </dependency>
-        <dependency>
-            <groupId>xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <id>jmiuml14di</id>
@@ -169,10 +146,6 @@
 
     </dependencies>
     <build>
-        <nagEmailAddress>dev@dentaku.codehaus.org</nagEmailAddress>
-        <sourceDirectory>${basedir}/src/java</sourceDirectory>
-        <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
-
         <unitTest>
             <includes>
                 <include>**/*Test.java</include>
@@ -201,9 +174,4 @@
             </resource>
         </resources>
     </build>
-    <reports>
-        <report>maven-clover-plugin</report>
-        <report>maven-javadoc-plugin</report>
-        <report>maven-junit-report-plugin</report>
-    </reports>
 </project>

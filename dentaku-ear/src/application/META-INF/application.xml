@@ -4,17 +4,14 @@
 <application>
   <display-name>dentaku:dentaku-ear</display-name>
   <module>
-    <ejb>dentaku-foundation-0.1.jar</ejb>
+    <ejb>dentaku-foundation-0.9-SNAPSHOT.jar</ejb>
   </module>
   <module>
-    <ejb>dentaku-model-0.1.jar</ejb>
-  </module>
-  <module>
-    <ejb>dentaku-services-0.1.jar</ejb>
+    <ejb>dentaku-services-0.9-SNAPSHOT.jar</ejb>
   </module>
   <module>
     <web>
-      <web-uri>dentaku-web-0.1.war</web-uri>
+      <web-uri>example-web-0.9-SNAPSHOT.war</web-uri>
       <context-root>webapp</context-root>
     </web>
   </module>

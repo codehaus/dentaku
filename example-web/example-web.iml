@@ -4,6 +4,7 @@
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/target/classes" />
     <exclude-output />
+    <exploded url="file://$MODULE_DIR$/target/example-web" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
@@ -12,8 +13,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="example-model" />
-    <orderEntry type="module" module-name="services" />
-    <orderEntry type="module" module-name="foundation" />
     <orderEntry type="library" name="jboss" level="application" />
     <orderEntry type="library" name="Tomcat" level="application" />
     <orderEntry type="library" name="Digester" level="application" />
@@ -33,268 +32,60 @@
     </orderEntry>
     <orderEntry type="library" name="Hibernate" level="application" />
     <orderEntry type="library" name="Clover" level="application" />
-    <orderEntry type="library" name="XStream-1.0" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
+    <orderEntry type="library" name="XStream-1.0" level="application" />
+    <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
     <setting name="EXPLODED_URL" value="file://$MODULE_DIR$/target/example-web" />
     <setting name="EXPLODED_ENABLED" value="true" />
     <setting name="JAR_URL" value="file://" />
     <setting name="JAR_ENABLED" value="false" />
+    <setting name="SYNC_EXPLODED_DIR" value="false" />
+    <setting name="BUILD_ON_FRAME_DEACTIVATION" value="false" />
     <setting name="RUN_JASPER_VALIDATION" value="false" />
   </component>
   <component name="WebModuleProperties">
+    <containerElement type="library" level="application" name="Apache Regexp">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MODULE_DIR$/lib/pager-taglib.jar!/</url>
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Commons">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Digester">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Hibernate">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Struts">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Test">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" level="application" name="XStream-1.0">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
     <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/target/example-web/WEB-INF/web.xml" version="2.3" />
     <webroots>
       <root url="file://$MODULE_DIR$/src/webapp" relative="/" />
     </webroots>
-    <orderEntriesWatcher>
-      <pairs>
-        <key>
-          <option name="value" value="0" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="jboss" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="1" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="Struts" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="6" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="Tomcat" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="8" />
-        </key>
-        <value predicate="dependencyModule" moduleName="services" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="9" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="Digester" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="10" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="Apache Regexp" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="12" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="Test" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="14" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="Commons" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="15" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="mx4j" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="23" />
-        </key>
-        <value predicate="moduleLibrary">
-          <url>jar://$MODULE_DIR$/lib/pager-taglib.jar!/</url>
-        </value>
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="24" />
-        </key>
-        <value predicate="dependencyModule" moduleName="example-model" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="25" />
-        </key>
-        <value predicate="dependencyModule" moduleName="foundation" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="26" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="Hibernate" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="27" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="Clover" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="28" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="XStream-1.0" />
-      </pairs>
-      <pairs>
-        <key>
-          <option name="value" value="30" />
-        </key>
-        <value predicate="higherLibrary" level="application" libraryName="Plexus" />
-      </pairs>
-    </orderEntriesWatcher>
-    <order-entry-info>
-      <info>
-        <key>
-          <option name="value" value="0" />
-        </key>
-        <value>
-          <setting name="copy" value="false" />
-          <setting name="URI" value="" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="1" />
-        </key>
-        <value>
-          <setting name="copy" value="true" />
-          <setting name="URI" value="/WEB-INF/lib" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="6" />
-        </key>
-        <value>
-          <setting name="copy" value="false" />
-          <setting name="URI" value="" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="8" />
-        </key>
-        <value>
-          <setting name="copy" value="true" />
-          <setting name="URI" value="/WEB-INF/classes" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="9" />
-        </key>
-        <value>
-          <setting name="copy" value="true" />
-          <setting name="URI" value="/WEB-INF/lib" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="10" />
-        </key>
-        <value>
-          <setting name="copy" value="true" />
-          <setting name="URI" value="/WEB-INF/lib" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="12" />
-        </key>
-        <value>
-          <setting name="copy" value="true" />
-          <setting name="URI" value="/WEB-INF/lib" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="14" />
-        </key>
-        <value>
-          <setting name="copy" value="true" />
-          <setting name="URI" value="/WEB-INF/lib" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="15" />
-        </key>
-        <value>
-          <setting name="copy" value="false" />
-          <setting name="URI" value="" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="23" />
-        </key>
-        <value>
-          <setting name="copy" value="true" />
-          <setting name="URI" value="/WEB-INF/lib" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="24" />
-        </key>
-        <value>
-          <setting name="copy" value="true" />
-          <setting name="URI" value="/WEB-INF/classes" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="25" />
-        </key>
-        <value>
-          <setting name="copy" value="true" />
-          <setting name="URI" value="/WEB-INF/classes" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="26" />
-        </key>
-        <value>
-          <setting name="copy" value="true" />
-          <setting name="URI" value="/WEB-INF/lib" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="27" />
-        </key>
-        <value>
-          <setting name="copy" value="false" />
-          <setting name="URI" value="" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="28" />
-        </key>
-        <value>
-          <setting name="copy" value="false" />
-          <setting name="URI" value="" />
-        </value>
-      </info>
-      <info>
-        <key>
-          <option name="value" value="30" />
-        </key>
-        <value>
-          <setting name="copy" value="false" />
-          <setting name="URI" value="" />
-        </value>
-      </info>
-    </order-entry-info>
-    <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/target/example-web/WEB-INF/web.xml" version="2.3" />
+  </component>
+  <component name="WeblogicWebModuleProperties">
+    <option name="IS_RUN_APPC" value="false" />
   </component>
 </module>
 
