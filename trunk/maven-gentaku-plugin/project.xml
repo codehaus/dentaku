@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
-    <extend>../project.xml</extend>
+    <groupId>dentaku</groupId>
 	<groupId>dentaku</groupId>
     <artifactId>maven-gentaku-plugin</artifactId>
     <name>Maven Gentaku Plug-in</name>
@@ -9,9 +9,9 @@
     <description>
 		A Maven plugin to run Gentaku from within Maven
 	</description>
-	
+
     <shortDescription>A Maven plugin to run Gentaku from Maven</shortDescription>
-	
+
     <developers>
         <developer>
             <name>Jose Luiz Peleteiro</name>
@@ -52,7 +52,7 @@
             <groupId>commons-el</groupId>
             <artifactId>jsp-api</artifactId>
             <version>SNAPSHOT</version>
-        </dependency>		
+        </dependency>
 		<!-- Netbeans -->
         <dependency>
 			<groupId>netbeans</groupId>
@@ -102,33 +102,27 @@
 			<version>unknow</version>
 			<url>http://www.netbeans.org</url>
         </dependency>
-		
+
 		<!-- Plexus -->
         <dependency>
-			<groupId>plexus</groupId>
+            <groupId>plexus</groupId>
             <artifactId>plexus-container-default</artifactId>
-			<version>1.0-alpha-1-SNAPSHOT</version>
-			<url>http://plexus.codehaus.org</url>
+            <version>1.0-alpha-2-SNAPSHOT</version>
+            <url>http://plexus.codehaus.org</url>
         </dependency>
         <dependency>
-			<groupId>plexus</groupId>
-            <artifactId>plexus-container-api</artifactId>
-			<version>1.0-alpha-1-SNAPSHOT</version>
-			<url>http://plexus.codehaus.org</url>
-        </dependency>
-        <dependency>
-			<groupId>plexus</groupId>
+            <groupId>plexus</groupId>
             <artifactId>plexus-utils</artifactId>
-			<version>1.0-alpha-1-SNAPSHOT</version>
-			<url>http://plexus.codehaus.org</url>
+            <version>1.0-alpha-1-SNAPSHOT</version>
+            <url>http://plexus.codehaus.org</url>
         </dependency>
         <dependency>
             <groupId>classworlds</groupId>
             <artifactId>classworlds</artifactId>
             <version>1.1-alpha-1</version>
-			<url>http://classworlds.codehaus.org</url>
+            <url>http://classworlds.codehaus.org</url>
         </dependency>
-		
+
 		<!-- Not categorized yet -->
         <dependency>
             <groupId>picocontainer</groupId>

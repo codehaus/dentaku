@@ -1,3 +1,6 @@
 <project default="plugin:plugin">
-  <goal name="main" prereqs="plugin:plugin"/>
+    <goal name="main" prereqs="plugin:plugin"/>
+    <goal name="deploy" prereqs="main">
+        <copy file="${maven.build.dir}/${maven.final.name}.jar" todir="c:/dev/maven/maven/plugins"/>
+    </goal>
 </project>
