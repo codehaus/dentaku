@@ -38,6 +38,15 @@
     </orderEntry>
     <orderEntry type="library" name="Axion" level="application" />
     <orderEntry type="module" module-name="cglib" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPO_LOCAL$/hsqldb/jars/hsqldb-1.7.2.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntryProperties />
   </component>
 </module>

@@ -54,7 +54,7 @@ public class ${class.name}Factory implements TranQLPersistenceFactory, Initializ
     public void initialize() throws Exception {
 ##        e = new ModelEntity("${class.name}", ${class.name}.class);
         // schema
-        entity = new ModelEntity("${class.name}", "${class.name}");
+        entity = new ModelEntity("${class.name}", "${class.fullyQualifiedName}");
 #foreach ( $att in $class.attributes)
 #set ($attname =  ${plugin.fromDatabaseAttributeName(${att.name}, "_")})
 #if ($plugin.matchesStereotype($att, "PrimaryKey"))

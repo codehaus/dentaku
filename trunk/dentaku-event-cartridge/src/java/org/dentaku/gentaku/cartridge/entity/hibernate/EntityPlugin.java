@@ -1,5 +1,5 @@
 /*
- * EntityBasePlugin.java
+ * EntityPlugin.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,28 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dentaku.gentaku.cartridge.entity;
+package org.dentaku.gentaku.cartridge.entity.hibernate;
 
-import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
-import org.omg.uml.foundation.core.Classifier;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Collection;
 
-public class EntityBasePlugin extends JavaPluginBase {
+public class EntityPlugin extends JavaPluginBase {
     private JMICapableMetadataProvider metadataProvider;
 
-    public EntityBasePlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public EntityPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
         this.metadataProvider = metadataProvider;
         getStereotypes().add("Entity");
-        setFileregex(".java");
-        setFilereplace("Base.java");
+        setCreateonly(true);
         setMultioutput(true);
     }
 
