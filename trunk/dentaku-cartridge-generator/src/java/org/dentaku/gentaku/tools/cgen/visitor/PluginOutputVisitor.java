@@ -70,26 +70,23 @@ public class PluginOutputVisitor {
 
             if (!c.isEmpty()) {
                 for (Iterator elementIterator = c.iterator(); elementIterator.hasNext();) {
-                    Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
                     ModelElementImpl element = (ModelElementImpl) elementIterator.next();
                     if (element instanceof Namespace) {
                         parent = (Namespace) element;
                     }
-                    if (iterateElements(mappingNode, newLocalNode, parent)) {
-                        result = true;
-                    }
+
+                    Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
                     if (iterateAttributes(mappingXSD, element, newLocalNode)) {
-                        result = true;
-                    }
-                    if (result) {
+                        iterateElements(mappingNode, newLocalNode, parent);
                         parentOutput.add(newLocalNode);
+                        result = true;
                     }
                 }
-            } else {
+            } else if (location.equals("root")) {
                 Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
                 if (iterateElements(mappingNode, newLocalNode, parent)) {
-                    result = true;
                     parentOutput.add(newLocalNode);
+                    result = true;
                 }
             }
         }
@@ -114,7 +111,7 @@ public class PluginOutputVisitor {
         boolean result = false;
         for (Iterator it = mappingNode.elements().iterator(); it.hasNext();) {
             LocalDefaultElement n = (LocalDefaultElement) it.next();
-            result = n.accept(this, newLocalNode, parent);
+            result = n.accept(this, newLocalNode, parent) || result;
         }
         return result;
     }
