@@ -52,15 +52,30 @@ public class ComponentConfigPlugin extends Plugin {
     }
 
     public String getDestinationFilename(Object metadata) {
-		String appName = new String();
-		Collection stereotypes = ((ModelElementImpl)metadata).getStereotypeNames();
-        for (Iterator it = stereotypes.iterator(); it.hasNext();) {
-        	String elem = (String) it.next();
-            if (elem.equals(SummitHelper.APP_NAME)) {
-            	appName= elem;
-            }
-        }
         return "components.xml";
+    }
+    
+    public String getAppName() {
+		String appName = new String();
+		boolean done = false;
+    	Collection metadata = getMetadata();
+    	for (Iterator t = metadata.iterator(); t.hasNext();) {
+    		ModelElement melem = (ModelElement) t.next();
+            if (melem instanceof ClassifierImpl) {
+        		Collection stereotypes = ((ModelElementImpl)melem).getStereotypeNames();
+                for (Iterator it = stereotypes.iterator(); it.hasNext();) {
+                	String elem = (String) it.next();
+                    if (elem.equals(SummitHelper.APP_NAME)) {
+                    	appName= elem;
+                    	done = true;
+                    	break;
+                    }
+                }
+            } 
+            if(done)
+            	break;
+    	}
+		return appName;
     }
 
     public Collection getScreenNames() {

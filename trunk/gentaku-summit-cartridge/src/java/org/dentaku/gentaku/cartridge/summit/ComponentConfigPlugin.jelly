@@ -174,11 +174,21 @@
             <role>linktool</role>
             <scope>request</scope>
           </tool>
+          <tool>
+            <name>detector</name>
+            <role>detector</role>
+            <scope>request</scope>
+          </tool>
+          <tool>
+            <name>page</name>
+            <role>htmlpage</role>
+            <scope>request</scope>
+          </tool>
 		  <j:forEach var="property" items="${plugin.getScreenNames()}">
 		  <tool>
 			<name>tool</name>
 			<role>${property}PullTool</role>
-			<scope>request</scope>
+			<scope>global</scope>
 		  </tool>
 		  </j:forEach>
         </tools>
@@ -188,6 +198,21 @@
       <role>linktool</role>
       <implementation>org.codehaus.plexus.summit.pull.tools.TemplateLink</implementation>
       <configuration/>
+    </component>  
+    <component>
+      <role>detector</role>
+      <implementation>org.codehaus.dentaku.summit.tool.BrowserDetector</implementation>
+      <configuration/>
+    </component>  
+    <component>
+      <role>htmlpage</role>
+      <implementation>org.codehaus.dentaku.summit.pull.HtmlPageAttributes</implementation>
+      <configuration>
+      	<title>${plugin.getAppName()}</title>
+      	<tag>HTML</tag>
+      	<uri>http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd</uri>
+      	<identifier>-//W3C//DTD HTML 4.01 Transitional//EN</identifier>
+      </configuration>/>
     </component>  
 	<j:forEach var="property" items="${plugin.getScreenNames()}">
 	<component>
