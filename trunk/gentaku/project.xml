@@ -28,6 +28,24 @@
             <url></url>
         </dependency>
 
+<!--        plexus-->
+        <dependency>
+            <groupId>plexus</groupId>
+            <artifactId>plexus</artifactId>
+            <version>0.14-SNAPSHOT</version>
+            <properties>
+                <ejb.bundle>true</ejb.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>classworlds</groupId>
+            <artifactId>classworlds</artifactId>
+            <version>1.1-SNAPSHOT</version>
+            <properties>
+                <ejb.bundle>true</ejb.bundle>
+            </properties>
+        </dependency>
+<!--        plexus-->
     </dependencies>
     <build>
         <!-- Resources that are packaged up inside the JAR file -->
