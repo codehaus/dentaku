@@ -2,7 +2,8 @@
 <project>
     <extend>${basedir}/../project.xml</extend>
     <artifactId>maven-gentaku-plugin</artifactId>
-    <name>maven-gentaku-plugin</name>
+    <name>Maven Gentaku Plug-in</name>
+    <currentVersion>0.9-SNAPSHOT</currentVersion>
     <inceptionYear>2004</inceptionYear>
     <description>
 		A Maven plugin to run Gentaku from within Maven
