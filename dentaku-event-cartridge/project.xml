@@ -1,5 +1,5 @@
 <project>
-    <extend>../project.xml</extend>
+    <extend>${basedir}/../project.xml</extend>
     <artifactId>dentaku-event-cartridge</artifactId>
     <name>Gentaku Event Cartridge</name>
     <dependencies>

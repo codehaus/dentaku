@@ -17,10 +17,15 @@
 package org.dentaku.services.metadata.nbmdr;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ArrayList;
 
 import javax.jmi.reflect.RefPackage;
 
@@ -29,11 +34,18 @@ import org.netbeans.api.xmi.XMIReferenceResolver;
 import org.netbeans.lib.jmi.xmi.XmiContext;
 
 public class XMIInputConfigImpl extends XMIInputConfig {
-    private Collection paths;
+    private Collection paths = new ArrayList();
     private XMIReferenceResolverImpl xmiReferenceResolver;
 
     public XMIInputConfigImpl(RefPackage[] extents, Collection searchPaths) {
-        this.paths = searchPaths;
+        for (Iterator it = searchPaths.iterator(); it.hasNext();) {
+            Object o = (Object) it.next();
+            if (o instanceof PathElement) {
+                paths.add(((PathElement)o).getId());
+            } else {
+                paths.add(o);
+            }
+        }
         xmiReferenceResolver = new XMIReferenceResolverImpl(extents, this);
     }
 
@@ -45,45 +57,95 @@ public class XMIInputConfigImpl extends XMIInputConfig {
         return xmiReferenceResolver;
     }
 
+    public static String getRootDir() {
+        String rootdir = System.getProperty("dentaku.rootdir");
+        if (rootdir == null) {
+            rootdir = System.getProperty("user.dir");
+        }
+        return rootdir + "/";
+    }
+
+    public static URL checkURL(URL check) {
+        URL result = null;
+        if (check != null) {
+            try {
+                InputStream is = check.openStream();
+                is.close();
+                result = check;
+            } catch (IOException e) { }
+        }
+        return result;
+    }
+
+    public static URL checkURL(String check) {
+        URL result = null;
+        if (check != null) {
+            try {
+                result = checkURL(new File(check).toURL());
+            } catch (MalformedURLException e) { }
+        }
+        return result;
+    }
+
     public class XMIReferenceResolverImpl extends XmiContext {
+        private Map urlCache = new HashMap();
+
         public XMIReferenceResolverImpl(RefPackage[] extents, XMIInputConfig config) {
             super(extents, config);
         }
 
         public URL toURL(String systemId) {
-            URL result = super.toURL(systemId);
-
-            // try classpath
+            URL result = (URL) urlCache.get(systemId);
             if (result == null) {
-                result = getClass().getClassLoader().getResource(systemId);
-            }
+                result = checkURL(systemId);
 
-            if (result == null) {
-                paths.add(new PathElement("."));
-                for (Iterator it = paths.iterator(); it.hasNext();) {
-                    try {
-                        String parent = ((PathElement) it.next()).getId();
-                        File f = new File(parent, systemId);
-                        if (f.exists()) {
-                            result = f.toURL();
-                            break;
-                        }
-                    } catch (MalformedURLException e) { }
+                if (result == null) {
+                    result = checkURL(getClass().getClassLoader().getResource(systemId));
                 }
-            }
 
-            if (result != null) {
-                String fullname = result.toExternalForm();
-                if (fullname.endsWith(".zip")) {
-                    String filename = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.indexOf(".zip"));
-                    try {
-                        result = new URL("jar:" + result + "!/" + filename);
-                    } catch (MalformedURLException e) {
-                        result = null;
+                if (result == null) {
+                    paths.add(".");
+                    String filename = systemId.substring(systemId.lastIndexOf("/") + 1);
+                    String rootdir = getRootDir();
+                    for (Iterator it = paths.iterator(); it.hasNext();) {
+                        try {
+                            String parent = (String) it.next();
+                            result = checkURL(new File(parent, filename).toURL());
+                            if (result != null) {
+                                break;
+                            }
+                            result = checkURL(new File(rootdir + parent, filename).toURL());
+                            if (result != null) {
+                                break;
+                            }
+                        } catch (MalformedURLException e) { }
                     }
                 }
+
+                if (result != null) {
+                    String fullname = result.toExternalForm();
+                    if (fullname.endsWith(".zip")) {
+                        String filename = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.indexOf(".zip"));
+                        try {
+                            result = new URL("jar:" + result + "!/" + filename);
+                        } catch (MalformedURLException e) {
+                            result = null;
+                        }
+                    }
+                }
+
+                // try classpath
+                if (result == null) {
+                    result = super.toURL(systemId);
+                }
+
+                if (result != null) {
+                    urlCache.put(systemId, result);
+                }
             }
+
             return result;
         }
+
     }
- }
+}

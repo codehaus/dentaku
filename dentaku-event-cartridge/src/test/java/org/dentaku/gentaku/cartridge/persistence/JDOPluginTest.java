@@ -24,6 +24,7 @@ import org.generama.WriterMapper;
 import org.generama.JellyTemplateEngine;
 
 import java.net.URL;
+import java.io.File;
 
 public class JDOPluginTest extends AbstractXMLGeneratingPluginTestBase {
     protected Plugin createPlugin(MetadataProvider metadataProvider, WriterMapper writerMapper) throws Exception {
@@ -31,6 +32,8 @@ public class JDOPluginTest extends AbstractXMLGeneratingPluginTestBase {
     }
 
     protected URL getExpected() throws Exception {
-        return null;
+        String basedir = System.getProperty("user.dir");
+        assertNotNull(basedir);
+        return new File(basedir + "/dentaku-event-cartridge/src/expected/JDOConfig.xml").toURL();
     }
 }

@@ -6,7 +6,8 @@
 
     <goal name="dentaku:test-gentaku">
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
-        <gentaku model="${maven.src.dir}/test/uml/TestModel.xml.zip">
+        <gentaku model="${dentaku.rootdir}/dentaku-metadata-service/src/test/uml/TestModel.xml.zip">
+            <fileset dir="${dentaku.rootdir}/gentaku/src/uml"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityBasePlugin" destdir="${dentaku.test.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityFactoryPlugin" destdir="${dentaku.test.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${dentaku.test.src}/META-INF/plexus" destinationfilename="components.xml"/>

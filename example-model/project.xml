@@ -34,35 +34,8 @@
         </dependency>
         <dependency>
             <groupId>dentaku</groupId>
-            <artifactId>dentaku-event-cartridge</artifactId>
-            <version>0.9-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
             <artifactId>gentaku</artifactId>
-            <version>0.9-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
-            <artifactId>dentaku-services</artifactId>
-            <version>0.9-SNAPSHOT</version>
-            <type>ejb</type>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
-            <artifactId>dentaku-foundation</artifactId>
-            <version>0.9-SNAPSHOT</version>
-            <type>ejb</type>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
-            <artifactId>dentaku-metadata-service</artifactId>
-            <version>0.9-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
-            <artifactId>dentaku-persistence-service</artifactId>
-            <version>0.9-SNAPSHOT</version>
+            <version>${pom.currentVersion}</version>
         </dependency>
         <dependency>
             <groupId>prevayler</groupId>
@@ -182,6 +155,24 @@
                 <war.bundle>true</war.bundle>
             </properties>
         </dependency>
+
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.0.3.2-dev</version>
+        </dependency>
+
     </dependencies>
     <build>
         <unitTest>

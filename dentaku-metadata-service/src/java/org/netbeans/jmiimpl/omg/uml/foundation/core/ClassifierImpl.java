@@ -152,7 +152,12 @@ abstract public class ClassifierImpl extends ModelElementImpl implements Classif
                     return (Attribute) attribute;
                 }
             }
-            current = (ClassifierImpl)((Generalization) ((Classifier) current).getGeneralization().iterator().next()).getParent();
+            Iterator it = current.getGeneralization().iterator();
+            if (it.hasNext()) {
+                current = (ClassifierImpl)((Generalization)it.next()).getParent();
+            } else {
+                current = null;
+            }
         }
         return null;
     }
