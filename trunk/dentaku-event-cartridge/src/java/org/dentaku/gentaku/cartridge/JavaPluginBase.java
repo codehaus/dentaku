@@ -82,50 +82,6 @@ public abstract class JavaPluginBase extends JavaGeneratingPlugin {
         return b;
     }
 
-//    protected void putMetadata(Map m, Object meta) {
-//        if (meta instanceof Classifier) {
-//            m.put("metadata", PClassifier.newInstance((Classifier) meta, model));
-//        } else {
-//            super.putMetadata(m, meta);
-//        }
-//    }
-
-//    public URL getResourceURLRelativeToThisPackage(Class clazz, String resourceName) {
-//        String className = clazz.getName();
-//        String packageName = className.substring(0, className.lastIndexOf('.'));
-//        String resourcePath = "/" + packageName.replace('.', '/') + "/" + resourceName;
-//        URL resource = clazz.getResource(resourcePath);
-//        Assert.assertNotNull("Resource not found at path: " + resourcePath, resource);
-//        return resource;
-//    }
-//
-//    protected Map loadConfiguration() throws RuntimeException {
-//        // let's configure ourselves
-//        byte buf[] = new byte[4096];
-//        int ptr = 0, read = 0;
-//        String input = "";
-//        String classname = getClass().getName();
-//        String filename = classname.substring(classname.lastIndexOf(".") + 1) + ".xml";
-//        InputStream in = getClass().getResourceAsStream(filename);
-//        try {
-//            do {
-//                ptr += read;
-//                read = in.read(buf, ptr, 4096);
-//                input += new String(buf).substring(0, read);
-//            } while (read == 4096);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        XStream xstream = new XStream();
-//        xstream.alias("template", Template.class);
-//        return (Map) xstream.fromXML(input);
-//    }
-//
-//    public static class Template {
-//        String template;
-//        boolean createonly;
-//    }
-
     public boolean isCreateonly() {
         return createonly;
     }
