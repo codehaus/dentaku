@@ -17,15 +17,15 @@
 package org.dentaku.services.metadata.nbmdr;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.jmi.reflect.RefPackage;
 

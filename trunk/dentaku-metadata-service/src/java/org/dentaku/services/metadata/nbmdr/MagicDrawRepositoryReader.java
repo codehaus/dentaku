@@ -16,20 +16,6 @@
  */
 package org.dentaku.services.metadata.nbmdr;
 
-import org.apache.tools.ant.types.FileSet;
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
-import org.dentaku.services.metadata.RepositoryException;
-import org.dentaku.services.metadata.RepositoryReader;
-import org.netbeans.api.mdr.MDRManager;
-import org.netbeans.api.mdr.MDRepository;
-import org.netbeans.api.xmi.XMIReader;
-import org.netbeans.api.xmi.XMIReaderFactory;
-import org.omg.uml.UmlPackage;
-
-import javax.jmi.model.ModelPackage;
-import javax.jmi.model.MofPackage;
-import javax.jmi.reflect.RefPackage;
-import javax.jmi.xmi.MalformedXMIException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +27,21 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import javax.jmi.model.ModelPackage;
+import javax.jmi.model.MofPackage;
+import javax.jmi.reflect.RefPackage;
+import javax.jmi.xmi.MalformedXMIException;
+
+import org.apache.tools.ant.types.FileSet;
+import org.dentaku.services.metadata.JMIUMLMetadataProvider;
+import org.dentaku.services.metadata.RepositoryException;
+import org.dentaku.services.metadata.RepositoryReader;
+import org.netbeans.api.mdr.MDRManager;
+import org.netbeans.api.mdr.MDRepository;
+import org.netbeans.api.xmi.XMIReader;
+import org.netbeans.api.xmi.XMIReaderFactory;
+import org.omg.uml.UmlPackage;
 
 /**
  * This used to be completely URL based, then something broke with XStream because we have these crappy version conflicts

@@ -16,16 +16,17 @@
  */
 package org.dentaku.services.metadata;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
+import java.util.Collection;
+
 import junit.framework.TestCase;
+
 import org.codehaus.plexus.embed.Embedder;
 import org.omg.uml.UmlPackage;
 import org.omg.uml.foundation.core.CorePackage;
 import org.omg.uml.foundation.core.ModelElementClass;
-
-import java.net.URL;
-import java.util.Collection;
-import java.io.File;
-import java.io.FileNotFoundException;
 
 public class MetadataTestBase extends TestCase {
     private Embedder e;
