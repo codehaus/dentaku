@@ -1,0 +1,4 @@
+
+#macro( fieldComment $field )
+	* Hi its just a test for ${field.name}
+#end
