@@ -17,42 +17,39 @@
 package org.dentaku.services;
 
 import junit.framework.TestCase;
-import org.dentaku.services.container.ContainerManager;
-import org.dentaku.services.container.DentakuPlexusContainer;
 import org.axiondb.jdbc.AxionDataSource;
+import org.codehaus.plexus.embed.Embedder;
 
 import javax.sql.DataSource;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.net.URL;
 import java.sql.Connection;
 
 public abstract class PersistenceServiceTestBase extends TestCase {
-    protected DentakuPlexusContainer container;
+    protected Embedder container;
     protected DataSource ds;
 
     protected void setUp() throws Exception {
         super.setUp();
-        ds = new AxionDataSource("jdbc:axiondb:testdb");
 
-        ContainerManager instance = ContainerManager.getInstance();
-        setupConfiguration(instance);
-        instance.setup();
-        container = instance.getContainer();
+        container = new Embedder();
+        String className = getClass().getName();
+        String name = className.substring(className.lastIndexOf(".") + 1) + ".xml";
+        URL resource = getClass().getResource(name);
+        container.setConfiguration(resource);
+        container.start();
+
+        ds = new AxionDataSource("jdbc:axiondb:testdb");
+        Connection c = ds.getConnection();
+
+//        container.lookupList(
+//        c.createStatement().execute("create table "
    }
 
     protected void tearDown() throws Exception {
         Connection c = ds.getConnection();
         c.createStatement().execute("SHUTDOWN");
+        container.stop();
         super.tearDown();
-
-        container.dispose();
-        container = null;
     }
 
-    protected void setupConfiguration(ContainerManager instance) {
-        String className = this.getClass().getName();
-        String filename = className.substring(className.lastIndexOf(".") + 1) + ".xml";
-        InputStream configurationStream = this.getClass().getResourceAsStream(filename);
-        instance.add(new InputStreamReader(configurationStream));
-    }
 }

@@ -1,28 +1,25 @@
 <?xml version="1.0"?>
 <project>
-    <pomVersion>3</pomVersion>
+    <modelVersion>4.0.0</modelVersion>
     <groupId>dentaku</groupId>
-    <currentVersion>0.9-SNAPSHOT</currentVersion>
-    <name>Dentaku Project</name>
+    <artifactId>dentaku-root</artifactId>
+    <name>Dentaku</name>
+    <version>0.10</version>
     <organization>
-        <name>Dentaku Team</name>
-        <url>http://www.dentaku.org</url>
-        <!--        <logo>http://dentaku.org/images/calculator.gif</logo>-->
+        <name>Codehaus</name>
+        <url>http://www.codehaus.org/</url>
+        <logo>/images/codehaus-small.gif</logo>
     </organization>
-    <inceptionYear>2003</inceptionYear>
-    <package>org.dentaku.*</package>
-    <!--    <logo></logo>-->
-    <url/>
-    <issueTrackingUrl>http://www.dentaku.org</issueTrackingUrl>
-    <siteAddress>http://www.dentaku.org</siteAddress>
-    <siteDirectory>/home/projects/dentaku/public_html/sites/${pom.artifactId}</siteDirectory>
-    <distributionDirectory>/dentaku/dist/${pom.artifactId}/</distributionDirectory>
-    <repository>
-        <connection>scm:cvs:pserver:anonymous@cvs.dentaku.codehaus.org:/home/projects/dentaku/scm:dentaku</connection>
-        <url>http://cvs.dentaku.codehaus.org/</url>
-    </repository>
-    <versions/>
-    <mailingLists/>
+    <inceptionYear>2001</inceptionYear>
+    <package>org.codehaus.plexus</package>
+    <logo>http://dentaku.codehaus.org/dentaku.png</logo>
+    <ciManagement>
+        <nagEmailAddress>dev@dentaku.codehaus.org</nagEmailAddress>
+    </ciManagement>
+    <scm>
+        <connection>scm:cvs:pserver:anonymous@cvs.dentaku.codehaus.org:/scm/dentaku:dentaku</connection>
+        <developerConnection>scm:cvs:ext:${maven.username}@cvs.dentaku.codehaus.org:/scm/dentaku:dentaku</developerConnection>
+    </scm>
     <developers>
         <developer>
             <name>Brian Topping</name>
@@ -92,14 +89,6 @@
         </dependency>
         <dependency>
             <id>plexus-utils</id>
-        </dependency>
-        <dependency>
-            <id>plexus-api</id>
-        </dependency>
-        <dependency>
-            <groupId>classworlds</groupId>
-            <artifactId>classworlds</artifactId>
-            <version>1.1-alpha-1</version>
         </dependency>
 <!--        plexus-->
         <!--        gentaku-->

@@ -17,20 +17,17 @@
 package org.dentaku.services.container;
 
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.embed.Embedder;
 import org.dentaku.services.exception.DentakuException;
 
-import java.io.InputStreamReader;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URL;
 
 /**
  * This is all kind of wacked out, but basically it's that way to make it testable with external container insertion
  */
 public class ContainerManager {
-    protected DentakuPlexusContainer container;
+    protected Embedder container;
     private static ContainerManager instance;
-    protected List configurationResources = new ArrayList();
 
     /**
      * Return a reference to the enclosing plexus container.  If this is not possible, throw a
@@ -50,64 +47,32 @@ public class ContainerManager {
         ContainerManager.instance = instance;
     }
 
-    public DentakuPlexusContainer getContainer() {
+    public Embedder getContainer() {
         return container;
-    }
-
-//    public static void setup(InputStream configurationResource) throws ContainerException {
-//        InputStreamReader reader = new InputStreamReader(configurationResource);
-//        XStream xs = new XStream();
-//        List l = (List)xs.fromXML(reader);
-//        ArrayList result = new ArrayList();
-//        for (Iterator it = l.iterator(); it.hasNext();) {
-//            result.add((InputStreamReader) it.next());
-//        }
-//        setup();
-//    }
-
-    /**
-     * Build a new plexus container and put it into JNDI
-     *
-     * @throws ContainerException
-     */
-    public void setup() throws ContainerException {
-        if (container == null) {
-            container = new DentakuPlexusContainer();
-            try {
-                container.setConfigurationResources(configurationResources);
-                container.initialize();
-                container.start();
-            } catch (Exception e) {
-                throw new ContainerException(e);
-            }
-        }
-    }
-
-    public void setup(DentakuPlexusContainer c) {
-        container = c;
-    }
-
-    public void add(InputStreamReader configurationResource) {
-        configurationResources.add(configurationResource);
     }
 
     public Object lookup(String key) throws ComponentLookupException {
         return container.lookup(key);
     }
 
-    public void dispose() {
-        container.dispose();
+    public void dispose() throws Exception {
+        container.stop();
         instance = null;
     }
 
-    public static ContainerManager getContainerManager(InputStream configurationStream) throws DentakuException {
+    public static ContainerManager getContainerManager(URL configurationStream) throws DentakuException {
         ContainerManager containerManager = new ContainerManager();
-        containerManager.add(new InputStreamReader(configurationStream));
-        containerManager.setup();
+//        containerManager.add(new InputStreamReader(configurationStream));
+        if (containerManager.container == null) {
+            Embedder container = new Embedder();
+            container.setConfiguration(configurationStream);
+            try {
+                container.start();
+            } catch (Exception e) {
+                throw new DentakuException(e);
+            }
+            containerManager.container = container;
+        }
         return containerManager;
-    }
-
-    public void disposeContainerManager() {
-        dispose();
     }
 }

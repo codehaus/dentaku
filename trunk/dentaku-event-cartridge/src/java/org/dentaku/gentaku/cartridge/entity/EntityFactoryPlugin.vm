@@ -36,7 +36,7 @@ public class ${class.name}Factory implements PersistenceFactory {
         return e;
     }
 
-    public void setup(PersistenceManagerStorage pm) {
+    public void setupEntities(PersistenceManagerStorage pm) {
         if (this.pm == null) {
             this.pm = pm;
 
@@ -50,14 +50,16 @@ public class ${class.name}Factory implements PersistenceFactory {
             e.addField(pm.createField("$attname", ${att.type.fullyQualifiedName}.class, false));
 #end
 #end
-            // relations
+        }
+    }
+
+    public void setupRelations(PersistenceManagerStorage pm) {
 #foreach ( $assoc in $class.associationLinks )
 #if ($assoc.target.navigable == true)
 #set ($targettypename = $assoc.target.participant.fullyQualifiedName)
-            e.addRelation(pm.createRelation(${class.name}.class, ${targettypename}.class));
+        e.addRelation(pm.createRelation(${class.name}.class, ${targettypename}.class));
 #end
 #end
-        }
     }
 
     public Class getManagedClass() {

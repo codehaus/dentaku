@@ -42,7 +42,7 @@ public abstract class EJBConnectorBean implements Connector, SessionBean {
      */
     public void ejbCreate() throws javax.ejb.CreateException {
         try {
-            cm = ContainerManager.getContainerManager(this.getClass().getResourceAsStream("ConnectorConfig.xml"));
+            cm = ContainerManager.getContainerManager(this.getClass().getResource("ConnectorConfig.xml"));
             connector = (DirectConnector)cm.lookup(Connector.ROLE);
         } catch (Exception e) {
             throw new CreateException(e.getMessage());

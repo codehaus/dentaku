@@ -4,14 +4,6 @@
     <name>example-web</name>
     <dependencies>
         <dependency>
-            <groupId>plexus</groupId>
-            <artifactId>plexus</artifactId>
-            <version>0.14-SNAPSHOT</version>
-            <properties>
-                <ejb.bundle>true</ejb.bundle>
-            </properties>
-        </dependency>
-        <dependency>
             <groupId>dentaku</groupId>
             <artifactId>example-model</artifactId>
             <version>${pom.currentVersion}</version>
