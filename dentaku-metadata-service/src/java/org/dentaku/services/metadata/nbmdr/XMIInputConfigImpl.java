@@ -16,9 +16,13 @@
  */
 package org.dentaku.services.metadata.nbmdr;
 
+import org.dentaku.services.metadata.Utils;
+import org.netbeans.api.xmi.XMIInputConfig;
+import org.netbeans.api.xmi.XMIReferenceResolver;
+import org.netbeans.lib.jmi.xmi.XmiContext;
+
+import javax.jmi.reflect.RefPackage;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,12 +30,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import javax.jmi.reflect.RefPackage;
-
-import org.netbeans.api.xmi.XMIInputConfig;
-import org.netbeans.api.xmi.XMIReferenceResolver;
-import org.netbeans.lib.jmi.xmi.XmiContext;
 
 public class XMIInputConfigImpl extends XMIInputConfig {
     private Collection paths = new ArrayList();
@@ -57,36 +55,6 @@ public class XMIInputConfigImpl extends XMIInputConfig {
         return xmiReferenceResolver;
     }
 
-    public static String getRootDir() {
-        String rootdir = System.getProperty("dentaku.rootdir");
-        if (rootdir == null) {
-            rootdir = System.getProperty("user.dir");
-        }
-        return rootdir + "/";
-    }
-
-    public static URL checkURL(URL check) {
-        URL result = null;
-        if (check != null) {
-            try {
-                InputStream is = check.openStream();
-                is.close();
-                result = check;
-            } catch (IOException e) { }
-        }
-        return result;
-    }
-
-    public static URL checkURL(String check) {
-        URL result = null;
-        if (check != null) {
-            try {
-                result = checkURL(new File(check).toURL());
-            } catch (MalformedURLException e) { }
-        }
-        return result;
-    }
-
     public class XMIReferenceResolverImpl extends XmiContext {
         private Map urlCache = new HashMap();
 
@@ -97,24 +65,24 @@ public class XMIInputConfigImpl extends XMIInputConfig {
         public URL toURL(String systemId) {
             URL result = (URL) urlCache.get(systemId);
             if (result == null) {
-                result = checkURL(systemId);
+                result = Utils.checkURL(systemId);
 
                 if (result == null) {
-                    result = checkURL(getClass().getClassLoader().getResource(systemId));
+                    result = Utils.checkURL(getClass().getClassLoader().getResource(systemId));
                 }
 
                 if (result == null) {
                     paths.add(".");
                     String filename = systemId.substring(systemId.lastIndexOf("/") + 1);
-                    String rootdir = getRootDir();
+                    String rootdir = Utils.getRootDir();
                     for (Iterator it = paths.iterator(); it.hasNext();) {
                         try {
                             String parent = (String) it.next();
-                            result = checkURL(new File(parent, filename).toURL());
+                            result = Utils.checkURL(new File(parent, filename).toURL());
                             if (result != null) {
                                 break;
                             }
-                            result = checkURL(new File(rootdir + parent, filename).toURL());
+                            result = Utils.checkURL(new File(rootdir + parent, filename).toURL());
                             if (result != null) {
                                 break;
                             }

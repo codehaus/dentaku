@@ -16,9 +16,25 @@
  */
 package org.dentaku.services.metadata.nbmdr;
 
+import org.apache.tools.ant.types.FileSet;
+import org.dentaku.services.metadata.JMIUMLMetadataProvider;
+import org.dentaku.services.metadata.RepositoryException;
+import org.dentaku.services.metadata.RepositoryReader;
+import org.dentaku.services.metadata.Utils;
+import org.netbeans.api.mdr.MDRManager;
+import org.netbeans.api.mdr.MDRepository;
+import org.netbeans.api.xmi.XMIReader;
+import org.netbeans.api.xmi.XMIReaderFactory;
+import org.omg.uml.UmlPackage;
+
+import javax.jmi.model.ModelPackage;
+import javax.jmi.model.MofPackage;
+import javax.jmi.reflect.RefPackage;
+import javax.jmi.xmi.MalformedXMIException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -140,31 +156,42 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
     }
 
     private void readInputStream(RefPackage umlModel) throws IOException, MalformedXMIException {
-        System.out.println("Rootdir is: "+ XMIInputConfigImpl.getRootDir());
+        // this is pretty cracked out code.  It should be unified to make the URL real, then let the URLInputStream take care of it
+        System.out.println("Rootdir is: "+ Utils.getRootDir());
         String fullname = model;
-        URL url = null;
         if (model != null) {
             // the embedded XMI is always saved as the filename minus the ".zip" suffix
 
             // check file exists
-            url = XMIInputConfigImpl.checkURL(model);
-            if (url == null) {
-                url = XMIInputConfigImpl.checkURL(XMIInputConfigImpl.getRootDir() + model);
+            modelURL = Utils.checkURL(model);
+            if (modelURL == null) {
+                modelURL = Utils.checkURL(Utils.getRootDir() + model);
             }
         } else if (modelURL != null) {
             try {
-                url = XMIInputConfigImpl.checkURL(modelURL);
-                fullname = url.toExternalForm();
+                modelURL = Utils.checkURL(this.modelURL);
+                fullname = modelURL.toExternalForm();
             } catch (Exception e) { }
         }
 
-        if (url == null) {
+        if (modelURL == null) {
             throw new FileNotFoundException(model + " could not be found");
         }
 
         // get the input stream
-        String filename = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.indexOf(".zip"));
         System.out.println("Reading from MagicDraw repository: " + fullname);
+        InputStream input;
+        if (fullname.endsWith(".zip")) {
+            String filename = fullname.substring(fullname.lastIndexOf("/") + 1, fullname.indexOf(".zip"));
+            input = openInputStreamFromZip(modelURL, filename);
+        } else {
+            input = modelURL.openStream();
+        }
+        XMIReader xmiReader = XMIReaderFactory.getDefault().createXMIReader(new XMIInputConfigImpl(new RefPackage[]{umlModel}, searchPaths));
+        xmiReader.read(input, fullname, umlModel);
+    }
+
+    private InputStream openInputStreamFromZip(URL url, String filename) throws IOException {
         ZipFile zip = new ZipFile(url.getFile());
         ZipEntry entry = zip.getEntry(filename);
         InputStream input = null;
@@ -174,8 +201,7 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
             log.severe("couldn't find file in archive.  Make sure you have not recently renamed the file at the OS level and/or re-save");
             throw e;
         }
-        XMIReader xmiReader = XMIReaderFactory.getDefault().createXMIReader(new XMIInputConfigImpl(new RefPackage[]{umlModel}, searchPaths));
-        xmiReader.read(input, fullname, umlModel);
+        return input;
     }
 
     /**

@@ -16,13 +16,6 @@
  */
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.dentaku.services.metadata.validator.ValidatingVisitor;
@@ -32,6 +25,12 @@ import org.netbeans.mdr.storagemodel.StorableObject;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.TaggedValue;
 import org.omg.uml.modelmanagement.Model;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 abstract public class ModelElementImpl extends InstanceHandler implements ModelElement {
     private static Map stereotypeCache = new HashMap();
@@ -68,34 +67,10 @@ abstract public class ModelElementImpl extends InstanceHandler implements ModelE
     }
 
     public String findTagValue(String tagName) {
-        return findTagValue(getTaggedValue(), tagName);
+        return getTaggedValue(tagName, true).getDataValue().iterator().next().toString();
     }
 
-    /**
-     * Searches a collection of tag values for one with a particular
-     * name
-     *
-     * @param taggedValues of taggedValues
-     * @param tagName      name of tag for which to search
-     * @return value of tag, null if tag not found
-     */
-    public String findTagValue(Collection taggedValues, String tagName) {
-        for (Iterator i = taggedValues.iterator(); i.hasNext();) {
-            TaggedValueImpl taggedValue = (TaggedValueImpl) i.next();
-            String tgvName = taggedValue.getFullyQualifiedName();
-            if (tagName.equals(tgvName)) {
-                Iterator it = taggedValue.getDataValue().iterator();
-                if (it.hasNext()) {
-                    return it.next().toString();
-                }
-                return null;
-            }
-        }
-        return null;
-    }
-
-    public Collection
-            getStereotypeNames() {
+    public Collection getStereotypeNames() {
         Collection names = (Collection) stereotypeCache.get(this);
         if (names == null) {
             names = new ArrayList();
@@ -109,41 +84,70 @@ abstract public class ModelElementImpl extends InstanceHandler implements ModelE
         return names;
     }
 
-    public TaggedValue getTaggedValue(String name) {
-        for (Iterator it = getTaggedValues().iterator(); it.hasNext();) {
-            TaggedValue taggedValue = (TaggedValue) it.next();
-            if (taggedValue.getName().equalsIgnoreCase(name)) {
-                return taggedValue;
-            }
-        }
-        return null;
-    }
-
     /**
      * This returns all tags that have the same name.  Can tags actually be defined with the same name twice?  This is JavaDoc style...
-     * @param name Name of tag
+     *
+     * @param name      Name of tag
+     * @param canonical Use fully qualified tag name
      * @return Collection of TaggedValues that match
      */
-    public Collection getTaggedValuesForName(final String name) {
+    public Collection getTaggedValuesForName(final String name, final boolean canonical) {
         return CollectionUtils.select(getTaggedValue(), new Predicate() {
             public boolean evaluate(Object o) {
-                return ((TaggedValue)o).getName().equals(name);
+                String thisName;
+                if (canonical) {
+                    thisName = ((TaggedValueImpl) o).getFullyQualifiedName();
+                } else {
+                    thisName = ((TaggedValueImpl) o).getName();
+                }
+                return thisName.equals(name);
             }
         });
     }
 
+    /**
+     * @deprecated
+     */
+    public Collection getTaggedValuesForName(final String name) {
+        return getTaggedValuesForName(name, false);
+    }
+
+    /**
+     * @deprecated
+     */
     public Collection getTaggedValues() {
-        Collection taggedValues = getTaggedValue();
-        Collection taggedValueProxies = new Vector();
-        for (Iterator i = taggedValues.iterator(); i.hasNext();) {
-            TaggedValue taggedValue = (TaggedValue) i.next();
-            taggedValueProxies.add(taggedValue);
+        return getTaggedValue();
+    }
+
+    /**
+     * Returns the first tagged value for this name by calling <code>getTaggedValuesForName</code>, ignoring others
+     *
+     * @param name      Name of tag
+     * @param canonical
+     * @return
+     */
+    public TaggedValue getTaggedValue(String name, boolean canonical) {
+        Collection tv = getTaggedValuesForName(name, canonical);
+        if (!tv.isEmpty()) {
+            return (TaggedValue) tv.iterator().next();
+        } else {
+            return null;
         }
-        return taggedValueProxies;
+    }
+
+    public TaggedValue getTaggedValue(String name) {
+        return getTaggedValue(name, false);
+    }
+
+    /**
+     * @param taggedValues ignored
+     * @deprecated
+     */
+    public String findTagValue(Collection taggedValues, String tagName) {
+        return getTaggedValue(tagName, true).getDataValue().iterator().next().toString();
     }
 
     public void accept(ValidatingVisitor visitor, Object context) throws VisitorException {
         visitor.visit(this, context);
     }
-
 }

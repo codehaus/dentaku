@@ -3,7 +3,7 @@
     <goal name="dentaku-dist">
         <attainGoal name="jar:install"/>
     </goal>
-    <preGoal name="java:compile">
+<!--    <preGoal name="java:compile">-->
 <!--        <taskdef name="jbind" classname="org.jbind.xml.ant.CompileTask" classpathref="maven.dependency.classpath"/>-->
 <!--        <jbind behaviourDir="${maven.src.dir}/java" dataDir="${maven.build.src}">-->
 <!--            <fileset dir="${maven.src.dir}/xml" includes="XMLSchema.xsd"/>-->

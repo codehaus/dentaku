@@ -19,15 +19,18 @@
             <version>1.1-beta-4</version>
         </dependency>
         <dependency>
-            <groupId>xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>1.0.3.2-dev</version>
+            <id>commons-jelly</id>
+            <version>1.0-RC1</version>
+            <url>http://jakarta.apache.org/jelly/</url>
         </dependency>
-        <dependency>
-            <groupId>xpp3</groupId>
-            <artifactId>xpp3</artifactId>
-            <version>1.1.3.3</version>
-        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>commons-jelly</groupId>-->
+<!--            <artifactId>commons-jelly-tags-xml</artifactId>-->
+<!--            <version>20030211.142705</version>-->
+<!--            <url>http://jakarta.apache.org/jelly/</url>-->
+<!--        </dependency>-->
+
     </dependencies>
     <build>
         <resources>
