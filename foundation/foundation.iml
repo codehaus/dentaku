@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module version="4" relativePaths="false">
+<module version="4" relativePaths="false" type="JAVA_MODULE">
   <component name="ModuleRootManager" />
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/target/classes" />
@@ -17,8 +17,19 @@
     <orderEntry type="library" name="Drools" level="application" />
     <orderEntry type="library" name="Test" level="application" />
     <orderEntry type="library" name="Clover" level="application" />
-    <orderEntry type="library" name="XStream-1.0" level="application" />
-    <orderEntry type="library" name="Plexus" level="application" />
+    <orderEntry type="library" exported="" name="Plexus" level="application" />
+    <orderEntry type="library" exported="" name="Classworlds" level="application" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPO_LOCAL$/classworlds/jars/classworlds-1.1-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="XStream" level="application" />
+    <orderEntryProperties />
   </component>
 </module>
 
