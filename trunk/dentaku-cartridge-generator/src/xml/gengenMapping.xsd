@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="element">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="stereotype" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="element" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="path" type="xs:string" use="required"/>
+			<xs:attribute name="location" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="root"/>
+						<xs:enumeration value="class"/>
+						<xs:enumeration value="constructor"/>
+						<xs:enumeration value="field"/>
+						<xs:enumeration value="method"/>
+						<xs:enumeration value="package"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="multioutput" default="false">
+				<xs:annotation>
+					<xs:documentation>
+                        Setting this value to true causes the generator to create a new output file for each implementation of the stereotype in a model.
+                    </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="true"/>
+						<xs:enumeration value="false"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mapping">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="element" maxOccurs="unbounded"/>
+				<xs:element ref="stereotype" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="tagNameBase" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="stereotype">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="ref" type="xs:QName"/>
+			<xs:attribute name="location">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="class"/>
+						<xs:enumeration value="constructor"/>
+						<xs:enumeration value="field"/>
+						<xs:enumeration value="method"/>
+						<xs:enumeration value="package"/>
+						<xs:enumeration value="root"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

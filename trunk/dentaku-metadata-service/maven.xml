@@ -20,4 +20,27 @@
             <component classname="org.dentaku.services.metadata.scccheck.SCCCheck" destdir="${maven.docs.dest}/SCC/"/>
         </xdoclet>
     </goal>
+
+    <goal name="gen">
+        <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+            <classpath>
+                <classpath ref="maven.dependency.classpath"/>
+                <fileset dir="${jwsdp.root}">
+                    <include name="jaxp/**/*.jar"/>
+                    <include name="jaxb/**/*.jar"/>
+                    <include name="jwsdp-shared/lib/**/*.jar"/>
+                </fileset>
+            </classpath>
+        </taskdef>
+
+<!--        <xjc schema="${maven.src.dir}/xml/xmi20.xsd" extension="false" package="org.dentaku.services.metadata.reader.xmi20" target="${maven.build.src}"/>-->
+        <xjc extension="false" package="org.dentaku.services.metadata.reader.xmi11" target="${maven.build.src}">
+            <schema dir="${maven.src.dir}/xml/">
+                <include name="xlink.xsd"/>
+                <include name="xml.xsd"/>
+                <include name="xmi11.xsd"/>
+             </schema>
+        </xjc>
+
+    </goal>
 </project>

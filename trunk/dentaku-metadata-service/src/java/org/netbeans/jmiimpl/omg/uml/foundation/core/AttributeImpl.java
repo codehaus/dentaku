@@ -49,7 +49,7 @@ abstract public class AttributeImpl extends ModelElementImpl implements Attribut
      * @return String value of tag, <b>null</b> if tag not found
      */
     public String findTagValue(String tagName, boolean follow) {
-        String value = findTagValue(getTaggedValue(), tagName);
+        String value = findTagValue(tagName);
         for (ClassifierImpl element = (ClassifierImpl)getType(); value == null && element != null; element = (ClassifierImpl)element.getJavaGeneralization()) {
             value = element.findTagValue(tagName);
         }
@@ -68,7 +68,6 @@ abstract public class AttributeImpl extends ModelElementImpl implements Attribut
     public String getAttributeJDBCType() {
         String value = findTagValue("andromda.persistence.JDBCType");
         if (null == value) {
-            Object type = getType();
             value = ((ModelElementImpl)getType()).getFullyQualifiedName();
             if (typeMappings != null) {
                 value = typeMappings.getJDBCType(value);
@@ -90,7 +89,6 @@ abstract public class AttributeImpl extends ModelElementImpl implements Attribut
     public String getAttributeSQLType() {
         String value = findTagValue("andromda.persistence.JDBCType");
         if (null == value) {
-            Object type = getType();
             value = ((ModelElementImpl)getType()).getFullyQualifiedName();
             if (typeMappings != null) {
                 value = typeMappings.getSQLType(value, getAttributeSQLFieldLength());

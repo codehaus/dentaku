@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping tagNameBase="org.dentaku.gentaku.jdo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="gengenMapping.xsd">
+	<element path="/xs:schema/xs:element[@name='jdo']" location="root">
+		<element path="/xs:schema/xs:element[@name='package']" location="package">
+			<stereotype ref="Package"/>
+			<element path="/xs:schema/xs:element[@name='class']" location="class">
+				<stereotype ref="Entity"/>
+				<element path="/xs:schema/xs:element[@name='datastore-identity']" location="class">
+					<stereotype ref="Entity"/>
+					<element path="/xs:schema/xs:element[@name='column']" location="field"/>
+				</element>
+				<element path="/xs:schema/xs:element[@name='inheritance']" location="class">
+					<stereotype ref="Entity"/>
+					<element path="/xs:schema/xs:element[@name='discriminator']" location="field">
+						<element path="/xs:schema/xs:element[@name='column']" location="field"/>
+					</element>
+					<element path="/xs:schema/xs:element[@name='join']" location="field">
+						<element path="/xs:schema/xs:element[@name='column']" location="field"/>
+					</element>
+				</element>
+				<element path="/xs:schema/xs:element[@name='version']" location="class">
+					<stereotype ref="Entity"/>
+					<element path="/xs:schema/xs:element[@name='column']" location="field"/>
+				</element>
+				<element path="/xs:schema/xs:element[@name='field']" location="field">
+					<element path="/xs:schema/xs:element[@name='collection']" location="field">
+						<element path="/xs:schema/xs:element[@name='extension']" location="field"/>
+					</element>
+					<element path="/xs:schema/xs:element[@name='map']" location="field">
+						<element path="/xs:schema/xs:element[@name='extension']" location="field"/>
+					</element>
+					<element path="/xs:schema/xs:element[@name='array']" location="field"/>
+					<element path="/xs:schema/xs:element[@name='column']" location="field">
+						<stereotype ref="PrimaryKey"/>
+					</element>
+					<element path="/xs:schema/xs:element[@name='join']" location="field">
+						<element path="/xs:schema/xs:element[@name='column']" location="field"/>
+					</element>
+					<element path="/xs:schema/xs:element[@name='element']" location="field">
+						<element path="/xs:schema/xs:element[@name='column']" location="field"/>
+					</element>
+					<element path="/xs:schema/xs:element[@name='key']" location="field">
+						<element path="/xs:schema/xs:element[@name='column']" location="field"/>
+					</element>
+					<element path="/xs:schema/xs:element[@name='value']" location="field">
+						<element path="/xs:schema/xs:element[@name='column']" location="field"/>
+					</element>
+					<element path="/xs:schema/xs:element[@name='order']" location="field">
+						<element path="/xs:schema/xs:element[@name='column']" location="field"/>
+					</element>
+					<element path="/xs:schema/xs:element[@name='index']" location="field"/>
+					<element path="/xs:schema/xs:element[@name='foreign-key']" location="field">
+						<element path="/xs:schema/xs:element[@name='extension']" location="field"/>
+					</element>
+					<element path="/xs:schema/xs:element[@name='extension']" location="field"/>
+				</element>
+				<element path="/xs:schema/xs:element[@name='fetch-group']" location="class">
+					<stereotype ref="Entity"/>
+				</element>
+				<element path="/xs:schema/xs:element[@name='query']" location="class">
+					<stereotype ref="Entity"/>
+				</element>
+				<element path="/xs:schema/xs:element[@name='extension']" location="class">
+					<stereotype ref="Entity"/>
+				</element>
+			</element>
+			<element path="/xs:schema/xs:element[@name='extension']" location="package"/>
+		</element>
+	</element>
+	<stereotype name="PrimaryKey" location="field"/>
+	<stereotype name="Entity" location="class"/>
+	<stereotype name="Package" location="package"/>
+</mapping>

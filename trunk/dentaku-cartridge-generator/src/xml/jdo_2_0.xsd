@@ -154,12 +154,8 @@
 	<xs:element name="datastore-identity">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:choice minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="column"/>
-				</xs:choice>
-				<xs:choice minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="extension"/>
-				</xs:choice>
+				<xs:element ref="column" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="extension" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="column" type="xs:string"/>
 			<xs:attribute name="strategy" type="xs:string"/>
@@ -246,9 +242,7 @@
 					<xs:element ref="collection"/>
 					<xs:element ref="map"/>
 					<xs:element ref="array"/>
-					<xs:choice>
-						<xs:element ref="column" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:choice>
+					<xs:element ref="column" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:choice>
 				<xs:element ref="join" minOccurs="0"/>
 				<xs:element ref="element" minOccurs="0"/>
@@ -377,12 +371,8 @@
 	<xs:element name="implements">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:choice maxOccurs="unbounded">
-					<xs:element ref="property-field"/>
-				</xs:choice>
-				<xs:choice minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="extension"/>
-				</xs:choice>
+				<xs:element ref="property-field" maxOccurs="unbounded"/>
+				<xs:element ref="extension" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
 		</xs:complexType>
@@ -418,12 +408,8 @@
 	<xs:element name="interface">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:choice minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="property"/>
-				</xs:choice>
-				<xs:choice>
-					<xs:element ref="extension" minOccurs="0" maxOccurs="unbounded"/>
-				</xs:choice>
+				<xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="extension" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
 			<xs:attribute name="requires-extent" default="true">
@@ -439,15 +425,9 @@
 	<xs:element name="jdo">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:choice maxOccurs="unbounded">
-					<xs:element ref="package"/>
-				</xs:choice>
-				<xs:choice minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="query"/>
-				</xs:choice>
-				<xs:choice minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="extension"/>
-				</xs:choice>
+				<xs:element ref="package" maxOccurs="unbounded"/>
+				<xs:element ref="query" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="extension" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -554,18 +534,10 @@
 	<xs:element name="package">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:choice minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="interface"/>
-				</xs:choice>
-				<xs:choice maxOccurs="unbounded">
-					<xs:element ref="class"/>
-				</xs:choice>
-				<xs:choice minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="sequence"/>
-				</xs:choice>
-				<xs:choice minOccurs="0" maxOccurs="unbounded">
-					<xs:element ref="extension"/>
-				</xs:choice>
+				<xs:element ref="interface" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="class" maxOccurs="unbounded"/>
+				<xs:element ref="sequence" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="extension" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
 		</xs:complexType>
@@ -598,9 +570,9 @@
 	</xs:element>
 	<xs:element name="query">
 		<xs:complexType mixed="true">
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="extension"/>
-			</xs:choice>
+			<xs:sequence>
+				<xs:element ref="extension" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
 			<xs:attribute name="name" type="xs:string"/>
 			<xs:attribute name="language" type="xs:string"/>
 		</xs:complexType>

@@ -44,7 +44,6 @@ public abstract class ValidatingVisitorBase implements ValidatingVisitor {
      * @param element Element in the AST being visited
      * @param context Context for accumulating state and whatnot
      * @throws VisitorException
-     * @todo need to cache the food chain for repeat calls
      */
     public void visit(ModelElement element, Object context) throws VisitorException {
         Class c = element.getClass();
