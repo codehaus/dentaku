@@ -26,8 +26,6 @@
     <orderEntry type="library" name="Test" level="application" />
     <orderEntry type="library" name="Clover" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
-    <orderEntry type="library" name="Netbeans MDR" level="application" />
-    <orderEntry type="library" name="Generama" level="application" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -39,8 +37,9 @@
     </orderEntry>
     <orderEntry type="library" name="Velocity" level="application" />
     <orderEntry type="library" name="Commons" level="application" />
-    <orderEntry type="module" module-name="dentaku-metadata-service" />
     <orderEntry type="library" name="XStream-1.0" level="application" />
+    <orderEntry type="module" module-name="generama" />
+    <orderEntry type="library" name="NBMDR New" level="application" />
     <orderEntryProperties />
   </component>
 </module>

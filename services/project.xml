@@ -9,11 +9,6 @@
     <dependencies>
         <dependency>
             <groupId>dentaku</groupId>
-            <artifactId>dentaku-metadata-service</artifactId>
-            <version>${pom.currentVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
             <artifactId>dentaku-event-cartridge</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
@@ -175,9 +170,9 @@
             <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>qdox</groupId>
-            <artifactId>qdox</artifactId>
-            <version>1.5</version>
+            <groupId>qfork</groupId>
+            <artifactId>qfork</artifactId>
+            <version>1.7-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>picocontainer</groupId>

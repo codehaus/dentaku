@@ -7,8 +7,8 @@
     </logging>
     <components>
         <component>
-            <role>org.dentaku.services.persistence.PersistenceManager</role>
-            <implementation>org.dentaku.services.persistence.hibernate.HibernatePersistenceManager</implementation>
+            <role>org.dentaku.services.persistence.PersistenceManagerStorage</role>
+            <implementation>org.dentaku.services.persistence.hibernate.HibernatePersistenceManagerStorage</implementation>
             <requirements>
                 <requirement>
                     <role>org.dentaku.services.persistence.PersistenceFactory</role>
