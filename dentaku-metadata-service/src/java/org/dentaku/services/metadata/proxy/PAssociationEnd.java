@@ -3,7 +3,7 @@ package org.dentaku.services.metadata.proxy;
 import org.omg.uml.foundation.core.AssociationEnd;
 import org.omg.uml.foundation.core.Classifier;
 import org.dentaku.services.metadata.UMLStaticHelper;
-import org.andromda.core.common.StringUtilsHelper;
+import org.dentaku.services.metadata.StringUtilsHelper;
 
 /**
  * dynamic proxy for an AssociationEnd: dynamically supports the UMLAssociationEnd,

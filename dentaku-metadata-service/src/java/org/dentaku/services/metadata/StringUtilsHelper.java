@@ -1,7 +1,7 @@
 /*
  * CopyrightPlugin (c) 2004 Your Corporation. All Rights Reserved.
  */
-package org.andromda.core.common;
+package org.dentaku.services.metadata;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -81,6 +81,9 @@ public class StringUtilsHelper {
     }
 
     public static String fromDatabaseAttributeName(String s, String separator) {
+        if (s == null) {
+            return null;
+        }
         String tok[] = s.split(separator);
         StringBuffer databaseAttributeName = new StringBuffer();
         databaseAttributeName.append(lowerCaseFirstLetter(tok[0]));

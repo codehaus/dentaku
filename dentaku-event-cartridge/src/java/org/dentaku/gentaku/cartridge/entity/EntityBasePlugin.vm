@@ -271,8 +271,9 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
             // attributes
 #foreach ( $att in $class.attributes )
 #set ($atttypename = $transform.findFullyQualifiedName($att.type))
+#set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
 #if ( $atttypename == "java.lang.String" )
-            zeroObject.set${str.upperCaseFirstLetter(${attname})}(
+            zeroObject.set${str.upperCaseFirstLetter(${attname})}("${att.name}");
 #end
 #end
             // relations
@@ -282,7 +283,8 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #set ($targettype = $adata.target.type)
 #set ($targettypename = $transform.findFullyQualifiedName($targettype))
 #if ($adata.isOne2Many())
-            zeroObject.set${str.upperCaseFirstLetter($adata.target.roleName)}(new java.util.ArrayList(0));
+#set ($attname =  ${str.fromDatabaseAttributeName(${$adata.target.roleName}, "_")})
+            zeroObject.set${str.upperCaseFirstLetter($attname)}(new java.util.ArrayList(0));
 #end
 #end
 #end
@@ -296,7 +298,8 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #foreach ( $att in $class.attributes )
 #set ($atttypename = $transform.findFullyQualifiedName($att.type))
 #if ( $atttypename == "java.lang.String" )
-            ${obj}.set${str.upperCaseFirstLetter(${att.name})}("${att.name}");
+#set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
+            ${obj}.set${str.upperCaseFirstLetter(${attname})}("${att.name}");
 #end
 #end
             // relations
@@ -305,10 +308,11 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #if ($adata.target.navigable == "true")
 #set ($targettype = $adata.target.type)
 #set ($targettypename = $transform.findFullyQualifiedName($targettype))
+#set ($attname =  ${str.fromDatabaseAttributeName(${adata.target.roleName}, "_")})
 #if ($adata.isOne2Many())
-            ${obj}.set${str.upperCaseFirstLetter($adata.target.roleName)}(${targettypename}.${meth}());
+            ${obj}.set${str.upperCaseFirstLetter($attname)}(${targettypename}.${meth}());
 #elseif ($adata.isOne2One() || $adata.isMany2One())
-            ${obj}.set${str.upperCaseFirstLetter($adata.target.roleName)}(${targettypename}.getTestClassOne());
+            ${obj}.set${str.upperCaseFirstLetter($attname)}(${targettypename}.getTestClassOne());
 #end
 #end
 #end
@@ -347,7 +351,7 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
     }
 
     public static int getTestCollectionSize() {
-        return Root.class.hashCode() % 100;
+        return ${class.name}.class.hashCode() % 100;
     }
 
 }
