@@ -18,12 +18,11 @@ package org.dentaku.gentaku.tools.cgen.visitor;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
-import org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin;
 import org.dom4j.Branch;
 import org.dom4j.Document;
+import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.DocumentFactory;
 import org.dom4j.QName;
 import org.dom4j.tree.DefaultElement;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
@@ -48,7 +47,6 @@ import java.util.Iterator;
  * <br>
  * This code also relies on a custom dom4j
  */
-
 public class PluginOutputVisitor {
     protected Document xsdDoc;
     protected UmlPackage model;
@@ -58,7 +56,7 @@ public class PluginOutputVisitor {
         this.model = model;
     }
 
-    public boolean visit(Element mappingNode, Branch parentOutput, Namespace parent) {
+    public boolean visit(Element mappingNode, Branch parentOutput, ModelElement parent) {
         boolean result = false;
         if (mappingNode.getName().equals("element")) {
             Element mappingXSD = (Element) xsdDoc.selectSingleNode(mappingNode.attributeValue("path"));
@@ -71,8 +69,10 @@ public class PluginOutputVisitor {
             if (!c.isEmpty()) {
                 for (Iterator elementIterator = c.iterator(); elementIterator.hasNext();) {
                     ModelElementImpl element = (ModelElementImpl) elementIterator.next();
-                    if (element instanceof Namespace) {
-                        parent = (Namespace) element;
+                    if (element instanceof Namespace || element instanceof Feature) {
+                        parent = element;
+                    } else {
+                        System.out.println("we got here?");
                     }
 
                     Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
@@ -107,7 +107,7 @@ public class PluginOutputVisitor {
         return result;
     }
 
-    private boolean iterateElements(Element mappingNode, Element newLocalNode, Namespace parent) {
+    private boolean iterateElements(Element mappingNode, Element newLocalNode, ModelElement parent) {
         boolean result = false;
         for (Iterator it = mappingNode.elements().iterator(); it.hasNext();) {
             LocalDefaultElement n = (LocalDefaultElement) it.next();
@@ -124,7 +124,10 @@ public class PluginOutputVisitor {
      * @param parent
      * @return Nodes matching criteria
      */
-    private Collection findElementsForLocationAndPrefix(String location, final String prefix, final Namespace parent) {
+    private Collection findElementsForLocationAndPrefix(String location, final String prefix, final ModelElement parent) {
+        if (parent != null && !(parent instanceof Namespace)) {
+            return Collections.singletonList(parent);
+        }
         Collection elements = Collections.EMPTY_LIST;
         if (location.equals("package")) {
             elements = model.getModelManagement().getUmlPackage().refAllOfType();
@@ -139,9 +142,7 @@ public class PluginOutputVisitor {
         Collection result = CollectionUtils.select(elements, new Predicate() {
             public boolean evaluate(Object object) {
                 ModelElement mei = (ModelElement) object;
-                if (parent != null
-                        && ((mei instanceof Classifier && mei.getNamespace() != parent)
-                            || (mei instanceof Feature && ((Feature) mei).getOwner() != parent))) {
+                if (parent != null && ((mei instanceof Classifier && mei.getNamespace() != parent) || (mei instanceof Feature && ((Feature) mei).getOwner() != parent))) {
                     return false;
                 }
                 Collection c = mei.getTaggedValue();
@@ -177,7 +178,7 @@ public class PluginOutputVisitor {
             super(qname);
         }
 
-        public boolean accept(PluginOutputVisitor visitor, Branch newParent, Namespace parent) {
+        public boolean accept(PluginOutputVisitor visitor, Branch newParent, ModelElement parent) {
             return visitor.visit(this, newParent, parent);
         }
     }
