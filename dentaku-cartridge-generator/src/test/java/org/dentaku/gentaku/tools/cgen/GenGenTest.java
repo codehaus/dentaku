@@ -29,7 +29,7 @@ public class GenGenTest extends junit.framework.TestCase {
     public GenGenPlugin plugin;
 
     protected void setUp() throws Exception {
-        String filename = "dentaku-cartridge-generator/src/test/uml/test2.xml.zip";
+        String filename = "example-model/src/uml/model.xml.zip";
         RepositoryReader rr = new MagicDrawRepositoryReader(Utils.checkURL(new File(Utils.getRootDir(), filename).toURL()));
         JMICapableMetadataProvider mp = new JMIUMLMetadataProvider(rr);
         plugin = new GenGenPlugin(mp);

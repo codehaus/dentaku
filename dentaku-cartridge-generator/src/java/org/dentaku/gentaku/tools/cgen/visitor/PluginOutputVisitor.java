@@ -67,24 +67,32 @@ public class PluginOutputVisitor {
      * @param mappingNode  Node that we are currently visiting in the mapping document
      * @param parentOutput Output node for document we are building.  Recursive calls gradually expand this
      * @param modelElement ModelElement from UML that we are currently working on
+     * @param location
      * @return true if we did something worth keeping
      */
-    public boolean visit(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement modelElement) throws GenerationException {
+    public boolean visit(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement modelElement, String location) throws GenerationException {
         boolean result = false;
         if (!mappingXSD.getName().equals("element")) {
-            result = iterateElements(mappingXSD, parentOutput, modelElement);
+            result = iterateElements(mappingXSD, parentOutput, modelElement, location);
         } else {
             String ref = mappingXSD.attributeValue("ref");
             if (ref != null) {
                 mappingXSD = (LocalDefaultElement) Util.selectSingleNode(xsdDoc, "/xs:schema/xs:element[@name='" + ref + "']");
             }
 
-            Set locationSet = getTextNodesSet(mappingXSD, "location");
-            if (locationSet.contains("root")) {
+            LocalDefaultElement annotation = mappingXSD.getAnnotation();
+            if (annotation != null) {
+                String candidateLocation = annotation.attributeValue("location");
+                if (candidateLocation != null) {
+                    location = candidateLocation;
+                }
+            }
+
+            if (location.equals("root")) {
                 // root element is a special case because we always iterate it.  But is this the only occurence not caught
-                // in the following loop?  Smells fishy
+                // in the following loop?  Smells fishy.  todo This is also broken because the root element cannot have attributes
                 Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
-                if (iterateElements(mappingXSD, newLocalNode, modelElement)) {
+                if (iterateElements(mappingXSD, newLocalNode, modelElement, location)) {
                     parentOutput.add(newLocalNode);
                     result = true;
                 }
@@ -92,7 +100,7 @@ public class PluginOutputVisitor {
                 // iterate candidate ModelElements that match these criteria
                 // the tag prefix we are looking for in tags named "prefix.tag"
                 String prefix = mappingXSD.attributeValue("name");
-                Collection c = findElementsForLocationAndPrefix(locationSet, prefix, modelElement);
+                Collection c = findElementsForLocationAndPrefix(location, prefix, modelElement);
                 for (Iterator elementIterator = c.iterator(); elementIterator.hasNext();) {
                     ModelElementImpl element = (ModelElementImpl) elementIterator.next();
                     if (element instanceof Namespace || element instanceof Feature) {
@@ -109,7 +117,7 @@ public class PluginOutputVisitor {
                         // that problem solved that the old behavior is the correct behavior.  If it is, the special case noise when a root element is
                         // being rendered can probably be removed as well
                         if (iterateAttributes(mappingXSD, element, newLocalNode)) {
-                            iterateElements(mappingXSD, newLocalNode, modelElement);
+                            iterateElements(mappingXSD, newLocalNode, modelElement, location);
                             postGenerate(mappingXSD, parentOutput, modelElement, newLocalNode);
                             parentOutput.add(newLocalNode);
                             result = true;
@@ -121,15 +129,6 @@ public class PluginOutputVisitor {
             }
         }
         return result;
-    }
-
-    private Set getTextNodesSet(LocalDefaultElement mappingXSD, String criteria) {
-        Set locations = new HashSet();
-        for (Iterator it = Util.selectNodes(mappingXSD.getAnnotation(), criteria).iterator(); it.hasNext();) {
-            String s = (String) ((Element) it.next()).getText();
-            locations.add(s);
-        }
-        return locations;
     }
 
     private void preGenerate(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement modelElement) throws GenerationException {
@@ -212,15 +211,16 @@ public class PluginOutputVisitor {
      * Iterate all the elements of the mappingNode by visiting each one of them.
      *
      * @param mappingXSD   The node of the XSD
+     * @return true if we did anything of value
      * @param newLocalNode Output node for document we are building.  Recursive calls gradually expand this
      * @param parent       The parent element from the UML model that we are parsing in parellel
-     * @return true if we did anything of value
+     * @param location
      */
-    private boolean iterateElements(Element mappingXSD, Branch newLocalNode, ModelElement parent) throws GenerationException {
+    private boolean iterateElements(Element mappingXSD, Branch newLocalNode, ModelElement parent, String location) throws GenerationException {
         boolean result = false;
         for (Iterator it = mappingXSD.elements().iterator(); it.hasNext();) {
             LocalDefaultElement n = (LocalDefaultElement) it.next();
-            result = n.accept(this, newLocalNode, parent) || result;
+            result = n.accept(this, newLocalNode, parent, location) || result;
         }
         return result;
     }
@@ -233,12 +233,12 @@ public class PluginOutputVisitor {
      * @param parent   ModelElement in the UML model that we are currently considering
      * @return Nodes matching criteria
      */
-    private Collection findElementsForLocationAndPrefix(Set locations, final String prefix, final ModelElement parent) {
+    private Collection findElementsForLocationAndPrefix(String location, final String prefix, final ModelElement parent) {
         // special case if parent is not an element container, the list of candidate elements is just this element
         if (parent != null && !(parent instanceof Namespace)) {
             return Collections.singletonList(parent);
         }
-        Collection elements = getCandidateElementsForLocation(locations);
+        Collection elements = getCandidateElementsForLocation(location);
 
         Collection result = CollectionUtils.select(elements, new Predicate() {
             public boolean evaluate(Object object) {
@@ -265,15 +265,15 @@ public class PluginOutputVisitor {
      * @param location The location we are wanting to look in, {package, class, method, field...}
      * @return All nodes in the model from that location
      */
-    private Collection getCandidateElementsForLocation(Set locations) {
+    private Collection getCandidateElementsForLocation(String location) {
         Collection elements = new LinkedList();
-        if (locations.contains("package")) {
+        if (location.equals("package")) {
             elements.addAll(model.getModelManagement().getUmlPackage().refAllOfType());
-        } else if (locations.contains("class")) {
+        } else if (location.equals("class")) {
             elements.addAll(model.getCore().getUmlClass().refAllOfType());
-        } else if (locations.contains("method")) {
+        } else if (location.equals("method")) {
             elements.addAll(model.getCore().getOperation().refAllOfType());
-        } else if (locations.contains("field")) {
+        } else if (location.equals("field")) {
             elements.addAll(model.getCore().getAttribute().refAllOfType());
         }
         return elements;

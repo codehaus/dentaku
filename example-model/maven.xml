@@ -10,7 +10,8 @@
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
         <gentaku model="${dentaku.rootdir}/example-model/src/uml/model.xml.zip">
             <fileset dir="${dentaku.rootdir}/gentaku/src/uml"/>
-            <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" />
+            <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" destdir="${basedir}/target/classes/META-INF" destinationfilename="jdo.xml"/>
+            <component classname="org.dentaku.gentaku.cartridge.core.POJOPlugin" destdir="${maven.build.src}" stereotype="Entity"/>
 <!--            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityBasePlugin" destdir="${maven.build.src}"/>-->
 <!--            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityPlugin" destdir="${maven.src.dir}/java"/>-->
 <!--            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityFactoryPlugin" destdir="${maven.build.src}"/>-->
