@@ -23,6 +23,7 @@
 					<element path="/xs:schema/xs:element[@name='column']" location="field"/>
 				</element>
 				<element path="/xs:schema/xs:element[@name='field']" location="field">
+                    <stereotype ref="Field"/>
 					<element path="/xs:schema/xs:element[@name='collection']" location="field">
 						<element path="/xs:schema/xs:element[@name='extension']" location="field"/>
 					</element>
@@ -31,7 +32,7 @@
 					</element>
 					<element path="/xs:schema/xs:element[@name='array']" location="field"/>
 					<element path="/xs:schema/xs:element[@name='column']" location="field">
-						<stereotype ref="PrimaryKey"/>
+<!--						<stereotype ref="PrimaryKey"/>-->
 					</element>
 					<element path="/xs:schema/xs:element[@name='join']" location="field">
 						<element path="/xs:schema/xs:element[@name='column']" location="field"/>
@@ -68,6 +69,7 @@
 		</element>
 	</element>
 	<stereotype name="PrimaryKey" location="field"/>
+	<stereotype name="Field" location="field"/>
 	<stereotype name="Entity" location="class"/>
 	<stereotype name="Package" location="package"/>
 </mapping>
