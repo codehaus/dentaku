@@ -81,7 +81,7 @@ public class CrudAction extends DefaultActionEvent
 	public void setPreAction(String preAction) {
 		this.preAction = preAction;
 	}
-	private void doPreAction(RunData aData, Context aContext) {
+	protected void doPreAction(RunData aData, Context aContext) {
 		if(preAction!=null) {
 			HashMap aMap = new HashMap();
 			try {
@@ -98,7 +98,7 @@ public class CrudAction extends DefaultActionEvent
 			}
 		}
 	}
-	private void doPostAction(RunData aData, Context aContext) {
+	protected void doPostAction(RunData aData, Context aContext) {
 		if(postAction!=null) {
 			HashMap aMap = new HashMap();
 			try {

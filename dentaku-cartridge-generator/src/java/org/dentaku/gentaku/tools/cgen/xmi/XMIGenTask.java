@@ -90,6 +90,8 @@ public class XMIGenTask extends Task {
 
             Document document = createXMIDoc(mappingDoc, schemaDoc, mappingDoc.getRootElement().attributeValue("tagNameBase"), rootNode);
 
+            if(destdir==null)
+            	destdir="./";
             File file = new File(destdir);
             file.mkdirs();
             writeFile(document, new File(file, filename));

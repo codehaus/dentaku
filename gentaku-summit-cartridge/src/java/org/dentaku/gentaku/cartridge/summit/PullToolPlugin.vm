@@ -2,9 +2,10 @@
  * This class is only generated once! It will never be overwritten.
  * You can safely modify it by hand to add any special pull methods.
  */
-package ${metadata.packageName}.tools;
+package ${metadata.packageName}.tool;
 
 import org.codehaus.plexus.summit.pull.RequestTool;
+import org.codehaus.plexus.summit.rundata.RunData;
 
 public class ${ScreenName}PullTool extends Base${ScreenName}PullTool implements RequestTool {
 

@@ -24,6 +24,8 @@ import org.generama.defaults.FileWriterMapper;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.omg.uml.foundation.core.TaggedValue;
 
+import org.codehaus.plexus.util.StringUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,7 +42,6 @@ import java.util.Map;
 
 public abstract class JavaPluginBase extends Plugin {
     private boolean createonly;
-    protected String stereotype;
     protected List stereotypes;
 
     public JavaPluginBase(TemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
@@ -116,7 +117,10 @@ public abstract class JavaPluginBase extends Plugin {
     }
 
     public void setStereotype(String stereotype) {
-        this.stereotypes.add(stereotype);
+    	String[] stereos = StringUtils.split(stereotype, ",");
+    	for(int i = 0; i<stereos.length; i++) {
+    		this.stereotypes.add(stereos[i]);
+    	}
     }
 
     private static class CheckFileWriterMapper implements WriterMapper {

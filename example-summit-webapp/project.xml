@@ -4,6 +4,8 @@
   <pomVersion>3</pomVersion>
   <artifactId>summit-webapp</artifactId>
   <name>Summit Example Webapp</name>
+  <groupId>dentaku</groupId>
+  <currentVersion>SNAPSHOT</currentVersion>
   <package>org.dentaku.summit.webapp.*</package>
   <dependencies>
     <dependency>
@@ -44,6 +46,13 @@
       <type>jar</type>
     </dependency>
     <!-- to be added for initdb-->
+    <!-- Plexus -->
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <version>1.0.b2</version>
+    </dependency>
+    <!-- XDoclet -->
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>gentaku</artifactId>
@@ -81,10 +90,10 @@
       </properties>
     </dependency>
     <dependency>
-        <groupId>${pom.groupId}</groupId>
-        <artifactId>dentaku-event-cartridge</artifactId>
-        <version>SNAPSHOT</version>
-        <type>jar</type>
+      <groupId>${pom.groupId}</groupId>
+      <artifactId>dentaku-event-cartridge</artifactId>
+      <version>SNAPSHOT</version>
+      <type>jar</type>
       <properties>
         <eclipse.dependency>true</eclipse.dependency>
       </properties>
@@ -108,46 +117,40 @@
       </properties>
     </dependency>
     <dependency>
-        <groupId>${pom.groupId}</groupId>
-        <artifactId>dentaku-qtags-cartridge</artifactId>
-        <version>SNAPSHOT</version>
-    </dependency>
-    <!-- Plexus -->
-    <dependency>
-		<groupId>plexus</groupId>
-        <artifactId>plexus-velocity</artifactId>
-		<version>1.0-beta-4-SNAPSHOT</version>
-		<url>http://plexus.codehaus.org/</url>
+      <groupId>${pom.groupId}</groupId>
+      <artifactId>dentaku-qtags-cartridge</artifactId>
+      <version>SNAPSHOT</version>
     </dependency>
     <dependency>
-		<groupId>plexus</groupId>
-        <artifactId>plexus-summit-dentaku</artifactId>
-		<version>SNAPSHOT</version>
-		<url>http://dentaku.codehaus.org/maven/repo</url>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-velocity</artifactId>
+      <version>1.0-beta-4-SNAPSHOT</version>
+      <url>http://plexus.codehaus.org/</url>
     </dependency>
     <dependency>
-		<groupId>plexus</groupId>
-        <artifactId>plexus-action</artifactId>
-		<version>1.0-alpha-1-SNAPSHOT</version>
-		<url>http://plexus.codehaus.org</url>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-summit-dentaku</artifactId>
+      <version>SNAPSHOT</version>
+      <url>http://dentaku.codehaus.org/maven/repo</url>
     </dependency>
     <dependency>
-		<groupId>plexus</groupId>
-        <artifactId>plexus-jdo</artifactId>
-		<version>SNAPSHOT</version>
-		<url>http://dentaku.codehaus.org/maven/repo</url>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-action</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+      <url>http://plexus.codehaus.org</url>
     </dependency>
     <dependency>
-        <groupId>xml-apis</groupId>
-        <artifactId>xml-apis</artifactId>
-        <version>1.0.b2</version>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-jdo</artifactId>
+      <version>SNAPSHOT</version>
+      <url>http://dentaku.codehaus.org/maven/repo</url>
     </dependency>
     <dependency>
-        <id>antlr</id>
-        <version>2.7.2</version>
-        <url>http://www.antlr.org/</url>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>2.7.2</version>
+      <url>http://www.antlr.org/</url>
     </dependency>
-    <!-- XDoclet -->    
     <dependency>
       <groupId>xdoclet-plugins</groupId>
       <artifactId>xdoclet-plugin-qtags</artifactId>
@@ -156,9 +159,21 @@
     </dependency>
     <dependency>
       <groupId>jpox</groupId>
+      <artifactId>jpox</artifactId>
+      <version>1.1.0-beta-1</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>jpox</groupId>
       <artifactId>maven-jpox-plugin</artifactId>
       <version>1.1.0-beta-1</version>
       <type>plugin</type>
+    </dependency>
+    <dependency>
+      <groupId>jdo</groupId>
+      <artifactId>jdo</artifactId>
+      <version>SNAPSHOT</version>
+      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>commons-el</groupId>

@@ -1,6 +1,11 @@
 <component-set>
   <components>
     <component>
+      <role>org.codehaus.plexus.servletcontainer.ServletContainer</role>
+      <implementation>org.codehaus.plexus.servletcontainer.jetty.JettyServletContainer</implementation>
+    </component>
+
+    <component>
       <role>org.codehaus.plexus.velocity.VelocityComponent</role>
       <implementation>org.codehaus.plexus.velocity.DefaultVelocityComponent</implementation>
       <configuration>
@@ -36,6 +41,8 @@
         <temp-directory>${basedir}/temp</temp-directory>
       </configuration>
     </component>
+    
+    <!-- Resolvers -->
     <component>
       <role>org.codehaus.plexus.summit.resolver.Resolver</role>
       <role-hint>new</role-hint>
@@ -43,8 +50,6 @@
       <configuration>
         <default-view>Index.vm</default-view>
         <error-view>Error.vm</error-view>
-        <default-base-name>Default</default-base-name>
-        <default-view-extension>vm</default-view-extension>
       </configuration>
     </component>
     <component>
@@ -54,10 +59,16 @@
       <configuration>
         <default-view>Index.vm</default-view>
         <error-view>Error.vm</error-view>
-        <default-base-name>Default</default-base-name>
-        <default-view-extension>vm</default-view-extension>
       </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.summit.renderer.Renderer</role>
+          <role-hint>velocity</role-hint>
+        </requirement>
+      </requirements>
     </component>
+    
+    <!-- Renderers -->
     <component>
       <role>org.codehaus.plexus.summit.renderer.Renderer</role>
       <role-hint>velocity</role-hint>
@@ -68,27 +79,123 @@
         </requirement>
       </requirements>
     </component>
+    
+    <!-- Displays -->
     <component>
       <role>org.codehaus.plexus.summit.display.Display</role>
       <role-hint>classic</role-hint>
       <implementation>org.codehaus.plexus.summit.display.ClassicBufferedDisplay</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.summit.renderer.Renderer</role>
+          <role-hint>velocity</role-hint>
+        </requirement>
+      </requirements>
     </component>
     <component>
       <role>org.codehaus.plexus.summit.display.Display</role>
       <role-hint>new</role-hint>
       <implementation>org.codehaus.plexus.summit.display.NewBufferedDisplay</implementation>
     </component>
+    
+    <!-- Pipeline -->
     <component>
       <role>org.codehaus.plexus.summit.pipeline.Pipeline</role>
       <implementation>org.codehaus.plexus.summit.pipeline.SummitPipeline</implementation>
+      <lifecycle-handler>plexus-configurable</lifecycle-handler>
       <configuration>
         <valves>
-          <valve implementation="org.codehaus.plexus.summit.pipeline.valve.CreateViewContextValve"/>
-          <valve implementation="org.codehaus.plexus.summit.pipeline.valve.DetermineTargetValve"/>
-          <valve implementation="org.codehaus.plexus.summit.pipeline.valve.ResolverValve"/>
-          <valve implementation="org.codehaus.plexus.summit.pipeline.valve.DisplayValve"/>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.CreateViewContextValve</valve>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.DetermineTargetValve</valve>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.ResolverValve</valve>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.ResolverValve</valve>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.ResolverValve</valve>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.DisplayValve</valve>
         </valves>
       </configuration>
     </component>
+
+    <component>
+      <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
+      <role-hint>org.codehaus.plexus.summit.pipeline.valve.DetermineTargetValve</role-hint>
+      <implementation>org.codehaus.plexus.summit.pipeline.valve.DetermineTargetValve</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.summit.resolver.Resolver</role>
+          <role-hint>new</role-hint>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
+      <role-hint>org.codehaus.plexus.summit.pipeline.valve.DisplayValve</role-hint>
+      <implementation>org.codehaus.plexus.summit.pipeline.valve.DisplayValve</implementation>
+      <configuration>
+        <display>new</display>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
+      <role-hint>org.codehaus.plexus.summit.pipeline.valve.ResolverValve</role-hint>
+      <implementation>org.codehaus.plexus.summit.pipeline.valve.ResolverValve</implementation>
+      <configuration>
+        <resolver>new</resolver>
+      </configuration>
+    </component>
+
+	<component>
+	  <role>org.codehaus.dentaku.summit.actions.CrudAction</role>
+	  <rolehint>com.stpenable.dentaku.actions.CrudCustomerOrder</rolehint>
+	  <implementation>com.stpenable.dentaku.actions.CrudCustomerOrder</implementation>
+	</component>
+
+    <!-- Pull Tools -->
+    <component>
+      <role>org.codehaus.plexus.summit.pull.PullService</role>
+      <implementation>org.codehaus.plexus.summit.pull.DefaultPullService</implementation>
+      <configuration>
+        <tools>
+          <tool>
+            <name>link</name>
+            <role>linktool</role>
+            <scope>request</scope>
+          </tool>
+		  <tool>
+			<name>tool</name>
+			<role>com.stpenable.dentaku.tools.CustomerOrderPullTool</role>
+			<scope>request</scope>
+		  </tool>
+        </tools>
+      </configuration>
+    </component>
+    <component>
+      <role>linktool</role>
+      <implementation>org.codehaus.plexus.summit.pull.tools.TemplateLink</implementation>
+      <configuration/>
+    </component>  
+	<component>
+	  <role>com.stpenable.dentaku.tools.CustomerOrderPullTool</role>
+	  <implementation>com.stpenable.dentaku.tools.CustomerOrderPullTool</implementation>
+	</component>
+    <component>
+      <role>org.codehaus.plexus.summit.pull.tools.TemplateRenderer</role>
+      <implementation>org.codehaus.plexus.summit.pull.tools.TemplateRenderer</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <lifecycle-handler>plexus</lifecycle-handler>
+      <configuration>
+        <default-view>Index.vm</default-view>
+        <error-view>Error.vm</error-view>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.summit.renderer.Renderer</role>
+          <role-hint>velocity</role-hint>
+        </requirement>
+      </requirements>
+    </component>
+  </components>
 </component-set>
+
 

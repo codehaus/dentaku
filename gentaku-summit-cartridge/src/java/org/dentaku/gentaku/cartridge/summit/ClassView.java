@@ -20,6 +20,7 @@ package org.dentaku.gentaku.cartridge.summit;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,7 +51,7 @@ import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
 		private ArrayList selectorNames = new ArrayList();
 		private ArrayList attributes; 
 		private ArrayList children;
-		private ArrayList ancestors;
+		private HashSet ancestors;
 		private boolean CRUD = false;
 		private Integer columncount = new Integer(2);
 		
@@ -273,13 +274,13 @@ import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
 		/**
 		 * @return Returns the ancestors.
 		 */
-		public ArrayList getAncestors() {
+		public HashSet getAncestors() {
 			return ancestors;
 		}
 		/**
 		 * @param ancestors The ancestors to set.
 		 */
-		public void setAncestors(ArrayList ancestors) {
+		public void setAncestors(HashSet ancestors) {
 			this.ancestors = ancestors;
 		}
 		/**

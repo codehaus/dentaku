@@ -22,7 +22,6 @@ import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
 
 import java.util.Collection;
-import java.util.Map;
 
 public class POJOPlugin extends JavaPluginBase {
     private JMICapableMetadataProvider metadataProvider;

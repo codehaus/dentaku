@@ -3,6 +3,7 @@
 #macro( fetchselector $classView  )
 		#set ( $arraycount = 0 )
 
+		PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
 	    String filter = new String(); 
 		#foreach($selectorname in ${classView.selectorNames})
 			#set ( $typecount = 0 )
@@ -14,10 +15,10 @@
 			#end
 			#if($arraycount == 0)
 
-		filter = $Q${selectorname} == aData.getParameters().getString(${selectorname})${Q} );
+		filter = $Q${selectorname} == ${Q} + aData.getParameters().getString(${Q}${selectorname}${Q});
 			#else
 
-		filter += $Q && ${selectorname} == aData.getParameters().getString(${selectorname})${Q} );
+		filter += $Q && ${selectorname} == ${Q} + aData.getParameters().getString(${Q}${selectorname}${Q});
 			#end
 			#set ( $arraycount =  $arraycount + 1 )
 		#end
@@ -38,34 +39,36 @@ package ${metadata.packageName}.action;
 #set ( $entitieswithcrud = $SummitHelper.getCrudList() )
 #set ( $viewrefclasses = $rootClassView.getAllDependentClassEntity() )
 
-package ${metadata.packageName}.actions;
 
-import org.codehaus.dentaku.summit.modules.actions.CrudAction;
-import org.codehaus.dentaku.summit.modules.actions.FkException;
+import org.codehaus.dentaku.summit.actions.CrudAction;
 import ${metadata.packageName}.model.*;
-import ${metadata.packageName}.util.*;
 
-import org.codehaus.plexus.summit.parameters.SummitRequestParameterParser;
+import org.codehaus.dentaku.summit.parameters.DentakuSummitParameterParser;
 import org.codehaus.plexus.summit.rundata.RunData;
+import org.codehaus.plexus.summit.parameters.RequestParameters;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.jdo.JDOService;
 
-import javax.jdo.PersistanceManager;
-import javax.jdo.Extent;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Transaction;
 import javax.jdo.Query;
 
 import org.apache.velocity.context.Context;
 
-import java.util.*;
 /**
  * Insert/Update/Delete instances of domain records
  * then populate the context ready to be rendered by the Velocity page.
  */
-public class Crud${ScreenName}} extends CrudAction {
+public class Crud${ScreenName} extends CrudAction {
 
 	private JDOService jdos;
 
-    public Crud${ScreenName} {
-		jdos = { JDOService ) lookup( JDOService.ROLE );
+    public Crud${ScreenName}() {
+		try{
+			jdos = ( JDOService ) lookup( JDOService.ROLE );
+		} catch (ComponentLookupException e) {
+			getLogger().error(${Q}Lookup of the JDOService component failed, check components.xml${Q});
+		}
 	}
 
 #foreach($viewclass in $entitieswithcrud)
@@ -85,10 +88,12 @@ public class Crud${ScreenName}} extends CrudAction {
             // as will occur if nothing has been previously selected from
             // the drop-down list (e.g. when no entities exist in the
             // record).
-            ParameterParser parser = aData.getParameters();
+            RequestParameters params = aData.getParameters();
+			DentakuSummitParameterParser parser = new DentakuSummitParameterParser(params);
             parser.setProperties(instance);
 
-			PersistanceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+			PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+			Transaction tx=pm.currentTransaction();
 			try {
                 tx.begin();       
     			pm.makePersistent(instance);
@@ -104,12 +109,13 @@ public class Crud${ScreenName}} extends CrudAction {
     		doPostAction(aData, aContext);
     		if(aContext.get(${Q}errMessage${Q}) != null)
     			populateContext(aData, aContext);
-
 			try {
-				populateContextWithSelected${viewclass.entityclassname}(instance, aData, aContext);
-#foreach (${parentclass} in ${viewclass.ancestors})
-	            populateContextWith${parentclass.entityclassname}(aData, aContext);
+#foreach ($parentclass in ${viewclass.ancestors})
+		        ${parentclass.entityclassname} a${parentclass.entityclassname} = new ${parentclass.entityclassname}();
+			    parser.setProperties(a${parentclass.entityclassname});
+	            populateContextWithSelected${parentclass.entityclassname}(a${parentclass.entityclassname}, aData, aContext);
 #end
+				populateContextWithSelected${viewclass.entityclassname}(instance, aData, aContext);
             } catch (Exception e) {
                 handleException(aContext, ${Q}Crud${ScreenName}.doCreate${viewclass.entityclassname}()${Q},
                     ${Q}Unable to populate context with ${viewclass.entityclassname} details${Q}, e);
@@ -132,10 +138,12 @@ public class Crud${ScreenName}} extends CrudAction {
             logParameters(aData, ${Q}${viewclass.entityclassname}.update()${Q});
 
             ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
-            ParameterParser parser = aData.getParameters();
+            RequestParameters params = aData.getParameters();
+			DentakuSummitParameterParser parser = new DentakuSummitParameterParser(params);
             parser.setProperties(instance);
 
-			PersistanceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+			PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+			Transaction tx=pm.currentTransaction();
 			try {
                 tx.begin();       
     			pm.makePersistent(instance);
@@ -154,11 +162,13 @@ public class Crud${ScreenName}} extends CrudAction {
     			populateContext(aData, aContext);
 
 			try {
-				populateContextFollowingUpdateWith${viewclass.entityclassname}(instance, aData, aContext);
-#foreach (${parentclass} in ${viewclass.ancestors})
-                populateContextWith${parentclass.entityclassname}(aData, aContext);
+#foreach ($parentclass in ${viewclass.ancestors})
+		        ${parentclass.entityclassname} a${parentclass.entityclassname} = new ${parentclass.entityclassname}();
+				parser.setProperties(a${parentclass.entityclassname});
+	            populateContextWithSelected${parentclass.entityclassname}(a${parentclass.entityclassname}, aData, aContext);
 #end
-         } catch (Exception e) {
+				populateContextWithSelected${viewclass.entityclassname}(instance, aData, aContext);
+	        } catch (Exception e) {
                 handleException(aContext, ${Q}Crud${ScreenName}.doUpdate${viewclass.entityclassname}()${Q},
                     ${Q}Unable to populate context with instance details${Q}, e);
             }
@@ -179,10 +189,12 @@ public class Crud${ScreenName}} extends CrudAction {
             logParameters(aData, ${Q}Crud${viewclass.entityclassname}.delete()${Q});
 
             ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
-            ParameterParser parser = aData.getParameters();
+            RequestParameters params = aData.getParameters();
+			DentakuSummitParameterParser parser = new DentakuSummitParameterParser(params);
             parser.setProperties(instance);
 
-			PersistanceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+			PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+			Transaction tx=pm.currentTransaction();
 			try {
                 tx.begin();       
     			pm.deletePersistent(instance);
@@ -201,11 +213,18 @@ public class Crud${ScreenName}} extends CrudAction {
 
             contextMessage(aContext,
                 ${Q}Confirmed deletion of record named ${viewclass.entityclassname}${Q});
-				populateContextWithSelected${viewclass.entityclassname}(null, aData, aContext);
-#foreach (${parentclass} in ${viewclass.ancestors})
-				populateContextWith${parentclass.entityclassname}(aData, aContext);
+			try{
+#foreach ($parentclass in ${viewclass.ancestors})
+		        ${parentclass.entityclassname} a${parentclass.entityclassname} = new ${parentclass.entityclassname}();
+				parser.setProperties(a${parentclass.entityclassname});
+	            populateContextWithSelected${parentclass.entityclassname}(a${parentclass.entityclassname}, aData, aContext);
 #end
-	    } catch (Exception e) {
+	            populateContextWith${viewclass.entityclassname}(aData, aContext);
+	        } catch (Exception e) {
+                handleException(aContext, ${Q}Crud${ScreenName}.doDelete${viewclass.entityclassname}()${Q},
+                    ${Q}Unable to populate context with instance details${Q}, e);
+            }
+		} catch (Exception e) {
             handleException(aContext, ${Q}Crud${ScreenName}.doDelete${viewclass.entityclassname}()${Q},
                 ${Q}Unable to delete record${Q}, e);
             populateContext(aData, aContext);
@@ -263,20 +282,21 @@ public class Crud${ScreenName}} extends CrudAction {
 		#fetchselector($rootClassView)
         if (aObject != null) {
             aContext.put(${Q}selected${rootClassView.entityclassname}${Q}, aObject);
-            ${rootClassView.entityclassname}.setSelectedObject(aObject);
+            //${rootClassView.entityclassname}.setSelectedObject(aObject);
         }
     }
-	protected void populateContextFollowingUpdateWith${rootClassView.entityclassname}(
-		${rootClassView.entityclassname}instance, RunData aData, Context aContext) {
+	protected void populateContextWithSelected${rootClassView.entityclassname}(
+		${rootClassView.entityclassname} instance, RunData aData, Context aContext) {
 		// Updated root object and currently selected child objects put into RunData
         if (instance != null) {
             aContext.put(${Q}selected${rootClassView.entityclassname}${Q}, instance);
-            ${rootClassView.entityclassname}.setSelectedObject(instance);
+            //${rootClassView.entityclassname}.setSelectedObject(instance);
         }
 #set ( ${childclasses} = ${rootClassView.children} )
 #foreach ( ${childclass} in ${childclasses} )
 		${childclass.entityclassname} instance = new ${childclass.entityclassname}();
-		ParameterParser parser = aData.getParameters();
+        RequestParameter params = aData.getParameters();
+		DentakuSummitParameterParser parser = new DentakuSummitParameterParser(params);
 		parser.setProperties(instance);
         populateContextWithSelected${childclass.entityclassname}(instance, aData, aContext);
 #end
@@ -310,14 +330,27 @@ public class Crud${ScreenName}} extends CrudAction {
      */
     protected void populateContext(RunData aData, Context aContext) {
         // This could be done with javascript, but stick with the convention
-		${rootClassView.entityclassname} instance = new ${rootClassView.entityclassname}();
-		ParameterParser parser = aData.getParameters();
-		parser.setProperties(instance);
-        populateContextWithSelected${rootClassView.entityclassname}(instance, aData, aContext);
+        RequestParameters params = aData.getParameters();
+		DentakuSummitParameterParser parser = new DentakuSummitParameterParser(params);
+		${rootClassView.entityclassname} a${rootClassView.entityclassname} = new ${rootClassView.entityclassname}();
+		try {
+			parser.setProperties(a${rootClassView.entityclassname});
+		} catch (Exception e) {
+			handleException(aContext, ${Q}Crud${ScreenName}.populateContext()${Q},
+                ${Q}Unable to populate context with ${rootClassView.entityclassname}${Q}, e);
+			return;
+		}
+        populateContextWithSelected${rootClassView.entityclassname}(a${rootClassView.entityclassname}, aData, aContext);
 #foreach ($viewrefclass3 in $viewrefclasses)
-		${viewrefclass3.entityclassname} instance = new ${viewrefclass3.entityclassname}();
-		parser.setProperties(instance);
-        populateContextWith${viewrefclass3.entityclassname}(instance, aData, aContext);
+		${viewrefclass3.entityclassname} a${viewrefclass3.entityclassname} = new ${viewrefclass3.entityclassname}();
+		try {
+			parser.setProperties(a${viewrefclass3.entityclassname});
+		} catch (Exception e) {
+			handleException(aContext, ${Q}Crud${ScreenName}.populateContext()${Q},
+                ${Q}Unable to populate context with ${viewrefclass3.entityclassname}${Q}, e);
+			return;
+		}
+        populateContextWithSelected${viewrefclass3.entityclassname}(a${viewrefclass3.entityclassname}, aData, aContext);
 #end
     }
 }
