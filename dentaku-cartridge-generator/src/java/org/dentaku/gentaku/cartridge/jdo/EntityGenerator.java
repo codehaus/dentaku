@@ -33,9 +33,11 @@ import org.omg.uml.foundation.core.Generalization;
 import org.omg.uml.foundation.core.Stereotype;
 import org.omg.uml.foundation.core.TagDefinition;
 import org.omg.uml.foundation.core.TaggedValue;
+import org.omg.uml.foundation.core.UmlAssociation;
 import org.omg.uml.foundation.core.UmlClass;
 import org.omg.uml.foundation.datatypes.MultiplicityRange;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -111,7 +113,7 @@ public class EntityGenerator extends GeneratorSupport {
             // handle the associations
             for (Iterator assIter = subclass.getTargetEnds().iterator(); assIter.hasNext();) {
                 AssociationEndImpl end = (AssociationEndImpl) assIter.next();
-                if (end.isNavigable()) {
+                if (end.isNavigable() && !excludedAssocs(end)) {
                     ClassifierImpl endClass = (ClassifierImpl) end.getParticipant();
                     Attribute newAttr = core.getAttribute().createAttribute();
                     if (end.getName() != null) {
@@ -145,7 +147,26 @@ public class EntityGenerator extends GeneratorSupport {
         }
     }
 
-    private void createGeneralization(CorePackage core, ClassifierImpl parent, ClassifierImpl child) {
+    /**
+	 * @param end
+	 * @return
+	 */
+	private boolean excludedAssocs(AssociationEndImpl end) {
+        UmlAssociation anAssoc = ((AssociationEnd) end).getAssociation();
+        Collection stereotypesForAssoc = anAssoc.getStereotype();
+		ArrayList sterotypesForAssocList = new ArrayList(stereotypesForAssoc);
+		for (Iterator ie = sterotypesForAssocList.iterator(); ie.hasNext();) {
+            Stereotype stereo = (Stereotype)ie.next();
+            if(stereo.getName().equals("View") || 
+            		stereo.getName().equals("Validates") || 
+					stereo.getName().equals("Imports")) {
+            	return true;
+            }
+		}
+		return false;
+	}
+
+	private void createGeneralization(CorePackage core, ClassifierImpl parent, ClassifierImpl child) {
         Generalization g = core.getGeneralization().createGeneralization();
         g.setChild(child);
         g.setParent(parent);
