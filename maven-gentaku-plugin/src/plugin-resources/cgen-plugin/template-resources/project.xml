@@ -1,40 +1,51 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <project>
-    <pomVersion>3</pomVersion>
-    <groupId>dentaku</groupId>
-    <artifactId>dentaku</artifactId>
-    <currentVersion>0.9-SNAPSHOT</currentVersion>
-    <name>Dentaku Project</name>
-    <organization>
-        <name>Dentaku Team</name>
-        <url>http://www.dentaku.org</url>
-        <!--        <logo>http://dentaku.org/images/calculator.gif</logo>-->
-    </organization>
-    <inceptionYear>2003</inceptionYear>
-    <package>org.dentaku.*</package>
-    <logo>http://dentaku.codehaus.org/dentaku.png</logo>
-    <url/>
-    <issueTrackingUrl>http://www.dentaku.org</issueTrackingUrl>
-    <siteAddress>http://dentaku.codehaus.org</siteAddress>
-    <siteDirectory>/home/projects/dentaku/public_html/sites/${pom.artifactId}</siteDirectory>
-    <distributionDirectory>/dentaku/dist/${pom.artifactId}/</distributionDirectory>
-    <repository>
-        <connection>scm:cvs:pserver:anonymous@cvs.dentaku.codehaus.org:/home/projects/dentaku/scm:dentaku</connection>
-        <url>http://cvs.dentaku.codehaus.org/</url>
-    </repository>
-    <versions/>
-    <mailingLists/>
-    <developers>
-        <developer>
-            <name>Brian Topping</name>
-            <email>topping@codehaus.org</email>
-            <roles>
-                <role>Founder</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
-    </developers>
+  <!-- the version of maven's project object model -->
+
+  <pomVersion>3</pomVersion>
+  <!-- a unique name for this project -->
+
+  <id>@ID@</id>
+  <!-- a short but descriptive name for the project -->
+
+  <name>@ID@</name>
+  <!-- The version of the project under development, e.g.
+       1.1, 1.2, 2.0-SNAPSHOT -->
+
+  <currentVersion>1.0</currentVersion>
+  <!-- details about the organization that 'owns' the project -->
+
+  <organization>
+  </organization>
+  <!-- the year the project started -->
+
+  <package>@PACKAGE@</package>
+
+  <!-- any mailing lists for the project -->
+
+  <mailingLists/>
+  <!-- who the developers are for the project -->
+
+  <developers/>
+  <!-- jar files the project is dependent on -->
+
     <dependencies>
+        <dependency>
+            <groupId>dentaku</groupId>
+            <artifactId>dentaku-metadata-service</artifactId>
+            <version>@DENTAKU-VERSION@</version>
+        </dependency>
+        <dependency>
+            <groupId>dentaku</groupId>
+            <artifactId>gentaku</artifactId>
+            <version>@DENTAKU-VERSION@</version>
+        </dependency>
+        <dependency>
+            <groupId>dentaku</groupId>
+            <artifactId>dentaku-cartridge-generator</artifactId>
+            <version>@DENTAKU-VERSION@</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -158,11 +169,6 @@
             <artifactId>qfork</artifactId>
             <version>1.7-SNAPSHOT</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>qdox</groupId>-->
-<!--            <artifactId>qdox</artifactId>-->
-<!--            <version>1.6-SNAPSHOT</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>picocontainer</groupId>
             <artifactId>picocontainer</artifactId>
@@ -232,37 +238,23 @@
 
         <!--        gentaku-->
     </dependencies>
-    <!-- ################################################################ -->
-    <!--        Project build and reports section                         -->
-    <!-- ################################################################ -->
-    <build>
-        <nagEmailAddress>dev@dentaku.codehaus.org</nagEmailAddress>
-        <sourceDirectory>${basedir}/src/java</sourceDirectory>
-        <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
-        <unitTest>
-            <includes>
-                <include>**/Test*.java</include>
-            </includes>
-            <excludes>
-                <exclude>**/*Test*All.java</exclude>
-            </excludes>
-        </unitTest>
-        <resources/>
-        <!-- (OPTIONAL) Resources packaged inside the JAR file. -->
-    </build>
-    <reports>
-        <report>maven-changes-plugin</report>
-        <report>maven-jdepend-plugin</report>
-        <report>maven-pmd-plugin</report>
-        <report>maven-junit-report-plugin</report>
-        <report>maven-clover-plugin</report>
-        <report>maven-changelog-plugin</report>
-        <report>maven-file-activity-plugin</report>
-        <report>maven-developer-activity-plugin</report>
-        <report>maven-file-activity-plugin</report>
-        <report>maven-license-plugin</report>
-        <report>maven-linkcheck-plugin</report>
-        <report>maven-jxr-plugin</report>
-        <report>maven-javadoc-plugin</report>
-    </reports>
+  <!-- build information for the project -->
+
+  <build>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+    </unitTest>
+    <resources>
+      <resource>
+        <directory>src/java</directory>
+        <includes>
+          <include>*.properties</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
 </project>
