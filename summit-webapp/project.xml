@@ -7,21 +7,6 @@
     <dependencies>
         <dependency>
             <groupId>dentaku</groupId>
-            <artifactId>dentaku-metadata-service</artifactId>
-            <version>${pom.currentVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
-            <artifactId>dentaku-persistence-service</artifactId>
-            <version>${pom.currentVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
-            <artifactId>dentaku-event-cartridge</artifactId>
-            <version>${pom.currentVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
             <artifactId>gentaku</artifactId>
             <version>0.9-SNAPSHOT</version>
         </dependency>
@@ -34,11 +19,6 @@
             <groupId>dentaku</groupId>
             <artifactId>dentaku-persistence-service</artifactId>
             <version>0.9-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>prevayler</groupId>
-            <artifactId>prevayler</artifactId>
-            <version>20040427</version>
         </dependency>
         <dependency>
             <groupId>hibernate</groupId>
