@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DbMappingTable {
-    private List configuration;
-    private HashMap mappings;
+    private static HashMap mappings;
 
     public String getJDBCType(String javaType) {
         TypeMapping mapping = (TypeMapping)getConfigurationMapping().get(javaType);
@@ -45,9 +44,7 @@ public class DbMappingTable {
             byte buf[] = new byte[4096];
             int ptr = 0, read = 0;
             String input = "";
-            String classname = getClass().getName();
-            String filename = classname.substring(classname.lastIndexOf(".") + 1) + ".xml";
-            InputStream in = getClass().getResourceAsStream(filename);
+            InputStream in = getClass().getResourceAsStream("DbMappingTable.xml");
             try {
                 do {
                     ptr += read;
@@ -59,7 +56,7 @@ public class DbMappingTable {
             }
             XStream xstream = new XStream();
             xstream.alias("mapping", TypeMapping.class);
-            configuration = (List) xstream.fromXML(input);
+            List configuration = (List) xstream.fromXML(input);
 
             // now cross reference it
             mappings = new HashMap();
