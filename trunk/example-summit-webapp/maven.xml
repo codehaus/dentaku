@@ -8,46 +8,16 @@
     <goal name="gentaku">
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
         <gentaku model="${basedir}//src/uml/SummitTestModel.xml.zip">
-            <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" destdir="${basedir}/target/classes/META-INF" destinationfilename="jdo.xml" encoding="UTF-8"/>
-            <component classname="org.dentaku.gentaku.cartridge.core.POJOPlugin" destdir="${maven.build.src}" stereotype="Entity"/>
-            <component classname="org.dentaku.gentaku.cartridge.event.EventBasePlugin" destdir="${maven.build.src}"/> 
-
             <component classname="org.dentaku.gentaku.cartridge.summit.BasePullToolPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.summit.PullToolPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.summit.CrudActionPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.summit.VelocityFormPlugin" destdir="${velocityscreens}"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.GroovyValvePlugin" destdir="${maven.build.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.ComponentConfigPlugin" destdir="${maven.build.src}"/>
+            <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" destdir="${basedir}/target/classes/META-INF" destinationfilename="jdo.xml" encoding="UTF-8"/>
+            <component classname="org.dentaku.gentaku.cartridge.core.POJOPlugin" destdir="${maven.build.src}" stereotype="Entity"/>
+            <component classname="org.dentaku.gentaku.cartridge.event.EventBasePlugin" destdir="${maven.build.src}"/> 
         </gentaku>
-    </goal>
-    <goal name="dentaku:initdb">
-        <path id="schema.classpath">
-            <path refid="maven.dependency.classpath"/>
-            <pathelement location="target/xdoclet/hibernatedoclet"/>
-            <pathelement location="target/classes"/>
-            <pathelement location="../example-model/tools/mySQL/mysql-connector-java-3.1.6.jar"/>
-        </path>
-        <fileset id="hibernate.mapping.files" dir="target/xdoclet/hibernatedoclet">
-            <include name="**/*.hbm.xml"/>
-        </fileset>
-        <pathconvert refid="hibernate.mapping.files" property="hibernate.mappings" pathsep=" "/>
-        <java classname="net.sf.hibernate.tool.hbm2ddl.SchemaExport" fork="true">
-            <jvmarg value="-Dhibernate.dialect=net.sf.hibernate.dialect.MySQLDialect"/>
-            <jvmarg value="-Dhibernate.connection.driver_class=com.mysql.jdbc.Driver"/>
-            <jvmarg value="-Dhibernate.connection.url=jdbc:mysql://${mysql.host}:3306/dentaku-summit-example"/>
-            <jvmarg value="-Dhibernate.connection.username=${mysql.username}"/>
-            <jvmarg value="-Dhibernate.connection.password=${mysql.password}"/>
-            <!--            <jvmarg value="-Xdebug"/>-->
-            <!--            <jvmarg value="-Xnoagent"/>-->
-            <!--            <jvmarg value="-Djava.compiler=NONE"/>-->
-            <!--            <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"/>-->
-            <arg line="${hibernate.mappings}"/>
-            <classpath refid="schema.classpath"/>
-        </java>
-        <exec executable="cmd.exe">
-            <arg file="tools/MySQL/mysql.exe"/>
-            <arg line="-h ${mysql.host} -u ${mysql.username} --password=${mysql.password} ${mysql.database}"/>
-            <arg line="&lt;"/>
-            <arg file="${maven.dentaku.sql.init}"/>
-        </exec>
     </goal>
     <postGoal name="java:compile">
         <path id="maven.compile.src.set">
@@ -55,5 +25,4 @@
             <pathelement location="target/src"/>
         </path>
     </postGoal>
-    <!-- Need to copy the resultant .class files after testing to the example-summit-webapp/WEB-INF/classes dir -->
 </project>
