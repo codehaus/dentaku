@@ -54,6 +54,8 @@ public class XMIGen implements ContainerComposer, Startable {
     private Document schemaDoc;
     private Set visited = new HashSet();
     private final Map typeCache = new HashMap();
+    private String mapping;
+    private String schema;
 
     public XMIGen() {
         System.setProperty("org.dom4j.factory", PluginDocumentFactory.class.getName());
@@ -76,10 +78,8 @@ public class XMIGen implements ContainerComposer, Startable {
         System.out.println("Running " + getClass().getName());
         SAXReader reader = new SAXReader();
         try {
-            String filename = "dentaku-cartridge-generator/src/xml/mapping.xml";
-            Document mappingDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), filename).toURL()));
-            filename = "dentaku-cartridge-generator/src/xml/jdo_2_0.xsd";
-            schemaDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), filename).toURL()));
+            Document mappingDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), mapping).toURL()));
+            schemaDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), schema).toURL()));
 
             // annotate XSD with mapping document
             mappingDoc.accept(new VisitorSupport() {
@@ -346,7 +346,7 @@ public class XMIGen implements ContainerComposer, Startable {
     }
 
     private String mapLocationName(String location) {
-        String result = null;
+        String result = "String";
         if (location.equals("field")) {
             result = "Attribute";
         } else if (location.equals("method")) {
@@ -355,6 +355,8 @@ public class XMIGen implements ContainerComposer, Startable {
             result = "Class";
         } else if (location.equals("package")) {
             result = "Package";
+        } else if (location.equals("root")) {
+            // result = "String";
         } else {
             result = location.substring(0, 1).toUpperCase() + location.substring(1);
         }
@@ -453,5 +455,21 @@ public class XMIGen implements ContainerComposer, Startable {
         public Element createElement(QName qname) {
             return new LocalDefaultElement(qname);
         }
+    }
+
+    public String getMapping() {
+        return mapping;
+    }
+
+    public void setMapping(String mapping) {
+        this.mapping = mapping;
+    }
+
+    public String getSchema() {
+        return schema;
+    }
+
+    public void setSchema(String schema) {
+        this.schema = schema;
     }
 }

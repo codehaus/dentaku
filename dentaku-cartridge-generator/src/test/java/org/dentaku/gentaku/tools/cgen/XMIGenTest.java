@@ -25,6 +25,8 @@ public class XMIGenTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         gen = new XMIGen();
+        gen.setMapping("dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/hibernate/xml/mapping.xml");
+        gen.setSchema("dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/hibernate/xml/hibernate-mapping-2.0.xsd");
     }
 
     public void testXMIGen() throws Exception {
