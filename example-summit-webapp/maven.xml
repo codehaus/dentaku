@@ -1,10 +1,16 @@
-<project default="dentaku-dist" xmlns:m="jelly:maven" xmlns:ant="jelly:ant">
+<project default="dentaku-dist" xmlns:m="jelly:maven" xmlns:ant="jelly:ant" xmlns:deploy="deploy" xmlns:j="jelly:core">
     <goal name="dentaku-dist">
         <attainGoal name="jar:install-snapshot"/>
     </goal>
+    
     <preGoal name="java:compile">
         <attainGoal name="gentaku"/>
+        <path id="maven.compile.src.set">
+            <pathelement location="src/java"/>
+            <pathelement location="target/src"/>
+        </path>
     </preGoal>
+    
     <goal name="gentaku">
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
         <gentaku model="${basedir}/src/uml/SummitTestModel.xml.zip">
@@ -15,17 +21,22 @@
             <component classname="org.dentaku.gentaku.cartridge.summit.GroovyValvePlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.summit.ComponentConfigPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.summit.MenuPlugin" destdir="${velocitymenu}"/>
-            <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" destdir="${basedir}/target/classes/META-INF" destinationfilename="jdo.xml" encoding="UTF-8"/>
+            <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" destdir="${basedir}/target/META-INF" destinationfilename="jdo.xml" encoding="UTF-8"/>
             <component classname="org.dentaku.gentaku.cartridge.core.POJOPlugin" destdir="${maven.build.src}" stereotype="Entity, POJO"/>
         </gentaku>
     </goal>
-    <preGoal name="java:compile">
-        <path id="maven.compile.src.set">
-            <pathelement location="src/java"/>
-            <pathelement location="target/src"/>
-        </path>
-    </preGoal>
+    
     <postGoal name="java:compile">
         <attainGoal name="jpox:enhance"/>
     </postGoal>
+    
+    <postGoal name="jpox:enhance">
+        <attainGoal name="assemble-webapp"/>
+    </postGoal> 
+       
+    <goal name="assemble-webapp">
+    	<j:set var="excludefiles" value="openide-util,jaxen,mdr,maven-jpox-plugin,commons-jelly,commons-jelly-tags-ant,commons-jelly-tags-define,commons-jelly-tags-util,commons-jelly-tags-xml,commons-jexl,commons-el,commons-collections,dom4j,ant,xpp3,commons-beanutils,generama,xdoclet,xdoclet-plugin-webwork,qdox,picocontainer,nanocontainer,nanocontainer-ant,org-netbeans-api-mdr,org-netbeans-modules-jmiutils,xstream,jmi,jmiuml14di,jmiutils,common-jelly-tags-define,common-jelly-tags-ant,common-jelly-tags-util,commons-lang,junit,dentaku-metadata-service,dentaku-services,gentaku,xml-apis,xerces,jdom,jsp-api,xdoclet-plugin-qtags,antlr,dentaku-qtags-cartridge,gentaku-summit-cartridge,dentaku-cartridge-generator,dentaku-event-cartridge,dentaku-persistence-service"/>
+    	<deploy:copy-deps todir="${basedir}/WEB-INF/lib" excludes="${excludefiles}"/>
+    	
+	</goal>
 </project>
