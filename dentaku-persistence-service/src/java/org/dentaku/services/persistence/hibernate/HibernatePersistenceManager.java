@@ -32,16 +32,16 @@ public class HibernatePersistenceManager extends AbstractPersistenceManager {
     }
 
     public void saveOrUpdate(Entity object) throws PersistenceException {
-        try {
-            if (object.getId() != null) {
-                sessionProvider.getSession().saveOrUpdate(object);
-            } else {
-                Object pk = sessionProvider.getSession().save(object);
-                object.setId(pk);
-            }
-        } catch (HibernateException e) {
-            throw new PersistenceException(e);
-        }
+//        try {
+//            if (object.getId() != null) {
+//                sessionProvider.getSession().saveOrUpdate(object);
+//            } else {
+//                Object pk = sessionProvider.getSession().save(object);
+//                object.setId(pk);
+//            }
+//        } catch (HibernateException e) {
+//            throw new PersistenceException(e);
+//        }
     }
 
     public void delete(Entity object) throws PersistenceException {
