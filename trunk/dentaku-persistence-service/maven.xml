@@ -3,4 +3,18 @@
     <goal name="dentaku-dist">
         <attainGoal name="jar:install"/>
     </goal>
+
+    <goal name="dentaku:test-gentaku">
+        <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
+        <gentaku model="${maven.src.dir}/test/uml/model.xml.zip">
+            <component classname="org.dentaku.gentaku.cartridge.entity.EntityBasePlugin" destdir="${maven.build.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.EntityPlugin" destdir="${maven.src.dir}/java"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.EntityFactoryPlugin" destdir="${maven.build.src}"/>
+        </gentaku>
+    </goal>
+
+    <preGoal name="test:compile">
+        <attainGoal name="dentaku:test-gentaku"/>
+    </preGoal>
+
 </project>
