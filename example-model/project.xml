@@ -303,12 +303,12 @@
         <dependency>
             <groupId>nanocontainer</groupId>
             <artifactId>nanocontainer-ant</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0-beta-1</version>
         </dependency>
         <dependency>
             <groupId>nanocontainer</groupId>
             <artifactId>nanocontainer</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0-beta-1</version>
         </dependency>
         <dependency>
             <groupId>velocity</groupId>
