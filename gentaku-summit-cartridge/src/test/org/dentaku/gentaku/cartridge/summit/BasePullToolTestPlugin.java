@@ -36,7 +36,6 @@ import org.generama.WriterMapper;
  * Add comment here
  */
 public class BasePullToolTestPlugin extends JavaPluginBase {
-    JMIUMLMetadataProvider metadataProvider;
 	public BasePullToolPlugin plugin;
 	private VelocityTemplateEngine templateEngine;
 	private WriterMapper writerMapper;
@@ -61,6 +60,6 @@ public class BasePullToolTestPlugin extends JavaPluginBase {
 	}
 	
     public Collection getMetadata() {
-        return metadataProvider.getJMIMetadata();
+        return ((JMICapableMetadataProvider)metadataProvider).getJMIMetadata();
     }
 }

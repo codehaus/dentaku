@@ -52,7 +52,6 @@ public class CrudActionTestPlugin extends JavaPluginBase {
 		this.templateEngine = templateEngine;
 		this.writerMapper = writerMapper;
 	}
-	JMIUMLMetadataProvider metadataProvider;
 
     public CrudActionPlugin plugin;
     private TemplateEngine templateEngine;
@@ -69,6 +68,6 @@ public class CrudActionTestPlugin extends JavaPluginBase {
         plugin.start();
     }
     public Collection getMetadata() {
-        return metadataProvider.getJMIMetadata();
+        return ((JMICapableMetadataProvider)metadataProvider).getJMIMetadata();
     }
 }
