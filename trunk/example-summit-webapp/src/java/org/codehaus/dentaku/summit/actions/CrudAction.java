@@ -17,18 +17,21 @@
  */
 package org.codehaus.dentaku.summit.actions;
 
-import java.io.IOException;
+import java.util.HashMap;
 
 import org.apache.velocity.context.Context;
+import org.codehaus.plexus.action.Action;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.summit.rundata.RunData;
-import org.codehaus.plexus.summit.exception.SummitException;
-import org.codehaus.plexus.summit.pipeline.valve.AbstractValve;
+import org.codehaus.plexus.summit.activity.DefaultActionEvent;
 
 /**
  */
-public class CrudAction extends AbstractValve
+public class CrudAction extends DefaultActionEvent 
  {
-
+	private String preAction;
+	private String postAction;
+	
     protected void log(String aMessage) {
         getLogger().debug(aMessage);
     }
@@ -53,12 +56,62 @@ public class CrudAction extends AbstractValve
         getLogger().error(aHeader + ":" + aMessage, e);
         contextMessage(aContext, aMessage);
     }
-
-	/* (non-Javadoc)
-	 * @see org.codehaus.plexus.summit.pipeline.valve.AbstractValve#invoke(org.codehaus.plexus.summit.rundata.RunData)
+	/**
+	 * @return Returns the postAction.
 	 */
-	public void invoke(RunData arg0) throws IOException, SummitException {
-		// TODO Auto-generated method stub
-		
+	public String getPostAction() {
+		return postAction;
+	}
+	/**
+	 * @param postAction The postAction to set.
+	 */
+	public void setPostAction(String postAction) {
+		this.postAction = postAction;
+	}
+	/**
+	 * @return Returns the preAction.
+	 */
+	public String getPreAction() {
+		return preAction;
+	}
+	/**
+	 * @param preAction The preAction to set.
+	 */
+	public void setPreAction(String preAction) {
+		this.preAction = preAction;
+	}
+	private void doPreAction(RunData aData, Context aContext) {
+		if(preAction!=null) {
+			HashMap aMap = new HashMap();
+			try {
+				// Get the component and run it
+				Action aAction = (Action)aData.lookup(Action.ROLE, preAction);
+				aMap.put("data", aData);
+				aMap.put("context", aContext);
+				aAction.execute(aMap);
+			} catch (ComponentLookupException e) {
+				// ignore it, as the action does not exist 
+			} catch (Exception e) {
+				// Report error
+				aContext.put("errMessage", "preAction Groovy script failed with this exception " + e.getMessage());
+			}
+		}
+	}
+	private void doPostAction(RunData aData, Context aContext) {
+		if(postAction!=null) {
+			HashMap aMap = new HashMap();
+			try {
+				// Get the component and run it
+				Action aAction = (Action)aData.lookup(Action.ROLE, postAction);
+				aMap.put("data", aData);
+				aMap.put("context", aContext);
+				aAction.execute(aMap);
+			} catch (ComponentLookupException e) {
+				// ignore it, as the action does not exist 
+			} catch (Exception e) {
+				// Report error
+				aContext.put("errMessage", "postAction Groovy script failed with this exception " + e.getMessage());
+			}
+		}
 	}
 }
