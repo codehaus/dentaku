@@ -77,7 +77,7 @@ public class XMIGen implements ContainerComposer, Startable {
         SAXReader reader = new SAXReader();
         try {
             String filename = "dentaku-cartridge-generator/src/xml/mapping.xml";
-            Document mappingDoc = reader.read(Utils.checkURL(Utils.checkURL(new File(Utils.getRootDir(), filename).toURL())));
+            Document mappingDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), filename).toURL()));
             filename = "dentaku-cartridge-generator/src/xml/jdo_2_0.xsd";
             schemaDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), filename).toURL()));
 

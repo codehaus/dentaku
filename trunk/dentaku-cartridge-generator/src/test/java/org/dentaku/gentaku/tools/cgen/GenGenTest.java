@@ -37,5 +37,6 @@ public class GenGenTest extends junit.framework.TestCase {
 
     public void testSomething() throws Exception {
         plugin.start();
+        assertTrue(true);
     }
 }
