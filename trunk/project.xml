@@ -121,13 +121,13 @@
         <dependency>
 			<groupId>plexus</groupId>
             <artifactId>plexus-container-default</artifactId>
-			<version>1.0-alpha-2-SNAPSHOT</version>
+			<version>1.0-alpha-1</version>
 			<url>http://plexus.codehaus.org</url>
         </dependency>
         <dependency>
 			<groupId>plexus</groupId>
             <artifactId>plexus-utils</artifactId>
-			<version>1.0-alpha-1-SNAPSHOT</version>
+			<version>1.0-alpha-1</version>
 			<url>http://plexus.codehaus.org</url>
         </dependency>
         <dependency>
@@ -141,7 +141,7 @@
         <dependency>
             <groupId>generama</groupId>
             <artifactId>generama</artifactId>
-            <version>SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>xdoclet</groupId>
