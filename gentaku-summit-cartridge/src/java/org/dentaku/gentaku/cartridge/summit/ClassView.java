@@ -18,10 +18,14 @@
 
 package org.dentaku.gentaku.cartridge.summit;
 
-	import java.util.ArrayList;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
-import org.omg.uml.foundation.core.ModelElement;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
+import org.omg.uml.foundation.core.TaggedValue;
 
 	/**
 	 *
@@ -45,25 +49,33 @@ import org.omg.uml.foundation.core.ModelElement;
 		private boolean CRUD = false;
 		private Integer columncount = new Integer(2);
 		
-		ClassView(SummitHelper helper, ModelElement object, String parentClassname) {
+		ClassView(SummitHelper helper, ClassifierImpl viewClass, String parentClassname) {
 		 	String steroname = new String();
 		 	String tagname = new String();
-		 	ArrayList steros = (ArrayList) object.getStereotype();
-		 	for (int i=0; i<steros.size(); i++) {
-				steroname = (String)steros.get(i);
-		 		if(steroname.compareTo(SummitHelper.ROOT_STEREOTYPE) == 0 ||
-				steroname.compareTo(SummitHelper.CHILD_SELECTOR_STEREOTYPE) == 0 ||
-				steroname.compareTo(SummitHelper.CHILD_TABLE_STEREOTYPE) == 0) {
-					this.setSterotype(steroname);
-					this.setParentsEntityname(parentClassname);
-				}
-		 	}
-		 	ArrayList tags = (ArrayList) object.getTaggedValue();
-		 	for (int i=0; i<tags.size(); i++) {
-		 		tagname = (String)tags.get(i);
+		 	Collection steros = (Collection) viewClass.getStereotypeNames();
+		 	if(steros.contains(SummitHelper.ROOT_STEREOTYPE)) {
+		 		this.setSterotype(SummitHelper.ROOT_STEREOTYPE);
+		 		this.setParentsEntityname(parentClassname);		 		
+		 	} else if(steros.contains(SummitHelper.CHILD_SELECTOR_STEREOTYPE)) {
+		 		this.setSterotype(SummitHelper.CHILD_SELECTOR_STEREOTYPE);
+		 		this.setParentsEntityname(parentClassname);		 				 		
+		 	} else if (	steros.contains(SummitHelper.CHILD_TABLE_STEREOTYPE)) {
+		 		this.setSterotype(SummitHelper.CHILD_TABLE_STEREOTYPE);
+		 		this.setParentsEntityname(parentClassname);		 		
+			} else {
+				//error in model, need to log this and return
+			}
+
+		 	Collection tags = (Collection) viewClass.getTaggedValue();
+		 	for (Iterator elemIterator = tags.iterator(); elemIterator.hasNext();) {
+		 		TaggedValueImpl tagImpl = (TaggedValueImpl)elemIterator.next();
+		 		tagname = tagImpl.getName();
 		 		if(tagname.compareTo(SummitHelper.CRUD) == 0) {
 		 			this.setCRUD(true);
 		 			helper.addCRUD(this);
+		 		} else if (tagname.compareTo(SummitHelper.COLUMNS) == 0) {
+		 			String colCount = (String) tagImpl.getDataValue().iterator().next();
+					columncount=Integer.getInteger(colCount);
 		 		}
 		 	}
 		 	// Need to find the association with the sterotype <<View>>

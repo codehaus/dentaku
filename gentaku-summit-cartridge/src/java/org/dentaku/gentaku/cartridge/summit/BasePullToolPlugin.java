@@ -20,6 +20,7 @@ package org.dentaku.gentaku.cartridge.summit;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import org.generama.WriterMapper;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
+import org.omg.uml.foundation.core.TaggedValue;
 
 /**
  *
@@ -48,7 +50,6 @@ public class BasePullToolPlugin extends JavaPluginBase {
 
     public BasePullToolPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
-        setStereotype("Entity");
         setStereotype("RootSelectable");
         // a cludge to get the thing to generate
         setCreateonly(true);
@@ -61,35 +62,55 @@ public class BasePullToolPlugin extends JavaPluginBase {
     protected void populateContextMap(Map m) {
         super.populateContextMap(m);
         helper = new SummitHelper();
-    	ClassifierImpl metadata = null;
+        Object metadata = null;
 		try {
-			metadata = (ClassifierImpl)m.get("metadata");
+			metadata = m.get("metadata");
 		} catch (Exception e) {
 			// need to add logging to report model errors and incorrectness of model
 			e.printStackTrace();
 		}
 		if(metadata!=null) {
-    		rootClassView = helper.buildClassView(metadata, null);
+    		rootClassView = helper.buildClassView((ClassifierImpl)metadata, null);
             m.put("rootClassView", rootClassView);
             m.put("qualifiedScreenName", 
-            		metadata.getFullyQualifiedName()
+            		((ClassifierImpl)metadata).getFullyQualifiedName()
             		+ ((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
 
     	}
     }
-
     public boolean shouldGenerate(Object metadata) {
-        Collection stereotypes = ((ModelElementImpl)metadata).getStereotypeNames();
-        return stereotypes.contains("RootSelectable");
+        String stereotypeName = null;
+        boolean result = false;
+        for (Iterator it = stereotypes.iterator(); it.hasNext();) {
+            stereotypeName = (String) it.next();
+            if (matchesStereotype((ModelElementImpl) metadata, stereotypeName)) {
+                result = true;
+            }
+        }
+        return result;
     }
 
     public String getDestinationPackage(Object metadata) {
-        return super.getDestinationPackage(metadata) + ".tools";
+    	String pack = super.getDestinationPackage(metadata);
+        return pack + ".tools";
     }
 
     public String getDestinationFilename(Object metadata) {
-    	String destName = ((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue()
-					+"Base"+"PullTool";
-    	return destName.replaceAll("\\.", "/");
+        TaggedValue taggedValue = ((ModelElementImpl) metadata).getTaggedValue(SummitHelper.SCRN_NAME);
+        if(taggedValue != null) {
+        	Collection tags = taggedValue.getDataValue();
+        	for (Iterator it = tags.iterator(); it.hasNext();) {
+        		Object name = it.next();
+                if (name instanceof String) {
+                    return "Base" + name + "PullTool.java";
+                } else {
+                	//error in model
+                }
+                // error in model, should always return on first elem in Collection, should only be one
+        	}
+        } else {
+        	// error logging needed here, model not correct
+        }
+    	return null;
     }
 }
