@@ -32,15 +32,14 @@ public abstract class JavaPluginBase extends org.generama.Plugin {
     private boolean createonly;
     protected String[] stereotypes;
 
-    public JavaPluginBase(String[] stereoTypes, TemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public JavaPluginBase(String[] stereotypes, TemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, new CheckFileWriterMapper(writerMapper));
         this.metadataProvider = metadataProvider;
         this.setCreateonly(true);
-        this.stereotypes = stereosTypes;
+        this.stereotypes = stereotypes;
     }
 
     public boolean shouldGenerate(Object metadata) {
-
         // It must be at least instance of ModelElement.
         if (!(metadata instanceof ModelElement)) {
             return false;

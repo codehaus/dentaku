@@ -7,7 +7,6 @@
 
 package ${class.packageName};
 
-
 public interface ${plugin.getDestinationClassname($class)}
 #if ( $class.getJavaGeneralization() )
 	extends ${plugin.getDestinationFullyQualifiedClassName( $class.getJavaGeneralization() )}
@@ -21,6 +20,12 @@ public interface ${plugin.getDestinationClassname($class)}
 		#if( $att.ownerScope == $SK_CLASSIFIER )
 			##	If an attribute, in an interface, is static its in fact a constant.
 			## does not matter if its public or not.
+			/**
+			#foreach( $commentLine in $jmiHelper.getCommentLines( $att ) )
+				* $!{commentLine}
+				*
+			#end
+			*/
 			public static final ${att.type.fullyQualifiedName} ${att.name} = ${att.initialValue.body};
 		#else
 			## Just private fields (which means property) are generated.
