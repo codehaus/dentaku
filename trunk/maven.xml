@@ -2,6 +2,7 @@
 <project default="dentaku:build-all" xmlns:j="jelly:core" xmlns:maven="jelly:maven">
 	<goal name="dentaku:build-all">
 <!--        global stuff-->
+        <attainGoal name="plugin:download"/>
 		<attainGoal name="multiproject:install"/>
 <!--        local stuff-->
 	</goal>
