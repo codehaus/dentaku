@@ -10,6 +10,7 @@ import org.dentaku.services.persistence.PersistenceException;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,13 +33,18 @@ public class SyntheticPersistenceManager extends AbstractPersistenceManager {
                 Method m = theClass.getMethod("getTestClassOne", null);
                 return m.invoke(null, null);
             } else {
-                Method m = theClass.getMethod("getTestClassMany", null);
-                List l = (List)m.invoke(null, null);
+                List l = getMany(theClass);
                 return l.get(2);
             }
         } catch (Exception e) {
             throw new PersistenceException(e);
         }
+    }
+
+    private List getMany(Class theClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Method m = theClass.getMethod("getTestClassMany", null);
+        List l = (List)m.invoke(null, null);
+        return l;
     }
 
     public void saveOrUpdate(ModelEntity object) throws PersistenceException {
@@ -54,8 +60,20 @@ public class SyntheticPersistenceManager extends AbstractPersistenceManager {
     }
 
     public List find(String query, Object[] values, Type[] types) throws PersistenceException {
-        // todo: this is definitely insufficient
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        String tok[] = query.split(" ");
+        String className = null;
+        for (int i = 0; i < tok.length; i++) {
+            String s = tok[i];
+            if (s.equals("class")) {
+                className = tok[i+1];
+                try {
+                    return getMany(Class.forName(className));
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+        }
+        return null;
     }
 
     public Collection filter(Collection c, String filter) throws PersistenceException {
