@@ -79,7 +79,8 @@ public class ${class.name}Factory implements PersistenceFactory {
 
 #foreach ( $att in $class.attributes)
 #if ($transform.getStereotype($att.getId()) != "PrimaryKey")
-        object.set${str.upperCaseFirstLetter(${att.name})} (source.get${str.upperCaseFirstLetter(${att.name})}());
+#set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
+        object.set${str.upperCaseFirstLetter(${attname})} (source.get${str.upperCaseFirstLetter(${attname})}());
 #end
 #end
         pm.saveOrUpdate(object);

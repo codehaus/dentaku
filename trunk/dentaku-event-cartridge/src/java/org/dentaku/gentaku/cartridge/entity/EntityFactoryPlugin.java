@@ -19,8 +19,9 @@ package org.dentaku.gentaku.cartridge.entity;
 import org.generama.MetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
+import org.dentaku.gentaku.cartridge.JavaPluginBase;
 
-public class EntityFactoryPlugin extends EntityBase {
+public class EntityFactoryPlugin extends JavaPluginBase {
     public EntityFactoryPlugin(VelocityTemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
         getStereotypes().add("Entity");

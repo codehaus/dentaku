@@ -90,7 +90,7 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #end
     * @hibernate.id generator-class="native"
 #else
-#set ($attname =  ${att.name})
+#set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
     * @hibernate.property
 #end
     *     column="$attcolumnname"
@@ -256,5 +256,98 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #end
 #end
 #end
+
+    // ---------------- test methods  ----------------------
+    // test methods, should go away (don't put test code in production classes :-)
+    private static ${class.name} zeroObject;
+    private static ${class.name} oneObject;
+    private static java.util.List oneCollection;
+    private static java.util.List manyObject;
+
+    public static ${class.name} getTestClassZero() {
+        if (zeroObject == null) {
+            zeroObject = new ${class.name}();
+            zeroObject.setId(new Long(0));
+            // attributes
+#foreach ( $att in $class.attributes )
+#set ($atttypename = $transform.findFullyQualifiedName($att.type))
+#if ( $atttypename == "java.lang.String" )
+            zeroObject.set${str.upperCaseFirstLetter(${attname})}(
+#end
+#end
+            // relations
+#foreach ( $assoc in $class.associationLinks )
+#set ($adata = $transform.getAssociationData($assoc))
+#if ($adata.target.navigable == "true")
+#set ($targettype = $adata.target.type)
+#set ($targettypename = $transform.findFullyQualifiedName($targettype))
+#if ($adata.isOne2Many())
+            zeroObject.set${str.upperCaseFirstLetter($adata.target.roleName)}(new java.util.ArrayList(0));
+#end
+#end
+#end
+
+        }
+        return zeroObject;
+    }
+
+#macro( body $obj $meth)
+            // attributes
+#foreach ( $att in $class.attributes )
+#set ($atttypename = $transform.findFullyQualifiedName($att.type))
+#if ( $atttypename == "java.lang.String" )
+            ${obj}.set${str.upperCaseFirstLetter(${att.name})}("${att.name}");
+#end
+#end
+            // relations
+#foreach ( $assoc in $class.associationLinks )
+#set ($adata = $transform.getAssociationData($assoc))
+#if ($adata.target.navigable == "true")
+#set ($targettype = $adata.target.type)
+#set ($targettypename = $transform.findFullyQualifiedName($targettype))
+#if ($adata.isOne2Many())
+            ${obj}.set${str.upperCaseFirstLetter($adata.target.roleName)}(${targettypename}.${meth}());
+#elseif ($adata.isOne2One() || $adata.isMany2One())
+            ${obj}.set${str.upperCaseFirstLetter($adata.target.roleName)}(${targettypename}.getTestClassOne());
+#end
+#end
+#end
+#end
+
+    public static ${class.name} getTestClassOne() {
+        if (oneObject == null) {
+            oneObject = new ${class.name}();
+            oneObject.setId(new Long(1));
+#body("oneObject" "getTestClassOneCollection")
+        }
+        return oneObject;
+    }
+
+    public static java.util.List getTestClassOneCollection() {
+        if (oneCollection == null) {
+            oneCollection = new java.util.ArrayList(1);
+            oneCollection.add(getTestClassOne());
+        }
+        return oneCollection;
+    }
+
+    public static java.util.List getTestClassMany() {
+        if (manyObject == null) {
+            manyObject = new java.util.ArrayList(getTestCollectionSize());
+            manyObject.add(getTestClassZero());
+            manyObject.add(getTestClassOne());
+            for (int i = 2; i < getTestCollectionSize(); i++) {
+                ${class.name} obj = new ${class.name}();
+                obj.setId(new Long(i));
+#body("obj" "getTestClassMany")
+                manyObject.add(obj);
+            }
+        }
+        return manyObject;
+    }
+
+    public static int getTestCollectionSize() {
+        return Root.class.hashCode() % 100;
+    }
 
 }

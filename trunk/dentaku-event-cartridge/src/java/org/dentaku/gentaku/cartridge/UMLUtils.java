@@ -23,6 +23,7 @@ import org.apache.commons.collections.functors.NotPredicate;
 import org.dentaku.gentaku.cartridge.event.graph.GraphProcessor;
 import org.dentaku.gentaku.cartridge.event.graph.JMIUMLIterator;
 import org.dentaku.services.metadata.JMIUMLMetadataProvider;
+import org.dentaku.services.metadata.dbmapping.DbMappingTable;
 import org.generama.Plugin;
 import org.omg.uml.behavioralelements.activitygraphs.ActivityGraph;
 import org.omg.uml.behavioralelements.statemachines.CompositeState;

@@ -3,10 +3,10 @@
  */
 package org.dentaku.services.metadata;
 
-import org.dentaku.gentaku.cartridge.DbMappingTable;
 import org.dentaku.services.metadata.proxy.PModel;
 import org.dentaku.services.metadata.proxy.PClassifier;
 import org.dentaku.services.metadata.proxy.DirectionalAssociationEnd;
+import org.dentaku.services.metadata.dbmapping.DbMappingTable;
 import org.generama.defaults.JavaGeneratingPlugin;
 import org.omg.uml.foundation.core.AssociationEnd;
 import org.omg.uml.foundation.core.Attribute;

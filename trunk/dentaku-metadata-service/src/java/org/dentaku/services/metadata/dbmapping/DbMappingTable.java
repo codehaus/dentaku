@@ -1,7 +1,7 @@
 /*
  * CopyrightPlugin (c) 2004 Your Corporation. All Rights Reserved.
  */
-package org.dentaku.gentaku.cartridge;
+package org.dentaku.services.metadata.dbmapping;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -39,7 +39,7 @@ public class DbMappingTable {
         }
     }
 
-    protected Map getConfigurationMapping() throws RuntimeException {
+    public Map getConfigurationMapping() throws RuntimeException {
         if (mappings == null) {
             // let's configure ourselves
             byte buf[] = new byte[4096];

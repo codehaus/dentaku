@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dentaku.gentaku.cartridge.entity;
+package org.dentaku.gentaku.cartridge;
 
 import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.dentaku.services.metadata.SimpleOOHelper;
@@ -43,13 +43,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public abstract class EntityBase extends JavaGeneratingPlugin {
+public abstract class JavaPluginBase extends JavaGeneratingPlugin {
     private boolean createonly;
     private List stereotypes;
     private SimpleOOHelper simpleOOHelper;
     protected Map stereotypeCache;
 
-    public EntityBase(TemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public JavaPluginBase(TemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, new CheckFileWriterMapper(writerMapper));
         setMultioutput(true);
         JMIUMLMetadataProvider mp = (JMIUMLMetadataProvider) getMetadataProvider();

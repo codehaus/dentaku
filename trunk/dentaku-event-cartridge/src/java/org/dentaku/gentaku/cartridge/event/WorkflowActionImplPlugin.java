@@ -18,14 +18,15 @@ package org.dentaku.gentaku.cartridge.event;
 
 import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.dentaku.gentaku.cartridge.UMLUtils;
-import org.dentaku.gentaku.cartridge.entity.EntityBase;
+import org.dentaku.gentaku.cartridge.JavaPluginBase;
+import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.generama.MetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
 
 import java.util.Collection;
 
-public class WorkflowActionImplPlugin extends EntityBase {
+public class WorkflowActionImplPlugin extends JavaPluginBase {
     protected UMLUtils umlUtils;
 
     public WorkflowActionImplPlugin(VelocityTemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
