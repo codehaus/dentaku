@@ -52,7 +52,7 @@ abstract public class AssociationEndImpl extends ModelElementImpl implements Ass
         return isMany(this) && !isMany(getOtherEnd());
     }
 
-    static protected boolean isMany(AssociationEnd ae) {
+    protected static boolean isMany(AssociationEnd ae) {
         Multiplicity multiplicity = ae.getMultiplicity();
         if (multiplicity == null) {
             return false;  // no multiplicity means multiplicity==1
@@ -60,7 +60,7 @@ abstract public class AssociationEndImpl extends ModelElementImpl implements Ass
         Collection ranges = multiplicity.getRange();
         for (Iterator i = ranges.iterator(); i.hasNext();) {
             MultiplicityRange range = (MultiplicityRange) i.next();
-            if (range.getUpper() > 1) {
+			if ((range.getUpper() > 1) || (range.getUpper() < 0)) {
                 return true;
             }
             int rangeSize = range.getUpper() - range.getLower();

@@ -9,7 +9,6 @@ import java.io.Writer;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
@@ -18,13 +17,15 @@ import org.generama.TemplateEngine;
 import org.generama.WriterMapper;
 import org.generama.defaults.FileWriterMapper;
 import org.omg.uml.foundation.core.ModelElement;
-import org.omg.uml.foundation.core.Stereotype;
 import org.omg.uml.foundation.datatypes.ChangeableKindEnum;
+import org.omg.uml.foundation.datatypes.OrderingKindEnum;
 import org.omg.uml.foundation.datatypes.ScopeKindEnum;
 import org.omg.uml.foundation.datatypes.VisibilityKindEnum;
 
 public abstract class JavaPluginBase extends org.generama.Plugin {
 
+	private JMIHelper jmiHelper = new JMIHelper();
+	
     private JMICapableMetadataProvider metadataProvider;
 
     private boolean createonly;
@@ -45,7 +46,7 @@ public abstract class JavaPluginBase extends org.generama.Plugin {
         }
 
         for (int i = 0; i < this.stereotypes.length; i++) {
-            if (matchesStereotype((ModelElement) metadata, this.stereotypes[i])) {
+            if (this.jmiHelper.matchesStereotype((ModelElement) metadata, this.stereotypes[i])) {
                 return true;
             }
         }
@@ -62,8 +63,12 @@ public abstract class JavaPluginBase extends org.generama.Plugin {
         super.populateContextMap(ctx);
         
         // helpers
-        ctx.put("jmiHelper", new JMIHelper());
+        ctx.put("jmiHelper", this.jmiHelper);
 
+        // Constants for OrderingKind
+        ctx.put("OK_ORDERED", OrderingKindEnum.OK_ORDERED);
+        ctx.put("OK_UNORDERED", OrderingKindEnum.OK_UNORDERED);
+        
         // Constants for ChangeableKind
         ctx.put("CK_ADD_ONLY", ChangeableKindEnum.CK_ADD_ONLY);
         ctx.put("CK_CHANGEABLE", ChangeableKindEnum.CK_CHANGEABLE);
@@ -89,22 +94,6 @@ public abstract class JavaPluginBase extends org.generama.Plugin {
         String packageName = getDestinationPackage(metadata);
         packageName = packageName.equals("") ? "" : packageName + ".";
         return packageName + getDestinationClassname(metadata);
-    }
-
-    public static boolean matchesStereotype(ModelElement object, String stereotypeName) {
-        if ((object == null) || (stereotypeName == null)) {
-            return false;
-        }
-
-        Iterator i = object.getStereotype().iterator();
-        while (i.hasNext()) {
-            Stereotype stereo = (Stereotype) i.next();
-            if (stereotypeName.equals(stereo.getName())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public boolean isCreateonly() {

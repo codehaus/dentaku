@@ -36,7 +36,13 @@
             <version>${pom.currentVersion}</version>
             <url>http://dentaku.codehaus.org/</url>
         </dependency>
-
+        <dependency>
+            <groupId>xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.0.3.2-dev</version>
+            <url>http://xstream.codehaus.org</url>
+        </dependency>
+        
 		<!-- Netbeans -->
         <dependency>
 			<groupId>netbeans</groupId>
