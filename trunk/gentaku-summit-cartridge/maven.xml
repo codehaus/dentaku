@@ -1,11 +1,4 @@
 <project default="dentaku-dist" xmlns:m="jelly:maven">
-    <goal name="dentaku-dist">
-        <attainGoal name="ejb:install"/>
-    </goal>
-    <preGoal name="ejb:init">
-        <attainGoal name="dentaku:gentaku"/>
-<!--        <attainGoal name="xdoclet:hibernatedoclet"/>-->
-    </preGoal>
     <goal name="dentaku:gentaku">
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
         <gentaku model="${maven.src.dir}/SummitTestModel.xml.zip">
@@ -15,14 +8,11 @@
             <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityFactoryPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.event.EventBasePlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}/META-INF/plexus" destinationfilename="components.xml"/>
-<!---->
-<!--            <component classname="org.dentaku.gentaku.cartridge.event.StrutsFormPlugin" destdir="${maven.build.src}"/>-->
-<!--            <component classname="org.dentaku.gentaku.cartridge.event.WerkflowPlugin" destdir="${maven.build.src}"/>-->
-<!--            <component classname="org.dentaku.gentaku.cartridge.event.RulesPlugin" destdir="${maven.build.src}"/>-->
-<!--            <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionImplPlugin" destdir="${maven.src.dir}/java"/>-->
-<!--            <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionPlugin" destdir="${maven.build.src}"/>-->
-<!--            <component classname="org.xdoclet.plugin.ejb.interfaces.LocalInterfacePlugin" destdir="${basedir}/target/java"/>-->
-<!--            <component classname="org.xdoclet.plugin.ejb.descriptor.EjbJarXmlPlugin" destdir="${basedir}/target/classes/META-INF"/>-->
+
+            <component classname="org.dentaku.summit-cartridge.BasePullToolPlugin" destdir="${maven.build.src}/java"/>
+            <component classname="org.dentaku.summit-cartridge.PullToolPlugin" destdir="${maven.build.src}/java"/>
+            <component classname="org.dentaku.summit-cartridge.CrudActionPlugin" destdir="${maven.build.src}/java"/>-->
+            <component classname="org.dentaku.summit-cartridge.VelocityFormPlugin" destdir="${maven.src.dir}/velocity"/>-->
         </gentaku>
     </goal>
     <goal name="dentaku:initdb">
@@ -30,7 +20,7 @@
             <path refid="maven.dependency.classpath"/>
             <pathelement location="target/xdoclet/hibernatedoclet"/>
             <pathelement location="target/classes"/>
-            <pathelement location="tools/mySQL/mysql-connector-java-3.1.2-alpha-bin.jar"/>
+            <pathelement location="../example-model/tools/mySQL/mysql-connector-java-3.1.6.jar"/>
         </path>
         <fileset id="hibernate.mapping.files" dir="target/xdoclet/hibernatedoclet">
             <include name="**/*.hbm.xml"/>
@@ -63,4 +53,5 @@
             <pathelement location="target/xdoclet/hibernatedoclet"/>
         </path>
     </preGoal>
+    <!-- Need to copy the resultant .class files after testing to the summit-webapp/WEB-INF/classes dir -->
 </project>
