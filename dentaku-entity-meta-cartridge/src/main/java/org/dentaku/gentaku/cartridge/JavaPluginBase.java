@@ -32,7 +32,7 @@ public abstract class JavaPluginBase extends org.generama.Plugin {
     private boolean createonly;
     protected String[] stereotypes;
 
-    public JavaPluginBase(String[] stereosTypes, TemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public JavaPluginBase(String[] stereoTypes, TemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, new CheckFileWriterMapper(writerMapper));
         this.metadataProvider = metadataProvider;
         this.setCreateonly(true);
