@@ -1,0 +1,7 @@
+<project default="dentaku-dist" xmlns:m="jelly:maven">
+
+<!--    <goal name="dentaku-dist">-->
+<!--        <attainGoal name="ear:install"/>-->
+<!--	    <copy file="${maven.build.dir}/${maven.final.name}.ear" todir="${jboss.deploy.dir}"/>-->
+<!--    </goal>-->
+</project>
