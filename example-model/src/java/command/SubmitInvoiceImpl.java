@@ -1,6 +1,6 @@
 /*
  * SubmitInvoiceImpl.java
- * Copyright 2002-2004 Bill2, Inc.
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import example.entity.Country;
 import example.entity.CountryFactory;
 import example.entity.Invoice;
 import org.dentaku.services.container.ContainerManager;
-import org.dentaku.services.persistence.PersistenceManager;
+import org.dentaku.services.persistence.PersistenceManagerStorage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -31,7 +31,7 @@ public class SubmitInvoiceImpl extends SubmitInvoice {
     private static Log log = LogFactory.getLog(SubmitInvoiceImpl.class);
     public boolean execute() throws Exception {
         boolean result = true;
-        PersistenceManager pm = (PersistenceManager) ContainerManager.getInstance().getContainer().lookup(PersistenceManager.ROLE);
+        PersistenceManagerStorage pm = (PersistenceManagerStorage) ContainerManager.getInstance().getContainer().lookup(PersistenceManagerStorage.ROLE);
         try {
             Invoice inv = getInvoice();
 

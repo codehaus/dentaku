@@ -2,14 +2,13 @@
 <module version="4" relativePaths="false" type="JAVA_MODULE">
   <component name="ModuleRootManager" />
   <component name="NewModuleRootManager">
-    <output url="file://$MODULE_DIR$/target/classes" />
+    <output url="file://$MODULE_DIR$/target.old/classes" />
     <exclude-output />
-    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <output-test url="file://$MODULE_DIR$/target.old/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/target/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/target/xdoclet/hibernatedoclet" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -49,9 +48,10 @@
     </orderEntry>
     <orderEntry type="library" name="Clover" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
-    <orderEntry type="library" name="Generama" level="application" />
     <orderEntry type="module" module-name="services" />
     <orderEntry type="module" module-name="foundation" />
+    <orderEntry type="module" module-name="qdox" />
+    <orderEntry type="module" module-name="dentaku-persistence-service" />
     <orderEntryProperties />
   </component>
 </module>

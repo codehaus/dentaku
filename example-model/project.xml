@@ -24,6 +24,11 @@
         </dependency>
         <dependency>
             <groupId>dentaku</groupId>
+            <artifactId>dentaku-persistence-service</artifactId>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>dentaku</groupId>
             <artifactId>dentaku-event-cartridge</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
@@ -33,89 +38,106 @@
             <version>${pom.currentVersion}</version>
         </dependency>
         <dependency>
-            <groupId>xdoclet</groupId>
-            <artifactId>xdoclet-jboss-module</artifactId>
-            <version>1.2.2-SNAPSHOT</version>
+            <id>freemarker</id>
+            <version>2.3</version>
+            <url>http://freemarker.sourceforge.net/</url>
+        </dependency>
+        
+<!--        <dependency>-->
+<!--            <groupId>xdoclet</groupId>-->
+<!--            <artifactId>xdoclet-jboss-module</artifactId>-->
+<!--            <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!---->
+<!--        <dependency>-->
+<!--            <groupId>xdoclet</groupId>-->
+<!--            <artifactId>xdoclet-jmx-module</artifactId>-->
+<!--            <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!---->
+<!--        <dependency>-->
+<!--            <groupId>jboss</groupId>-->
+<!--            <artifactId>jboss-j2ee</artifactId>-->
+<!--            <version>3.2.1</version>-->
+<!--        </dependency>-->
+<!---->
+<!--        <dependency>-->
+<!--          <groupId>xdoclet</groupId>-->
+<!--          <artifactId>xdoclet</artifactId>-->
+<!--          <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--          <groupId>xdoclet</groupId>-->
+<!--          <artifactId>xdoclet-apache-module</artifactId>-->
+<!--          <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--          <groupId>xdoclet</groupId>-->
+<!--          <artifactId>xdoclet-java-module</artifactId>-->
+<!--          <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--          <groupId>xdoclet</groupId>-->
+<!--          <artifactId>xdoclet-jdo-module</artifactId>-->
+<!--          <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--          <groupId>xdoclet</groupId>-->
+<!--          <artifactId>xdoclet-jboss-module</artifactId>-->
+<!--          <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--          <groupId>xdoclet</groupId>-->
+<!--          <artifactId>xdoclet-jmx-module</artifactId>-->
+<!--          <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--          <groupId>xdoclet</groupId>-->
+<!--          <artifactId>xdoclet-hibernate-module</artifactId>-->
+<!--          <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--          <groupId>xdoclet</groupId>-->
+<!--          <artifactId>xdoclet-web-module</artifactId>-->
+<!--          <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--          <groupId>xdoclet</groupId>-->
+<!--          <artifactId>xdoclet-xdoclet-module</artifactId>-->
+<!--          <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--          <id>xdoclet+ejb+module</id>-->
+<!--          <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!---->
+<!--        <dependency>-->
+<!--            <groupId>xdoclet</groupId>-->
+<!--            <artifactId>xdoclet-ejb-module</artifactId>-->
+<!--            <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>xdoclet</groupId>-->
+<!--            <artifactId>xdoclet-hibernate-module</artifactId>-->
+<!--            <version>1.2.2-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>xdoclet</groupId>-->
+<!--            <artifactId>xjavadoc</artifactId>-->
+<!--            <version>1.0.3</version>-->
+<!--        </dependency>-->
+<!---->
+        <dependency>
+            <groupId>xdoclet-plugins</groupId>
+            <artifactId>xdoclet-plugin-hibernate</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>xdoclet-plugins</groupId>
+            <artifactId>xdoclet-plugin-qtags</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <!-- This one is needed because jboss-module depends on it -->
-        <dependency>
-            <groupId>xdoclet</groupId>
-            <artifactId>xdoclet-jmx-module</artifactId>
-            <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>jboss</groupId>
-            <artifactId>jboss-j2ee</artifactId>
-            <version>3.2.1</version>
-        </dependency>
-
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-apache-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-java-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-jdo-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-jboss-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-jmx-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-hibernate-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-web-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>xdoclet</groupId>
-          <artifactId>xdoclet-xdoclet-module</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <id>xdoclet+ejb+module</id>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>xdoclet</groupId>
-            <artifactId>xdoclet-ejb-module</artifactId>
-            <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>xdoclet</groupId>
-            <artifactId>xdoclet-hibernate-module</artifactId>
-            <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>xdoclet</groupId>
-            <artifactId>xjavadoc</artifactId>
-            <version>1.0.3</version>
-        </dependency>
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xerces</artifactId>
@@ -153,11 +175,6 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>opensymphony</groupId>
-            <artifactId>osuser</artifactId>
-            <version>1.0-dev-19Dec03</version>
         </dependency>
 
         <!--         for hibernate-->
@@ -291,9 +308,15 @@
             <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>qdox</groupId>
-            <artifactId>qdox</artifactId>
-            <version>1.4</version>
+            <groupId>xdoclet</groupId>
+            <artifactId>xdoclet</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>qfork</groupId>
+            <artifactId>qfork</artifactId>
+            <version>1.7-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>picocontainer</groupId>
@@ -323,7 +346,7 @@
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
-            <version>1.4-dev-8</version>
+            <version>1.5</version>
         </dependency>
         <dependency>
             <groupId>commons-jexl</groupId>
@@ -335,15 +358,26 @@
             <artifactId>ant</artifactId>
             <version>1.5.3-1</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>commons-jelly</groupId>-->
+<!--            <artifactId>commons-jelly-tags-define</artifactId>-->
+<!--            <version>SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>commons-digester</groupId>-->
+<!--            <artifactId>commons-digester</artifactId>-->
+<!--            <version>1.4.1</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>commons-jelly</groupId>
+            <artifactId>commons-jelly-tags-xml</artifactId>
+            <version>20030211.142705</version>
+            <url>http://jakarta.apache.org/jelly/</url>
+        </dependency>
         <dependency>
             <groupId>commons-jelly</groupId>
             <artifactId>commons-jelly-tags-define</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-digester</groupId>
-            <artifactId>commons-digester</artifactId>
-            <version>1.4.1</version>
+            <version>20030211.142932</version>
         </dependency>
 
         <!-- Build/Test time only -->
@@ -352,12 +386,6 @@
             <version>1.0</version>
             <url></url>
         </dependency>
-
-        <!--dependency>
-            <id>qdox-attributes</id>
-            <version>0.8</version>
-            <url></url>
-        </dependency-->
         <dependency>
             <id>antlr</id>
             <version>2.7.2</version>
@@ -372,14 +400,14 @@
 <!--            <artifactId>xstream</artifactId>-->
 <!--            <version>1.0-SNAPSHOT</version>-->
 <!--        </dependency>-->
-        <dependency>
-            <id>xstream</id>
-        </dependency>
-        <dependency>
-          <groupId>xpp3</groupId>
-          <artifactId>xpp3</artifactId>
-          <version>1.1.3.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <id>xstream</id>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--          <groupId>xpp3</groupId>-->
+<!--          <artifactId>xpp3</artifactId>-->
+<!--          <version>1.1.3.3</version>-->
+<!--        </dependency>-->
         <!--        generama-->
         <dependency>
             <groupId>struts</groupId>
@@ -387,48 +415,6 @@
             <version>1.1</version>
             <properties>
                 <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <id>mockejb</id>
-        </dependency>
-        <dependency>
-            <id>osuser</id>
-        </dependency>
-        <dependency>
-            <id>xdoclet2</id>
-        </dependency>
-        <dependency>
-            <id>jmiuml14di</id>
-        </dependency>
-        <dependency>
-            <id>jmiutils</id>
-        </dependency>
-        <dependency>
-            <id>mdrapi</id>
-        </dependency>
-        <dependency>
-            <id>mof</id>
-        </dependency>
-        <dependency>
-            <id>nbmdr</id>
-        </dependency>
-        <dependency>
-            <id>openide-fs</id>
-        </dependency>
-        <dependency>
-            <id>openide-lookup</id>
-        </dependency>
-        <dependency>
-            <id>jmi</id>
-        </dependency>
-        <dependency>
-            <id>jmitoolkit</id>
-        </dependency>
-        <dependency>
-            <id>oracle</id>
-            <properties>
-                <ejb.bundle>true</ejb.bundle>
             </properties>
         </dependency>
     </dependencies>
