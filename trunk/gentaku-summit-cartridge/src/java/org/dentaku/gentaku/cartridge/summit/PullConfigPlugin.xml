@@ -6,7 +6,7 @@
     <implementation>org.codehaus.plexus.summit.pull.DefaultPullService</implementation>
     <configuration>
       <tools>
-        <j:forEach var="property" items="${plugin.getScreenNames}">
+        <j:forEach var="property" items="${plugin.getScreenNames()}">
 		<tool>
 		  <name>tool</name>
 		  <role>"${property}"</role>
@@ -16,7 +16,7 @@
       </tools>
     </configuration>
   </component>
-  <j:forEach var="property" items="${plugin.getScreenNames}">
+  <j:forEach var="property" items="${plugin.getScreenNames()}">
   <component>
     <role>"${property}"</role>
     <implementation>"${metadata.getFullyQualifiedName()}".tools."${property}"BasePullTool</implementation>

@@ -23,11 +23,11 @@ import java.util.Map;
 
 import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
 
 /**
  * Creates the pull tool that extends the Base Pulltool for each of 
@@ -55,15 +55,24 @@ public class PullToolPlugin extends JavaPluginBase {
     }
     protected void populateContextMap(Map m) {
         super.populateContextMap(m);
-    	ClassifierImpl rootViewClass = null;
+    	ClassifierImpl metadata = null;
 		try {
-			rootViewClass = (ClassifierImpl)m.get("metadata");
+			metadata = (ClassifierImpl)m.get("metadata");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(rootViewClass!=null) {
-	        m.put("ScreenName", rootViewClass.getTaggedValue(SummitHelper.SCRN_NAME));
+		if(metadata!=null) {
+	        m.put(SummitHelper.SCRN_NAME, ((TaggedValueImpl)metadata.getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
+	        m.put("qualifiedScreenName", 
+	        		metadataProvider.getOriginalPackageName(metadata)
+	        		+ ((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
     	}
+    }
+    public String getDestinationFilename(Object metadata) {
+    	String destName = metadataProvider.getOriginalPackageName(metadata) + ".tools."
+		+((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue()
+		+"PullTool";
+    	return destName.replaceAll("\\.", "/");
     }
 }

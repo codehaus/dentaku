@@ -17,40 +17,48 @@
  */
 package org.codehaus.dentaku.summit.modules.actions;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.summit.rundata.RunData;
-
+import org.codehaus.plexus.summit.exception.SummitException;
+import org.codehaus.plexus.summit.pipeline.valve.AbstractValve;
 
 /**
  */
-public class CrudAction {
-    protected static Log Log = LogFactory.getLog(CrudAction.class);
+public class CrudAction extends AbstractValve
+ {
 
     protected void log(String aMessage) {
-        Log.debug(aMessage);
+        getLogger().debug(aMessage);
     }
 
     /**
  */
-    protected static void logParameters(RunData aData, String aMessage) {
-        Log.debug(aMessage + ": parameters are:" +
+    protected void logParameters(RunData aData, String aMessage) {
+        getLogger().debug(aMessage + ": parameters are:" +
             aData.getParameters().toString());
     }
 
     /**
  */
-    protected static void contextMessage(Context aContext, String aMessage) {
+    protected void contextMessage(Context aContext, String aMessage) {
         aContext.put("errMessage", aMessage);
     }
 
     /**
  */
-    protected static void handleException(Context aContext, String aHeader,
+    protected void handleException(Context aContext, String aHeader,
         String aMessage, Exception e) {
-        Log.error(aHeader + ":" + aMessage);
-        Log.error(e);
+        getLogger().error(aHeader + ":" + aMessage, e);
         contextMessage(aContext, aMessage);
     }
+
+	/* (non-Javadoc)
+	 * @see org.codehaus.plexus.summit.pipeline.valve.AbstractValve#invoke(org.codehaus.plexus.summit.rundata.RunData)
+	 */
+	public void invoke(RunData arg0) throws IOException, SummitException {
+		// TODO Auto-generated method stub
+		
+	}
 }

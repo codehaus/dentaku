@@ -29,6 +29,7 @@ import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
 
 /**
  *
@@ -48,6 +49,7 @@ public class BasePullToolPlugin extends JavaPluginBase {
     public BasePullToolPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
         setStereotype("Entity");
+        setStereotype("RootSelectable");
         // a cludge to get the thing to generate
         setCreateonly(true);
     }
@@ -59,22 +61,32 @@ public class BasePullToolPlugin extends JavaPluginBase {
     protected void populateContextMap(Map m) {
         super.populateContextMap(m);
         helper = new SummitHelper();
-    	ClassifierImpl rootViewClass = null;
+    	ClassifierImpl metadata = null;
 		try {
-			rootViewClass = (ClassifierImpl)m.get("metadata");
+			metadata = (ClassifierImpl)m.get("metadata");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			// need to add logging to report model errors and incorrectness of model
 			e.printStackTrace();
 		}
-		if(rootViewClass!=null) {
-    		rootClassView = helper.buildClassView(rootViewClass, null);
+		if(metadata!=null) {
+    		rootClassView = helper.buildClassView(metadata, null);
+            m.put("rootClassView", rootClassView);
+            m.put("qualifiedScreenName", 
+            		metadata.getFullyQualifiedName()
+            		+ ((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
+
     	}
-        m.put("rootClassView", rootClassView);
     }
 
     public boolean shouldGenerate(Object metadata) {
         Collection stereotypes = ((ModelElementImpl)metadata).getStereotypeNames();
         return stereotypes.contains("RootSelectable");
     }
-
+    
+    public String getDestinationFilename(Object metadata) {
+    	String destName = metadataProvider.getOriginalPackageName(metadata) + ".tools."
+					+((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue()
+					+"Base"+"PullTool";
+    	return destName.replaceAll("\\.", "/");
+    }
 }
