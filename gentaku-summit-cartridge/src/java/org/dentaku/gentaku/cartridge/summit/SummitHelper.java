@@ -20,6 +20,7 @@ package org.dentaku.gentaku.cartridge.summit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.netbeans.jmiimpl.omg.uml.foundation.core.AssociationEndImpl;
@@ -85,6 +86,7 @@ public class SummitHelper
 
 	private String screenname;
 	private HashMap valuelists;
+	private HashSet viewEntityDone = new HashSet();
 	private String viewpackage;
 	private ClassView rootViewClass;
 	private ArrayList crudList = new ArrayList();
@@ -145,6 +147,7 @@ public class SummitHelper
 		ArrayList classViewChildren = new ArrayList();
 		ArrayList viewattributes = new ArrayList();
 		int entity_count=0;
+		String entityname = null;
 		
 		Collection steroNames = viewClass.getStereotypeNames();
 		String steroname = getKnownViewSterotypeName(steroNames);
@@ -167,33 +170,38 @@ public class SummitHelper
             		if(entity_count>1){
             			// error, need to add logging so model incorrectness can be reported
             		} else {
-            			aClassView.setEntityclassname(entity.getFullyQualifiedName());
+            			entityname = entity.getName();
+            			aClassView.setEntityclassname(entity.getName());
             			Collection entityattributes = entity.getAttributes();
-            			AttributeImpl[] entityattributeclassifiers = (AttributeImpl[])entityattributes.toArray();
-            			for(int i=0; i<entityattributes.size(); i++) {
-            				Collection attributestereotypes = entityattributeclassifiers[i].getStereotypeNames();
-            				if(isPKname(attributestereotypes)) {
-            					aClassView.getSelectorNames().add(entityattributeclassifiers[i].getName());
-            					aClassView.getSelectorTypes().add(entityattributeclassifiers[i].getType().getName());
+            			ArrayList entityattributeclassifiers = new ArrayList(entityattributes);
+            			for(Iterator ie = entityattributeclassifiers.iterator(); ie.hasNext();) {
+            				Object attr = ie.next();
+            				if(attr instanceof Attribute) {
+	            				Collection attributestereotypes = ((AttributeImpl)attr).getStereotypeNames();
+	            				if(isPKname(attributestereotypes)) {
+	            					aClassView.getSelectorNames().add(((AttributeImpl)attr).getName());
+	            					aClassView.getSelectorTypes().add(((AttributeImpl)attr).getType().getName());
+	            				}
             				}
             			}
             		}
             	}
-            	// Find class with assocation of type VIEW_REF, a related child display
+        		viewEntityDone.add(viewClass.getName());
+            	// Find class with assocation of type VIEW_REF, a related child display, walk down tree only
             	ClassifierImpl child = getChildClassifier((AssociationEndImpl)end, VIEW_REF);
-            	if(child!=null) {
-            		// the entity.getName() sets the parent name
-            		ClassView childClassView = buildClassView(child, entity.getName());
+            	if(child!=null && entityname != null && !viewEntityDone.contains(child.getName())) {
+            		// the entityname sets the parent name
+            		ClassView childClassView = buildClassView(child, entityname);
             		classViewChildren.add(childClassView);
             	}
             }
         }
 		if(parentClassname == null) {
-			// RootSelectable has the rooEntity attached thru View Assoc
+			// RootSelectable has the rootEntity attached thru View Assoc
 			rootViewClass = aClassView;
 		}
 
-        aClassView.addChildren(classViewChildren);
+        aClassView.setChildren(classViewChildren);
         // Now extract all the attributes we will display and get their relative position
         Collection attributeImpl = viewClass.getAttributes();
 		ArrayList attributeImplList = new ArrayList(attributeImpl);
@@ -237,68 +245,89 @@ public class SummitHelper
 		// set the sterotype for the widget type
 		Collection steroCollection = attr.getStereotypeNames();
 		if(steroCollection != null) {
-			String stero = null;
 			for(Iterator ie = steroCollection.iterator(); ie.hasNext();) {
 	            Object steroObject = ie.next();
-				if(steroObject.getClass().isInstance(stero)) {
-					attrView.setSterotype(stero);
+				if(steroObject.getClass().isInstance(String.class)) {
+					attrView.setSterotype((String)steroObject);
 				}
 			}
 		}
 		// set the position in the table, left to right top to bottom
-		Collection posnObjectCollection = attr.getTaggedValue(POSITION).getDataValue();
-		if(posnObjectCollection != null) {
-			Integer posn = null;
-			for(Iterator ie = posnObjectCollection.iterator(); ie.hasNext();) {
-	            Object posnObject = ie.next();
-				if(posnObject.getClass().isInstance(posn)) {
-					attrView.setPosition(posn);
+		TaggedValue aPosTagValue = attr.getTaggedValue(POSITION);
+		Collection posnObjectCollection = null;
+		if(aPosTagValue != null) {
+			posnObjectCollection = aPosTagValue.getDataValue();
+			if(posnObjectCollection != null) {
+				Integer posn = null;
+				for(Iterator ie = posnObjectCollection.iterator(); ie.hasNext();) {
+		            Object posnObject = ie.next();
+					if(posnObject.getClass().isInstance(String.class)) {
+						try {
+							posn = Integer.getInteger((String)posnObject);
+							attrView.setPosition(posn);
+						} catch (NumberFormatException nfe) {
+							// error in model need to report
+						}
+					}
 				}
 			}
 		}
 		// set the span for TD in the table
-		Collection spanObjectCollection = attr.getTaggedValue(SPAN).getDataValue();
-		if(posnObjectCollection != null) {
-			Integer posn = null;
-			for(Iterator ie = posnObjectCollection.iterator(); ie.hasNext();) {
-	            Object posnObject = ie.next();
-				if(posnObject.getClass().isInstance(posn)) {
-					attrView.setPosition(posn);
-				}
-			}
-		}
-		Collection labelObjectCollection = attr.getTaggedValue(LABEL).getDataValue();
-		if(labelObjectCollection != null) {
-			String label = null;
-			for(Iterator ie = labelObjectCollection.iterator(); ie.hasNext();) {
-	            Object labelObject = ie.next();
-				if(labelObject.getClass().isInstance(label)) {
-					attrView.setLabel(label);
-				}
-			}
-			if(attrView.getLabel()==null)
-				attrView.setLabel(attrView.getAttributename());
-		}
-		Collection listObjectCollection = attr.getTaggedValue(LIST_ITEMS).getDataValue();
-		if(listObjectCollection != null) {
-			String list = null;
-			for(Iterator ie = posnObjectCollection.iterator(); ie.hasNext();) {
-	            Object listObject = ie.next();
-				if(listObject.getClass().isInstance(list)) {
-					list = (String)listObject;
-					String listItem;
-					int pos=0, i=0;
-					ArrayList listItems = new ArrayList();
-					while(true) {
-						i = list.indexOf(',', pos);
-						if(i>-1) {
-						listItem=list.substring(0, i).trim();
-						listItems.add(listItem);
-						} else {
-							break;
+		TaggedValue aSpanTagValue = attr.getTaggedValue(SPAN);
+		if(aSpanTagValue != null) {
+			Collection spanObjectCollection = aSpanTagValue.getDataValue();
+			if(spanObjectCollection != null) {
+				Integer span = null;
+				for(Iterator ie = spanObjectCollection.iterator(); ie.hasNext();) {
+		            Object spanObject = ie.next();
+					if(spanObject.getClass().isInstance(String.class)) {
+						try {
+							span = Integer.getInteger((String)spanObject);
+							attrView.setColspan(span);
+						} catch (NumberFormatException nfe) {
+							// error in model need to report
 						}
 					}
-					attrView.setListvalues((String[])listItems.toArray());
+				}
+			}
+		}
+		TaggedValue aLabelTagValue = attr.getTaggedValue(LABEL);
+		if(aLabelTagValue != null) {
+			Collection labelObjectCollection = aLabelTagValue.getDataValue();
+			if(labelObjectCollection != null) {
+				for(Iterator ie = labelObjectCollection.iterator(); ie.hasNext();) {
+		            Object labelObject = ie.next();
+					if(labelObject.getClass().isInstance(String.class)) {
+						attrView.setLabel((String)labelObject);
+					}
+				}
+				if(attrView.getLabel()==null)
+					attrView.setLabel(attrView.getAttributename());
+			}
+		}
+		TaggedValue aListItemsTagValue = attr.getTaggedValue(LIST_ITEMS);
+		if(aListItemsTagValue != null) {
+			Collection listObjectCollection = aListItemsTagValue.getDataValue();
+			if(listObjectCollection != null) {
+				String list = null;
+				for(Iterator ie = posnObjectCollection.iterator(); ie.hasNext();) {
+		            Object listObject = ie.next();
+					if(listObject.getClass().isInstance(String.class)) {
+						list = (String)listObject;
+						String listItem;
+						int pos=0, i=0;
+						ArrayList listItems = new ArrayList();
+						while(true) {
+							i = list.indexOf(',', pos);
+							if(i>-1) {
+							listItem=list.substring(0, i).trim();
+							listItems.add(listItem);
+							} else {
+								break;
+							}
+						}
+						attrView.setListvalues((String[])listItems.toArray());
+					}
 				}
 			}
 		}
@@ -385,7 +414,7 @@ public class SummitHelper
                 	AssociationEndImpl otherEnd = (AssociationEndImpl) ((AssociationEndImpl)end).getTarget();
                 	// 
                 	if(otherEnd.isClass()) {
-                	ClassifierImpl aClassifier = (ClassifierImpl)otherEnd.getParticipant();
+                		ClassifierImpl aClassifier = (ClassifierImpl)otherEnd.getParticipant();
                 	return aClassifier;
                 	}
                 }

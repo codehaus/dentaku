@@ -2,11 +2,11 @@
  * This class is only generated once! It will never be overwritten.
  * You can safely modify it by hand to add any special pull methods.
  */
-package ${qualifiedScreenName}.tools;
+package ${metadata.packageName}.tools;
 
 import org.codehaus.plexus.summit.pull.RequestTool;
 
-public class ${ScreenName}PullTool extends ${ScreenName}BasePullTool implements RequestTool {
+public class ${ScreenName}PullTool extends Base${ScreenName}PullTool implements RequestTool {
 
 	/**
      * Refresh method - does nothing

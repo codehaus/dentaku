@@ -3,13 +3,13 @@
 ## Has an ordered list of related classes to all root classes in views
 #set ( $alldepclassviews = $rootClassView.getAllDependentClassView() )
 
-package ${qualifiedScreenName}.tools;
+package ${metadata.packageName}.tools;
 
 import ${metadata.packageName}.model.${rootClassView.entityclassname};
 #foreach( $depclassview in $alldepclassviews )
 import ${metadata.packageName}.model.${depclassview.entityclassname};
 #end
-public class ${metadata.screenName}BasePullTool {
+public class ${ScreenName}BasePullTool {
     public void init(Object data) {
 		JDOService jdos = 
             ( JDOService ) lookup( JDOService.ROLE );
