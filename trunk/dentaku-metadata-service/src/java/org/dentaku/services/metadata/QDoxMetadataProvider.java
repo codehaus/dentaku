@@ -30,6 +30,7 @@ import org.generama.GeneramaException;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.OperationImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.omg.uml.foundation.core.Attribute;
 import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.Comment;
@@ -242,7 +243,7 @@ public class QDoxMetadataProvider extends JMIMetadataProviderBase implements Jav
             addStereotype(stereotype, binaryBuilder);
         }
 
-        for (Iterator it = ((ClassifierImpl) classifier).getTaggedValues().iterator(); it.hasNext();) {
+        for (Iterator it = ((ModelElementImpl) classifier).getTaggedValues().iterator(); it.hasNext();) {
             TaggedValueImpl taggedValue = (TaggedValueImpl) it.next();
             if (taggedValue.getName().startsWith("@")) {
                 binaryBuilder.addJavaDocTag(new TagDef(taggedValue.getName().substring(1), taggedValue.getValue()));
