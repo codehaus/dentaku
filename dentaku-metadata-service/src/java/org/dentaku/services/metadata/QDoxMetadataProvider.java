@@ -182,7 +182,7 @@ public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDo
                 Classifier anInterface = (Classifier) it.next();
                 classDef.implementz.add(anInterface.getName());
             }
-            Classifier superclass = (Classifier) ((ClassifierImpl) classifier).getJavaGeneralization();
+            Classifier superclass = (Classifier) ((ClassifierImpl) classifier).getSuperclass();
             if (superclass != null) {
                 classDef.extendz.add(superclass.getName());
             }

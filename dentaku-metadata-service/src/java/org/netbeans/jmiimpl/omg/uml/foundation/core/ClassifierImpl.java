@@ -29,12 +29,13 @@ import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.CorePackage;
 import org.omg.uml.foundation.core.Generalization;
 import org.omg.uml.foundation.core.Operation;
+import org.omg.uml.foundation.core.GeneralizableElement;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-abstract public class ClassifierImpl extends ModelElementImpl implements Classifier {
+abstract public class  ClassifierImpl extends ModelElementImpl implements Classifier {
     private final static String PRIMARY_KEY = "PrimaryKey";
 
     protected ClassifierImpl(StorableObject storable) {
@@ -68,11 +69,17 @@ abstract public class ClassifierImpl extends ModelElementImpl implements Classif
         });
     }
 
-    public Object getJavaGeneralization() {
+    /**
+     * This is improved, but todo STILL BROKEN
+     * @return
+     */
+    public GeneralizableElement getSuperclass() {
         Iterator i = getGeneralization().iterator();
         if (i.hasNext()) {
-            Generalization generalization = (Generalization) i.next();
-            return generalization.getParent();
+            GeneralizableElement parent = ((Generalization) i.next()).getParent();
+            if (!parent.isAbstract()) {
+                return parent;
+            }
         }
         return null;
     }
