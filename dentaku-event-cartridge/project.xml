@@ -36,6 +36,7 @@
         </dependency>
     </dependencies>
     <build>
+        <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
         <resources>
             <resource>
                 <directory>${basedir}/src/java</directory>

@@ -60,12 +60,16 @@ public class XMIGen implements ContainerComposer, Startable {
     public void start() {
         SAXReader reader = new SAXReader();
         try {
-            Document mappingDoc = reader.read(Utils.checkURL("dentaku-cartridge-generator/src/xml/mapping.xml"));
-            Document jdoDoc = reader.read(Utils.checkURL("dentaku-cartridge-generator/src/xml/jdo_2_0.xsd"));
+            String filename = "dentaku-cartridge-generator/src/xml/mapping.xml";
+            Document mappingDoc = reader.read(Utils.checkURL(Utils.checkURL(new File(Utils.getRootDir(), filename).toURL())));
+            filename = "dentaku-cartridge-generator/src/xml/jdo_2_0.xsd";
+            Document jdoDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), filename).toURL()));
 
             Document document = createXMIDoc(mappingDoc, jdoDoc);
 
-            writeFile(document, "/dentaku-cartridge-generator/target/jellySrc/text.xmi");
+            File file = new File(Utils.getRootDir() + "/dentaku-cartridge-generator/target/xmi");
+            file.mkdirs();
+            writeFile(document, new File(file, "MDProfile.xmi"));
         } catch (DocumentException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -212,13 +216,13 @@ public class XMIGen implements ContainerComposer, Startable {
         return tagDefinition;
     }
 
-    private void writeFile(Branch document, String filename) throws IOException {
+    private void writeFile(Branch document, File file) throws IOException {
         OutputFormat format = OutputFormat.createPrettyPrint();
         format.setEncoding(System.getProperty("file.encoding"));
         format.setSuppressDeclaration(false);
         format.setExpandEmptyElements(false);
 
-        Writer out = new FileWriter(new File(Utils.getRootDir() + filename));
+        Writer out = new FileWriter(file);
         final XMLWriter xmlWriter = new XMLWriter(out, format);
         xmlWriter.setEscapeText(false);
 
