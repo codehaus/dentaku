@@ -171,7 +171,7 @@ public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDo
         Collection interfaces = ((ClassifierImpl)classifier).getAbstractions();
         if (classifier instanceof Interface) {
             // It's an interface
-            classDef.isInterface = true;
+            classDef.type = ClassDef.INTERFACE;
             for (Iterator it = interfaces.iterator(); it.hasNext();) {
                 Classifier anInterface = (Classifier) it.next();
                 classDef.extendz.add(anInterface.getName());

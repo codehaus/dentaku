@@ -61,13 +61,13 @@ public class ContainerManager {
         instance = null;
     }
 
-    public static ContainerManager getContainerManager(URL configurationStream) throws DentakuException, IOException {
+    public static ContainerManager getContainerManager(URL configurationStream) throws DentakuException {
         ContainerManager containerManager = new ContainerManager();
 //        containerManager.add(new InputStreamReader(configurationStream));
         if (containerManager.container == null) {
             Embedder container = new Embedder();
-            container.setConfiguration(configurationStream);
             try {
+                container.setConfiguration(configurationStream);
                 container.start();
             } catch (Exception e) {
                 throw new DentakuException(e);
