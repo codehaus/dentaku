@@ -24,14 +24,16 @@ class ${metadata.name}Groovy
         ${entity.name} a${entity.name} = new ${entity.name}();
         parser.setProperties(a${entity.name});
 #end
-        // Add your code here, validation maybe?
+        // Add your code here, if an error is detected then put an error message
+		// using ((Context)map.get("context")).put("errMessage", "Your err message")
 #elseif($state == "postAction") 	
 		// Default code generated for postAction expects the objects
 		// associated in the model to be in the Context
 #foreach($entity in $listImports)
         ${entity.name} a${entity.name} = map.get(${entity.name});
 #end
-        // Add your manipulation of the object here, also get anything else out of context you need
+        // Add your manipulation of the objects here, if an error is detected then put an error message
+		// using ((Context)map.get("context")).put("errMessage", "Your err message")
 #end
     }
 }

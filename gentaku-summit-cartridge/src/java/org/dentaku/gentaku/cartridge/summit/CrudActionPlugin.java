@@ -47,7 +47,7 @@ public class CrudActionPlugin extends JavaPluginBase {
     public CrudActionPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
         setStereotype("RootSelectable");
-        setCreateonly(true);
+        setCreateonly(false);
     }
 
     public Collection getMetadata() {
@@ -85,7 +85,7 @@ public class CrudActionPlugin extends JavaPluginBase {
     }
     public String getDestinationPackage(Object metadata) {
     	String pack = super.getDestinationPackage(metadata);
-        return pack + ".actions";
+        return pack + ".action";
     }
 
     public String getDestinationFilename(Object metadata) {

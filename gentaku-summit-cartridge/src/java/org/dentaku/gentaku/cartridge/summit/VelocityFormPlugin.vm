@@ -146,7 +146,7 @@ ${P}if ($N${D}selected${rootclassname} && ($D${rootclassname}s.size() > 0) )
 ${P}set ( ${D}selected${rootclassname} = $D${rootclassname}s.get(0) )
 ${P}end
 #buildnamearray(${rootClassView.getSelectorNames()} "${rootClassView.entityclassname}Names") 
-${P}set ( ${D}selected${rootclassname}Id = $Q${P}buildKey(${D}${rootClassView.entityclassname}Names ${D}selected${rootclassname})$Q )
+${P}set ( ${D}selected${rootclassname}Id = ${Q}${P}buildKey(${D}${rootClassView.entityclassname}Names ${D}selected${rootclassname})${Q} )
 #foreach($allchildview in $viewclassesnotroot)
 #set ( $listnames = $SummitHelper.getValueListnames(${allchildview}) )
 #buildlistsarray( $listnames )
@@ -160,11 +160,11 @@ ${P}if ($N${D}selected${childentity.entityclassname} && ($D${childentity.entityc
 	${P}set ( ${D}selected${childentity.entityclassname} = $D${childentity.entityclassname}s.get(0) )
 ${P}end
 #buildnamearray(${childentity.getSelectorNames()} "${childentity.entityclassname}Names") 
-${P}set ( ${D}selected${childentity.entityclassname}Id = "Q"${P}buildKey(${D}${childentity.entityclassname}Names ${D}selected${childentity.entityclassname})$Q )
+${P}set ( ${D}selected${childentity.entityclassname}Id = ${Q}${P}buildKey(${D}${childentity.entityclassname}Names ${D}selected${childentity.entityclassname})${Q} )
 #end
 
-#set ( $linkname = "link.setPage($Q${ScreenName}.vm" )
-<form method=${Q}post${Q} action=$Q$D$linkname${Q}).setAction(${Q}Crud${ScreenName}${Q})${Q}>
+#set ( $linkname = "link.setPage('${ScreenName}.vm'" )
+<form method=${Q}post${Q} action=${Q}${D}${linkname}).setAction('Crud${ScreenName}')${Q}>
 
 	<input type=${Q}hidden${Q} name=$Q${rootClassView.entityclassname}Id$Q value=$Q$D${rootClassView.entityclassname}Id$Q/>
 	<input type=${Q}hidden${Q} name=${Q}selectiontype${Q} value=${Q}initial${Q}/>

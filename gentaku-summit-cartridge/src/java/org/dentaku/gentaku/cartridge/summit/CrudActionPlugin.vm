@@ -73,6 +73,9 @@ public class Crud${ScreenName}} extends CrudAction {
      * Persist a new instance of ${viewclass.entityclassname}
      */
     public void doCreate${viewclass.entityclassname}(RunData aData, Context aContext) {
+		doPreAction(aData, aContext);
+		if(aContext.get(${Q}errMessage${Q}) !=null)
+			populateContext(aData, aContext);
         try {
             logParameters(aData, ${Q}Crud${viewclass.entityclassname}.create()${Q});
 
@@ -98,7 +101,11 @@ public class Crud${ScreenName}} extends CrudAction {
                 }
                 pm.close();
 			}
-            try {
+    		doPostAction(aData, aContext);
+    		if(aContext.get(${Q}errMessage${Q}) != null)
+    			populateContext(aData, aContext);
+
+			try {
 				populateContextWithSelected${viewclass.entityclassname}(instance, aData, aContext);
 #foreach (${parentclass} in ${viewclass.ancestors})
 	            populateContextWith${parentclass.entityclassname}(aData, aContext);
@@ -118,6 +125,9 @@ public class Crud${ScreenName}} extends CrudAction {
      * Update an existing instance of ${viewclass.entityclassname}
      */
     public void doUpdate${viewclass.entityclassname}(RunData aData, Context aContext) {
+		doPreAction(aData, aContext);
+		if(aContext.get(${Q}errMessage${Q}) !=null)
+			populateContext(aData, aContext);
         try {
             logParameters(aData, ${Q}${viewclass.entityclassname}.update()${Q});
 
@@ -139,7 +149,11 @@ public class Crud${ScreenName}} extends CrudAction {
                 pm.close();
 			}
 
-            try {
+    		doPostAction(aData, aContext);
+    		if(aContext.get(${Q}errMessage${Q}) != null)
+    			populateContext(aData, aContext);
+
+			try {
 				populateContextFollowingUpdateWith${viewclass.entityclassname}(instance, aData, aContext);
 #foreach (${parentclass} in ${viewclass.ancestors})
                 populateContextWith${parentclass.entityclassname}(aData, aContext);
@@ -158,6 +172,9 @@ public class Crud${ScreenName}} extends CrudAction {
      * Delete an instance of ${viewclass.entityclassname}
      */
     public void doDelete${viewclass.entityclassname}(RunData aData, Context aContext) {
+		doPreAction(aData, aContext);
+		if(aContext.get(${Q}errMessage${Q}) !=null)
+			populateContext(aData, aContext);
         try {
             logParameters(aData, ${Q}Crud${viewclass.entityclassname}.delete()${Q});
 
@@ -178,6 +195,9 @@ public class Crud${ScreenName}} extends CrudAction {
                 }
                 pm.close();
 			}
+    		doPostAction(aData, aContext);
+    		if(aContext.get(${Q}errMessage${Q}) != null)
+    			populateContext(aData, aContext);
 
             contextMessage(aContext,
                 ${Q}Confirmed deletion of record named ${viewclass.entityclassname}${Q});
@@ -201,6 +221,9 @@ public class Crud${ScreenName}} extends CrudAction {
      * the record. The template then renders the page with the objects fields.
      */
     public void doPerform(RunData aData, Context aContext) {
+		doPreAction(aData, aContext);
+		if(aContext.get(${Q}errMessage${Q}) !=null)
+			populateContext(aData, aContext);
         logParameters(aData, ${Q}Crud${ScreenName}.doPerform()${Q});
 
         String selectionType = aData.getParameters().getString(${Q}selectionType${Q});
@@ -228,7 +251,10 @@ public class Crud${ScreenName}} extends CrudAction {
             populateContextWith${viewrefclass1.entityclassname}(aData, aContext);
         } 
 #end
-    }
+		doPostAction(aData, aContext);
+		if(aContext.get(${Q}errMessage${Q}) != null)
+			populateContext(aData, aContext);
+	}
     /**
      * The selector attribute should always reside in the context so that drop-down
      * lists can be populated by a pull tool
@@ -279,7 +305,7 @@ public class Crud${ScreenName}} extends CrudAction {
 
     /**
      * Normally used for recovering the screen values after an exception
-	 * pays no attention to current context.
+	 * pays attention to current context.
 	 * Returns objects currently in context along with the error message
      */
     protected void populateContext(RunData aData, Context aContext) {
