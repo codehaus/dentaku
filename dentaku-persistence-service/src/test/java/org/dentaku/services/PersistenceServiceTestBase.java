@@ -19,10 +19,9 @@ package org.dentaku.services;
 import junit.framework.TestCase;
 import org.axiondb.jdbc.AxionDataSource;
 import org.codehaus.plexus.embed.Embedder;
-import org.mockejb.jndi.MockContextFactory;
 import org.dentaku.services.persistence.TranQLPersistenceFactory;
+import org.mockejb.jndi.MockContextFactory;
 
-import javax.sql.DataSource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.net.URL;
@@ -44,7 +43,13 @@ public abstract class PersistenceServiceTestBase extends TestCase {
         container.setConfiguration(resource);
         container.start();
 
+        MockContextFactory.setAsInitial();
+        // create the initial context that will be used for binding EJBs
+        context = new InitialContext();
+        // add to the context
         ds = new AxionDataSource("jdbc:axiondb:testdb");
+        context.rebind(TranQLPersistenceFactory.dataSourceName, ds);
+
         Connection c = ds.getConnection();
         Statement s = c.createStatement();
 

@@ -1,5 +1,5 @@
 /*
- * EntityPlugin.java
+ * EntityFactoryPlugin.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dentaku.gentaku.cartridge.entity;
+package org.dentaku.gentaku.cartridge.entity.hibernate;
 
 import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
@@ -23,18 +23,19 @@ import org.generama.WriterMapper;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.HashMap;
 
-public class EntityPlugin extends JavaPluginBase {
+public class EntityFactoryPlugin extends JavaPluginBase {
     private JMICapableMetadataProvider metadataProvider;
 
-    public EntityPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public EntityFactoryPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
         this.metadataProvider = metadataProvider;
         getStereotypes().add("Entity");
-        setCreateonly(true);
+        getStereotypes().add("SubtypeEntity");
+        setFileregex(".java");
+        setFilereplace("Factory.java");
         setMultioutput(true);
-    }
+   }
 
     protected void populateContextMap(Map m) {
         super.populateContextMap(m);

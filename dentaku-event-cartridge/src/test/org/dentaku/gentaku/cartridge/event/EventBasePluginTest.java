@@ -22,7 +22,6 @@ import org.generama.WriterMapper;
 import org.generama.VelocityTemplateEngine;
 import org.dentaku.services.metadata.QDoxMetadataProvider;
 import org.dentaku.gentaku.AbstractJavaGeneratingPluginTestBase;
-import org.dentaku.gentaku.cartridge.entity.EntityPlugin;
 
 import java.net.URL;
 import java.net.MalformedURLException;

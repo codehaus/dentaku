@@ -36,34 +36,8 @@ public class ${class.name}Factory implements PersistenceFactory {
         return e;
     }
 
-    public void setupEntities(PersistenceManagerStorage pm) {
-        if (this.pm == null) {
-            this.pm = pm;
-
-            e = pm.createEntity("${class.name}", ${class.name}.class);
-            // attributes
-#foreach ( $att in $class.attributes)
-#set ($attname =  ${plugin.fromDatabaseAttributeName(${att.name}, "_")})
-#if ($plugin.matchesStereotype($att, "PrimaryKey"))
-            e.addField(pm.createField("$attname", ${att.type.fullyQualifiedName}.class, true));
-#else
-            e.addField(pm.createField("$attname", ${att.type.fullyQualifiedName}.class, false));
-#end
-#end
-        }
-    }
-
-    public void setupRelations(PersistenceManagerStorage pm) {
-#foreach ( $assoc in $class.associationLinks )
-#if ($assoc.target.navigable == true)
-#set ($targettypename = $assoc.target.participant.fullyQualifiedName)
-        e.addRelation(pm.createRelation(${class.name}.class, ${targettypename}.class));
-#end
-#end
-    }
-
-    public Class getManagedClass() {
-        return ${class.name}.class;
+    public void setup(PersistenceManagerStorage pm) {
+        this.pm = pm;
     }
 
    // ---------------- create methods --------------------
