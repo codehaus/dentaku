@@ -158,4 +158,8 @@ abstract public class ModelElementImpl extends InstanceHandler implements ModelE
     public void accept(ValidatingVisitor visitor, Object context) throws VisitorException {
         visitor.visit(this, context);
     }
+
+    public String toString() {
+        return getFullyQualifiedName();
+    }
 }
