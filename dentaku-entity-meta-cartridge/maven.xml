@@ -12,6 +12,7 @@
         <ant:gentaku model="${basedir}/src/test/uml/model.xml.zip" classpathref="gentaku.task.classpath">
             <ant:component classname="org.dentaku.gentaku.cartridge.java.impl.InterfacePlugin" destdir="${maven.build.src}"/>
             <ant:component classname="org.dentaku.gentaku.cartridge.java.impl.BeanPlugin" destdir="${maven.build.src}"/>
+            <ant:component classname="org.dentaku.gentaku.cartridge.java.impl.BeanPKPlugin" destdir="${maven.build.src}"/>
         </ant:gentaku>
     </goal>
 </project>
