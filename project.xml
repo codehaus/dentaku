@@ -14,7 +14,7 @@
     <!--    <logo></logo>-->
     <url/>
     <issueTrackingUrl>http://www.dentaku.org</issueTrackingUrl>
-    <siteAddress>http://www.dentaku.org</siteAddress>
+    <siteAddress>http://dentaku.codehaus.org</siteAddress>
     <siteDirectory>/home/projects/dentaku/public_html/sites/${pom.artifactId}</siteDirectory>
     <distributionDirectory>/dentaku/dist/${pom.artifactId}/</distributionDirectory>
     <repository>

@@ -33,33 +33,33 @@ public class QueryBuilder {
         this.schema = schema;
     }
 
-    public QueryCommand buildSelectById(Entity entity, boolean forUpdate) throws QueryException {
-        List params = new ArrayList();
-
-        Node select = new Select(false);
-        List attrs = entity.getAttributes();
-        for (int i = 0; i < attrs.size(); i++) {
-            Attribute attribute = (Attribute) attrs.get(i);
-            select.addChild(new AttributeReference(null, attribute));
-        }
-
-        FieldTransform[] resultTransforms = new FieldTransform[attrs.size()];
-        for (int i = 0; i < resultTransforms.length; i++) {
-            Attribute attribute = (Attribute) attrs.get(i);
-            resultTransforms[i] = new FieldAccessor(i, attribute.getType());
-        }
-
-
-        Node expr = getWhereClause(entity, params);
-
-        // 041205 - this is the line I was using...
+//    public QueryCommand buildSelectById(Entity entity, boolean forUpdate) throws QueryException {
+//        List params = new ArrayList();
+//
+//        Node select = new Select(false);
+//        List attrs = entity.getAttributes();
+//        for (int i = 0; i < attrs.size(); i++) {
+//            Attribute attribute = (Attribute) attrs.get(i);
+//            select.addChild(new AttributeReference(null, attribute));
+//        }
+//
+//        FieldTransform[] resultTransforms = new FieldTransform[attrs.size()];
+//        for (int i = 0; i < resultTransforms.length; i++) {
+//            Attribute attribute = (Attribute) attrs.get(i);
+//            resultTransforms[i] = new FieldAccessor(i, attribute.getType());
+//        }
+//
+//
+//        Node expr = getWhereClause(entity, params);
+//
+//        // 041205 - this is the line I was using...
 //        Query query = new Query((FieldTransform[]) params.toArray(new FieldTransform[params.size()]), resultTransforms);
-
-        // just to get a compile
-        Query query = null;
-        query.addChild(select).addChild(new From().addChild(new QuerySource(entity, null, forUpdate))).addChild(new Where().addChild(expr));
-        return schema.getCommandFactory().createQuery(query);
-    }
+//
+//        // just to get a compile
+//        Query query = null;
+//        query.addChild(select).addChild(new From().addChild(new QuerySource(entity, null, forUpdate))).addChild(new Where().addChild(expr));
+//        return schema.getCommandFactory().createQuery(query);
+//    }
 
 
 //        /**
