@@ -25,8 +25,8 @@ import java.util.Collection;
 import org.dentaku.services.persistence.hibernate.ThreadLocalSessionProvider;
 
 public abstract class ModelEntity {
-    public abstract java.lang.Object getId();
-    public abstract void setId(java.lang.Object newValue);
+    public abstract Object getId();
+    public abstract void setId(Object newValue);
 
     public Collection refresh(Collection o) throws PersistenceException {
         try {
