@@ -25,7 +25,8 @@ import org.omg.uml.foundation.datatypes.VisibilityKindEnum;
 public abstract class JavaPluginBase extends org.generama.Plugin {
 
 	private JMIHelper jmiHelper = new JMIHelper();
-	
+	private JavaHelper javaHelper = new JavaHelper();
+
     private JMICapableMetadataProvider metadataProvider;
 
     private boolean createonly;
@@ -64,6 +65,7 @@ public abstract class JavaPluginBase extends org.generama.Plugin {
         
         // helpers
         ctx.put("jmiHelper", this.jmiHelper);
+        ctx.put("javaHelper", this.javaHelper);
 
         // Constants for OrderingKind
         ctx.put("OK_ORDERED", OrderingKindEnum.OK_ORDERED);

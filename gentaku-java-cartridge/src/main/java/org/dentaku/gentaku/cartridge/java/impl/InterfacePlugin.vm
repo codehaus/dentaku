@@ -21,11 +21,11 @@ public interface ${plugin.getDestinationClassname($class)} {
 			## Just private fields (which means property) are generated.
 			#if( $att.visibility == $VK_PRIVATE )
 				#if ( ( $att.changeability == $CK_CHANGEABLE ) || ( $att.changeability == $CK_FROZEN ) )
-					public $att.type.fullyQualifiedName get${plugin.upperCaseFirstLetter($att.name)}();
+					public $javaHelper.parseType($att.type.fullyQualifiedName) get${plugin.upperCaseFirstLetter($att.name)}();
 				#end
 				
 				#if ( ( $att.changeability == $CK_CHANGEABLE ) || ( $att.changeability == $CK_ADD_ONLY ) )
-					public void set${plugin.upperCaseFirstLetter($att.name)}($att.type.fullyQualifiedName value);
+					public void set${plugin.upperCaseFirstLetter($att.name)}($javaHelper.parseType($att.type.fullyQualifiedName) value);
 				#end
 			#end
 		#end
@@ -58,11 +58,11 @@ public interface ${plugin.getDestinationClassname($class)} {
 				#if( $isItArray )
 					## Yes, it is an array.
 					#if ( ( $att.changeability == $CK_CHANGEABLE ) || ( $att.changeability == $CK_FROZEN ) )
-						public $att.type.fullyQualifiedName get${plugin.upperCaseFirstLetter($att.name)}();
+						public $javaHelper.parseType($att.type.fullyQualifiedName) get${plugin.upperCaseFirstLetter($att.name)}();
 					#end
 					
 					#if ( ( $att.changeability == $CK_CHANGEABLE ) || ( $att.changeability == $CK_ADD_ONLY ) )
-						public void set${plugin.upperCaseFirstLetter($att.name)}($att.type.fullyQualifiedName value);
+						public void set${plugin.upperCaseFirstLetter($att.name)}($javaHelper.parseType($att.type.fullyQualifiedName) value);
 					#end
 				#else
 					## Its not an array
