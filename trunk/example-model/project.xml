@@ -309,9 +309,7 @@
         </dependency>
         <!--       end only for testing-->
         <dependency>
-            <groupId>mockejb</groupId>
-            <artifactId>mockejb</artifactId>
-            <version>0.5</version>
+            <id>mockejb</id>
         </dependency>
 
         <dependency>
