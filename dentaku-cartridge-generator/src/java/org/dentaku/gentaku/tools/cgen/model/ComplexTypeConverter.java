@@ -16,11 +16,6 @@
  */
 package org.dentaku.gentaku.tools.cgen.model;
 
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.alias.ClassMapper;
 
 public class ComplexTypeConverter extends ConverterBase {
@@ -28,7 +23,7 @@ public class ComplexTypeConverter extends ConverterBase {
         super(ComplexType.class, classMapper, classAttributeIdentifier);
     }
 
-    public boolean canConvert(Class type) {
-        return type.equals(Schema.class);
+    protected void setValue(Object result, Object o) {
+        ((ComplexType) result).getElements().add(o);
     }
 }

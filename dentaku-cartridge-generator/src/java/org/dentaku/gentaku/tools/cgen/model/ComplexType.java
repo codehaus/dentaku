@@ -1,5 +1,5 @@
-/**
- *
+/*
+ *  ComplexType.java
  *  Copyright 2004 Brian Topping
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,5 +16,17 @@
  */
 package org.dentaku.gentaku.tools.cgen.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ComplexType {
+    protected List elements = new ArrayList();
+
+    public List getElements() {
+        return elements;
+    }
+
+    public void setElements(List elements) {
+        this.elements = elements;
+    }
 }

@@ -17,10 +17,11 @@
 package org.dentaku.gentaku.tools.cgen.model;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class Schema {
     public String elementFormDefault;
-    protected List elements;
+    protected List elements = new ArrayList();
 
     public String getElementFormDefault() {
         return elementFormDefault;

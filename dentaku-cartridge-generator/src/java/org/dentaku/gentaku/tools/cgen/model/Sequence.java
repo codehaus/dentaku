@@ -16,5 +16,17 @@
  */
 package org.dentaku.gentaku.tools.cgen.model;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Sequence {
+    protected List elements = new ArrayList();
+
+    public List getElements() {
+        return elements;
+    }
+
+    public void setElements(List elements) {
+        this.elements = elements;
+    }
 }

@@ -16,11 +16,6 @@
  */
 package org.dentaku.gentaku.tools.cgen.model;
 
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.alias.ClassMapper;
 
 public class ElementConverter extends ConverterBase {
@@ -28,17 +23,11 @@ public class ElementConverter extends ConverterBase {
         super(Element.class, classMapper, classAttributeIdentifier);
     }
 
-    public boolean canConvert(Class type) {
-        return type.equals(Element.class);
-    }
-
-    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-        Element result = (Element)super.unmarshal(reader, context);
-        reader.moveDown();
-        Object o = readItem(reader, context, null);
-        result.setComplexType((ComplexType)o);
-        reader.moveUp();
-
-        return result;
+    protected void setValue(Object result, Object o) {
+        if (o instanceof ComplexType) {
+            ((Element) result).setComplexType((ComplexType) o);
+        } else {
+            throw new RuntimeException(convertingClass.getName() + " does not yet support children of " + o.getClass().getName());
+        }
     }
 }

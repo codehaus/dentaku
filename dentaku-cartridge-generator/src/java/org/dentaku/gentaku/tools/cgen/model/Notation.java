@@ -17,4 +17,22 @@
 package org.dentaku.gentaku.tools.cgen.model;
 
 public class Notation {
+    public String name;
+    public String public_;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPublic() {
+        return public_;
+    }
+
+    public void setPublic(String public_) {
+        this.public_ = public_;
+    }
 }
