@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project xmlns:j="jelly:core" xmlns:ant="jelly:ant">
+
+	<goal name="gentaku" prereqs="gentaku:run"/>
+	
+    <goal name="gentaku:run">
+		<ant:taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask">
+			<ant:classpath id="gentaku.task.classpath">
+				<ant:pathelement location="${maven.build.dir}"/>
+				<ant:pathelement location="${pom.build.sourceDirectory}"/>
+				<ant:pathelement path="${plugin.dependencyClasspath}"/> 
+				<j:forEach var="lib" items="${pom.artifacts}">
+					<j:set var="dep" value="${lib.dependency}"/>
+					<j:if test="${dep.getProperty('gentaku.dependency') == 'true'}">
+						<ant:pathelement location="${lib.path}"/> 
+					</j:if>
+				</j:forEach>
+			</ant:classpath>
+		</ant:taskdef>
+
+		<j:set var="gentaku_index" value="0"/>
+		<j:set var="varname" value="maven.gentaku.${gentaku_index}"/>
+		<j:set var="gentaku_name" value="${context.getVariable(varname)}"/>
+		<j:while test="${gentaku_name != null}">
+			<ant:gentaku>
+
+				<!-- set components -->
+				<j:forEach var="component_index" items="${gentaku_name}">
+					<j:set var="varname" value="maven.gentaku.${gentaku_index}.${component_index}"/>
+					<j:set var="component_class" value="${context.getVariable(varname)}"/>
+					<j:set var="varname" value="maven.gentaku.${gentaku_index}.${component_index}."/>
+					<ant:component classname="${component_class}" encoding="utf-8">
+						<j:if test="${maven.compile.encoding} != null}">
+							<ant:setProperty name="encoding" value="${maven.compile.encoding}"/>
+						</j:if>
+						<j:forEach var="prop" items="${pom.getContext().getVariables().entrySet()}">
+							<j:if test="${prop.getKey().startsWith(varname)}">
+								<ant:setProperty name="${prop.getKey().replaceAll(varname, '')}" value="${prop.getValue()}"/>
+							</j:if>
+						</j:forEach>
+					</ant:component>
+				</j:forEach>
+
+			</ant:gentaku>
+			<j:set var="gentaku_index" value="${gentaku_index + 1}"/>
+			<j:set var="varname" value="maven.gentaku.${gentaku_index}"/>
+			<j:set var="gentaku_name" value="${context.getVariable(varname)}"/>
+		</j:while>
+
+	</goal>
+
+</project>
