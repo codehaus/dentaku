@@ -20,6 +20,7 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 import org.codehaus.plexus.embed.Embedder;
 import org.dentaku.services.exception.DentakuException;
 
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -60,7 +61,7 @@ public class ContainerManager {
         instance = null;
     }
 
-    public static ContainerManager getContainerManager(URL configurationStream) throws DentakuException {
+    public static ContainerManager getContainerManager(URL configurationStream) throws DentakuException, IOException {
         ContainerManager containerManager = new ContainerManager();
 //        containerManager.add(new InputStreamReader(configurationStream));
         if (containerManager.container == null) {
