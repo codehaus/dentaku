@@ -25,7 +25,8 @@ import org.omg.uml.modelmanagement.ModelManagementPackage;
 import org.omg.uml.modelmanagement.UmlPackage;
 import org.omg.uml.modelmanagement.UmlPackageClass;
 
-public abstract class UmlPackageImpl extends ModelElementImpl implements UmlPackage {
+public abstract class UmlPackageImpl extends ModelElementImpl implements org.dentaku.services.metadata.jmi.modelmanagement.UmlPackage {
+
     public UmlPackageImpl(StorableObject storable) {
         super(storable);
     }
@@ -42,8 +43,10 @@ public abstract class UmlPackageImpl extends ModelElementImpl implements UmlPack
                 final String s = names[i];
                 final UmlPackage currentCopy = current;
                 Object l = CollectionUtils.find(namespaceClass.refAllOfType(), new Predicate() {
+
                     public boolean evaluate(Object object) {
-                        return object != null && ((UmlPackage) object).getNamespace() == currentCopy && ((UmlPackage) object).getName().equals(s);
+                        return object != null && ((UmlPackage) object).getNamespace() == currentCopy
+                                && ((UmlPackage) object).getName().equals(s);
                     }
                 });
 

@@ -21,13 +21,12 @@ import java.util.Iterator;
 
 import org.netbeans.mdr.storagemodel.StorableObject;
 import org.omg.uml.foundation.core.Classifier;
-import org.omg.uml.foundation.core.Operation;
 import org.omg.uml.foundation.core.Parameter;
 import org.omg.uml.foundation.datatypes.ParameterDirectionKindEnum;
 import org.omg.uml.foundation.datatypes.VisibilityKind;
 import org.omg.uml.foundation.datatypes.VisibilityKindEnum;
 
-public abstract class OperationImpl extends ModelElementImpl implements Operation {
+public abstract class OperationImpl extends ModelElementImpl implements org.dentaku.services.metadata.jmi.core.Operation {
     protected OperationImpl(StorableObject storable) {
         super(storable);
     }

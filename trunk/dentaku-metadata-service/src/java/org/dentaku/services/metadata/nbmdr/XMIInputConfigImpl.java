@@ -37,7 +37,7 @@ public class XMIInputConfigImpl extends XMIInputConfig {
 
     public XMIInputConfigImpl(RefPackage[] extents, Collection searchPaths) {
         for (Iterator it = searchPaths.iterator(); it.hasNext();) {
-            Object o = (Object) it.next();
+            Object o = it.next();
             if (o instanceof PathElement) {
                 paths.add(((PathElement)o).getId());
             } else {

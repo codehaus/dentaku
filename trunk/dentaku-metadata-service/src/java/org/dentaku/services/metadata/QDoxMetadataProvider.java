@@ -185,7 +185,7 @@ public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDo
         for (Iterator it = methods.iterator(); it.hasNext();) {
             Operation pOperation = (Operation) it.next();
             // Ignore methods defined in superclasses
-            if (((Operation) pOperation).getOwner() == classifier) {
+            if (pOperation.getOwner() == classifier) {
                 addMethodOrConstructor(pOperation, binaryBuilder);
             }
         }
@@ -226,7 +226,7 @@ public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDo
         binaryBuilder.addJavaDoc(comment);
 
         // add stereotype tags first. allowing for overrides
-        for (Iterator it = ((ModelElement) classifier).getStereotype().iterator(); it.hasNext();) {
+        for (Iterator it = classifier.getStereotype().iterator(); it.hasNext();) {
             Stereotype stereotype = (Stereotype) it.next();
             addStereotype(stereotype, binaryBuilder);
         }

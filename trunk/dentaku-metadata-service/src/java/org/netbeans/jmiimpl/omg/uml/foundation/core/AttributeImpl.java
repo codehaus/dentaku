@@ -16,16 +16,15 @@
  */
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
-import org.dentaku.services.metadata.dbmapping.DbMappingTable;
-import org.netbeans.mdr.storagemodel.StorableObject;
-import org.omg.uml.foundation.core.Attribute;
-import org.omg.uml.foundation.datatypes.Multiplicity;
-import org.omg.uml.foundation.datatypes.MultiplicityRange;
-
 import java.util.Collection;
 import java.util.Iterator;
 
-abstract public class AttributeImpl extends ModelElementImpl implements Attribute {
+import org.dentaku.services.metadata.dbmapping.DbMappingTable;
+import org.netbeans.mdr.storagemodel.StorableObject;
+import org.omg.uml.foundation.datatypes.Multiplicity;
+import org.omg.uml.foundation.datatypes.MultiplicityRange;
+
+abstract public class AttributeImpl extends ModelElementImpl implements org.dentaku.services.metadata.jmi.core.Attribute {
     DbMappingTable typeMappings = new DbMappingTable();
 
     public AttributeImpl(StorableObject storable) {

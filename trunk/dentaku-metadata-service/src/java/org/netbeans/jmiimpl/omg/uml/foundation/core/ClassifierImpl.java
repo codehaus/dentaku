@@ -25,7 +25,6 @@ import org.omg.uml.UmlPackage;
 import org.omg.uml.foundation.core.Abstraction;
 import org.omg.uml.foundation.core.AssociationEnd;
 import org.omg.uml.foundation.core.Attribute;
-import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.CorePackage;
 import org.omg.uml.foundation.core.Generalization;
 import org.omg.uml.foundation.core.Operation;
@@ -37,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-abstract public class  ClassifierImpl extends ModelElementImpl implements Classifier {
+abstract public class ClassifierImpl extends ModelElementImpl implements org.dentaku.services.metadata.jmi.core.Classifier {
     private final static String PRIMARY_KEY = "PrimaryKey";
 
     protected ClassifierImpl(StorableObject storable) {
@@ -99,7 +98,7 @@ abstract public class  ClassifierImpl extends ModelElementImpl implements Classi
             for (Iterator i = attributes.iterator(); i.hasNext();) {
                 AttributeImpl attribute = (AttributeImpl)i.next();
                 if (attribute.getStereotypeNames().contains(PRIMARY_KEY)) {
-                    return (Attribute) attribute;
+                    return attribute;
                 }
             }
             Iterator it = current.getGeneralization().iterator();
