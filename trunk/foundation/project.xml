@@ -23,7 +23,7 @@
         <dependency>
             <groupId>xdoclet</groupId>
             <artifactId>maven-xdoclet-plugin</artifactId>
-            <version>1.2.2</version>
+            <version>1.2.2-SNAPSHOT</version>
             <type>plugin</type>
         </dependency>
         <!--        werkflow-->

@@ -67,7 +67,15 @@ abstract public class ModelElementImpl extends InstanceHandler implements ModelE
     }
 
     public String findTagValue(String tagName) {
-        return getTaggedValue(tagName, true).getDataValue().iterator().next().toString();
+        TaggedValue taggedValue = getTaggedValue(tagName, true);
+        String result = null;
+        if (taggedValue != null) {
+            Collection dataValue = taggedValue.getDataValue();
+            if (!dataValue.isEmpty()) {
+                result = dataValue.iterator().next().toString();
+            }
+        }
+        return result;
     }
 
     public Collection getStereotypeNames() {
