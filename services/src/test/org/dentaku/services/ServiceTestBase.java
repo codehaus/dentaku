@@ -17,32 +17,24 @@
 package org.dentaku.services;
 
 import junit.framework.TestCase;
-import org.dentaku.services.container.ContainerManager;
-import org.dentaku.services.container.DentakuPlexusContainer;
+import org.codehaus.plexus.embed.Embedder;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.net.URL;
 
 public abstract class ServiceTestBase extends TestCase {
-    protected DentakuPlexusContainer container;
+    protected Embedder container;
 
     protected void setUp() throws Exception {
 
-        ContainerManager instance = ContainerManager.getInstance();
-        setupConfiguration(instance);
-        instance.setup();
-        container = instance.getContainer();
-    }
-
-    protected void setupConfiguration(ContainerManager instance) {
-        String className = this.getClass().getName();
-        String filename = className.substring(className.lastIndexOf(".") + 1) + ".xml";
-        InputStream configurationStream = this.getClass().getResourceAsStream(filename);
-        instance.add(new InputStreamReader(configurationStream));
+        container = new Embedder();
+        String className = getClass().getName();
+        String name = className.substring(className.lastIndexOf(".") + 1) + ".xml";
+        URL resource = getClass().getResource(name);
+        container.setConfiguration(resource);
+        container.start();
     }
 
     public void tearDown() throws Exception {
-        container.dispose();
-        container = null;
+        container.stop();
     }
 }

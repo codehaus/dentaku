@@ -104,16 +104,4 @@ public class SyntheticPersistenceManagerStorage extends AbstractPersistenceManag
 
     public void endTrans(boolean somethingUnknown) {
     }
-
-    public ModelEntity createEntity(String name, Class clazz) {
-        return null;
-    }
-
-    public Attribute createField(String s, Class aClass, boolean b) {
-        return null;
-    }
-
-    public Association createRelation(Class r1, Class r2) {
-        return null;
-    }
 }

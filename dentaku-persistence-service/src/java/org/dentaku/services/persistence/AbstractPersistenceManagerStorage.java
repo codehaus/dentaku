@@ -18,9 +18,15 @@ package org.dentaku.services.persistence;
 
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.dentaku.services.persistence.hibernate.SessionProvider;
+import org.dentaku.services.persistence.tranql.ModelEntity;
+import org.dentaku.services.persistence.tranql.Field;
+import org.tranql.schema.Attribute;
+import org.tranql.schema.Association;
+import org.tranql.ejb.Relationship;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 public abstract class AbstractPersistenceManagerStorage implements PersistenceManagerStorage, Initializable {
     protected SessionProvider sessionProvider = null;
@@ -46,7 +52,26 @@ public abstract class AbstractPersistenceManagerStorage implements PersistenceMa
     public void initialize() throws Exception {
         for (Iterator it = factories.values().iterator(); it.hasNext();) {
             PersistenceFactory factory = (PersistenceFactory) it.next();
-            factory.setup(this);
+            factory.setupEntities(this);
         }
+        for (Iterator it = factories.values().iterator(); it.hasNext();) {
+            PersistenceFactory factory = (PersistenceFactory) it.next();
+            factory.setupRelations(this);
+        }
+    }
+
+    public ModelEntity createEntity(String name, Class clazz) {
+        return new ModelEntity(name, name);
+    }
+
+    public Attribute createField(String name, Class clazz, boolean pk) {
+        return new Field(name, name, clazz, pk);
+    }
+
+    public Association createRelation(Class r1, Class r2) {
+        org.tranql.schema.Entity entity1 = ((PersistenceFactory)factories.get(r1.getName()+"Factory")).getEntity();
+        org.tranql.schema.Entity entity2 = ((PersistenceFactory)factories.get(r2.getName() + "Factory")).getEntity();
+
+        return new Relationship(new Association.JoinDefinition(entity1, entity2, new LinkedHashMap()));
     }
 }

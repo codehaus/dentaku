@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class ModelEntity implements Entity {
     private final String schemaName;
-    private final String ejbName;
+    private final String physicalName;
 
     private final List pkFields = new ArrayList();
     private final List cmpFields = new ArrayList();
@@ -25,9 +25,9 @@ public class ModelEntity implements Entity {
     private final List cmrFields = new ArrayList();
     private final Map cmrFieldsByName = new HashMap();
 
-    public ModelEntity(String schemaName, String ejbName) {
+    public ModelEntity(String schemaName, String physicalName) {
         this.schemaName = schemaName;
-        this.ejbName = ejbName;
+        this.physicalName = physicalName;
     }
 
     public String getName() {
@@ -35,7 +35,7 @@ public class ModelEntity implements Entity {
     }
 
     public String getPhysicalName() {
-        return ejbName;
+        return physicalName;
     }
 
     public Attribute getAttribute(String name) {

@@ -79,31 +79,4 @@ public class TranQLPersistenceManagerStorage extends AbstractPersistenceManagerS
 
     public void endTrans(boolean somethingUnknown) {
     }
-
-    public ModelEntity createEntity(String name, Class clazz) {
-        return null;
-    }
-
-    public Attribute createField(String s, Class aClass, boolean b) {
-        return null;
-    }
-
-    public Association createRelation(Class r1, Class r2) {
-        PersistenceFactory persistenceFactory1 = ((PersistenceFactory)factories.get(r1.getName()));
-        org.tranql.schema.Entity entity1 = persistenceFactory1.getEntity();
-        if (entity1 == null) {
-            persistenceFactory1.setup(this);
-            entity1 = persistenceFactory1.getEntity();
-        }
-
-        PersistenceFactory persistenceFactory2 = ((PersistenceFactory)factories.get(r1.getName()));
-        org.tranql.schema.Entity entity2 = persistenceFactory2.getEntity();
-        if (entity2 == null) {
-            persistenceFactory2.setup(this);
-            entity2 = persistenceFactory2.getEntity();
-        }
-
-        return new Relationship(new Association.JoinDefinition(entity1, entity2, new LinkedHashMap()));
-    }
-
 }

@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultPersistenceManagerStorage implements PersistenceManagerStorage {
+public class DefaultPersistenceManagerStorage extends AbstractPersistenceManagerStorage {
     private Map factories;
 
     public PersistenceFactory getPersistenceFactory(String name) {
@@ -41,7 +41,7 @@ public class DefaultPersistenceManagerStorage implements PersistenceManagerStora
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public SessionProvider getSessionProvider() throws PersistenceException {
+    public SessionProvider getSessionProvider() {
         return null;
     }
 
@@ -73,17 +73,5 @@ public class DefaultPersistenceManagerStorage implements PersistenceManagerStora
     }
 
     public void endTrans(boolean somethingUnknown) {
-    }
-
-    public ModelEntity createEntity(String name, Class clazz) {
-        return null;
-    }
-
-    public Attribute createField(String s, Class aClass, boolean b) {
-        return null;
-    }
-
-    public Association createRelation(Class r1, Class r2) {
-        return null;
     }
 }

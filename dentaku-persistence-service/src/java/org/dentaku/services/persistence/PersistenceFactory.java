@@ -25,7 +25,8 @@ public interface PersistenceFactory {
     Entity create(Object source) throws PersistenceException;
     Entity findByPrimaryKey(java.io.Serializable pk) throws PersistenceException;
 
-    void setup(PersistenceManagerStorage storage);
+    void setupEntities(PersistenceManagerStorage storage);
+    void setupRelations(PersistenceManagerStorage storage);
     public org.tranql.schema.Entity getEntity();
     public Class getManagedClass();
 }

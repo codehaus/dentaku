@@ -27,7 +27,7 @@ public class DirectConnector extends ConnectorBase {
     public static DirectConnector getInstance() throws DentakuException {
         if (ourInstance == null) {
             try {
-                containerManager = ContainerManager.getContainerManager(ConnectorBase.class.getResourceAsStream("ConnectorConfig.xml"));
+                containerManager = ContainerManager.getContainerManager(ConnectorBase.class.getResource("ConnectorConfig.xml"));
                 ourInstance = (DirectConnector)containerManager.lookup(Connector.ROLE);
             } catch (ComponentLookupException e) {
                 // how to test this?

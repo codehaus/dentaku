@@ -38,13 +38,13 @@ public class DirectConnectorTest extends FoundationTestBase {
     }
 
     public void testValvesPopulated() throws Exception {
-        Connector component = (Connector) cm.lookup(Connector.ROLE);
+        Connector component = (Connector) container.lookup(Connector.ROLE);
         List l = component.getPipeline().getValves();
         assertFalse(l.isEmpty());
     }
 
     public void testPipeline() throws Exception {
-        Connector component = (Connector) cm.lookup(Connector.ROLE);
+        Connector component = (Connector) container.lookup(Connector.ROLE);
         DummyEvent event = new DummyEvent();
         component.fireEvent(event);
     }
@@ -52,7 +52,7 @@ public class DirectConnectorTest extends FoundationTestBase {
     public void testContainerNotFound() throws Exception {
         try {
             tearDown();
-            ContainerManager cm = ContainerManager.getContainerManager(this.getClass().getResourceAsStream("EmptyConfig.xml"));
+            ContainerManager cm = ContainerManager.getContainerManager(this.getClass().getResource("EmptyConfig.xml"));
             Connector component = (Connector) cm.getContainer().lookup(Connector.ROLE);
             fail("Expected ComponentLookupException");
         } catch (ComponentLookupException e) { }
