@@ -48,31 +48,31 @@
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>gentaku</artifactId>
-      <version>${pom.currentVersion}</version>
+      <version>SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>dentaku-metadata-service</artifactId>
-      <version>${pom.currentVersion}</version>
+      <version>SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>dentaku-persistence-service</artifactId>
-      <version>${pom.currentVersion}</version>
+      <version>SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>
         <groupId>${pom.groupId}</groupId>
         <artifactId>dentaku-event-cartridge</artifactId>
-        <version>${pom.currentVersion}</version>
+        <version>SNAPSHOT</version>
         <type>jar</type>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>gentaku-summit-cartridge</artifactId>
-      <version>${pom.currentVersion}</version>
+      <version>SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <!-- Plexus -->
@@ -110,13 +110,13 @@
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>gentaku</artifactId>
-      <version>${pom.currentVersion}</version>
+      <version>SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>${pom.groupId}</groupId>
       <artifactId>dentaku-cartridge-generator</artifactId>
-      <version>${pom.currentVersion}</version>
+      <version>SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>

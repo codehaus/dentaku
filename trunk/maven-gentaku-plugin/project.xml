@@ -28,13 +28,13 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
             <url>http://dentaku.codehaus.org/</url>
         </dependency>
 		<dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
             <url>http://dentaku.codehaus.org/</url>
         </dependency>
         <dependency>

@@ -10,12 +10,12 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-event-cartridge</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
             <id>mockejb</id>
@@ -87,7 +87,7 @@
         <dependency>
             <groupId>generama</groupId>
             <artifactId>generama</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>SNAPSHOT</version>
         </dependency>
         <!--       end only for testing-->
 

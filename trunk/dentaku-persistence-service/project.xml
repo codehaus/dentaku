@@ -10,23 +10,23 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-event-cartridge</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
 <!--            <groupId>jpox</groupId>-->

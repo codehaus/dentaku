@@ -3,7 +3,7 @@
 	<goal name="dentaku:build-all">
 <!--        global stuff-->
 <!--        <attainGoal name="plugin:download"/>-->
-		<attainGoal name="multiproject:install"/>
+		<attainGoal name="multiproject:install-snapshot"/>
 <!--        local stuff-->
 	</goal>
 
