@@ -17,32 +17,58 @@
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
 import java.util.Iterator;
+import java.util.Collection;
 
 import org.netbeans.mdr.storagemodel.StorableObject;
 import org.omg.uml.foundation.core.TaggedValue;
+import org.apache.commons.el.ExpressionEvaluatorImpl;
+
+import javax.servlet.jsp.el.ELException;
+import javax.servlet.jsp.el.VariableResolver;
 
 abstract public class TaggedValueImpl extends ModelElementImpl implements TaggedValue {
+    // todo is this threadsafe???
+    static ExpressionEvaluatorImpl ev = new ExpressionEvaluatorImpl();
     protected TaggedValueImpl(StorableObject storable) {
         super(storable);
     }
+
+    /**
+     * This is rather WRONG because we are just returning all the values, separated by spaces.  Not a particularly reasonable behavior....
+     * @return
+     */
     public String getValue() {
         StringBuffer sb = new StringBuffer();
-        for (Iterator it = getReferenceValue().iterator(); it.hasNext();) {
-            Object o = (Object) it.next();
-            if (sb.length() > 0) {
-                sb.append(" ");
-            }
-            sb.append(o.toString());
-        }
-        for (Iterator i = getDataValue().iterator(); i.hasNext();) {
-            Object v = i.next();
-            if (v.toString().length() > 0) {
-                if (sb.length() > 0) {
-                    sb.append(" ");
-                }
-                sb.append(v.toString());
-            }
-        }
+        append(sb, getReferenceValue());
+        append(sb, getDataValue());
         return sb.toString();
+    }
+
+    private void append(StringBuffer sb, Collection contents) {
+        for (Iterator it = contents.iterator(); it.hasNext();) {
+            Object o = (Object) it.next();
+            try {
+                VariableResolver vr = new VariableResolver() {
+                    public Object resolveVariable(String string) throws ELException {
+                        Object result = null;
+                        if (string.equals("model")) {
+                            result = getModelElement().refOutermostPackage();
+                        } else if (string.equals("parent")) {
+                            result = getModelElement();
+                        }
+                        return result;
+                    }
+                };
+                String result = (String)ev.evaluate(o.toString(), String.class, vr, null);
+                if (result.length() > 0) {
+                    if (sb.length() > 0) {
+                        sb.append(" ");
+                    }
+                    sb.append(result);
+                }
+            } catch (ELException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
