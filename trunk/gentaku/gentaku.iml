@@ -99,7 +99,6 @@
     </orderEntry>
     <orderEntry type="library" name="Commons" level="application" />
     <orderEntry type="library" name="Test" level="application" />
-    <orderEntry type="module" module-name="dentaku-services" />
     <orderEntry type="library" name="XStream-1.0" level="application" />
   </component>
 </module>
