@@ -1,0 +1,3 @@
+<project default="plugin:plugin">
+  <goal name="main" prereqs="plugin:plugin"/>
+</project>

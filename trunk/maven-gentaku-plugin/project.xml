@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+    <groupId>dentaku</groupId>
+    <artifactId>maven-gentaku-plugin</artifactId>
+    <name>Maven Gentaku Plug-in</name>
+    <currentVersion>1.0-SNAPSHOT</currentVersion>
+    <inceptionYear>2004</inceptionYear>
+    <description>
+		A Maven plugin to run Gentaku from within Maven
+	</description>
+	
+    <shortDescription>A Maven plugin to run Gentaku from Maven</shortDescription>
+	
+    <developers>
+        <developer>
+            <name>Jose Luiz Peleteiro</name>
+            <id>juzepeleteiro</id>
+            <email>juzepeleteiro@intelli.biz</email>
+            <organization>Intelli.biz</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
+    <dependencies>
+		<!-- Dentaku -->
+        <dependency>
+            <groupId>dentaku</groupId>
+            <artifactId>gentaku</artifactId>
+            <version>${pom.currentVersion}</version>
+            <url>http://dentaku.codehaus.org/</url>
+        </dependency>
+		<dependency>
+            <groupId>dentaku</groupId>
+            <artifactId>dentaku-metadata-service</artifactId>
+            <version>${pom.currentVersion}</version>
+            <url>http://dentaku.codehaus.org/</url>
+        </dependency>
+
+		<!-- Netbeans -->
+        <dependency>
+			<groupId>netbeans</groupId>
+            <artifactId>jmi</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
+        </dependency>
+        <dependency>
+			<groupId>netbeans</groupId>
+            <artifactId>jmiuml14di</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
+        </dependency>
+        <dependency>
+			<groupId>netbeans</groupId>
+            <artifactId>jmiutils</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
+        </dependency>
+        <dependency>
+			<groupId>netbeans</groupId>
+            <artifactId>mdr</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
+        </dependency>
+        <dependency>
+			<groupId>netbeans</groupId>
+            <artifactId>mof</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
+        </dependency>
+        <dependency>
+			<groupId>netbeans</groupId>
+            <artifactId>openide-util</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
+        </dependency>
+        <dependency>
+			<groupId>netbeans</groupId>
+            <artifactId>org-netbeans-api-mdr</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
+        </dependency>
+        <dependency>
+			<groupId>netbeans</groupId>
+            <artifactId>org-netbeans-modules-jmiutils</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
+        </dependency>
+		
+		<!-- Plexus -->
+        <dependency>
+			<groupId>plexus</groupId>
+            <artifactId>plexus-container-default</artifactId>
+			<version>1.0-alpha-1-SNAPSHOT</version>
+			<url>http://plexus.codehaus.org</url>
+        </dependency>
+        <dependency>
+			<groupId>plexus</groupId>
+            <artifactId>plexus-container-api</artifactId>
+			<version>1.0-alpha-1-SNAPSHOT</version>
+			<url>http://plexus.codehaus.org</url>
+        </dependency>
+        <dependency>
+			<groupId>plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+			<version>1.0-alpha-1-SNAPSHOT</version>
+			<url>http://plexus.codehaus.org</url>
+        </dependency>
+        <dependency>
+            <groupId>classworlds</groupId>
+            <artifactId>classworlds</artifactId>
+            <version>1.1-alpha-1</version>
+			<url>http://classworlds.codehaus.org</url>
+        </dependency>
+		
+		<!-- Not categorized yet -->
+        <dependency>
+            <groupId>picocontainer</groupId>
+            <artifactId>picocontainer</artifactId>
+            <version>1.0</version>
+            <url>http://picocontainer.codehaus.org/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>nanocontainer</groupId>
+            <artifactId>nanocontainer-ant</artifactId>
+            <version>1.0-beta-1</version>
+            <url>http://nanocontainer.codehaus.org/ant/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>nanocontainer</groupId>
+            <artifactId>nanocontainer</artifactId>
+            <version>1.0-beta-1</version>
+            <url>http://nanocontainer.codehaus.org/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>generama</groupId>
+            <artifactId>generama</artifactId>
+            <version>SNAPSHOT</version>
+			<url>http://generama.codehaus.org/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>xdoclet</groupId>
+            <artifactId>xdoclet</artifactId>
+            <version>SNAPSHOT</version>
+			<url>http://xdoclet.codehaus.org/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>qfork</groupId>
+            <artifactId>qfork</artifactId>
+            <version>1.7-SNAPSHOT</version>
+            <url>http://qdox.codehaus.org/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.4</version>
+            <url>http://jakarta.apache.org/velocity/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>2.1</version>
+            <url>http://jakarta.apache.org/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.8</version>
+            <url>http://jakarta.apache.org/log4j/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.0.4</version>
+            <url>http://jakarta.apache.org/commons/logging/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.6.1</version>
+            <url>http://jakarta.apache.org/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-jelly</groupId>
+			<artifactId>commons-jelly</artifactId>
+            <version>1.0-beta-4-SNAPSHOT</version>
+            <url>http://jakarta.apache.org/jelly/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-jelly</groupId>
+            <artifactId>commons-jelly-tags-xml</artifactId>
+            <version>20030211.142705</version>
+            <url>http://jakarta.apache.org/jelly/</url>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-jelly</groupId>
+            <artifactId>commons-jelly-tags-jsl</artifactId>
+            <version>20030211.143151</version>
+            <url>http://jakarta.apache.org/jelly</url>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-jelly</groupId>
+            <artifactId>commons-jelly-tags-define</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+			<groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.4</version>
+			<url>http://www.dom4j.org</url>
+        </dependency>
+
+        <dependency>
+			<groupId>commons-jexl</groupId>
+            <artifactId>commons-jexl</artifactId>
+            <version>1.0-beta-2</version>
+            <url>http://jakarta.apache.org/jexl/</url>
+        </dependency>
+
+        <dependency>
+			<groupId>ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.5.3-1</version>
+			<url>http://ant.apache.org</url>
+        </dependency>
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/plugin-resources</directory>
+                <targetPath>plugin-resources</targetPath>
+            </resource>
+            <resource>
+                <directory>${basedir}</directory>
+                <includes>
+                    <include>plugin.jelly</include>
+                    <include>plugin.properties</include>
+                    <include>project.properties</include>
+                    <include>project.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+	
+    <reports>
+        <report>maven-changes-plugin</report>
+        <report>maven-license-plugin</report>
+    </reports>
+</project>
+
