@@ -16,7 +16,6 @@
  */
 package org.dentaku.gentaku;
 
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.dentaku.services.metadata.QDoxMetadataProvider;
 import org.generama.Generama;
 import org.picocontainer.MutablePicoContainer;
