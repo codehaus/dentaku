@@ -5,11 +5,13 @@
 // See: http://dentaku.codehaus.org/gentaku
 //
 
+#set( $super = $jmiHelper.findSuperEntity( $class ) )
+
 package ${class.packageName};
 
 public class ${plugin.getDestinationClassname($class)} 
-#if ( $class.javaGeneralization )
-	extends ${plugin.getDestinationFullyQualifiedClassName( $class.javaGeneralization )}
+#if ( $super )
+	extends ${plugin.getDestinationFullyQualifiedClassName( $super )}
 #end
 implements ${plugin.getInterfaceFullname($class)}
 {
@@ -24,10 +26,12 @@ implements ${plugin.getInterfaceFullname($class)}
 				#set( $superPKCount = $superPKCount + 1 )		
 			#end
 		#end
+		#countSuperPK( $jmiHelper.findSuperEntity( $k ) )
 	#end
 #end
-#countSuperPK( $class.javaGeneralization )
-#set( $thisPKCount = $superPKCount )
+#countSuperPK( $super )
+
+#set( $thisPKCount = 0 )
 #foreach( $att in $class.attributes )
 	#if ( $jmiHelper.matchesStereotype($att, "PrimaryKey") )
 		#set( $thisPKCount = $thisPKCount + 1 )		
@@ -41,7 +45,6 @@ implements ${plugin.getInterfaceFullname($class)}
 	public void set_PK(${plugin.getDestinationClassname($class)}PK value) { this._pk = value; }
 #end
 
-
 ## Parse Atributtes
 #foreach( $att in $class.attributes )
 
@@ -54,6 +57,7 @@ implements ${plugin.getInterfaceFullname($class)}
 			## Just private fields (which means property) are generated.
 			#if( $att.visibility == $VK_PRIVATE )
 				#if ( $jmiHelper.matchesStereotype($att, "PrimaryKey") )
+
 					#if ( $thisPKCount > 1 )
 						public ${javaHelper.parseType($att.type.fullyQualifiedName)} get${plugin.upperCaseFirstLetter($att.name)}() { 
 							if (this.get_PK() == null) { return null; }
@@ -65,15 +69,12 @@ implements ${plugin.getInterfaceFullname($class)}
 						#else
 							private ${javaHelper.parseType($att.type.fullyQualifiedName)} ${att.name};
 						#end
-						
+
 						/**
 						#foreach( $commentLine in $jmiHelper.getCommentLines( $att ) )
 							* $!{commentLine}
 							*
 						#end
-						
-						#parse( "${plugin.callbacksPath}/EntityField.bean.vm" )
-						
 						*/
 						public ${javaHelper.parseType($att.type.fullyQualifiedName)} get${plugin.upperCaseFirstLetter($att.name)}() { return this.${att.name}; }
 						public void set${plugin.upperCaseFirstLetter($att.name)}(${javaHelper.parseType($att.type.fullyQualifiedName)} value) { this.${att.name} = value; }
@@ -210,6 +211,12 @@ implements ${plugin.getInterfaceFullname($class)}
 	#end
 #end
 
+##
+## If there's one or more primarykey, whatever, hashCode and equals are roles of the superclass. (and there's one)
+##
+
+#if ( $superPKCount == 0 )
+	## Then, generate equals and hashcode.
 
 	public boolean equals(Object obj) {
 
@@ -218,26 +225,19 @@ implements ${plugin.getInterfaceFullname($class)}
     	}
     	${plugin.getInterfaceFullname($class)} value = (${plugin.getInterfaceFullname($class)}) obj;
 
-		#if ( $thisPKCount > 1 )
-			##composite-id
-			return org.apache.commons.lang.ObjectUtils.equals(this.get_PK(), value.get_PK());		
-		#else
-			## single id
-	
-			boolean ret = true;
-	
-			#if( $class.javaGeneralization )
-				ret &= super.equals(value);
-			#end
-	
-			#foreach ( $att in $class.attributes )
-				#if ( $jmiHelper.matchesStereotype($att, "PrimaryKey") )
-					ret &= org.apache.commons.lang.ObjectUtils.equals(this.get${plugin.upperCaseFirstLetter($att.name)}(), value.get${plugin.upperCaseFirstLetter($att.name)}());
-				#end
-			#end    	
-	
-	        return ret;
+		boolean ret = true;
+
+		#if( $super )
+			ret &= super.equals(value);
 		#end
+
+		#foreach ( $att in $class.attributes )
+			#if ( $jmiHelper.matchesStereotype($att, "PrimaryKey") )
+				ret &= org.apache.commons.lang.ObjectUtils.equals(this.get${plugin.upperCaseFirstLetter($att.name)}(), value.get${plugin.upperCaseFirstLetter($att.name)}());
+			#end
+		#end    	
+
+        return ret;
     }
 
     public int hashCode() {
@@ -249,7 +249,7 @@ implements ${plugin.getInterfaceFullname($class)}
 			## single id
 	    	int hash = 0;
 	
-			#if( $class.javaGeneralization )
+			#if( $super )
 				hash += super.hashCode();
 			#end
 	
@@ -262,11 +262,12 @@ implements ${plugin.getInterfaceFullname($class)}
 	        return hash;
 		#end
     }
+#end
     
     public String toString() {
 		org.apache.commons.lang.builder.ToStringBuilder builder = new org.apache.commons.lang.builder.ToStringBuilder(this);
 
-		#if( $class.javaGeneralization )
+		#if( $super )
 			builder.appendSuper(super.toString());
 		#end
 

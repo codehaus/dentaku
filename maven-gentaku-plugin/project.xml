@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
-    <extend>${basedir}/../project.xml</extend>
+    <extend>../project.xml</extend>
+	<groupId>dentaku</groupId>
     <artifactId>maven-gentaku-plugin</artifactId>
     <name>Maven Gentaku Plug-in</name>
     <currentVersion>0.9-SNAPSHOT</currentVersion>
@@ -42,7 +43,16 @@
             <version>1.0.3.2-dev</version>
             <url>http://xstream.codehaus.org</url>
         </dependency>
-        
+		<dependency>
+			<groupId>commons-el</groupId>
+			<artifactId>commons-el</artifactId>
+			<version>2.0-SNAPSHOT</version>
+		</dependency>
+        <dependency>
+            <groupId>commons-el</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>		
 		<!-- Netbeans -->
         <dependency>
 			<groupId>netbeans</groupId>
@@ -172,7 +182,7 @@
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>2.1</version>
+            <version>3.1</version>
             <url>http://jakarta.apache.org/</url>
         </dependency>
 

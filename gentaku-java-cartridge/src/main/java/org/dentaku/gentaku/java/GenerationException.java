@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dentaku.gentaku.metacartridge;
+package org.dentaku.gentaku.java;
 
 public class GenerationException extends Exception {
     public GenerationException() {

@@ -1,6 +1,6 @@
-package org.dentaku.gentaku.metacartridge.java;
+package org.dentaku.gentaku.java.common;
 
-import org.dentaku.gentaku.metacartridge.JavaPluginBase;
+import org.dentaku.gentaku.java.JavaPluginBase;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
