@@ -1,5 +1,5 @@
 /*
- * ModelEntity.java
+ * Entity.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ import java.util.Collection;
 
 import org.dentaku.services.persistence.hibernate.ThreadLocalSessionProvider;
 
-public abstract class ModelEntity {
+public abstract class Entity {
     public abstract Object getId();
     public abstract void setId(Object newValue);
 

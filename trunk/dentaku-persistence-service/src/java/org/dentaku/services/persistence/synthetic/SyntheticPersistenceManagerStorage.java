@@ -16,10 +16,12 @@
  */
 package org.dentaku.services.persistence.synthetic;
 
-import net.sf.hibernate.type.Type;
 import org.dentaku.services.persistence.AbstractPersistenceManagerStorage;
-import org.dentaku.services.persistence.ModelEntity;
+import org.dentaku.services.persistence.Entity;
 import org.dentaku.services.persistence.PersistenceException;
+import org.dentaku.services.persistence.tranql.ModelEntity;
+import org.tranql.schema.Attribute;
+import org.tranql.schema.Association;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -60,19 +62,15 @@ public class SyntheticPersistenceManagerStorage extends AbstractPersistenceManag
         return l;
     }
 
-    public void saveOrUpdate(ModelEntity object) throws PersistenceException {
+    public void saveOrUpdate(Entity object) throws PersistenceException {
         // todo: what should we do about inserts?  the references are sometimes circular...
     }
 
-    public void delete(ModelEntity object) throws PersistenceException {
+    public void delete(Entity object) throws PersistenceException {
         // todo: what should we do about deletes?
     }
 
-    public List find(String query, Object value, Type type) throws PersistenceException {
-        return find(query, new Object[] {value}, new Type[] {type}); 
-    }
-
-    public List find(String query, Object[] values, Type[] types) throws PersistenceException {
+    public List find(String query, Object[] values, Class[] types) throws PersistenceException {
         String tok[] = query.split(" ");
         String className = null;
         for (int i = 0; i < tok.length; i++) {
@@ -105,5 +103,17 @@ public class SyntheticPersistenceManagerStorage extends AbstractPersistenceManag
     }
 
     public void endTrans(boolean somethingUnknown) {
+    }
+
+    public ModelEntity createEntity(String name, Class clazz) {
+        return null;
+    }
+
+    public Attribute createField(String s, Class aClass, boolean b) {
+        return null;
+    }
+
+    public Association createRelation(Class r1, Class r2) {
+        return null;
     }
 }

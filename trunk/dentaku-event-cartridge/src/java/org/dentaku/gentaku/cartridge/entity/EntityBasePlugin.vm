@@ -16,9 +16,24 @@ public abstract class ${class.name}Base
 #if($superclass)
         extends $superclass.name
 #else
-        extends org.dentaku.services.persistence.ModelEntity
+        extends org.dentaku.services.persistence.Entity
 #end
         implements org.dentaku.services.persistence.XMLBean, java.io.Serializable {
+
+    public ${class.name}Base() { }
+
+#foreach ( $op in $class.operations)
+#if ($op.name == $class.name && $op.parameter.size() != 0)
+    public ${class.name}Base(${op.signature}) {
+#foreach ( $param in $op.parameter )
+#if ( !$param.isReturnParam() )
+        set${plugin.upperCaseFirstLetter(${param.name})}(${param.name});
+#end
+#end
+    }
+#end
+#end
+
     public void getXML(org.dom4j.Element el) throws org.dentaku.services.exception.XMLBeanException {
         try {
             org.dom4j.Element beanElement = el.addElement("${class.name}");
@@ -196,17 +211,17 @@ public abstract class ${class.name}Base
     // ---------------- business methods  ----------------------
 
 #foreach ( $op in $class.operations)
-#if (!$plugin.matchesStereotype($op, "FinderMethod") && !$plugin.matchesStereotype($op, "FilterMethod"))
+#if ($class.name != $op.name && !$plugin.matchesStereotype($op, "FinderMethod") && !$plugin.matchesStereotype($op, "FilterMethod"))
    /**
     *
     */
-#set ($msig = $op.signature)
+#set ($msig = ${op.signature})
 #set ($returntype = $op.returnType.fullyQualifiedName)
 #if ($defaultException)
-    $op.visibilityName abstract $returntype ${msig}
+    $op.visibilityName abstract $returntype ${op.name}($msig)
         throws $defaultException;
 #else
-    $op.visibilityName abstract $returntype ${msig};
+    $op.visibilityName abstract $returntype ${op.name}($msig);
 #end
 #end
 #end

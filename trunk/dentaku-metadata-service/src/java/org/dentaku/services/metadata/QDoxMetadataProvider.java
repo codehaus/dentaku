@@ -48,6 +48,7 @@ import java.util.Map;
 
 public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDoxCapableMetadataProvider, JavaClassCache {
     private ClassLibrary classLibrary = new ClassLibrary(this);
+    private Collection metadata;
     private Map classes;
     private Map qdoxJMIMap;
 
@@ -65,23 +66,14 @@ public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDo
 
     public Collection getJMIMetadata() {
         setupMetadata();
-        return qdoxJMIMap.values();
+        return metadata;
     }
 
     private void setupMetadata() {
         try {
-            classLibrary.addDefaultLoader();
             if (classes == null) {
-                Stereotype stereotype = null;
-                Collection stereotypes = getModel().getCore().getStereotype().refAllOfType();
-                for (Iterator it = stereotypes.iterator(); it.hasNext();) {
-                    stereotype = (Stereotype) it.next();
-                    if (stereotype.getName().equals("Entity")) {
-                        break;
-                    }
-                }
-//                XPath xpath = new JavaBeanXPath("core/stereotype/refAllOfType[name='Entity']", DocumentNavigator.getInstance());
-//                List templates = (List)xpath.evaluate(getModel());
+                metadata = getModel().getCore().getModelElement().refAllOfType();
+                classLibrary.addDefaultLoader();
                 Collection c = getModel().getCore().getClassifier().refAllOfType();
                 classes = new HashMap(c.size());
                 qdoxJMIMap = new HashMap(c.size());

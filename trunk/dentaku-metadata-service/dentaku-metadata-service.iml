@@ -21,7 +21,6 @@
     <orderEntry type="library" name="dom4j" level="application" />
     <orderEntry type="library" name="XStream-1.0" level="application" />
     <orderEntry type="library" name="Hibernate" level="application" />
-    <orderEntry type="module" module-name="dentaku-persistence-service" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -32,7 +31,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="cglib" />
-    <orderEntry type="library" name="NBMDR New" level="application" />
+    <orderEntry type="module" module-name="mdr" />
     <orderEntryProperties />
   </component>
 </module>

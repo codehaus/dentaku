@@ -38,5 +38,5 @@ public abstract class AbstractEvent implements Serializable {
         this.response = response;
     }
 
-    public abstract boolean execute() throws Exception;
+    public abstract boolean execute(Object o) throws Exception;
 }

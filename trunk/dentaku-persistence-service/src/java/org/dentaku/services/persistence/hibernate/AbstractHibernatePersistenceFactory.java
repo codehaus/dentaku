@@ -17,13 +17,13 @@
 package org.dentaku.services.persistence.hibernate;
 
 import org.dentaku.services.persistence.PersistenceFactory;
-import org.dentaku.services.persistence.ModelEntity;
+import org.dentaku.services.persistence.Entity;
 import org.dentaku.services.persistence.PersistenceException;
 
 public abstract class AbstractHibernatePersistenceFactory implements PersistenceFactory {
-    public abstract ModelEntity create() throws PersistenceException;
+    public abstract Entity create() throws PersistenceException;
 
-    public abstract ModelEntity create(Object source) throws PersistenceException;
+    public abstract Entity create(Object source) throws PersistenceException;
 
-    public abstract ModelEntity findByPrimaryKey(Long pk) throws PersistenceException;
+    public abstract Entity findByPrimaryKey(Long pk) throws PersistenceException;
 }

@@ -34,7 +34,8 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="generama" />
-    <orderEntry type="module" module-name="services" />
+    <orderEntry type="module" module-name="tranql" exported="" />
+    <orderEntry type="module" module-name="dentaku-services" />
     <orderEntryProperties />
   </component>
 </module>

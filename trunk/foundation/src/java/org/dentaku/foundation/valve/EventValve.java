@@ -36,6 +36,6 @@ import java.net.URL;
 
 public class EventValve implements Valve {
     public boolean execute(AbstractEvent event) throws Exception {
-        return event.execute();
+        return event.execute(null);
     }
 }

@@ -16,8 +16,8 @@
  */
 package example.web;
 
-import command.SubmitInvoiceImpl;
-import example.command.SubmitInvoice;
+import example.command.SubmitInvoiceEvent;
+import example.command.SubmitInvoiceEventBase;
 import example.entity.Address;
 import example.entity.CreditCard;
 import example.entity.Invoice;
@@ -233,7 +233,7 @@ public class CartAction extends DispatchAction {
         // processing succeeds.  We should have complete shipping details from the shipper at this point.
         Invoice inv = (Invoice) request.getSession().getAttribute("invoice");
 
-        SubmitInvoice event = new SubmitInvoiceImpl();
+        SubmitInvoiceEventBase event = new SubmitInvoiceEvent();
         event.setInvoice(inv);
         DirectConnector.getInstance().fireEvent(event);
         request.getSession().setAttribute("invoice", inv);

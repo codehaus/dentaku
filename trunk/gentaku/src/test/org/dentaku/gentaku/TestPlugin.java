@@ -19,19 +19,26 @@ package org.dentaku.gentaku;
 import org.generama.*;
 
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * 
  */
 public class TestPlugin extends Plugin {
     public boolean wasExecuted = false;
+    private TestMetadataProvider mp;
 
-    public TestPlugin(TemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper, boolean wasExecuted) {
+    public TestPlugin(TemplateEngine templateEngine, TestMetadataProvider metadataProvider, WriterMapper writerMapper, boolean wasExecuted) {
         super(templateEngine, metadataProvider, writerMapper);
+        mp = metadataProvider;
         this.wasExecuted = wasExecuted;
     }
 
     public void execute() throws IOException, GeneramaException {
         wasExecuted = true;
+    }
+
+    protected Collection getMetadata() {
+        return mp.getMetadata();
     }
 }

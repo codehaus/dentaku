@@ -24,7 +24,7 @@ import java.util.Map;
 
 public abstract class AbstractPersistenceManagerStorage implements PersistenceManagerStorage, Initializable {
     protected SessionProvider sessionProvider = null;
-    private Map factories = null;
+    protected Map factories = null;
 
     public PersistenceFactory getPersistenceFactory(String name) throws PersistenceException {
         PersistenceFactory persistenceFactory = (PersistenceFactory) factories.get(name);
@@ -46,7 +46,7 @@ public abstract class AbstractPersistenceManagerStorage implements PersistenceMa
     public void initialize() throws Exception {
         for (Iterator it = factories.values().iterator(); it.hasNext();) {
             PersistenceFactory factory = (PersistenceFactory) it.next();
-            factory.setManager(this);
+            factory.setup(this);
         }
     }
 }

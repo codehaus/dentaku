@@ -49,7 +49,7 @@ public abstract class FoundationTestBase extends TestCase {
             super(response);
         }
 
-        public boolean execute() throws Exception {
+        public boolean execute(Object o) throws Exception {
             return true;
         }
     }

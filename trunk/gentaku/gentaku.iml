@@ -20,7 +20,6 @@
     <orderEntry type="module" module-name="generama" />
     <orderEntry type="module" module-name="dentaku-metadata-service" />
     <orderEntry type="module" module-name="xdoclet" />
-    <orderEntry type="library" name="NBMDR New" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
     <orderEntry type="library" exported="" name="Antlr" level="application" />
     <orderEntry type="module-library">

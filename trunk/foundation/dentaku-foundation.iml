@@ -9,6 +9,252 @@
     <setting name="BUILD_ON_FRAME_DEACTIVATION" value="false" />
   </component>
   <component name="EjbModuleProperties">
+    <containerElement type="module" name="dentaku-services">
+      <attribute name="method" value="4" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="module" name="cglib">
+      <attribute name="method" value="6" />
+      <attribute name="URI" value="/cglib.jar" />
+    </containerElement>
+    <containerElement type="module" name="dentaku-event-cartridge">
+      <attribute name="method" value="6" />
+      <attribute name="URI" value="/dentaku-event-cartridge.jar" />
+    </containerElement>
+    <containerElement type="module" name="dentaku-metadata-service">
+      <attribute name="method" value="6" />
+      <attribute name="URI" value="/dentaku-metadata-service.jar" />
+    </containerElement>
+    <containerElement type="module" name="generama">
+      <attribute name="method" value="6" />
+      <attribute name="URI" value="/generama.jar" />
+    </containerElement>
+    <containerElement type="module" name="gentaku">
+      <attribute name="method" value="6" />
+      <attribute name="URI" value="/gentaku.jar" />
+    </containerElement>
+    <containerElement type="module" name="mdr">
+      <attribute name="method" value="6" />
+      <attribute name="URI" value="/mdr.jar" />
+    </containerElement>
+    <containerElement type="module" name="qdox">
+      <attribute name="method" value="6" />
+      <attribute name="URI" value="/qdox.jar" />
+    </containerElement>
+    <containerElement type="module" name="xdoclet">
+      <attribute name="method" value="6" />
+      <attribute name="URI" value="/xdoclet.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/ant/jars/ant-1.5.3-1.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/ant-1.5.3-1.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Ant">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/bsh/jars/bsh-2.0b1.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/bsh-2.0b1.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://C:/dev/codehaus/cglib/lib/asm-attrs.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/asm-attrs.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://C:/dev/codehaus/cglib/lib/asm-util.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/asm-util.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://C:/dev/codehaus/cglib/lib/asm.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/asm.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://C:/dev/codehaus/cglib/lib/aspectwerkz-core-0.10.RC1.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/aspectwerkz-core-0.10.RC1.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>file://C:/dev/dentaku/dentaku-metadata-service/src/resources</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/ant/jars/ant-1.5.3-1.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/ant-1.5.3-1.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/antlr/jars/antlr-2.7.2.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/antlr-2.7.2.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/jmock/jars/jmock-1.0.0.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/jmock-1.0.0.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/xmlunit/jars/xmlunit-1.0.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/xmlunit-1.0.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://C:/dev/dentaku/services/lib/ccc_ssl.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/ccc_ssl.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/cglib/jars/cglib-2.0.1.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/cglib-2.0.1.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Classworlds">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Clover">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Commons">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/commons-digester/jars/commons-digester-1.4.1.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/commons-digester-1.4.1.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/commons-httpclient/jars/commons-httpclient-2.0-rc2.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/commons-httpclient-2.0-rc2.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/commons-jexl/jars/commons-jexl-1.0-beta-2.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/commons-jexl-1.0-beta-2.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="dom4j">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/ehcache/jars/ehcache-0.7.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/ehcache-0.7.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Freemarker">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/generama/jars/generama-1.1-SNAPSHOT.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/generama-1.1-SNAPSHOT.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Hibernate">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/hibernate/jars/hibernate-2.1.3.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/hibernate-2.1.3.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Jelly">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://C:/dev/dentaku/services/lib/jsr94-1.0.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/jsr94-1.0.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/junit/jars/junit-3.8.1.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/junit-3.8.1.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://C:/dev/dentaku/services/lib/mockejb-0.5.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/mockejb-0.5.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/nanocontainer/jars/nanocontainer-1.0-beta-1.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/nanocontainer-1.0-beta-1.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/nanocontainer/jars/nanocontainer-ant-1.0-beta-1.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/nanocontainer-ant-1.0-beta-1.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Netbeans MDR Deps for Module">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/odmg/jars/odmg-3.0.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/odmg-3.0.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/opensymphony/jars/oscache-2.0.1.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/oscache-2.0.1.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Pico">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/picocontainer/jars/picocontainer-1.0.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/picocontainer-1.0.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Plexus">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/qfork/jars/qfork-1.7-SNAPSHOT.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/qfork-1.7-SNAPSHOT.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Test">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Velocity">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/velocity/jars/velocity-1.4.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/velocity-1.4.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="XML">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://C:/dev/dentaku/services/lib/xstream-1.0-SNAPSHOT.jar!/</url>
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/xstream-1.0-SNAPSHOT.jar" />
+    </containerElement>
+    <containerElement type="library" level="application" name="XStream-1.0">
+      <attribute name="method" value="2" />
+      <attribute name="URI" value="/" />
+    </containerElement>
     <deploymentDescriptor name="ejb-jar.xml" url="file://$MODULE_DIR$/src/ejb/META-INF/ejb-jar.xml" version="2.x" />
   </component>
   <component name="ModuleRootManager" />
@@ -345,6 +591,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="dentaku-services" />
     <orderEntryProperties />
   </component>
   <component name="WLEjbModuleProperties">

@@ -57,20 +57,7 @@ public abstract class OperationImpl extends ModelElementImpl implements Operatio
         return sb.toString();
 
     }
-
-    public String getSignature() {
-        Iterator it = getParameter().iterator();
-        if (!it.hasNext()) {
-            return getName() + "()";
-        }
-        StringBuffer sb = new StringBuffer();
-        sb.append(getName());
-        sb.append("(");
-        sb.append(getOperationTypedParameterList());
-        sb.append(")");
-        return sb.toString();
-    }
-
+    
     /**
      * Builds a comma-separated parameter list
      * (type and name of each parameter) of an operation.
@@ -78,7 +65,7 @@ public abstract class OperationImpl extends ModelElementImpl implements Operatio
      * @param o the operation
      * @return String the parameter list
      */
-    private String getOperationTypedParameterList() {
+    public String getSignature() {
         StringBuffer sb = new StringBuffer();
         Iterator it = getParameter().iterator();
         boolean commaNeeded = false;

@@ -17,14 +17,14 @@
 package org.dentaku.services.persistence;
 
 import org.dentaku.services.persistence.hibernate.SessionProvider;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.CompositionPhase;
+import org.dentaku.services.persistence.tranql.ModelEntity;
+import org.tranql.schema.Attribute;
+import org.tranql.schema.Association;
+import org.tranql.ejb.Relationship;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Collection;
-
-import net.sf.hibernate.type.Type;
+import java.util.List;
 
 /**
  * A PersistenceManagerStorage is the lookup component for multiple PersistenceEngines.  This is pluggable,
@@ -39,10 +39,9 @@ public interface PersistenceManagerStorage {
     SessionProvider getSessionProvider() throws PersistenceException;
     PersistenceFactory getPersistenceFactory(String name) throws PersistenceException;
     Object load(Class theClass, Serializable id) throws PersistenceException;
-    void saveOrUpdate(ModelEntity object) throws PersistenceException;
-    void delete(ModelEntity object) throws PersistenceException;
-    List find(String query, Object value, Type type) throws PersistenceException;
-    List find(String query, Object[] values, Type[] types) throws PersistenceException;
+    void saveOrUpdate(Entity object) throws PersistenceException;
+    void delete(Entity object) throws PersistenceException;
+    List find(String query, Object[] values, Class[] types) throws PersistenceException;
     Collection filter(Collection c, String filter) throws PersistenceException;
     void refresh(Object o) throws PersistenceException;
     void releaseSession() throws PersistenceException;
@@ -52,4 +51,8 @@ public interface PersistenceManagerStorage {
 
     void endTrans();
     void endTrans(boolean somethingUnknown);
+
+    ModelEntity createEntity(String name, Class clazz);
+    Attribute createField(String s, Class aClass, boolean b);
+    Association createRelation(Class r1, Class r2);
 }

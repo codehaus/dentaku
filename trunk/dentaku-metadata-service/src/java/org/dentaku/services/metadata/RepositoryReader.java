@@ -16,16 +16,14 @@
  */
 package org.dentaku.services.metadata;
 
-import javax.jmi.xmi.MalformedXMIException;
+import org.omg.uml.UmlPackage;
+
 import javax.jmi.reflect.RefPackage;
-import java.io.InputStream;
+import javax.jmi.xmi.MalformedXMIException;
 import java.io.IOException;
-import java.net.URL;
-import java.net.MalformedURLException;
 
 public interface RepositoryReader {
     public static final String ROLE = RepositoryReader.class.getName();
 
-    void readInputStream(RefPackage model) throws IOException, MalformedXMIException;
-    void setModel(String model) throws MalformedURLException;
+    UmlPackage getModel() throws RepositoryException;
 }
