@@ -7,6 +7,8 @@ import org.omg.uml.foundation.core.Attribute;
 import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.Dependency;
 import org.omg.uml.foundation.core.Operation;
+import org.omg.uml.foundation.core.GeneralizableElement;
+import org.omg.uml.foundation.core.Generalization;
 import org.dentaku.services.metadata.UMLStaticHelper;
 
 import java.util.Collection;
@@ -103,5 +105,14 @@ public class PClassifier
         return operationProxies;
     }
 
+    public Object getJavaGeneralization() {
+        GeneralizableElement element = (GeneralizableElement)modelElement;
+        Iterator i = element.getGeneralization().iterator();
+        if (i.hasNext()) {
+            Generalization generalization = (Generalization) i.next();
+            return generalization.getParent();
+        }
+        return null;
+    }
 }
 

@@ -48,5 +48,12 @@ public interface UMLClassifier
      */
     Object getPackage();
 
+    /**
+     * Gets the generalization of the UMLClassifier object
+     *
+     * @return The package value
+     */
+    Object getJavaGeneralization();
+
 }
 

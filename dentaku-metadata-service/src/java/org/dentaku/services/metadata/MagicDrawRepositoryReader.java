@@ -26,11 +26,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class MagicDrawRepositoryReader implements RepositoryReader {
     private URL modelURL = null;
+
+    public MagicDrawRepositoryReader() {
+        // i sure hope pico is initialized correctly
+    }
 
     public MagicDrawRepositoryReader(URL modelURL) {
         this.modelURL = modelURL;
