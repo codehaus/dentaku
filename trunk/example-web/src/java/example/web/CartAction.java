@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dentaku.foundation.connector.DirectConnector;
+import org.dentaku.foundation.ui.struts.ActionComponent;
 import org.dentaku.services.container.ContainerManager;
 import org.dentaku.services.persistence.PersistenceManager;
 
@@ -54,7 +55,7 @@ import java.util.Iterator;
  * @struts.action-forward name="confirm" path="/cart/checkout-confirm.jsp"
  * @struts.action-forward name="confirmation" path="/cart/checkout-confirmation.jsp"
  */
-public class CartAction extends DispatchAction {
+public class CartAction extends DispatchAction implements ActionComponent {
     /**
      * Add an item to the cart based on the information in the form.
      */

@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.dentaku.foundation.ui.struts.ActionComponent;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
  *                      parameter="m"
  * @struts.action-forward name="viewTable" path="/admin/viewTable.jsp"
  */
-public class AdminAction extends DispatchAction {
+public class AdminAction extends DispatchAction implements ActionComponent {
     public ActionForward viewItem(ActionMapping mapping,
                                   ActionForm form,
                                   HttpServletRequest request,
