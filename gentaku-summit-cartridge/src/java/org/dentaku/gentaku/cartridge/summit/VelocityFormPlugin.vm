@@ -54,8 +54,8 @@
 	#end
 #end
 
-#set ( $screenname = $SummitHelper.getScreenname() )
-#set ( $rootclass = $rootClassView.getRootEntity() )
+#set ( $screenname = $SummitHelper.screenname )
+#set ( $rootclass = $rootClassView.getRootEntityName() )
 ## Has an ordered list of related classes to root class on display
 #set ( $classesnotroot = $rootClassView.getAllDependentClassView() )
 

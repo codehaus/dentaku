@@ -86,6 +86,7 @@ public class SummitHelper
 	private String screenname;
 	private HashMap valuelists;
 	private String viewpackage;
+	private ClassView rootViewClass;
 	private ArrayList crudList = new ArrayList();
 	
 	/**
@@ -164,9 +165,9 @@ public class SummitHelper
             		// only one allowed, so lets count them
             		entity_count++;
             		if(entity_count>1){
-            			// error
+            			// error, need to add logging so model incorrectness can be reported
             		} else {
-            			aClassView.setClassname(entity.getFullyQualifiedName());
+            			aClassView.setEntityclassname(entity.getFullyQualifiedName());
             			Collection entityattributes = entity.getAttributes();
             			AttributeImpl[] entityattributeclassifiers = (AttributeImpl[])entityattributes.toArray();
             			for(int i=0; i<entityattributes.size(); i++) {
@@ -187,6 +188,11 @@ public class SummitHelper
             	}
             }
         }
+		if(parentClassname == null) {
+			// RootSelectable has the rooEntity attached thru View Assoc
+			rootViewClass = aClassView;
+		}
+
         aClassView.addChildren(classViewChildren);
         // Now extract all the attributes we will display and get their relative position
         Collection attributeImpl = viewClass.getAttributes();
@@ -312,6 +318,16 @@ public class SummitHelper
         return null;
 	}
 
+	/**
+	 * Find the 'parent most' of the entity views displayed
+	 * only one per screen
+	 * 
+	 * @return String
+	 */
+	public ClassView getRootView() throws Exception {
+        return rootViewClass;
+    }
+    
 	/**
 	 * Find the root or 'parent most' of the entity views displayed
 	 * only one per screen

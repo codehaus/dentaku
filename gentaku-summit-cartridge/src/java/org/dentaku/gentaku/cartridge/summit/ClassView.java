@@ -124,14 +124,6 @@ import org.omg.uml.foundation.core.ModelElement;
 		
 		// Getters and Setters
 
-		public void setClassname (String name) {
-			entityclassname = name;
-		}
-		
-		public String getClassname () {
-			return entityclassname;
-		}
-		
 		public void setSterotype (String name) {
 			sterotype = name;
 		}

@@ -61,15 +61,15 @@ public class VelocityFormPlugin extends JavaPluginBase {
     protected void populateContextMap(Map m) {
         super.populateContextMap(m);
         helper = new SummitHelper();
-    	ClassifierImpl rootViewClass = null;
+    	ClassifierImpl metadata = null;
 		try {
-			rootViewClass = (ClassifierImpl)m.get("metadata");
+			metadata = (ClassifierImpl)m.get("metadata");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(rootViewClass!=null) {
-    		rootClassView = helper.buildClassView(rootViewClass, null);
+		if(metadata!=null) {
+    		rootClassView = helper.buildClassView(metadata, null);
     	}
         m.put("rootClassView", rootClassView);
         m.put("SummitHelper", helper);
