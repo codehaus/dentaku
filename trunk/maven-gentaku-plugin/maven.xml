@@ -1,5 +1,8 @@
 <project default="plugin:plugin">
     <goal name="main" prereqs="plugin:plugin"/>
+    <goal name="plugin:install-snapshot">
+        <attainGoal name="plugin:install"/>
+    </goal>
     <goal name="deploy" prereqs="main">
         <copy file="${maven.build.dir}/${maven.final.name}.jar" todir="c:/dev/maven/maven/plugins"/>
     </goal>

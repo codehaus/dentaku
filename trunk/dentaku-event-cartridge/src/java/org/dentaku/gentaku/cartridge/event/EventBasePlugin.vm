@@ -3,7 +3,7 @@
  */
 package ${plugin.getDestinationPackage($class)};
 
-public abstract class ${class.name}EventBase extends org.dentaku.foundation.event.AbstractEvent implements org.prevayler.Transaction {
+public abstract class ${class.name}EventBase extends org.dentaku.foundation.event.AbstractEvent {
     public ${class.name}EventBase() {
     }
     

@@ -4,8 +4,18 @@
 
     <goal name="main" prereqs="war:install"/>
 
+    <goal name="xdoclet">
+        <taskdef name="xdoclet" classname="org.xdoclet.ant.XDocletTask" classpathref="maven.dependency.classpath"/>
+        <xdoclet>
+            <fileset dir="${pom.build.sourceDirectory}">
+                <include name="**/*.java"/>
+            </fileset>
+            <component classname="org.xdoclet.plugin.web.WebPlugin" destdir="${maven.build.dir}/xdoclet/webdoclet/WEB-INF" mergedir="${maven.src.dir}/merge"/>
+            <component classname="org.xdoclet.plugin.struts.StrutsConfigXMLPlugin" destdir="${maven.build.dir}/xdoclet/webdoclet/WEB-INF" mergeDir="${maven.src.dir}/merge"/>
+        </xdoclet>
+    </goal>
     <preGoal name="war:init">
-        <attainGoal name="xdoclet:webdoclet"/>
+        <attainGoal name="xdoclet"/>
         <copy todir="${maven.build.dir}/${pom.artifactId}">
             <fileset dir="${maven.build.dir}/xdoclet/webdoclet" includes="**/*"/>
         </copy>
