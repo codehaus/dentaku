@@ -16,17 +16,6 @@
  */
 package org.dentaku.services.metadata.reader;
 
-import org.apache.log4j.Logger;
-import org.dentaku.services.metadata.RepositoryException;
-import org.dentaku.services.metadata.RepositoryReader;
-import org.netbeans.lib.jmi.xmi.XmiSAXReader;
-import org.omg.uml.UmlPackage;
-import org.xml.sax.SAXException;
-import org.xml.sax.InputSource;
-
-import javax.jmi.reflect.RefPackage;
-import javax.jmi.xmi.MalformedXMIException;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,6 +23,17 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import javax.jmi.reflect.RefPackage;
+import javax.jmi.xmi.MalformedXMIException;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.log4j.Logger;
+import org.dentaku.services.metadata.RepositoryException;
+import org.dentaku.services.metadata.RepositoryReader;
+import org.omg.uml.UmlPackage;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * This is a developmental XMI reader

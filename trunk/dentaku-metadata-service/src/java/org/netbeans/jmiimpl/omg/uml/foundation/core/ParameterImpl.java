@@ -12,9 +12,9 @@
  */
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
+import org.netbeans.mdr.storagemodel.StorableObject;
 import org.omg.uml.foundation.core.Parameter;
 import org.omg.uml.foundation.datatypes.ParameterDirectionKindEnum;
-import org.netbeans.mdr.storagemodel.StorableObject;
 
 public abstract class ParameterImpl extends ModelElementImpl implements Parameter {
     protected ParameterImpl(StorableObject storable) {

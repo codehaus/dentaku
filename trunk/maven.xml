@@ -1,9 +1,19 @@
 <?xml version="1.0"?>
-<project default="dentaku:build-all" xmlns:j="jelly:core" xmlns:maven="jelly:maven">
+<project default="dentaku:build-all" xmlns:j="jelly:core" xmlns:maven="jelly:maven" xmlns:ant="jelly:ant" xmlns:u="jelly:util">
 	<goal name="dentaku:build-all">
 <!--        global stuff-->
 <!--        <attainGoal name="plugin:download"/>-->
 		<attainGoal name="multiproject:install"/>
 <!--        local stuff-->
 	</goal>
+	
+	<postGoal name="test:test-resources">
+		
+		<u:file name="${basedir}" var="basedirFile"/>
+		<ant:replace dir="${maven.test.dest}" token="@BASEDIR_URL@" value="${basedirFile.toURL()}">
+			<ant:include name="**/*.xml"/>
+		</ant:replace>
+		
+	</postGoal>
+	
 </project>

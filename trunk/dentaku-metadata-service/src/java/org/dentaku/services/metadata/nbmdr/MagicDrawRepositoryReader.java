@@ -16,33 +16,32 @@
  */
 package org.dentaku.services.metadata.nbmdr;
 
-import org.netbeans.api.mdr.MDRManager;
-import org.netbeans.api.mdr.MDRepository;
-import org.netbeans.api.xmi.XMIReader;
-import org.netbeans.api.xmi.XMIReaderFactory;
-import org.netbeans.api.xmi.XMIInputConfig;
-import org.netbeans.api.xmi.XMIReferenceResolver;
-import org.omg.uml.UmlPackage;
-import org.dentaku.services.metadata.RepositoryReader;
-import org.dentaku.services.metadata.RepositoryException;
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import javax.jmi.model.ModelPackage;
 import javax.jmi.model.MofPackage;
 import javax.jmi.reflect.RefPackage;
 import javax.jmi.xmi.MalformedXMIException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Collections;
+
+import org.dentaku.services.metadata.JMIUMLMetadataProvider;
+import org.dentaku.services.metadata.RepositoryException;
+import org.dentaku.services.metadata.RepositoryReader;
+import org.netbeans.api.mdr.MDRManager;
+import org.netbeans.api.mdr.MDRepository;
+import org.netbeans.api.xmi.XMIReader;
+import org.netbeans.api.xmi.XMIReaderFactory;
+import org.omg.uml.UmlPackage;
 
 /**
  * This used to be completely URL based, then something broke with XStream because we have these crappy version conflicts
@@ -110,6 +109,7 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
                 // locate the UML package definition that was just loaded in
                 metaModelPackage = findPackage(META_PACKAGE, metaModelExtent);
             }
+            
             MofPackage metaModel = metaModelPackage;
             JMIUMLMetadataProvider.booted = true;
             RefPackage model1 = repository.getExtent(MODEL_NAME);

@@ -16,10 +16,10 @@
  */
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
-import org.omg.uml.foundation.core.TaggedValue;
-import org.netbeans.mdr.storagemodel.StorableObject;
-
 import java.util.Iterator;
+
+import org.netbeans.mdr.storagemodel.StorableObject;
+import org.omg.uml.foundation.core.TaggedValue;
 
 abstract public class TaggedValueImpl extends ModelElementImpl implements TaggedValue {
     protected TaggedValueImpl(StorableObject storable) {

@@ -16,26 +16,22 @@
  */
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Vector;
+
 import org.dentaku.services.metadata.RepositoryException;
 import org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader;
 import org.netbeans.mdr.storagemodel.StorableObject;
 import org.omg.uml.UmlPackage;
 import org.omg.uml.foundation.core.Abstraction;
+import org.omg.uml.foundation.core.AssociationEnd;
 import org.omg.uml.foundation.core.Attribute;
 import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.CorePackage;
 import org.omg.uml.foundation.core.Generalization;
 import org.omg.uml.foundation.core.Operation;
-import org.omg.uml.foundation.core.UmlClass;
-import org.omg.uml.foundation.core.GeneralizableElement;
-import org.omg.uml.foundation.core.AssociationEnd;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.Collections;
-import java.util.ArrayList;
 
 abstract public class ClassifierImpl extends ModelElementImpl implements Classifier {
     private final static String PRIMARY_KEY = "PrimaryKey";

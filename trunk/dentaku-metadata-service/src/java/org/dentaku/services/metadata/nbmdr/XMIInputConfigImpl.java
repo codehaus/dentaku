@@ -16,18 +16,17 @@
  */
 package org.dentaku.services.metadata.nbmdr;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Iterator;
+
+import javax.jmi.reflect.RefPackage;
+
 import org.netbeans.api.xmi.XMIInputConfig;
 import org.netbeans.api.xmi.XMIReferenceResolver;
 import org.netbeans.lib.jmi.xmi.XmiContext;
-
-import javax.jmi.reflect.RefPackage;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collection;
-import java.util.Iterator;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.io.File;
 
 public class XMIInputConfigImpl extends XMIInputConfig {
     private Collection paths;

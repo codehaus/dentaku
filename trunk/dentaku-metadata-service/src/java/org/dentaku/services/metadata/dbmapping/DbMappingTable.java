@@ -16,18 +16,17 @@
  */
 package org.dentaku.services.metadata.dbmapping;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
-import com.thoughtworks.xstream.io.xml.XppDomDriver;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
+import com.thoughtworks.xstream.io.xml.XppDomDriver;
 
 public class DbMappingTable {
     private static HashMap mappings;
