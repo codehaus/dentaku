@@ -113,7 +113,7 @@
         <dependency>
             <groupId>plexus</groupId>
             <artifactId>plexus-utils</artifactId>
-            <version>1.0-alpha-1-SNAPSHOT</version>
+            <version>1.0-alpha-2-SNAPSHOT</version>
             <url>http://plexus.codehaus.org</url>
         </dependency>
         <dependency>
