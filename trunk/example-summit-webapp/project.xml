@@ -88,7 +88,13 @@
 		<version>1.0-beta-4-SNAPSHOT</version>
 		<url>http://plexus.codehaus.org</url>
     </dependency>
-    <!-- XDoclet -->
+    <dependency>
+		<groupId>plexus</groupId>
+        <artifactId>plexus-jdo</artifactId>
+		<version>0.2</version>
+		<url>http://plexus.codehaus.org</url>
+    </dependency>
+    <!-- XDoclet -->    
     <dependency>
       <groupId>xdoclet-plugins</groupId>
       <artifactId>xdoclet-plugin-hibernate</artifactId>
@@ -125,12 +131,12 @@
       <version>SNAPSHOT</version>
       <type>jar</type>
     </dependency>
-      <dependency>
-          <groupId>xstream</groupId>
-          <artifactId>xstream</artifactId>
-          <version>1.0.3.2-dev</version>
-      </dependency>
- </dependencies>
+    <dependency>
+      <groupId>xstream</groupId>
+      <artifactId>xstream</artifactId>
+      <version>1.0.3.2-dev</version>
+    </dependency>
+  </dependencies>
   <build>
     <unitTest>
       <includes>
