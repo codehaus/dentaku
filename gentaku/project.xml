@@ -2,7 +2,7 @@
 <project>
     <pomVersion>3</pomVersion>
     <groupId>dentaku</groupId>
-    <currentVersion>0.7</currentVersion>
+    <currentVersion>0.8</currentVersion>
     <artifactId>gentaku</artifactId>
     <name>Source Generator for Dentaku</name>
     <package>org.dentaku.gentaku.*</package>
@@ -11,7 +11,7 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
-            <version>0.7</version>
+            <version>0.8</version>
             <type>ejb</type>
         </dependency>
         <dependency>
