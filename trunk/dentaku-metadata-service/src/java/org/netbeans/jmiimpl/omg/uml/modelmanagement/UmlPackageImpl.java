@@ -31,32 +31,35 @@ public abstract class UmlPackageImpl extends ModelElementImpl implements UmlPack
     }
 
     public UmlPackage getChildPackage(String name, boolean create) {
-        String[] names = name.split("\\.");
-        CorePackage core = ((org.omg.uml.UmlPackage) refOutermostPackage()).getCore();
-        UmlPackageClass namespaceClass = ((ModelManagementPackage) refImmediatePackage()).getUmlPackage();
-
         org.omg.uml.modelmanagement.UmlPackage current = this;
-        for (int i = 0; i < names.length; i++) {
-            final String s = names[i];
-            final UmlPackage currentCopy = current;
-            Object l = CollectionUtils.find(namespaceClass.refAllOfType(), new Predicate() {
-                public boolean evaluate(Object object) {
-                    return object != null && ((UmlPackage) object).getNamespace() == currentCopy && ((UmlPackage) object).getName().equals(s);
-                }
-            });
 
-            if (l == null) {
-                if (create) {
-                    // add Namespace and make it current
-                    UmlPackage newUmlPackage = namespaceClass.createUmlPackage();
-                    newUmlPackage.setName(s);
-                    core.getANamespaceOwnedElement().add(current, newUmlPackage);
-                    current = newUmlPackage;
+        if (name != null && name.length() > 0) {
+            String[] names = name.split("\\.");
+            CorePackage core = ((org.omg.uml.UmlPackage) refOutermostPackage()).getCore();
+            UmlPackageClass namespaceClass = ((ModelManagementPackage) refImmediatePackage()).getUmlPackage();
+
+            for (int i = 0; i < names.length; i++) {
+                final String s = names[i];
+                final UmlPackage currentCopy = current;
+                Object l = CollectionUtils.find(namespaceClass.refAllOfType(), new Predicate() {
+                    public boolean evaluate(Object object) {
+                        return object != null && ((UmlPackage) object).getNamespace() == currentCopy && ((UmlPackage) object).getName().equals(s);
+                    }
+                });
+
+                if (l == null) {
+                    if (create) {
+                        // add Namespace and make it current
+                        UmlPackage newUmlPackage = namespaceClass.createUmlPackage();
+                        newUmlPackage.setName(s);
+                        core.getANamespaceOwnedElement().add(current, newUmlPackage);
+                        current = newUmlPackage;
+                    } else {
+                        throw new RuntimeException("'" + name + "' not found and create disabled");
+                    }
                 } else {
-                    throw new RuntimeException("'" + name + "' not found and create disabled");
+                    current = (UmlPackage) l;
                 }
-            } else {
-                current = (UmlPackage) l;
             }
         }
         return current;

@@ -23,11 +23,40 @@ import org.generama.MetadataProvider;
 import org.generama.tests.SinkWriterMapper;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
+import org.xdoclet.JavaSourceProvider;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.Reader;
+import java.io.StringReader;
 
 public class GentakuTest extends TestCase {
-    
+    public static class TestJavaSourceProvider implements JavaSourceProvider {
+        public Collection getURLs() {
+            Reader one = new StringReader("" +
+                            "public class One{}"
+            );
+            Reader two = new StringReader("" +
+                            "public class Two{}"
+            );
+            Reader three = new StringReader("" +
+                            "public class Three{}"
+            );
+            List result = new ArrayList();
+            result.add(one);
+            result.add(two);
+            result.add(three);
+            return result;
+        }
+
+        public String getEncoding() {
+            return null;
+        }
+    }
+
     public void testGentaku() {
-        Gentaku gt = new Gentaku(SinkWriterMapper.class);
+        Gentaku gt = new Gentaku(TestJavaSourceProvider.class, SinkWriterMapper.class);
         MutablePicoContainer pico = new DefaultPicoContainer();
         gt.composeContainer(pico, null);
 

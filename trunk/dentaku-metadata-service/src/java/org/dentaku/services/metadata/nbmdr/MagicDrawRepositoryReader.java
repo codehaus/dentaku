@@ -17,7 +17,6 @@
 package org.dentaku.services.metadata.nbmdr;
 
 import org.apache.tools.ant.types.FileSet;
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.dentaku.services.metadata.RepositoryException;
 import org.dentaku.services.metadata.RepositoryReader;
 import org.dentaku.services.metadata.Utils;
@@ -26,14 +25,12 @@ import org.netbeans.api.mdr.MDRepository;
 import org.netbeans.api.xmi.XMIReader;
 import org.netbeans.api.xmi.XMIReaderFactory;
 import org.omg.uml.UmlPackage;
+import org.omg.uml.modelmanagement.Model;
 
 import javax.jmi.model.ModelPackage;
 import javax.jmi.model.MofPackage;
 import javax.jmi.reflect.RefPackage;
 import javax.jmi.xmi.MalformedXMIException;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -75,7 +72,7 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
 //        # MDRStorageProperty.org.netbeans.mdr.persistence.jdbcimpl.schemaName =
     };
 
-    private String model;
+    private String model = null;
     private URL modelURL;
     private List searchPaths = new ArrayList();
     private Logger log = Logger.getLogger(MagicDrawRepositoryReader.class.getName());
@@ -123,14 +120,13 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
                 }
 
                 MofPackage metaModel = metaModelPackage;
-                JMIUMLMetadataProvider.booted = true;
                 RefPackage model1 = repository.getExtent(MODEL_NAME);
                 if (model1 != null) {
                     log.info("MDR: deleting exising model");
                     model1.refDelete();
                 }
                 model1 = repository.createExtent(MODEL_NAME, metaModel);
-                readInputStream(model1);
+                readInputStream((UmlPackage)model1);
                 modelPackage = (UmlPackage) model1;
 //                repository.endTrans();
             } catch (Exception e) {
@@ -141,13 +137,9 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
         return modelPackage;
     }
 
-    private void readInputStream(RefPackage umlModel) throws IOException, MalformedXMIException {
+    private void readInputStream(UmlPackage umlModel) throws IOException, MalformedXMIException {
         // this is pretty cracked out code.  It should be unified to make the URL real, then let the URLInputStream take care of it
-        System.out.println("Rootdir is: "+ Utils.getRootDir());
-        String fullname = model;
         if (model != null) {
-            // the embedded XMI is always saved as the filename minus the ".zip" suffix
-
             // check file exists
             modelURL = Utils.checkURL(model);
             if (modelURL == null) {
@@ -156,15 +148,18 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
         } else if (modelURL != null) {
             try {
                 modelURL = Utils.checkURL(this.modelURL);
-                fullname = modelURL.toExternalForm();
             } catch (Exception e) { }
         }
 
         if (modelURL == null) {
-            throw new FileNotFoundException(model + " could not be found");
+            log.warning("XMI repository could not be found and none loaded!");
+            Model m = umlModel.getModelManagement().getModel().createModel();
+            m.setName("Data");
+            return;
         }
 
         // get the input stream
+        String fullname = modelURL.toExternalForm();
         System.out.println("Reading from MagicDraw repository: " + fullname);
         InputStream input;
         if (fullname.endsWith(".zip")) {
