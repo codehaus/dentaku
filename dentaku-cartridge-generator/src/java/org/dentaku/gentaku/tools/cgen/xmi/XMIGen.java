@@ -169,14 +169,6 @@ public class XMIGen implements ContainerComposer, Startable {
                 Element attribute = (Element) it.next();
                 createTaggedValueDefinition(tag, xsdNode.attributeValue("name") + "." + attribute.attributeValue("name"), null, mapLocationName(location)); // todo documentation value from XSD
             }
-
-//            QName qName = DocumentFactory.getInstance().createQName("attribute", "xs", "http://www.w3.org/2001/XMLSchema");
-//            for (Iterator attrIter = xsdNode.elementIterator(qName); attrIter.hasNext();) {
-//                Element attrElement = (Element) attrIter.next();
-//
-//                tag = createEmptyUMLElement(stereotype, "Stereotype.definedTag");
-//                createTaggedValueDefinition(tag, stereotype.attributeValue("xmi.id"), attrElement.attributeValue("name"), null); // todo documentation value from XSD
-//            }
         }
         return stereotype;
     }

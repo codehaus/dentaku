@@ -23,6 +23,9 @@ import org.dom4j.Branch;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.DocumentFactory;
+import org.dom4j.QName;
+import org.dom4j.tree.DefaultElement;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
 import org.omg.uml.UmlPackage;
@@ -36,6 +39,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
+/**
+ * This class generates XML output descriptors based on a UML model.  It uses the visitor pattern support in dom4j, as during
+ * development, it was unclear what parts of the model were going to be necessary for generation, and it was easier to go
+ * through the complexity of working in dom4j directly than having to constantly update a custom AST.  Once this code is
+ * stabilized, it should be used as a prototype for a version that uses a custom AST, reducing the code complexity significantly
+ * because the dom4j semantics do not clutter it.
+ * <br>
+ * This code also relies on a custom dom4j
+ */
+
 public class PluginOutputVisitor {
     protected Document xsdDoc;
     protected UmlPackage model;
@@ -47,7 +60,7 @@ public class PluginOutputVisitor {
 
     public boolean visit(Element mappingNode, Branch parentOutput, Namespace parent) {
         boolean result = false;
-        if (mappingNode.getName().equals("mapping") || mappingNode.getName().equals("element")) {
+        if (mappingNode.getName().equals("element")) {
             Element mappingXSD = (Element) xsdDoc.selectSingleNode(mappingNode.attributeValue("path"));
 
             String location = mappingNode.attributeValue("location");
@@ -62,7 +75,7 @@ public class PluginOutputVisitor {
                     if (element instanceof Namespace) {
                         parent = (Namespace) element;
                     }
-                    if (iterateChildren(mappingNode, newLocalNode, parent)) {
+                    if (iterateElements(mappingNode, newLocalNode, parent)) {
                         result = true;
                     }
                     if (iterateAttributes(mappingXSD, element, newLocalNode)) {
@@ -74,7 +87,7 @@ public class PluginOutputVisitor {
                 }
             } else {
                 Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
-                if (iterateChildren(mappingNode, newLocalNode, parent)) {
+                if (iterateElements(mappingNode, newLocalNode, parent)) {
                     result = true;
                     parentOutput.add(newLocalNode);
                 }
@@ -97,10 +110,10 @@ public class PluginOutputVisitor {
         return result;
     }
 
-    private boolean iterateChildren(Element mappingNode, Element newLocalNode, Namespace parent) {
+    private boolean iterateElements(Element mappingNode, Element newLocalNode, Namespace parent) {
         boolean result = false;
         for (Iterator it = mappingNode.elements().iterator(); it.hasNext();) {
-            GenGenPlugin.LocalDefaultElement n = (GenGenPlugin.LocalDefaultElement) it.next();
+            LocalDefaultElement n = (LocalDefaultElement) it.next();
             result = n.accept(this, newLocalNode, parent);
         }
         return result;
@@ -145,5 +158,30 @@ public class PluginOutputVisitor {
             }
         });
         return result;
+    }
+
+    /**
+     * DocumentFactory class for dom4j.  The base implementation of the visitor was insufficient four our needs, but not sure yet
+     * what the information we needed for a custom AST.  So the best thing was to keep the AST in dom4j (giving full access to the
+     * actual XML) but change the accept method through a change to the factory.
+     */
+    public static class PluginDocumentFactory extends DocumentFactory {
+        public Element createElement(QName qname) {
+            return new LocalDefaultElement(qname);
+        }
+    }
+
+    /**
+     * The class that is instantiated by the factory.  Really only does something with the accept method, adding a couple of custom
+     * state parameters we need and *not* calling all the childen of a node as the defualt impl does.
+     */
+    public static class LocalDefaultElement extends DefaultElement {
+        public LocalDefaultElement(QName qname) {
+            super(qname);
+        }
+
+        public boolean accept(PluginOutputVisitor visitor, Branch newParent, Namespace parent) {
+            return visitor.visit(this, newParent, parent);
+        }
     }
 }
