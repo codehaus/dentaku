@@ -15,6 +15,11 @@
        </dependency>
         <dependency>
             <groupId>dentaku</groupId>
+            <artifactId>dentaku-metadata-service</artifactId>
+            <version>${pom.currentVersion}</version>
+       </dependency>
+        <dependency>
+            <groupId>dentaku</groupId>
             <artifactId>dentaku-event-cartridge</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
@@ -206,8 +211,14 @@
             <version>3.8.1</version>
         </dependency>
 <!--        gentaku-->
+        <dependency>
+            <groupId>axion</groupId>
+            <artifactId>axion</artifactId>
+            <version>1.0-M3-dev</version>
+        </dependency>
     </dependencies>
     <build>
+        <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
         <unitTest>
             <includes>
                 <include>**/*Test.java</include>
@@ -221,13 +232,13 @@
                     </includes>
                 </resource>
                 <resource>
-                    <directory>src/test</directory>
+                    <directory>src/test/java</directory>
                     <includes>
                         <include>**/*.xml</include>
                     </includes>
                 </resource>
                 <resource>
-                    <directory>src/test</directory>
+                    <directory>src/test/java</directory>
                     <includes>
                         <include>**/*.drl</include>
                     </includes>
@@ -236,7 +247,7 @@
         </unitTest>
         <resources>
             <resource>
-                <directory>src/java</directory>
+                <directory>src/test/java</directory>
                 <includes>
                     <include>**/*.xml</include>
                 </includes>
