@@ -1,0 +1,47 @@
+<project default="dentaku-dist" xmlns:j="jelly:core" xmlns:maven="jelly:maven">
+
+    <goal name="dentaku-dist">
+        <attainGoal name="jar:install"/>
+    </goal>
+    <preGoal name="java:compile">
+<!--        <taskdef name="jbind" classname="org.jbind.xml.ant.CompileTask" classpathref="maven.dependency.classpath"/>-->
+<!--        <jbind behaviourDir="${maven.src.dir}/java" dataDir="${maven.build.src}">-->
+<!--            <fileset dir="${maven.src.dir}/xml" includes="XMLSchema.xsd"/>-->
+<!--        </jbind>-->
+        <!--        <jbind destinationDir="${maven.build.src}" derivePackage="true">-->
+        <!--            <fileset dir="${maven.src.dir}" includes="**/*.xsd"/>-->
+        <!--        </jbind>-->
+
+<!--        <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">-->
+<!--            <classpath>-->
+<!--                <classpath ref="maven.dependency.classpath"/>-->
+<!--                <fileset dir="${jwsdp.root}">-->
+<!--                    <include name="jaxp/**/*.jar"/>-->
+<!--                    <include name="jaxb/**/*.jar"/>-->
+<!--                    <include name="jwsdp-shared/lib/**/*.jar"/>-->
+<!--                </fileset>-->
+<!--            </classpath>-->
+<!--        </taskdef>-->
+<!---->
+<!--        <xjc schema="${maven.src.dir}/xml/XMLSchema.xsd" extension="true" package="org.dentaku.gentaku.tools.cgen" target="${maven.build.src}"/>-->
+
+                <taskdef name="xjc" classname="org.apache.ws.jaxme.generator.XJCTask">
+                    <classpath>
+<!--                        <classpath ref="maven.dependency.classpath"/>-->
+                        <fileset dir="C:/dev/apache/ws-jaxme-0.3.1">
+                            <include name="lib/**/*.jar"/>
+                        </fileset>
+                    </classpath>
+                </taskdef>
+            <xjc schema="${maven.src.dir}/xml/XMLSchema.xsd" target="${maven.build.src}">
+                <produces includes="org/dentaku/gentaku/tools/cgen/*.java"/>
+            </xjc>
+
+        <path id="maven.compile.src.set">
+            <pathelement location="${maven.src.dir}/java"/>
+            <pathelement location="${maven.build.src}"/>
+        </path>
+
+    </preGoal>
+
+</project>
