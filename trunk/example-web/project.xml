@@ -4,24 +4,24 @@
     <name>example-web</name>
     <dependencies>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>example-model</artifactId>
             <version>${pom.currentVersion}</version>
             <type>ejb</type>
         </dependency>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
             <version>${pom.currentVersion}</version>
             <type>ejb</type>
         </dependency>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-persistence-service</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-foundation</artifactId>
             <version>${pom.currentVersion}</version>
             <type>ejb</type>

@@ -6,7 +6,7 @@
     <package>org.dentaku.gentaku.*</package>
     <dependencies>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>

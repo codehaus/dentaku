@@ -15,7 +15,7 @@
             <id>mockejb</id>
         </dependency>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
             <version>${pom.currentVersion}</version>
             <type>ejb</type>

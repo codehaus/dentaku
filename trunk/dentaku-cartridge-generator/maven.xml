@@ -25,22 +25,22 @@
 <!---->
 <!--        <xjc schema="${maven.src.dir}/xml/XMLSchema.xsd" extension="true" package="org.dentaku.gentaku.tools.cgen" target="${maven.build.src}"/>-->
 
-                <taskdef name="xjc" classname="org.apache.ws.jaxme.generator.XJCTask">
-                    <classpath>
+<!--                <taskdef name="xjc" classname="org.apache.ws.jaxme.generator.XJCTask">-->
+<!--                    <classpath>-->
 <!--                        <classpath ref="maven.dependency.classpath"/>-->
-                        <fileset dir="C:/dev/apache/ws-jaxme-0.3.1">
-                            <include name="lib/**/*.jar"/>
-                        </fileset>
-                    </classpath>
-                </taskdef>
-            <xjc schema="${maven.src.dir}/xml/XMLSchema.xsd" target="${maven.build.src}">
-                <produces includes="org/dentaku/gentaku/tools/cgen/*.java"/>
-            </xjc>
+<!--                        <fileset dir="C:/dev/apache/ws-jaxme-0.3.1">-->
+<!--                            <include name="lib/**/*.jar"/>-->
+<!--                        </fileset>-->
+<!--                    </classpath>-->
+<!--                </taskdef>-->
+<!--            <xjc schema="${maven.src.dir}/xml/XMLSchema.xsd" target="${maven.build.src}">-->
+<!--                <produces includes="org/dentaku/gentaku/tools/cgen/*.java"/>-->
+<!--            </xjc>-->
 
-        <path id="maven.compile.src.set">
-            <pathelement location="${maven.src.dir}/java"/>
-            <pathelement location="${maven.build.src}"/>
-        </path>
+<!--        <path id="maven.compile.src.set">-->
+<!--            <pathelement location="${maven.src.dir}/java"/>-->
+<!--            <pathelement location="${maven.build.src}"/>-->
+<!--        </path>-->
 
     </preGoal>
 

@@ -6,34 +6,34 @@
     <package>example.*</package>
     <dependencies>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-foundation</artifactId>
             <version>${pom.currentVersion}</version>
             <type>ejb</type>
         </dependency>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
             <version>${pom.currentVersion}</version>
             <type>ejb</type>
         </dependency>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-persistence-service</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-event-cartridge</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
             <version>${pom.currentVersion}</version>
         </dependency>
