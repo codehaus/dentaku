@@ -4,6 +4,10 @@
 package org.dentaku.services.metadata.dbmapping;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.alias.DefaultNameMapper;
+import com.thoughtworks.xstream.alias.DefaultClassMapper;
+import com.thoughtworks.xstream.xml.xpp3.Xpp3DomXMLReaderDriver;
+import com.thoughtworks.xstream.objecttree.reflection.JavaReflectionObjectFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +16,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.codehaus.plexus.configuration.xml.xstream.alias.HyphenatedClassMapper;
+import org.codehaus.plexus.configuration.xml.xstream.alias.HyphenatedNameMapper;
 
 public class DbMappingTable {
     private static HashMap mappings;
@@ -54,7 +61,8 @@ public class DbMappingTable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            XStream xstream = new XStream();
+            XStream xstream =  new XStream( new JavaReflectionObjectFactory(), new DefaultClassMapper(new DefaultNameMapper() ), new Xpp3DomXMLReaderDriver());
+
             xstream.alias("mapping", TypeMapping.class);
             List configuration = (List) xstream.fromXML(input);
 
@@ -71,10 +79,10 @@ public class DbMappingTable {
         return mappings;
     }
 
-    private class TypeMapping {
-        private List typeNames;
-        private String jdbcType;
-        private String sqlPattern;
-        private String sqlDefaultLength;
+    public static class TypeMapping {
+        public List typeNames;
+        public String jdbcType;
+        public String sqlPattern;
+        public String sqlDefaultLength;
     }
 }

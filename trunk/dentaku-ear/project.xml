@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 <project>
-    <pomVersion>3</pomVersion>
-    <groupId>dentaku</groupId>
-    <currentVersion>0.6</currentVersion>
-    <id>dentaku-ear</id>
+    <extend>${basedir}/../project.xml</extend>
     <artifactId>dentaku-ear</artifactId>
     <name>Dentaku ear application</name>
     <package>org.dentaku.*</package>
@@ -11,34 +8,25 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-foundation</artifactId>
-            <version>0.7</version>
+            <version>${pom.currentVersion}</version>
             <type>ejb</type>
             <properties>
                 <ear.bundle>true</ear.bundle>
             </properties>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>${pom.groupId}</groupId>-->
-<!--            <artifactId>dentaku-model</artifactId>-->
-<!--            <version>${pom.currentVersion}</version>-->
-<!--            <type>ejb</type>-->
-<!--            <properties>-->
-<!--                <ear.bundle>true</ear.bundle>-->
-<!--            </properties>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
-            <version>0.8</version>
-            <type>jar</type>
+            <version>${pom.currentVersion}</version>
+            <type>ejb</type>
             <properties>
                 <ear.bundle>true</ear.bundle>
             </properties>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
-            <artifactId>dentaku-web</artifactId>
-            <version>0.7</version>
+            <artifactId>example-web</artifactId>
+            <version>${pom.currentVersion}</version>
             <type>war</type>
             <properties>
                 <ear.bundle>true</ear.bundle>

@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
-    <pomVersion>3</pomVersion>
-    <groupId>dentaku</groupId>
-    <currentVersion>0.8</currentVersion>
+    <extend>${basedir}/../project.xml</extend>
     <artifactId>gentaku</artifactId>
     <name>Source Generator for Dentaku</name>
     <package>org.dentaku.gentaku.*</package>
-    <description>Source Generator for Dentaku</description>
     <dependencies>
         <dependency>
-            <groupId>${pom.groupId}</groupId>
-            <artifactId>dentaku-services</artifactId>
-            <version>0.8</version>
-            <type>ejb</type>
+            <groupId>dentaku</groupId>
+            <artifactId>dentaku-metadata-service</artifactId>
+            <version>${pom.currentVersion}</version>
         </dependency>
         <dependency>
             <groupId>generama</groupId>
@@ -22,7 +18,7 @@
         <dependency>
             <groupId>qdox</groupId>
             <artifactId>qdox</artifactId>
-            <version>1.4</version>
+            <version>1.5</version>
         </dependency>
         <dependency>
             <groupId>picocontainer</groupId>
@@ -89,12 +85,6 @@
             <version>1.0</version>
             <url></url>
         </dependency>
-
-        <!--dependency>
-            <id>qdox-attributes</id>
-            <version>0.7-SNAPSHOT</version>
-            <url></url>
-        </dependency-->
         <dependency>
             <id>antlr</id>
             <version>2.7.2</version>
@@ -106,59 +96,8 @@
             <url></url>
         </dependency>
 
-        <!--        netbeans-->
-<!--        <dependency>-->
-<!--            <groupId>netbeans</groupId>-->
-<!--            <artifactId>openide-fs</artifactId>-->
-<!--            <jar>openide-fs.jar</jar>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>netbeans</groupId>-->
-<!--            <artifactId>openide-lookup</artifactId>-->
-<!--            <jar>openide-lookup.jar</jar>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>netbeans</groupId>-->
-<!--            <artifactId>nbmdr</artifactId>-->
-<!--            <jar>nbmdr.jar</jar>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>netbeans</groupId>-->
-<!--            <artifactId>mdrapi</artifactId>-->
-<!--            <jar>mdrapi.jar</jar>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>netbeans</groupId>-->
-<!--            <artifactId>jmi</artifactId>-->
-<!--            <jar>jmi.jar</jar>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>netbeans</groupId>-->
-<!--            <artifactId>jmiutils</artifactId>-->
-<!--            <jar>jmiutils.jar</jar>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>netbeans</groupId>-->
-<!--            <artifactId>jmitoolkit</artifactId>-->
-<!--            <jar>jmitoolkit.jar</jar>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>netbeans</groupId>-->
-<!--            <artifactId>mof</artifactId>-->
-<!--            <jar>mof.jar</jar>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>netbeans</groupId>-->
-<!--            <artifactId>jmiuml14di</artifactId>-->
-<!--            <jar>jmiuml14di.jar</jar>-->
-<!--        </dependency>-->
-        <!--        netbeans-->
     </dependencies>
     <build>
-        <nagEmailAddress>dev@dentaku.codehaus.org</nagEmailAddress>
-        <sourceDirectory>${basedir}/src/java</sourceDirectory>
-        <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
-
         <!-- Resources that are packaged up inside the JAR file -->
         <resources>
             <resource>

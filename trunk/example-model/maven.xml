@@ -20,7 +20,7 @@
             <component classname="org.dentaku.gentaku.cartridge.event.EventPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.event.WerkflowPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.event.RulesPlugin" destdir="${maven.build.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}" destinationfilename="META-INF/plexus/components.xml"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}/META-INF/plexus" destinationfilename="components.xml"/>
             <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionImplPlugin" destdir="${maven.src.dir}/java"/>
             <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionPlugin" destdir="${maven.build.src}"/>
             <!--            <component classname="org.xdoclet.plugin.ejb.interfaces.LocalInterfacePlugin" destdir="${basedir}/target/java"/>-->

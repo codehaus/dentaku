@@ -15,7 +15,8 @@
     <orderEntry type="library" name="Commons" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
     <orderEntry type="library" name="Test" level="application" />
-    <orderEntry type="library" name="XStream" level="application" />
+    <orderEntry type="library" name="Clover" level="application" />
+    <orderEntry type="library" name="XStream-1.0" level="application" />
     <orderEntryProperties />
   </component>
 </module>
