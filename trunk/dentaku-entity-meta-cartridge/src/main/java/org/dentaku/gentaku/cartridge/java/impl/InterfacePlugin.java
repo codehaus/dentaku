@@ -15,6 +15,7 @@ public class InterfacePlugin extends JavaPluginBase {
     }
 
     public String metodos(Object o) {
+        if (o == null) { return ""; }
         String x = "";
 
         Method[] ms = o.getClass().getMethods();
@@ -27,4 +28,6 @@ public class InterfacePlugin extends JavaPluginBase {
 
         return x;
     }
+   
+    
 }

@@ -1,8 +1,8 @@
 <project>
     <extend>../project.xml</extend>
-    <artifactId>gentaku-java-cartridge</artifactId>
-    <name>Gentaku Java Cartridge</name>
-	<shortDescription>Cartidge to generate java code like interfaces and exception.</shortDescription>
+    <artifactId>dentaku-entity-meta-cartridge</artifactId>
+    <name>Dentaku Entity Meta Cartridge</name>
+	<shortDescription>Meta cartidge to generate java code for entities and has some extensions point to be implemented by persistence specific cartridge.</shortDescription>
     <dependencies>
         <dependency>
             <groupId>${pom.groupId}</groupId>
@@ -22,18 +22,10 @@
             <version>1.0.3.2-dev</version>
         </dependency>
         <dependency>
-            <groupId>commons-el</groupId>
-            <artifactId>commons-el</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.0</version>
         </dependency>
-        <dependency>
-            <groupId>commons-el</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
-
-        
-        
     </dependencies>
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>

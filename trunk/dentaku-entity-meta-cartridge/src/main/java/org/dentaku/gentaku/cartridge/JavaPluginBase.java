@@ -24,8 +24,8 @@ import org.omg.uml.foundation.datatypes.VisibilityKindEnum;
 
 public abstract class JavaPluginBase extends org.generama.Plugin {
 
-	private JMIHelper jmiHelper = new JMIHelper();
-	private JavaHelper javaHelper = new JavaHelper();
+	protected JMIHelper jmiHelper = new JMIHelper();
+	protected JavaHelper javaHelper = new JavaHelper();
 
     private JMICapableMetadataProvider metadataProvider;
 
