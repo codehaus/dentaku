@@ -31,10 +31,8 @@ import org.dom4j.VisitorSupport;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.nanocontainer.ant.PicoContainerTask;
-import org.nanocontainer.integrationkit.ContainerComposer;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.Startable;
+import org.apache.tools.ant.Task;
+import org.apache.tools.ant.BuildException;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -49,34 +47,26 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-public class XMIGen implements ContainerComposer, Startable {
+public class XMIGenTask extends Task {
     private UUID uuid = new UUID();
     private Document schemaDoc;
     private Set visited = new HashSet();
     private final Map typeCache = new HashMap();
     private String mapping;
     private String schema;
+    private String destdir;
+    public String filename = "MDProfile.xmi";
 
-    public XMIGen() {
+    public XMIGenTask() {
         System.setProperty("org.dom4j.factory", PluginDocumentFactory.class.getName());
     }
 
-    public class XMIGenTask extends PicoContainerTask {
-        public XMIGenTask() {
-            extraContainerComposer = new XMIGen();
-        }
-    }
-
-    public void composeContainer(MutablePicoContainer pico, Object assemblyScope) {
-        // maybe we'll need this someday
-    }
-
-    public void stop() {
-    }
-
-    public void start() {
+    public void execute() throws BuildException {
         System.out.println("Running " + getClass().getName());
         SAXReader reader = new SAXReader();
+        if (mapping == null || schema == null) {
+            throw new BuildException("you must provide both a mapping and a schema argument to the XMIGenTask");
+        }
         try {
             Document mappingDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), mapping).toURL()));
             schemaDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), schema).toURL()));
@@ -100,9 +90,9 @@ public class XMIGen implements ContainerComposer, Startable {
 
             Document document = createXMIDoc(mappingDoc, schemaDoc, mappingDoc.getRootElement().attributeValue("tagNameBase"), rootNode);
 
-            File file = new File(Utils.getRootDir() + "/dentaku-cartridge-generator/target/xmi");
+            File file = new File(Utils.getRootDir() + destdir);
             file.mkdirs();
-            writeFile(document, new File(file, "MDProfile.xmi"));
+            writeFile(document, new File(file, filename));
         } catch (DocumentException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -471,5 +461,21 @@ public class XMIGen implements ContainerComposer, Startable {
 
     public void setSchema(String schema) {
         this.schema = schema;
+    }
+
+    public String getDestdir() {
+        return destdir;
+    }
+
+    public void setDestdir(String destdir) {
+        this.destdir = destdir;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }

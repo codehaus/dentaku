@@ -3,4 +3,17 @@
     <goal name="dentaku-dist">
         <attainGoal name="jar:install-snapshot"/>
     </goal>
+    <goal name="scratch">
+        <attainGoal name="java:compile"/>
+        <taskdef name="xmigen" classname="org.dentaku.gentaku.tools.cgen.xmi.XMIGenTask">
+            <classpath>
+                <path refid="maven.dependency.classpath"/>
+                <pathelement path="${maven.build.dest}"/>
+            </classpath>
+        </taskdef>
+        <xmigen schema="dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/jdo/xml/jdo_2_0.xsd"
+            mapping="dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/jdo/xml/mapping.xsd"
+            destdir="dentaku-cartridge-generator/target/xmi" filename="jdo.xmi"/>
+
+    </goal>
 </project>
