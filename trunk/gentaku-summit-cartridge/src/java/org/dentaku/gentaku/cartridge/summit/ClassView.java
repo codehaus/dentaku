@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
-import org.omg.uml.foundation.core.TaggedValue;
 
 	/**
 	 *

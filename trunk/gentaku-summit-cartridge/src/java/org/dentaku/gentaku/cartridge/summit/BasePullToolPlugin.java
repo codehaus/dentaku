@@ -62,15 +62,16 @@ public class BasePullToolPlugin extends JavaPluginBase {
     protected void populateContextMap(Map m) {
         super.populateContextMap(m);
         helper = new SummitHelper();
-        Object metadata = null;
+        ClassifierImpl metadata = null;
 		try {
-			metadata = m.get("metadata");
+			metadata = (ClassifierImpl)m.get("metadata");
 		} catch (Exception e) {
 			// need to add logging to report model errors and incorrectness of model
 			e.printStackTrace();
 		}
 		if(metadata!=null) {
     		rootClassView = helper.buildClassView((ClassifierImpl)metadata, null);
+	        m.put(SummitHelper.SCRN_NAME, ((TaggedValueImpl)metadata.getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
             m.put("rootClassView", rootClassView);
             m.put("qualifiedScreenName", 
             		((ClassifierImpl)metadata).getFullyQualifiedName()
