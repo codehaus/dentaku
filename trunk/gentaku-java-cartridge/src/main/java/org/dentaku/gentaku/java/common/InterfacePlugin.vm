@@ -5,14 +5,12 @@
 // See: http://dentaku.codehaus.org/gentaku
 //
 
-#set( $super = $jmiHelper.findSuperEntity( $class ) )
-
 package ${class.packageName};
 
 public interface ${plugin.getDestinationClassname($class)}
 	extends java.io.Serializable
-#if ( $super )
-	, ${plugin.getDestinationFullyQualifiedClassName( $super )}
+#foreach( $abstract in $jmiHelper.getAllAbstractions($class) )
+	, ${plugin.getDestinationFullyQualifiedClassName( $abstract )}
 #end
 {
 

@@ -1,6 +1,7 @@
 package org.dentaku.gentaku.java;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +10,8 @@ import org.netbeans.jmiimpl.omg.uml.foundation.core.AttributeImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.Comment;
+import org.omg.uml.foundation.core.GeneralizableElement;
+import org.omg.uml.foundation.core.Generalization;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.Stereotype;
 import org.omg.uml.foundation.core.TaggedValue;
@@ -33,15 +36,32 @@ public class JMIHelper {
 
     public Classifier findSuperEntity(Classifier clazz) {
         Iterator it = clazz.getGeneralization().iterator();
-        ModelElement superz;
         while (it.hasNext()) {
-            superz = (ModelElement) it.next();
-            if ((superz instanceof Classifier) && (this.matchesStereotype(superz, "Entity"))) {
-                return (Classifier) superz;
+            Object elem = it.next();
+            if (elem instanceof Generalization) {
+                GeneralizableElement superz = ((Generalization) elem).getParent();
+                if (this.matchesStereotype(superz, "Entity")) {
+                    return (Classifier) superz;
+                }
             }
         }
 
         return null;
+    }
+
+    public Collection getAllAbstractions(Classifier clazz) {
+        Iterator it = clazz.getGeneralization().iterator();
+        ArrayList ret = new ArrayList();
+        
+        while (it.hasNext()) {
+            Object elem = it.next();
+            if (elem instanceof Generalization) {
+                GeneralizableElement superz = ((Generalization) elem).getParent();
+                ret.add(superz);
+            }
+        }
+
+        return ret;
     }
 
     public String getTaggedSingleValue(ModelElement me, String name) {
@@ -60,14 +80,12 @@ public class JMIHelper {
         return "";
     }
 
-    public int countPrimaryKey(ClassifierImpl c) {
-        return this.countPrimaryKey(c, 0);
-    }
-
-    private int countPrimaryKey(ClassifierImpl c, int count) {
+    public int countItsPrimaryKey(ClassifierImpl c) {
         if (c == null) {
-            return count;
+            return 0;
         }
+
+        int count = 0;
 
         Iterator i = c.getAttributes().iterator();
         while (i.hasNext()) {
@@ -77,6 +95,20 @@ public class JMIHelper {
                 count++;
             }
         }
+
+        return count;
+    }
+
+    public int countPrimaryKey(ClassifierImpl c) {
+        return this.countPrimaryKey(c, 0);
+    }
+
+    private int countPrimaryKey(ClassifierImpl c, int count) {
+        if (c == null) {
+            return count;
+        }
+
+        count += this.countItsPrimaryKey(c);
 
         return this.countPrimaryKey((ClassifierImpl) c.getSuperclass(), count);
     }
