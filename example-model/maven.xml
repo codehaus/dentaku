@@ -1,12 +1,11 @@
 <project default="dentaku-dist" xmlns:m="jelly:maven">
     <goal name="dentaku-dist">
-        <attainGoal name="ejb:install"/>
+        <attainGoal name="jar:install"/>
     </goal>
-    <preGoal name="ejb:init">
-        <attainGoal name="dentaku:gentaku"/>
-<!--        <attainGoal name="xdoclet:hibernatedoclet"/>-->
+    <preGoal name="java:compile">
+        <attainGoal name="gentaku"/>
     </preGoal>
-    <goal name="dentaku:gentaku">
+    <goal name="gentaku">
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
         <gentaku model="${dentaku.rootdir}/example-model/src/uml/model.xml.zip">
             <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" destdir="${basedir}/target/classes/META-INF" destinationfilename="jdo.xml" encoding="UTF-8"/>
@@ -25,7 +24,7 @@
             <!--            <component classname="org.xdoclet.plugin.ejb.descriptor.EjbJarXmlPlugin" destdir="${basedir}/target/classes/META-INF"/>-->
         </gentaku>
     </goal>
-    <goal name="dentaku:initdb">
+    <goal name="initdb">
         <path id="schema.classpath">
             <path refid="maven.dependency.classpath"/>
             <pathelement location="target/xdoclet/hibernatedoclet"/>
