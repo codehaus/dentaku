@@ -1,31 +1,11 @@
 /*
  * $dontedit
  */
-#set( $class = $metadata )
-#set ($packagename = $transform.findPackageName(${class.package}))
-package $packagename;
+package ${metadata.packageName};
 
 import org.dentaku.services.persistence.PersistenceException;
 import org.dentaku.services.persistence.PersistenceFactory;
-import org.dentaku.services.persistence.PersistenceManager;
-
-##
-#macro ( generateDocumentation $item $indent)
-#foreach ( $tgv in $item.taggedValues )
-#if ($tgv.tag == "documentation")
-#set ($paras = $transform.formatHTMLStringAsParagraphs($tgv.value))
-#foreach ( $par in $paras )
-${indent}*
-${indent}* <p>
-#foreach ( $line in $par.lines )
-${indent}* $line
-#end
-${indent}* </p>
-#end
-#end
-#end
-#end
-##
+import org.dentaku.services.persistence.PersistenceManagerStorage;
 
 /**
  * <p>
@@ -33,8 +13,7 @@ ${indent}* </p>
  * Is able to find and create objects of type ${class.name}.
  * Those can be described as follows:
  * </p>
-#generateDocumentation ($class " ")
-#set ($tablename = $str.toDatabaseAttributeName(${class.name}, "_"))
+#set ($tablename = $plugin.toDatabaseAttributeName(${class.name}, "_"))
 #foreach ( $tgv in $class.taggedValues )
 #if ($tgv.tag != "documentation")
 #if ($tgv.tag == "---")
@@ -48,9 +27,9 @@ ${indent}* </p>
  *
  */
 public class ${class.name}Factory implements PersistenceFactory {
-    PersistenceManager pm = null;
+    PersistenceManagerStorage pm = null;
 
-    public void setManager(PersistenceManager pm) {
+    public void setManager(PersistenceManagerStorage pm) {
         this.pm = pm;
     }
 
@@ -78,9 +57,9 @@ public class ${class.name}Factory implements PersistenceFactory {
         ${class.name} object = new ${class.name}();
 
 #foreach ( $att in $class.attributes)
-#if ($transform.getStereotype($att.getId()) != "PrimaryKey")
-#set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
-        object.set${str.upperCaseFirstLetter(${attname})} (source.get${str.upperCaseFirstLetter(${attname})}());
+#if (!$plugin.matchesStereotype($att.getId(), "PrimaryKey"))
+#set ($attname =  ${plugin.fromDatabaseAttributeName(${att.name}, "_")})
+        object.set${plugin.upperCaseFirstLetter(${attname})} (source.get${plugin.upperCaseFirstLetter(${attname})}());
 #end
 #end
         pm.saveOrUpdate(object);
@@ -92,8 +71,8 @@ public class ${class.name}Factory implements PersistenceFactory {
     }
 
     // ---------------- finder methods  ----------------------
-#set ($primKey = $transform.getPrimaryKeyAttribute($class))
-#set ($primKeyTypeName = $transform.findFullyQualifiedName($primKey.type))
+#set ($primKey = $class.primaryKeyAttribute)
+#set ($primKeyTypeName = $primKey.type.fullyQualifiedName)
     /**
      *
      * Finds ${class.name} object by its primary key.
@@ -105,10 +84,10 @@ public class ${class.name}Factory implements PersistenceFactory {
     }
 
 #foreach ( $op in $class.operations)
-#if ($transform.getStereotype($op.id) == "FinderMethod")
-#set ($returntype = $transform.findFullyQualifiedName($op.getType()))
+#if ($plugin.matchesStereotype($op, "FinderMethod"))
+#set ($returntype = $op.returnType.fullyQualifiedName)
 ##
-#set ($parameterList = $transform.getOperationTypedParameterList($op))
+#set ($parameterList = $op.typedParameterList)
 #if ($parameterList.length() == 0)
 #set ($parameters = "")
 #else
@@ -116,19 +95,18 @@ public class ${class.name}Factory implements PersistenceFactory {
 #end
 ##
     /**
-#generateDocumentation ($op "    ")
      *
      * Finds ${class.name} object(s) using a query.
      * @todo: remove hibernate dependencies
      */
-    $op.visibility $returntype ${op.name} ($parameters)
+    $op.visibilityName $returntype ${op.name} ($parameters)
         throws PersistenceException
     {
 ##
 #set($querystring = "")
-#set($querystring = $transform.findTagValue($op.taggedValues, "@andromda.hibernate.query"))
+#set($querystring = $op.findTagValue("@gentaku.hibernate.query"))
 #if($querystring == "")
-#set($querystring = "from c in class ${transform.findFullyQualifiedName($class)}")
+#set($querystring = "from c in class ${class.fullyQualifiedName}")
 #if($op.parameters.size() > 0)
 #set($querystring = "${querystring} where")
 #foreach($prm in $op.parameters)
@@ -146,7 +124,7 @@ public class ${class.name}Factory implements PersistenceFactory {
         java.util.ArrayList values = new java.util.ArrayList();
 #foreach($prm in $op.parameters)
 #set ($index = $velocityCount - 1)
-        types.add(net.sf.hibernate.Hibernate.${str.toUpperCase($prm.type.name)});
+        types.add(net.sf.hibernate.Hibernate.${plugin.toUpperCase($prm.type.name)});
         values.add(${prm.name});
 #end
 ##
@@ -158,10 +136,9 @@ public class ${class.name}Factory implements PersistenceFactory {
 
     // ---------------- filter methods  ----------------------
 #foreach ( $op in $class.operations)
-#if ($transform.getStereotype($op.id) == "FilterMethod")
-#set ($returntype = $transform.findFullyQualifiedName($op.getType()))
+#if ($plugin.matchesStereotype($op.id, "FilterMethod"))
+#set ($returntype = $op.type.fullyQualifiedName)
     /**
-#generateDocumentation ($op "    ")
      *
      * Filter a collection.
      * @todo: remove hibernate dependencies
@@ -169,7 +146,7 @@ public class ${class.name}Factory implements PersistenceFactory {
     $op.visibility java.util.Collection ${op.name} (java.util.Collection c) throws PersistenceException
     {
 ##
-#set($querystring = $transform.findTagValue($op.taggedValues, "@gentaku.hibernate.filter"))
+#set($querystring = $op.findTagValue("@gentaku.hibernate.filter"))
 ##
         return pm.filter(c, "$querystring");
     }

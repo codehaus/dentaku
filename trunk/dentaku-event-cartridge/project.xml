@@ -106,6 +106,11 @@
             <version>1.2.8</version>
         </dependency>
         <dependency>
+            <groupId>qfork</groupId>
+            <artifactId>qfork</artifactId>
+            <version>1.7-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <id>jmiuml14di</id>
         </dependency>
         <dependency>
@@ -154,6 +159,7 @@
                     <include>**/*.jelly</include>
                     <include>**/*.xml</include>
                     <include>**/*.vm</include>
+                    <include>**/*.ftl</include>
                 </includes>
             </resource>
         </resources>

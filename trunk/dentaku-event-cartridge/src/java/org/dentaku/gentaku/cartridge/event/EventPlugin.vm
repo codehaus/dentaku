@@ -4,27 +4,28 @@
 #set( $class = $metadata )
 package ${plugin.getDestinationPackage($class)};
 
-public abstract class ${plugin.getDestinationClassname($class)} extends org.dentaku.foundation.event.AbstractEvent {
+public abstract class ${class.name} extends org.dentaku.foundation.event.AbstractEvent {
     public ${plugin.getDestinationClassname($class)}() {
     }
     
     public abstract boolean execute() throws Exception;
 
-    protected ${plugin.getDestinationClassname($class)}(org.dentaku.foundation.output.OutputContext response) {
+    protected ${class.name}(org.dentaku.foundation.output.OutputContext response) {
         super(response);
     }
 
-#foreach ( $targetEnd in $plugin.umlUtils.getTargetEnds($class) )
-#if ( $plugin.umlUtils.isClass($targetEnd.participant) )
-    #set ($targettypename = $plugin.getDestinationFullyQualifiedClassName($targetEnd.participant))
-    private ${targettypename} ${targetEnd.name};
+#foreach ( $targetEnd in $class.targetEnds )
+#if ( ${targetEnd.isClass()} == true)
+    #set ($targetFQN = $targetEnd.participant.fullyQualifiedName)
+    #set ($targetUQN = $targetEnd.name)
+    private ${targetFQN} ${targetUQN};
 
-    public ${targettypename} get${plugin.umlUtils.upperCaseFirstLetter(${targetEnd.name})}() {
-        return this.$targetEnd.name;
+    public ${targetFQN} get${plugin.upperCaseFirstLetter(${targetEnd.name})}() {
+        return this.$targetUQN;
     }
 
-    public void set${plugin.umlUtils.upperCaseFirstLetter(${targetEnd.name})}(${targettypename} ${targetEnd.name}) {
-        this.$targetEnd.name = $targetEnd.name;
+    public void set${plugin.upperCaseFirstLetter(${targetUQN})}(${targetFQN} ${targetUQN}) {
+        this.$targetUQN = $targetUQN;
     }
 #end
 #end

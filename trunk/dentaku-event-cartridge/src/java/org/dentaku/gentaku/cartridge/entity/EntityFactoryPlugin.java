@@ -1,6 +1,6 @@
 /*
  * EntityFactoryPlugin.java
- * Copyright 2002-2004 Bill2, Inc.
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,36 @@ import org.generama.MetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
 import org.dentaku.gentaku.cartridge.JavaPluginBase;
+import org.dentaku.gentaku.cartridge.entity.deprecated.SimpleOOHelper;
+import org.dentaku.gentaku.cartridge.entity.deprecated.StringUtilsHelper;
+import org.dentaku.services.metadata.JMICapableMetadataProvider;
+import org.omg.uml.foundation.core.Classifier;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collection;
+
+import com.thoughtworks.qdox.model.AbstractJavaEntity;
 
 public class EntityFactoryPlugin extends JavaPluginBase {
-    public EntityFactoryPlugin(VelocityTemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
+    private JMICapableMetadataProvider metadataProvider;
+
+    public EntityFactoryPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
+        this.metadataProvider = metadataProvider;
         getStereotypes().add("Entity");
         getStereotypes().add("SubtypeEntity");
         setFileregex(".java");
         setFilereplace("Factory.java");
+        setMultioutput(true);
+   }
+
+    protected void populateContextMap(Map m) {
+        super.populateContextMap(m);
+        m.put("class", m.get("metadata"));
+    }
+
+    protected Collection getMetadata() {
+        return metadataProvider.getJMIMetadata();
     }
 }

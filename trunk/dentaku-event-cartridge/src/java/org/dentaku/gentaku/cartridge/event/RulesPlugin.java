@@ -1,6 +1,6 @@
 /*
  * RulesPlugin.java
- * Copyright 2002-2004 Bill2, Inc.
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,20 @@
  */
 package org.dentaku.gentaku.cartridge.event;
 
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
-import org.dentaku.gentaku.cartridge.UMLUtils;
+import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.generama.JellyTemplateEngine;
 import org.generama.Plugin;
 import org.generama.WriterMapper;
 
-public class RulesPlugin extends Plugin {
-    protected UMLUtils umlUtils;
+import java.util.Collection;
+import java.util.Map;
 
-    public RulesPlugin(JellyTemplateEngine jellyTemplateEngine, JMIUMLMetadataProvider metadataProvider, WriterMapper writerMapper) {
+public class RulesPlugin extends Plugin {
+    private JMICapableMetadataProvider metadataProvider;
+
+    public RulesPlugin(JellyTemplateEngine jellyTemplateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(jellyTemplateEngine, metadataProvider, writerMapper);
-        umlUtils = UMLUtils.getInstance((JMIUMLMetadataProvider)getMetadataProvider(), this);
+        this.metadataProvider = metadataProvider;
         setEncoding("UTF-8");
     }
 
@@ -35,18 +37,12 @@ public class RulesPlugin extends Plugin {
         return "drools.drl";
     }
 
-    public UMLUtils getUmlUtils() {
-        return umlUtils;
+    protected void populateContextMap(Map m) {
+        super.populateContextMap(m);
+        m.put("class", m.get("metadata"));
     }
 
-    public String getDestinationClassname(Object metadata) {
-        String destinationFilename = getDestinationFilename(metadata);
-        return destinationFilename.substring(0, destinationFilename.indexOf('.'));
-    }
-
-    public String getDestinationFullyQualifiedClassName(Object metadata) {
-        String packageName = getDestinationPackage(metadata);
-        packageName = packageName.equals("") ? "" : packageName + ".";
-        return packageName + getDestinationClassname(metadata);
+    protected Collection getMetadata() {
+        return metadataProvider.getJMIMetadata();
     }
 }

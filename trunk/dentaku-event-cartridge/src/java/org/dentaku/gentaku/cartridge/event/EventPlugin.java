@@ -1,6 +1,6 @@
 /*
  * EventPlugin.java
- * Copyright 2002-2004 Bill2, Inc.
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +16,29 @@
  */
 package org.dentaku.gentaku.cartridge.event;
 
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
-import org.dentaku.gentaku.cartridge.UMLUtils;
-import org.generama.MetadataProvider;
-import org.generama.WriterMapper;
-import org.generama.JellyTemplateEngine;
+import org.dentaku.gentaku.cartridge.JavaPluginBase;
+import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.generama.VelocityTemplateEngine;
-import org.generama.defaults.JavaGeneratingPlugin;
-import org.generama.velocity.VelocityComponent;
+import org.generama.WriterMapper;
 
 import java.util.Collection;
+import java.util.Map;
 
-public class EventPlugin extends JavaGeneratingPlugin {
-    protected UMLUtils umlUtils;
+public class EventPlugin extends JavaPluginBase {
+    private JMICapableMetadataProvider metadataProvider;
 
-    public EventPlugin(VelocityTemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public EventPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
-        umlUtils = UMLUtils.getInstance((JMIUMLMetadataProvider)getMetadataProvider(), this);
+        this.metadataProvider = metadataProvider;
         setMultioutput(true);
     }
 
-    public boolean shouldGenerate(Object metadata) {
-        Collection stereotypes = umlUtils.getStereotypeNames(metadata);
-        return stereotypes.contains("Event");
+    protected void populateContextMap(Map m) {
+        super.populateContextMap(m);
+        m.put("class", m.get("metadata"));
     }
 
-    public UMLUtils getUmlUtils() {
-        return umlUtils;
+    protected Collection getMetadata() {
+        return metadataProvider.getJMIMetadata();
     }
 }

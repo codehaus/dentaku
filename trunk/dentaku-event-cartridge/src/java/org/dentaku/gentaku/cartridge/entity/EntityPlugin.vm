@@ -2,8 +2,7 @@
  * This class is only generated once! It will never be overwritten.
  * You can (and have to!) safely modify it by hand.
  */
-#set ($packagename = $transform.findPackageName(${metadata.package}))
-package $packagename;
+package ${metadata.packageName};
 
 #set ($superclass = $metadata.javaGeneralization)
 
