@@ -37,7 +37,6 @@ import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
  */
 
 public class PullToolPlugin extends JavaPluginBase {
-    JMIUMLMetadataProvider metadataProvider;
 
     public PullToolPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
@@ -48,7 +47,7 @@ public class PullToolPlugin extends JavaPluginBase {
 	 * @see org.generama.Plugin#getMetadata()
 	 */
 	public Collection getMetadata() {
-        return metadataProvider.getJMIMetadata();
+        return ((JMICapableMetadataProvider)metadataProvider).getJMIMetadata();
 	}
     public boolean shouldGenerate(Object metadata) {
         Collection stereotypes = ((ModelElementImpl)metadata).getStereotypeNames();

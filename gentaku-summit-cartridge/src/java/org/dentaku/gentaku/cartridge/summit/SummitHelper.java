@@ -76,7 +76,7 @@ public class SummitHelper
 	final static String POSITION = "position";
 	final static String LIST_ITEMS = "listItems";
 	final static String COLUMNS = "TRcolumns";
-	final static String SCRN_NAME = "screenName";
+	final static String SCRN_NAME = "ScreenName";
 	final static String LABEL = "label";
 	final static String SPAN = "span";
 	final static String CRUD = "hasCrud";

@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
@@ -39,7 +38,6 @@ import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
  * @author <a href="mailto:david@dwynter.plus.com">David Wynter</a>
  */
 public class BasePullToolPlugin extends JavaPluginBase {
-    JMIUMLMetadataProvider metadataProvider;
 	
 	private ClassView rootClassView = null;
 	private SummitHelper helper =null;
@@ -55,7 +53,7 @@ public class BasePullToolPlugin extends JavaPluginBase {
     }
 
     public Collection getMetadata() {
-        return metadataProvider.getJMIMetadata();
+        return ((JMICapableMetadataProvider)metadataProvider).getJMIMetadata();
     }
     
     protected void populateContextMap(Map m) {

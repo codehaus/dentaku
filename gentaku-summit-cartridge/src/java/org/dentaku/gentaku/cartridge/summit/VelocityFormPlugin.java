@@ -39,7 +39,6 @@ import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
  * @author <a href="mailto:david@dwynter.plus.com">David Wynter</a>
  */
 public class VelocityFormPlugin extends JavaPluginBase {
-    private JMICapableMetadataProvider metadataProvider;
 	
 	private ClassView rootClassView = null;
 	private SummitHelper helper =null;
@@ -77,7 +76,7 @@ public class VelocityFormPlugin extends JavaPluginBase {
     }
     
     public Collection getMetadata() {
-        return metadataProvider.getJMIMetadata();
+        return ((JMICapableMetadataProvider)metadataProvider).getJMIMetadata();
     }
     
     public boolean shouldGenerate(Object metadata) {
