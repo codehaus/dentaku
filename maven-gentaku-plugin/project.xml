@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
-    <groupId>dentaku</groupId>
+    <extend>${basedir}/../project.xml</extend>
     <artifactId>maven-gentaku-plugin</artifactId>
-    <name>Maven Gentaku Plug-in</name>
-    <currentVersion>1.0-SNAPSHOT</currentVersion>
+    <name>maven-gentaku-plugin</name>
     <inceptionYear>2004</inceptionYear>
     <description>
 		A Maven plugin to run Gentaku from within Maven
@@ -25,13 +24,13 @@
     <dependencies>
 		<!-- Dentaku -->
         <dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
             <version>${pom.currentVersion}</version>
             <url>http://dentaku.codehaus.org/</url>
         </dependency>
 		<dependency>
-            <groupId>dentaku</groupId>
+            <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
             <version>${pom.currentVersion}</version>
             <url>http://dentaku.codehaus.org/</url>
