@@ -16,31 +16,30 @@
  */
 package org.dentaku.services.persistence.tranql;
 
-import org.dentaku.services.persistence.AbstractPersistenceManagerStorage;
 import org.dentaku.services.persistence.Entity;
 import org.dentaku.services.persistence.PersistenceException;
-import org.dentaku.services.persistence.PersistenceFactory;
-import org.tranql.ejb.Relationship;
+import org.dentaku.services.persistence.TranQLPersistenceFactory;
+import org.dentaku.services.persistence.AbstractPersistenceManagerStorage;
 import org.tranql.field.FieldAccessor;
 import org.tranql.field.FieldTransform;
 import org.tranql.ql.Query;
-import org.tranql.ql.QueryException;
-import org.tranql.ql.Select;
 import org.tranql.ql.QueryBuilder;
-import org.tranql.schema.Association;
-import org.tranql.schema.Attribute;
-import org.tranql.schema.Schema;
+import org.tranql.ql.QueryException;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class TranQLPersistenceManagerStorage extends AbstractPersistenceManagerStorage {
-    protected Schema schema;
+    protected org.tranql.schema.Schema schema;
+
+    public void initialize() throws Exception {
+        super.initialize();
+
+    }
 
     public Object load(Class theClass, Serializable id) throws PersistenceException {
-        QueryBuilder qb = QueryBuilder.buildSelectById(((PersistenceFactory)factories.get(theClass.getName())).getEntity(), false);
+        QueryBuilder qb = QueryBuilder.buildSelectById(((TranQLPersistenceFactory)factories.get(theClass.getName())).getEntity(), false);
         Query query = new Query(new FieldTransform[]{new FieldAccessor(0, theClass)}, null);
 //        query.addChild(new Select(false).addChild(theClass.)
         return doQuery(query);

@@ -33,7 +33,7 @@ public abstract class AbstractPersistenceManagerStorage implements PersistenceMa
     protected Map factories = null;
 
     public PersistenceFactory getPersistenceFactory(String name) throws PersistenceException {
-        PersistenceFactory persistenceFactory = (PersistenceFactory) factories.get(name);
+        PersistenceFactory persistenceFactory = (PersistenceFactory) factories.get(name + "Factory");
         return persistenceFactory;
     }
 
@@ -52,26 +52,8 @@ public abstract class AbstractPersistenceManagerStorage implements PersistenceMa
     public void initialize() throws Exception {
         for (Iterator it = factories.values().iterator(); it.hasNext();) {
             PersistenceFactory factory = (PersistenceFactory) it.next();
-            factory.setupEntities(this);
-        }
-        for (Iterator it = factories.values().iterator(); it.hasNext();) {
-            PersistenceFactory factory = (PersistenceFactory) it.next();
-            factory.setupRelations(this);
+            factory.setup(this);
         }
     }
 
-    public ModelEntity createEntity(String name, Class clazz) {
-        return new ModelEntity(name, name);
-    }
-
-    public Attribute createField(String name, Class clazz, boolean pk) {
-        return new Field(name, name, clazz, pk);
-    }
-
-    public Association createRelation(Class r1, Class r2) {
-        org.tranql.schema.Entity entity1 = ((PersistenceFactory)factories.get(r1.getName()+"Factory")).getEntity();
-        org.tranql.schema.Entity entity2 = ((PersistenceFactory)factories.get(r2.getName() + "Factory")).getEntity();
-
-        return new Relationship(new Association.JoinDefinition(entity1, entity2, new LinkedHashMap()));
-    }
 }

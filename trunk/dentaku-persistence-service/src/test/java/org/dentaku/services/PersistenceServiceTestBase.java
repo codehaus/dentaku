@@ -23,10 +23,11 @@ import org.codehaus.plexus.embed.Embedder;
 import javax.sql.DataSource;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.Statement;
 
 public abstract class PersistenceServiceTestBase extends TestCase {
     protected Embedder container;
-    protected DataSource ds;
+    protected static AxionDataSource ds;
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -38,16 +39,27 @@ public abstract class PersistenceServiceTestBase extends TestCase {
         container.setConfiguration(resource);
         container.start();
 
-        ds = new AxionDataSource("jdbc:axiondb:testdb");
-        Connection c = ds.getConnection();
+        if (ds == null) {
+            ds = new AxionDataSource("jdbc:axiondb:testdb");
+            Connection c = ds.getConnection();
+            Statement s = c.createStatement();
 
-//        container.lookupList(
-//        c.createStatement().execute("create table "
-   }
+            s.execute("CREATE TABLE Root(id long, intVal integer, stringVal varchar(50))");
+            s.execute("CREATE TABLE Child(id long, intVal integer, stringVal varchar(50), rootFk long)");
+            s.execute("INSERT INTO Root VALUES(1, 10, 'hello')");
+            s.execute("INSERT INTO Child VALUES(1, 10, 'child1', 1)");
+            s.execute("INSERT INTO Child VALUES(2, 20, 'child2', 1)");
+
+            s.close();
+            c.close();
+        }
+    }
 
     protected void tearDown() throws Exception {
+        // this shutdown does not appear to do anything... if the database is opened again, the old tables are still there
         Connection c = ds.getConnection();
         c.createStatement().execute("SHUTDOWN");
+        c.close();
         container.stop();
         super.tearDown();
     }
