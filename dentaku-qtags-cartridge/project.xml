@@ -22,7 +22,7 @@
         <dependency>
             <groupId>xdoclet-plugins</groupId>
             <artifactId>xdoclet-plugin-qtags</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
             <id>antlr</id>

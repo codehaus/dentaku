@@ -28,12 +28,4 @@ public abstract class ${class.name}EventBase extends org.dentaku.foundation.even
     }
 #end
 #end
-
-    public void executeOn(Object prevalentSystem, java.util.Date ignored) {
-#foreach ( $targetEnd in $class.targetEnds )
-#if ( ${targetEnd.isClass()} == true && ${targetEnd.stereotypeNames.contains("Writable")} )
-        ((com.adultedge.model.draft.StorageRoot)prevalentSystem).store($targetEnd.name);
-#end
-#end
-    }
 }

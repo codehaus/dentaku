@@ -162,7 +162,7 @@
         <dependency>
             <groupId>xdoclet-plugins</groupId>
             <artifactId>xdoclet-plugin-webwork</artifactId>
-            <version>1.0-alpha-1</version>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>qdox</groupId>
