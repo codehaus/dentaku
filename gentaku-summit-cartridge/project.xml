@@ -4,7 +4,6 @@
   <pomVersion>3</pomVersion>
   <artifactId>gentaku-summit-cartridge</artifactId>
   <name>Gentaku Summit Cartridge</name>
-  <groupId>gentaku-summit-cartridge</groupId>
   <organization>
     <url>http://dentaku.codehaus.org</url>
   </organization>
@@ -30,6 +29,11 @@
     <dependency>
         <groupId>${pom.groupId}</groupId>
         <artifactId>dentaku-metadata-service</artifactId>
+        <version>${pom.currentVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>${pom.groupId}</groupId>
+        <artifactId>dentaku-event-cartridge</artifactId>
         <version>${pom.currentVersion}</version>
     </dependency>
     <dependency>
