@@ -2,7 +2,7 @@
 <project>
     <extend>${basedir}/../project.xml</extend>
     <artifactId>gentaku</artifactId>
-    <name>Gentaku</name>
+    <name>gentaku</name>
     <package>org.dentaku.gentaku.*</package>
     <dependencies>
         <dependency>
