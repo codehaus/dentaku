@@ -3,12 +3,4 @@
         <attainGoal name="ejb:install"/>
     </goal>
     
-    <preGoal name="ejb:init">
-        <mkdir dir="${maven.build.dir}/xdoclet/ejbdoclet"/>
-        <path id="maven.compile.src.set">
-            <pathelement location="src/java"/>
-            <pathelement location="target/xdoclet/ejbdoclet"/>
-        </path>
-        <attainGoal name="xdoclet:ejbdoclet"/>
-    </preGoal>
 </project>

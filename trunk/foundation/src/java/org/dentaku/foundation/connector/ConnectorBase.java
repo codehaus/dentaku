@@ -31,10 +31,6 @@ public abstract class ConnectorBase implements Connector {
     protected Pipeline pipeline;
     protected Connector connector;
 
-    public Pipeline getPipeline() {
-        return pipeline;
-    }
-
     /**
      * @param event
      * @throws Exception

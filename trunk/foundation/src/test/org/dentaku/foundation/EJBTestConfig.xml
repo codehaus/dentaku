@@ -8,7 +8,7 @@
     <components>
         <component>
             <role>org.dentaku.foundation.connector.Connector</role>
-            <implementation>org.dentaku.foundation.connector.EJBConnector</implementation>
+            <implementation>org.dentaku.foundation.connector.ejb.EJBConnectorSession</implementation>
             <requirements>
 <!--                <requirement>-->
 <!--                    <role>org.codehaus.plexus.PlexusContainer</role>-->

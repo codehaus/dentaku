@@ -37,12 +37,6 @@ public class DirectConnectorTest extends FoundationTestBase {
         assertEquals(component, DirectConnector.getInstance());
     }
 
-    public void testValvesPopulated() throws Exception {
-        Connector component = (Connector) container.lookup(Connector.ROLE);
-        List l = component.getPipeline().getValves();
-        assertFalse(l.isEmpty());
-    }
-
     public void testPipeline() throws Exception {
         Connector component = (Connector) container.lookup(Connector.ROLE);
         DummyEvent event = new DummyEvent();

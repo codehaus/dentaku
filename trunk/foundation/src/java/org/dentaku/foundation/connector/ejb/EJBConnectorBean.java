@@ -14,11 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dentaku.foundation.connector;
+package org.dentaku.foundation.connector.ejb;
 
 import org.codehaus.plexus.PlexusContainer;
 import org.dentaku.foundation.event.AbstractEvent;
 import org.dentaku.foundation.pipeline.Pipeline;
+import org.dentaku.foundation.connector.Connector;
+import org.dentaku.foundation.connector.DirectConnector;
+import org.dentaku.foundation.connector.ConnectorBase;
 import org.dentaku.services.container.ContainerManager;
 
 import javax.ejb.CreateException;
@@ -42,7 +45,7 @@ public abstract class EJBConnectorBean implements Connector, SessionBean {
      */
     public void ejbCreate() throws javax.ejb.CreateException {
         try {
-            cm = ContainerManager.getContainerManager(this.getClass().getResource("ConnectorConfig.xml"));
+            cm = ContainerManager.getContainerManager(ConnectorBase.class.getResource("ConnectorConfig.xml"));
             connector = (DirectConnector)cm.lookup(Connector.ROLE);
         } catch (Exception e) {
             throw new CreateException(e.getMessage());
@@ -59,9 +62,5 @@ public abstract class EJBConnectorBean implements Connector, SessionBean {
 
     public void fireEvent(AbstractEvent event) throws Exception {
         connector.fireEvent(event);
-    }
-
-    public Pipeline getPipeline() {
-        return connector.getPipeline();
     }
 }
