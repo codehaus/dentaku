@@ -43,7 +43,8 @@ public class BasePullToolTestPlugin extends JavaPluginBase {
 	
 
     public BasePullToolTestPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
-    	super(new String[] { "Entity" }, templateEngine, metadataProvider, writerMapper);        
+    	super(templateEngine, metadataProvider, writerMapper);        
+        setStereotype("Entity");
 		this.templateEngine = templateEngine;
 		this.writerMapper = writerMapper;
 	}

@@ -47,7 +47,8 @@ public class CrudActionTestPlugin extends JavaPluginBase {
 	 * @param writerMapper
 	 */
 	public CrudActionTestPlugin(TemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
-		super(new String[] { "Entity" }, templateEngine, metadataProvider, writerMapper);
+		super(templateEngine, metadataProvider, writerMapper);
+        setStereotype("Entity");
 		this.templateEngine = templateEngine;
 		this.writerMapper = writerMapper;
 	}

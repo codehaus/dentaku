@@ -51,7 +51,8 @@ public class CrudActionPlugin extends JavaPluginBase {
 	private SummitHelper helper =null;
 
     public CrudActionPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
-        super(new String[] { "Entity" }, templateEngine, metadataProvider, writerMapper);
+        super(templateEngine, metadataProvider, writerMapper);
+        setStereotype("Entity");
         setCreateonly(true);
     }
 

@@ -47,8 +47,13 @@ public class VelocityFormPlugin extends JavaPluginBase {
 	List dependentDisplayAttributes = new ArrayList();
 
     public VelocityFormPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
-        super(new String[] { "Entity", "RootSelectable", "ChildSelectable", 
-        		"ChildTable"}, templateEngine, metadataProvider, writerMapper);
+        super(templateEngine, metadataProvider, writerMapper);
+        ArrayList stereos = new ArrayList();
+        setStereotype("Entity");
+        setStereotype("RootSelectable");
+        setStereotype("ChildSelectable"); 
+        setStereotype("ChildTable");
+     
         this.metadataProvider = metadataProvider;
         setCreateonly(true);
         setMultioutput(true);

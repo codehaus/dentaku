@@ -48,7 +48,8 @@ public class BasePullToolPlugin extends JavaPluginBase {
 	List dependentDisplayAttributes = new ArrayList();
 
     public BasePullToolPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
-        super(new String[] { "Entity" }, templateEngine, metadataProvider, writerMapper);
+        super(templateEngine, metadataProvider, writerMapper);
+        setStereotype("Entity");
         // a cludge to get the thing to generate
         setCreateonly(true);
     }

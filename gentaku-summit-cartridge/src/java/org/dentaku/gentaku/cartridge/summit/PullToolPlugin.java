@@ -40,7 +40,8 @@ public class PullToolPlugin extends JavaPluginBase {
     JMIUMLMetadataProvider metadataProvider;
 
     public PullToolPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
-        super(new String[] { "Entity" }, templateEngine, metadataProvider, writerMapper);
+        super(templateEngine, metadataProvider, writerMapper);
+        setStereotype("Entity");
         setCreateonly(false);
     }
     /* (non-Javadoc)
