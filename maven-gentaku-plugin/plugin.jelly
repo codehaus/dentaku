@@ -9,7 +9,7 @@
         </d:tag>
     </d:taglib>
         
-    <goal name="gentaku" prereqs="gentaku:run"/>
+    <goal name="gentaku:gentaku" prereqs="gentaku:run"/>
     
     <goal name="gentaku:run">
         <ant:taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask">
