@@ -7,10 +7,6 @@ import org.omg.uml.foundation.core.Stereotype;
 import org.omg.uml.foundation.core.TaggedValue;
 
 public class JMIHelper {
-
-	public boolean isPrimaryType(String name) {
-		return name.indexOf('.') < 0;
-	}
 	
     public boolean matchesStereotype(ModelElement object, String stereotypeName) {
         if ((object == null) || (stereotypeName == null)) {
