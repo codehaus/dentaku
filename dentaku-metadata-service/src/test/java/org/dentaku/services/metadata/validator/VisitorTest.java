@@ -16,14 +16,14 @@
  */
 package org.dentaku.services.metadata.validator;
 
+import java.util.Iterator;
+
 import org.dentaku.services.metadata.MetadataTestBase;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.GeneralizableElement;
 import org.omg.uml.foundation.core.Namespace;
 import org.omg.uml.foundation.core.UmlClass;
-
-import java.util.Iterator;
 
 public class VisitorTest extends MetadataTestBase {
     public VisitorTest() {

@@ -25,13 +25,13 @@ import java.util.Vector;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.dentaku.services.metadata.validator.ValidatingVisitor;
+import org.dentaku.services.metadata.validator.VisitorException;
 import org.netbeans.mdr.handlers.InstanceHandler;
 import org.netbeans.mdr.storagemodel.StorableObject;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.TaggedValue;
 import org.omg.uml.modelmanagement.Model;
-import org.dentaku.services.metadata.validator.ValidatingVisitor;
-import org.dentaku.services.metadata.validator.VisitorException;
 
 abstract public class ModelElementImpl extends InstanceHandler implements ModelElement {
     private static Map stereotypeCache = new HashMap();

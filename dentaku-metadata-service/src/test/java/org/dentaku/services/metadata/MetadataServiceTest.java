@@ -16,21 +16,13 @@
  */
 package org.dentaku.services.metadata;
 
-import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 
-import junit.framework.TestCase;
-
-import org.codehaus.plexus.embed.Embedder;
-import org.omg.uml.UmlPackage;
-import org.omg.uml.foundation.core.Classifier;
-import org.omg.uml.foundation.core.CorePackage;
-import org.omg.uml.foundation.core.ModelElement;
-import org.omg.uml.foundation.core.ModelElementClass;
-import org.omg.uml.foundation.core.Operation;
-import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
+import org.omg.uml.foundation.core.Classifier;
+import org.omg.uml.foundation.core.Operation;
 
 public class MetadataServiceTest extends MetadataTestBase {
     public void testRootClass() throws Exception {

@@ -16,15 +16,15 @@
  */
 package org.dentaku.services.metadata.validator;
 
-import org.apache.commons.collections.set.ListOrderedSet;
-import org.omg.uml.foundation.core.ModelElement;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.collections.set.ListOrderedSet;
+import org.omg.uml.foundation.core.ModelElement;
 
 public abstract class ValidatingVisitorBase implements ValidatingVisitor {
     final protected Map superclassCache = new HashMap();
