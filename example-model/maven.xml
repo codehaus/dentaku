@@ -10,11 +10,10 @@
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
         <gentaku model="${dentaku.rootdir}/example-model/src/uml/model.xml.zip">
             <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" destdir="${basedir}/target/classes/META-INF" destinationfilename="jdo.xml" encoding="UTF-8"/>
-            <component classname="org.dentaku.gentaku.cartridge.core.POJOPlugin" extends="" destdir="${maven.build.src}" stereotype="Entity" fileregex=".java" filereplace="Base.java"/>
+            <component classname="org.dentaku.gentaku.cartridge.core.POJOPlugin" destdir="${maven.build.src}" stereotype="Entity"/>
+            <component classname="org.dentaku.gentaku.cartridge.event.EventBasePlugin" destdir="${maven.build.src}"/>
             <!--            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityBasePlugin" destdir="${maven.build.src}"/>-->
-            <!--            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityPlugin" destdir="${maven.src.dir}/java"/>-->
             <!--            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityFactoryPlugin" destdir="${maven.build.src}"/>-->
-                        <component classname="org.dentaku.gentaku.cartridge.event.EventBasePlugin" destdir="${maven.build.src}"/>
             <!--            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}/META-INF/plexus" destinationfilename="components.xml"/>-->
             <!---->
             <!--            <component classname="org.dentaku.gentaku.cartridge.event.StrutsFormPlugin" destdir="${maven.build.src}"/>-->
