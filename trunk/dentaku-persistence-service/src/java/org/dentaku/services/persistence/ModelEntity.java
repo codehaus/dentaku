@@ -29,12 +29,12 @@ public abstract class ModelEntity {
     public abstract void setId(Object newValue);
 
     public Collection refresh(Collection o) throws PersistenceException {
-        try {
-            Session sess = ThreadLocalSessionProvider.getThreadLocalSession();
-            sess.refresh(this);
-        } catch (HibernateException e) {
-            throw new PersistenceException(e);
-        }
+//        try {
+//            Session sess = ThreadLocalSessionProvider.getThreadLocalSession();
+//            sess.refresh(this);
+//        } catch (HibernateException e) {
+//            throw new PersistenceException(e);
+//        }
         return o;
     }
 

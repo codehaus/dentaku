@@ -7,7 +7,7 @@
     </logging>
     <components>
         <component>
-            <role>org.generama.MetadataProvider</role>
+            <role>org.dentaku.services.metadata.JMICapableMetadataProvider</role>
             <implementation>org.dentaku.services.metadata.JMIUMLMetadataProvider</implementation>
             <requirements>
                 <requirement>

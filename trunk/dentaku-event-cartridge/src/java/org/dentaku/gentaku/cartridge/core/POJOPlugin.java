@@ -1,5 +1,5 @@
 /*
- * EventPlugin.java
+ * POJOPlugin.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dentaku.gentaku.cartridge.event;
+package org.dentaku.gentaku.cartridge.core;
 
 import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
@@ -24,10 +24,10 @@ import org.generama.WriterMapper;
 import java.util.Collection;
 import java.util.Map;
 
-public class EventPlugin extends JavaPluginBase {
+public class POJOPlugin extends JavaPluginBase {
     private JMICapableMetadataProvider metadataProvider;
 
-    public EventPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public POJOPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
         this.metadataProvider = metadataProvider;
         setMultioutput(true);

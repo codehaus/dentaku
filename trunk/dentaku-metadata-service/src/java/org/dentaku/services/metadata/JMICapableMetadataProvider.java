@@ -16,15 +16,16 @@
  */
 package org.dentaku.services.metadata;
 
-import org.omg.uml.foundation.core.Classifier;
-import org.omg.uml.UmlPackage;
 import org.generama.MetadataProvider;
-import com.thoughtworks.qdox.model.AbstractJavaEntity;
+import org.omg.uml.UmlPackage;
+import org.omg.uml.foundation.core.Classifier;
 
 import java.util.Collection;
 
 public interface JMICapableMetadataProvider extends MetadataProvider {
-    public Classifier mapQDoxToClassifier(AbstractJavaEntity qdox);
+    public static final String ROLE = JMICapableMetadataProvider.class.getName();
+
+    public Classifier mapObjectToClassifier(Object qdox);
     public UmlPackage getModel() throws RepositoryException;
 
     public Collection getJMIMetadata();

@@ -1,5 +1,5 @@
 /*
- * EventPluginTest.java
+ * EventBasePluginTest.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,9 +29,9 @@ import java.net.MalformedURLException;
 import java.io.FileNotFoundException;
 import java.io.File;
 
-public class EventPluginTest extends AbstractJavaGeneratingPluginTestBase {
+public class EventBasePluginTest extends AbstractJavaGeneratingPluginTestBase {
     protected Plugin createPlugin(MetadataProvider metadataProvider, WriterMapper writerMapper) throws Exception {
-        return new EventPlugin(new VelocityTemplateEngine(), (QDoxMetadataProvider) metadataProvider, writerMapper);
+        return new EventBasePlugin(new VelocityTemplateEngine(), (QDoxMetadataProvider) metadataProvider, writerMapper);
     }
 
     protected URL getExpected() throws FileNotFoundException, MalformedURLException {

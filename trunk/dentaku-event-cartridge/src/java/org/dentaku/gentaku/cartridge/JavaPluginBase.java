@@ -16,12 +16,11 @@
  */
 package org.dentaku.gentaku.cartridge;
 
-import org.generama.MetadataProvider;
+import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.generama.Plugin;
 import org.generama.TemplateEngine;
 import org.generama.WriterMapper;
 import org.generama.defaults.FileWriterMapper;
-import org.generama.defaults.JavaGeneratingPlugin;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 
 import java.io.File;
@@ -38,7 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public abstract class JavaPluginBase extends JavaGeneratingPlugin {
+public abstract class JavaPluginBase extends Plugin {
     private boolean createonly;
 
     public Map getContextObjects() {
@@ -49,10 +48,21 @@ public abstract class JavaPluginBase extends JavaGeneratingPlugin {
 
     protected List stereotypes;
 
-    public JavaPluginBase(TemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public JavaPluginBase(TemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, new CheckFileWriterMapper(writerMapper));
         setMultioutput(true);
         stereotypes = new ArrayList();
+    }
+
+    public String getDestinationClassname(Object metadata) {
+        String destinationFilename = getDestinationFilename(metadata);
+        return destinationFilename.substring(0, destinationFilename.indexOf('.'));
+    }
+
+    public String getDestinationFullyQualifiedClassName(Object metadata) {
+        String packageName = getDestinationPackage(metadata);
+        packageName = packageName.equals("") ? "" : packageName + ".";
+        return packageName + getDestinationClassname(metadata);
     }
 
     public boolean shouldGenerate(Object metadata) {

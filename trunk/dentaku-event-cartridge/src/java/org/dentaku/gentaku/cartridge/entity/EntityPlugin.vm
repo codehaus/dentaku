@@ -13,6 +13,6 @@ package ${metadata.packageName};
   * @hibernate.class table="${metadata.name}"
 #end
   */
-public class ${metadata.name} extends ${metadata.name}Base {
+public class ${metadata.name} extends ${metadata.name}Base implements java.io.Serializable {
 
 }

@@ -90,7 +90,8 @@ abstract public class ModelElementImpl extends InstanceHandler implements ModelE
         return null;
     }
 
-    public Collection getStereotypeNames() {
+    public Collection
+            getStereotypeNames() {
         Collection names = (Collection) stereotypeCache.get(this);
         if (names == null) {
             names = new ArrayList();

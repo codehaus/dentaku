@@ -19,8 +19,6 @@ package org.dentaku.services.metadata;
 import com.thoughtworks.qdox.model.DocletTagFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.generama.GeneramaException;
-import org.generama.MetadataProvider;
 import org.netbeans.api.mdr.MDRManager;
 import org.netbeans.api.mdr.MDRepository;
 import org.netbeans.api.xmi.XMIReader;
@@ -35,10 +33,9 @@ import javax.jmi.model.ModelPackage;
 import javax.jmi.model.MofPackage;
 import javax.jmi.reflect.RefPackage;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Iterator;
 
-public abstract class JMIMetadataProviderBase implements MetadataProvider {
+public abstract class JMIMetadataProviderBase implements JMICapableMetadataProvider {
     public static boolean booted;
 
     static {
@@ -69,8 +66,6 @@ public abstract class JMIMetadataProviderBase implements MetadataProvider {
             throw new RuntimeException("Couldn't parse UML", e);
         } 
     }
-
-    public abstract Collection getMetadata() throws GeneramaException;
 
     public String getOriginalFileName(Object object) {
         if ((object == null) || !(object instanceof ModelElement)) {
@@ -183,4 +178,5 @@ public abstract class JMIMetadataProviderBase implements MetadataProvider {
     public DocletTagFactory getDocletTagFactory() {
         return docletTagFactory;
     }
+
 }

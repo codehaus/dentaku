@@ -7,7 +7,7 @@
     </logging>
     <components>
         <component>
-            <role>org.generama.MetadataProvider</role>
+            <role>org.generama.QDoxCapableMetadataProvider</role>
             <implementation>org.dentaku.services.metadata.QDoxMetadataProvider</implementation>
             <requirements>
                 <requirement>
