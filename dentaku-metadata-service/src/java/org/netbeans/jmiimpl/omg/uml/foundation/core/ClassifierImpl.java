@@ -16,12 +16,9 @@
  */
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Vector;
-
-import org.dentaku.services.metadata.RepositoryException;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.functors.InstanceofPredicate;
 import org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader;
 import org.netbeans.mdr.storagemodel.StorableObject;
 import org.omg.uml.UmlPackage;
@@ -33,6 +30,10 @@ import org.omg.uml.foundation.core.CorePackage;
 import org.omg.uml.foundation.core.Generalization;
 import org.omg.uml.foundation.core.Operation;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
 abstract public class ClassifierImpl extends ModelElementImpl implements Classifier {
     private final static String PRIMARY_KEY = "PrimaryKey";
 
@@ -40,25 +41,10 @@ abstract public class ClassifierImpl extends ModelElementImpl implements Classif
         super(storable);
     }
 
-    /**
-     * Gets the attributes attribute of the ClassifierProxy object
-     *
-     * @return The attributes value
-     */
     public Collection getAttributes() {
-        Collection features = new FilteredCollection(getFeature()) {
-            protected boolean accept(Object object) {
-                return object instanceof Attribute;
-            }
-        };
-        return features;
+        return CollectionUtils.select(getFeature(), new InstanceofPredicate(Attribute.class));
     }
 
-    /**
-     * Gets the associationLinks attribute of the ClassifierProxy object
-     *
-     * @return The associationLinks value
-     */
     public Collection getAssociationLinks() {
         return getCore().getAParticipantAssociation().getAssociation(this);
     }
@@ -67,40 +53,19 @@ abstract public class ClassifierImpl extends ModelElementImpl implements Classif
         return ((UmlPackage)repository().getExtent(MagicDrawRepositoryReader.MODEL_NAME)).getCore();
     }
 
-    /**
-     * Gets the operations of the specified Classifier object.
-     *
-     * @param object Classifier object
-     * @return Collection of org.omg.uml.foundation.core.Operation
-     */
     public Collection getOperations() {
-        Collection features = new FilteredCollection(getFeature()) {
-            protected boolean accept(Object object) {
-                return object instanceof Operation;
-            }
-        };
-        return features;
+        return CollectionUtils.select(getFeature(), new InstanceofPredicate(Operation.class));
     }
 
-    /**
-     * Returns the collection of interfaces implemented by the given
-     * Classifier object.
-     *
-     * @param object Class
-     * @return Collection of Interfaces
-     */
     public Collection getAbstractions() {
+        // todo there's gotta be a better way to do this than iterating the list three times...
         Collection clientDependencies = getCore().getAClientClientDependency().getClientDependency(this);
-        return new FilteredCollection(clientDependencies) {
-            public boolean add(Object object) {
-                Abstraction abstraction = (Abstraction) object;
-                return super.add(abstraction.getSupplier().iterator().next());
+        Collection collection = CollectionUtils.select(clientDependencies, new InstanceofPredicate(Abstraction.class));
+        return CollectionUtils.collect(collection, new Transformer() {
+            public Object transform(Object object) {
+                return ((Abstraction) object).getSupplier().iterator().next();
             }
-
-            protected boolean accept(Object object) {
-                return object instanceof Abstraction;
-            }
-        };
+        });
     }
 
     public Object getJavaGeneralization() {
@@ -110,30 +75,6 @@ abstract public class ClassifierImpl extends ModelElementImpl implements Classif
             return generalization.getParent();
         }
         return null;
-    }
-
-    protected static abstract class FilteredCollection extends Vector {
-        /**
-         * Constructor for the FilterCollection object
-         *
-         * @param c Description of the Parameter
-         */
-        public FilteredCollection(Collection c) {
-            for (Iterator i = c.iterator(); i.hasNext();) {
-                Object object = i.next();
-                if (accept(object)) {
-                    add(object);
-                }
-            }
-        }
-
-        /**
-         * Description of the Method
-         *
-         * @param object Description of the Parameter
-         * @return Description of the Return Value
-         */
-        protected abstract boolean accept(Object object);
     }
 
     /**
@@ -162,7 +103,7 @@ abstract public class ClassifierImpl extends ModelElementImpl implements Classif
         return null;
     }
 
-    public Collection getTargetEnds() throws RepositoryException {
+    public Collection getTargetEnds() {
         Collection links = getCore().getAParticipantAssociation().getAssociation(this);
         ArrayList result = new ArrayList();
         for (Iterator it = links.iterator(); it.hasNext();) {

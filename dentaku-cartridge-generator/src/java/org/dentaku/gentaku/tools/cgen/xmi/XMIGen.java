@@ -121,7 +121,7 @@ public class XMIGen implements ContainerComposer, Startable {
 
         // create tagdefs into gengen
         Element gengenOwnedElement = createOwnedElement(gengenPackage);
-        Element xsdTagdef = createTaggedValueDefinition(gengenOwnedElement, "gengen.XSD", null, new String[]{"Package"}, "String", "false"); // todo documentation value from XSD
+        Element xsdTagdef = createTaggedValueDefinition(gengenOwnedElement, "gengen.XSD", null, new String[]{"Package"}, "String", false); // todo documentation value from XSD
         Element emptyUMLElement = createEmptyUMLElement(modelPackage, "ModelElement.taggedValue");
         createUMLTaggedValue(emptyUMLElement, xsdTagdef, DocumentHelper.createCDATA(jdoDoc.asXML()));
 
@@ -131,7 +131,7 @@ public class XMIGen implements ContainerComposer, Startable {
         // add one to the package we are creating
         modelPackage.addAttribute("stereotype", gengenStereotype.attributeValue("xmi.id"));
 
-        Element mappingTagdef = createTaggedValueDefinition(gengenOwnedElement, "gengen.mapping", null, new String[]{"Package"}, "String", "false"); // todo documentation value from XSD
+        Element mappingTagdef = createTaggedValueDefinition(gengenOwnedElement, "gengen.mapping", null, new String[]{"Package"}, "String", false); // todo documentation value from XSD
         createUMLTaggedValue(emptyUMLElement, mappingTagdef, DocumentHelper.createCDATA(mappingDoc.asXML()));
 
         Element scratchPackage = createOwnedElement(modelPackage);
@@ -140,7 +140,7 @@ public class XMIGen implements ContainerComposer, Startable {
         Element groupStereotype = createIdentifiedEmptyElement(scratchPackage, "Stereotype").addAttribute("name", "tagGroup");
         groupStereotype.addElement("UML:Stereotype.baseClass", "omg.org/UML/1.4").setText("TagDefinition");
 
-        Element groupTagdef = createTaggedValueDefinition(scratchPackage, "Group", null, new String[]{"TagDefinition"}, "String", "false"); // todo documentation value from XSD
+        Element groupTagdef = createTaggedValueDefinition(scratchPackage, "Group", null, new String[]{"TagDefinition"}, "String", false); // todo documentation value from XSD
         groupTagdef.addAttribute("stereotype", groupStereotype.attributeValue("xmi.id"));
 
         Element enumeration = createIdentifiedEmptyElement(scratchPackage, "Enumeration").addAttribute("name", packageName).addElement("UML:Enumeration.literal", "omg.org/UML/1.4");
@@ -160,25 +160,22 @@ public class XMIGen implements ContainerComposer, Startable {
             Element s = (Element) it.next();
             Element stereotype = createIdentifiedEmptyElement(scratchPackage, "Stereotype").addAttribute("name", s.attributeValue("name"));
 
-            List locationElems = Util.selectNodes(s.getParent(), "location");
-            String[] locations = new String[locationElems.size()];
-            int i = 0;
-            for (Iterator locationIter = locationElems.iterator(); locationIter.hasNext();) {
+            for (Iterator locationIter = Util.selectNodes(s.getParent(), "location").iterator(); locationIter.hasNext();) {
                 LocalDefaultElement element = (LocalDefaultElement) locationIter.next();
                 String location = mapLocationName((String) element.getText());
                 createTextElement(stereotype, "Stereotype.baseClass", location);
-                locations[i++] = location;
             }
 
             Element se = s.getParent();
             Element xsdNode = (Element) jdoDoc.selectSingleNode(se.attributeValue("path"));
 
             Element tag = createEmptyUMLElement(stereotype, "Stereotype.definedTag");
+            createTaggedValueDefinition(tag, xsdNode.attributeValue("name"), null, null, "String", false); // todo documentation value from XSD
             for (Iterator it1 = xsdNode.selectNodes("*/xs:attribute").iterator(); it1.hasNext();) {
                 Element attribute = (Element) it1.next();
                 String tagdefType = getType(attribute, tag);
-                String required = (attribute.attributeValue("use") != null && attribute.attributeValue("use").equals("required") ? "true" : "false");
-                createTaggedValueDefinition(tag, xsdNode.attributeValue("name") + "." + attribute.attributeValue("name"), null, locations, tagdefType, required); // todo documentation value from XSD
+                boolean required = attribute.attributeValue("use") != null && attribute.attributeValue("use").equals("required");
+                createTaggedValueDefinition(tag, xsdNode.attributeValue("name") + "." + attribute.attributeValue("name"), null, null, tagdefType, required); // todo documentation value from XSD
             }
         }
     }
@@ -189,15 +186,15 @@ public class XMIGen implements ContainerComposer, Startable {
     private void generateTags(Element tagPackage, Document jdoDoc, Element enumeration, String rootPath, Element groupTagdef) {
         LocalDefaultElement elem = (LocalDefaultElement) Util.selectSingleNode(jdoDoc, rootPath);
         visited = new HashSet();
-        processNodeTags(elem, enumeration, tagPackage, null, elem, groupTagdef);
+        processNodeTags(elem, enumeration, tagPackage, null, elem, groupTagdef, new String[0]);
     }
 
-    private void processNodeTags(LocalDefaultElement xsdNode, Element enumeration, Element tagPackage, Element literal, LocalDefaultElement parentElement, Element groupTagdef) {
+    private void processNodeTags(LocalDefaultElement xsdNode, Element enumeration, Element tagPackage, Element literal, LocalDefaultElement parentElement, Element groupTagdef, String[] locations) {
         if (xsdNode.getName().equals("element")) {
             String ref = xsdNode.attributeValue("ref");
             if (ref != null) {
                 LocalDefaultElement thisElem = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, "/xs:schema/xs:element[@name='" + ref + "']");
-                processNodeTags(thisElem, enumeration, tagPackage, literal, parentElement, groupTagdef);
+                processNodeTags(thisElem, enumeration, tagPackage, literal, parentElement, groupTagdef, locations);
                 return;
             }
 
@@ -208,29 +205,39 @@ public class XMIGen implements ContainerComposer, Startable {
             visited.add(name);
             literal = createIdentifiedEmptyElement(enumeration, "EnumerationLiteral").addAttribute("name", xsdNode.attributeValue("name"));
             parentElement = xsdNode;
+
+            Element annotation = xsdNode.getAnnotation();
+            locations = new String[0];
+            if (annotation != null) {
+                List locationElems = Util.selectNodes(annotation, "location");
+                locations = new String[locationElems.size()];
+                for (int i = 0; i < locations.length; i++) {
+                    LocalDefaultElement o = (LocalDefaultElement) locationElems.get(i);
+                    locations[i] = mapLocationName((String) o.getText());
+                }
+                createGroupedTagdef(tagPackage, parentElement.attributeValue("name"), locations, "String", false, literal, groupTagdef);
+            }
         }
+
         for (Iterator it = xsdNode.elementIterator(); it.hasNext();) {
             LocalDefaultElement thisElem = (LocalDefaultElement) it.next();
             if (thisElem.getName().equals("attribute")) {
 //                Element enum = (Element) enumeration.attributes().get(enumeration.attributeCount() - 1);
-                Element annotation = parentElement.getAnnotation();
-                if (annotation != null) {
-                    List locationElems = Util.selectNodes(annotation, "location");
-                    String locations[] = new String[locationElems.size()];
-                    for (int i = 0; i < locations.length; i++) {
-                        LocalDefaultElement o = (LocalDefaultElement) locationElems.get(i);
-                        locations[i] = mapLocationName((String) o.getText());
-                    }
+                if (locations.length > 0) {
                     String tagdefType = getType(thisElem, tagPackage);
-                    String required = (thisElem.attributeValue("use") != null && thisElem.attributeValue("use").equals("true") ? "true" : "false");
-                    Element tvDef = createTaggedValueDefinition(tagPackage, parentElement.attributeValue("name") + "." + thisElem.attributeValue("name"), null, locations, tagdefType, required); // todo documentation value from XSD
-                    Element taggedValue = createIdentifiedEmptyElement(createEmptyUMLElement(tvDef, "ModelElement.taggedValue"), "TaggedValue");
-                    taggedValue.addAttribute("name", literal.attributeValue("name")).addAttribute("type", groupTagdef.attributeValue("xmi.id")).addAttribute("referenceValue", literal.attributeValue("xmi.id"));
+                    boolean required = thisElem.attributeValue("use") != null && thisElem.attributeValue("use").equals("true");
+                    createGroupedTagdef(tagPackage, parentElement.attributeValue("name") + "." + thisElem.attributeValue("name"), locations, tagdefType, required, literal, groupTagdef);
                 }
             } else {
-                processNodeTags(thisElem, enumeration, tagPackage, literal, parentElement, groupTagdef);
+                processNodeTags(thisElem, enumeration, tagPackage, literal, parentElement, groupTagdef, locations);
             }
         }
+    }
+
+    private void createGroupedTagdef(Element tagPackage, String name, String[] locations, String tagdefType, boolean required, Element enumeration, Element groupTagdef) {
+        Element tvDef = createTaggedValueDefinition(tagPackage, name, null, locations, tagdefType, required); // todo documentation value from XSD
+        Element taggedValue = createIdentifiedEmptyElement(createEmptyUMLElement(tvDef, "ModelElement.taggedValue"), "TaggedValue");
+        taggedValue.addAttribute("name", enumeration.attributeValue("name")).addAttribute("type", groupTagdef.attributeValue("xmi.id")).addAttribute("referenceValue", enumeration.attributeValue("xmi.id"));
     }
 
     private String getType(Element xsdAttributeRoot, Branch tagPackage) {
@@ -326,7 +333,7 @@ public class XMIGen implements ContainerComposer, Startable {
         return result;
     }
 
-    private Element createTaggedValueDefinition(Branch parent, String name, String documentation, String[] baseClass, String tagdefType, String required) {
+    private Element createTaggedValueDefinition(Branch parent, String name, String documentation, String[] baseClass, String tagdefType, boolean required) {
         Element tagDefinition = createUMLTagDefinition(parent, name, tagdefType);
 
         // create multiplicity
@@ -345,11 +352,19 @@ public class XMIGen implements ContainerComposer, Startable {
         modelPackage = tagDefinition.addElement("XMI.extension").addAttribute("xmi.extender", "MagicDraw UML 8.0").addAttribute("xmi.extenderID", "MagicDraw UML 8.0");
 
         // add base classes
-        for (int i = 0; i < baseClass.length; i++) {
-            String baseName = baseClass[i];
-            modelPackage.addElement("TagDefinition.baseClass").setText(baseName);
+        if (baseClass != null) {
+            for (int i = 0; i < baseClass.length; i++) {
+                String baseName = baseClass[i];
+                modelPackage.addElement("TagDefinition.baseClass").setText(baseName);
+            }
         }
-        modelPackage.addElement("TagDefinition.createTaggedValue").addAttribute("xmi.value", required);
+
+        // create a default value of the parent name if this tag suffix is ".name"
+        // @todo there are a whole range of tags that are possible like this
+        if (name.endsWith(".name")) {
+            modelPackage.addElement("TagDefinition.defaultValue.dataValue").setText("${parent.name}");
+        }
+        modelPackage.addElement("TagDefinition.createTaggedValue").addAttribute("xmi.value", (required ? "true" : "false"));
 
         return tagDefinition;
     }

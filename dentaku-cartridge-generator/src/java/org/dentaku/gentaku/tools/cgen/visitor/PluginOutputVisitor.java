@@ -37,10 +37,10 @@ import org.omg.uml.foundation.core.TaggedValue;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -55,12 +55,10 @@ import java.util.Set;
 public class PluginOutputVisitor {
     protected Document xsdDoc;
     protected UmlPackage model;
-    protected Map stereotypeMap;
 
-    public PluginOutputVisitor(Document xsdDoc, UmlPackage model, Map stereotypeMap) {
+    public PluginOutputVisitor(Document xsdDoc, UmlPackage model) {
         this.xsdDoc = xsdDoc;
         this.model = model;
-        this.stereotypeMap = stereotypeMap;
     }
 
     /**
@@ -68,59 +66,59 @@ public class PluginOutputVisitor {
      *
      * @param mappingNode  Node that we are currently visiting in the mapping document
      * @param parentOutput Output node for document we are building.  Recursive calls gradually expand this
-     * @param parent       ModelElement from UML that we are currently working on
+     * @param modelElement ModelElement from UML that we are currently working on
      * @return true if we did something worth keeping
      */
-    public boolean visit(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement parent) throws GenerationException {
+    public boolean visit(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement modelElement) throws GenerationException {
         boolean result = false;
         if (!mappingXSD.getName().equals("element")) {
-            result = iterateElements(mappingXSD, parentOutput, parent);
+            result = iterateElements(mappingXSD, parentOutput, modelElement);
         } else {
             String ref = mappingXSD.attributeValue("ref");
             if (ref != null) {
                 mappingXSD = (LocalDefaultElement) Util.selectSingleNode(xsdDoc, "/xs:schema/xs:element[@name='" + ref + "']");
             }
-            preGenerate(mappingXSD, parentOutput);
 
-            if (generate(mappingXSD, parentOutput)) {
-                Set locations = getTextNodesSet(mappingXSD, "location");
-                if (locations.contains("root")) {
-                    // root element is a special case because we always iterate it.  But is this the only occurence not caught
-                    // in the following loop?  Smells fishy
-                    Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
-                    if (iterateElements(mappingXSD, newLocalNode, parent)) {
-                        parentOutput.add(newLocalNode);
-                        result = true;
+            Set locationSet = getTextNodesSet(mappingXSD, "location");
+            if (locationSet.contains("root")) {
+                // root element is a special case because we always iterate it.  But is this the only occurence not caught
+                // in the following loop?  Smells fishy
+                Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
+                if (iterateElements(mappingXSD, newLocalNode, modelElement)) {
+                    parentOutput.add(newLocalNode);
+                    result = true;
+                }
+            } else {
+                // iterate candidate ModelElements that match these criteria
+                // the tag prefix we are looking for in tags named "prefix.tag"
+                String prefix = mappingXSD.attributeValue("name");
+                Collection c = findElementsForLocationAndPrefix(locationSet, prefix, modelElement);
+                for (Iterator elementIterator = c.iterator(); elementIterator.hasNext();) {
+                    ModelElementImpl element = (ModelElementImpl) elementIterator.next();
+                    if (element instanceof Namespace || element instanceof Feature) {
+                        modelElement = element;
+                    } else {
+                        throw new AssertionError("Please report this to Brian");
                     }
-                } else {
-                    // iterate candidate ModelElements that match these criteria
-                    // the tag prefix we are looking for in tags named "prefix.tag"
-                    String prefix = mappingXSD.attributeValue("name");
-                    Collection c = findElementsForLocationAndPrefix(locations, prefix, parent);
-                    for (Iterator elementIterator = c.iterator(); elementIterator.hasNext();) {
-                        ModelElementImpl element = (ModelElementImpl) elementIterator.next();
-                        if (element instanceof Namespace || element instanceof Feature) {
-                            parent = element;
-                        } else {
-                            throw new AssertionError("Please report this to Brian");
-                        }
 
+                    preGenerate(mappingXSD, parentOutput, modelElement);
+                    if (generate(mappingXSD, parentOutput, modelElement)) {
                         Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
                         // @todo note that in older versions of this code, we used to keep elements that properly rendered, even if a node did not have
                         // any attributes that rendered.  This was removed organically in the process of tracking down problems, but it may be that with
                         // that problem solved that the old behavior is the correct behavior.  If it is, the special case noise when a root element is
                         // being rendered can probably be removed as well
                         if (iterateAttributes(mappingXSD, element, newLocalNode)) {
-                            iterateElements(mappingXSD, newLocalNode, parent);
+                            iterateElements(mappingXSD, newLocalNode, modelElement);
+                            postGenerate(mappingXSD, parentOutput, modelElement, newLocalNode);
                             parentOutput.add(newLocalNode);
                             result = true;
                         }
+                    } else {
+                        result = true;
                     }
                 }
-            } else {
-                result = true;
             }
-            postGenerate(mappingXSD, parentOutput);
         }
         return result;
     }
@@ -134,11 +132,11 @@ public class PluginOutputVisitor {
         return locations;
     }
 
-    private void preGenerate(LocalDefaultElement mappingXSD, Branch parentOutput) throws GenerationException {
+    private void preGenerate(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement modelElement) throws GenerationException {
         Set generators = getGenerators(mappingXSD);
         for (Iterator genIter = generators.iterator(); genIter.hasNext();) {
             LocalDefaultElement g = (LocalDefaultElement) genIter.next();
-            g.getGenerator().preGenerate(mappingXSD, parentOutput);
+            g.getGenerator().preGenerate(mappingXSD, parentOutput, modelElement);
         }
     }
 
@@ -149,24 +147,25 @@ public class PluginOutputVisitor {
      *
      * @param mappingXSD
      * @param parentOutput
+     * @param modelElement
      * @return
      * @throws GenerationException
      */
-    private boolean generate(LocalDefaultElement mappingXSD, Branch parentOutput) throws GenerationException {
+    private boolean generate(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement modelElement) throws GenerationException {
         boolean result = true;
         Set generators = getGenerators(mappingXSD);
         for (Iterator genIter = generators.iterator(); genIter.hasNext();) {
             LocalDefaultElement g = (LocalDefaultElement) genIter.next();
-            result = result && g.getGenerator().generate(mappingXSD, parentOutput);
+            result = result && g.getGenerator().generate(mappingXSD, parentOutput, modelElement);
         }
         return result;
     }
 
-    private void postGenerate(LocalDefaultElement mappingXSD, Branch parentOutput) throws GenerationException {
+    private void postGenerate(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement modelElement, Element outputElement) throws GenerationException {
         Set generators = getGenerators(mappingXSD);
         for (Iterator genIter = generators.iterator(); genIter.hasNext();) {
             LocalDefaultElement g = (LocalDefaultElement) genIter.next();
-            g.getGenerator().postGenerate(mappingXSD, parentOutput);
+            g.getGenerator().postGenerate(mappingXSD, parentOutput, modelElement, outputElement);
         }
     }
 
@@ -174,8 +173,7 @@ public class PluginOutputVisitor {
         Set generators = new HashSet();
         for (Iterator genIter = Util.selectNodes(mappingXSD.getAnnotation(), "stereotype").iterator(); genIter.hasNext();) {
             LocalDefaultElement element = (LocalDefaultElement) genIter.next();
-            LocalDefaultElement stereotype = (LocalDefaultElement) stereotypeMap.get(element.attributeValue("ref"));
-            generators.addAll(Util.selectNodes(stereotype, "generator"));
+            generators.addAll(Util.selectNodes(element, "generator"));
         }
         return generators;
     }
@@ -191,10 +189,16 @@ public class PluginOutputVisitor {
      */
     private boolean iterateAttributes(Element mappingXSD, ModelElementImpl element, Element newLocalNode) {
         boolean result = false;
+        String tagClass = mappingXSD.attributeValue("name");
+
+        // first check to see if there is a tag without the attribute value.  This triggers class generation regardless of
+        // whether there is any attributes
+        if ((TaggedValueImpl) element.getTaggedValue(tagClass) != null) {
+            result = true;
+        }
         for (Iterator it = mappingXSD.selectNodes("*/xs:attribute").iterator(); it.hasNext();) {
             Element node = (Element) it.next();
             String tagName = node.attributeValue("name");
-            String tagClass = mappingXSD.attributeValue("name");
             TaggedValueImpl taggedValue = (TaggedValueImpl) element.getTaggedValue(tagClass + "." + tagName);
             if (taggedValue != null) {
                 newLocalNode.addAttribute(tagName, taggedValue.getValue());
@@ -239,7 +243,7 @@ public class PluginOutputVisitor {
         Collection result = CollectionUtils.select(elements, new Predicate() {
             public boolean evaluate(Object object) {
                 ModelElement mei = (ModelElement) object;
-                if (parent != null && ((mei instanceof Classifier && mei.getNamespace() != parent) || (mei instanceof Feature && ((Feature) mei).getOwner() != parent))) {
+                if (parent != null && ((mei instanceof Classifier && mei.getNamespace() != parent) || (mei instanceof Feature && ((Feature) mei).getOwner() != parent)) || (mei instanceof HashMap)) {
                     return false;
                 }
                 Collection c = mei.getTaggedValue();
