@@ -7,7 +7,7 @@
     </preGoal>
     <goal name="gentaku">
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
-        <gentaku model="${dentaku.rootdir}/example-summit-webapp/src/uml/SummitTestModel.xml.zip">
+        <gentaku model="${basedir}/src/uml/SummitTestModel.xml.zip">
             <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" destdir="${basedir}/target/classes/META-INF" destinationfilename="jdo.xml" encoding="UTF-8"/>
             <component classname="org.dentaku.gentaku.cartridge.core.POJOPlugin" destdir="${maven.build.src}" stereotype="Entity"/>
 
