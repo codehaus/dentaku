@@ -32,6 +32,7 @@
     <orderEntry type="module" module-name="cglib" />
     <orderEntry type="module" module-name="mdr" />
     <orderEntry type="library" name="XStream" level="application" />
+    <orderEntry type="library" name="NBMDR New" level="application" />
     <orderEntryProperties />
   </component>
 </module>

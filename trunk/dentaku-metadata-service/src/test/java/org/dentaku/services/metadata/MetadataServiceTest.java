@@ -32,25 +32,7 @@ import org.omg.uml.foundation.core.Operation;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 
-public class MetadataServiceTest extends TestCase {
-    
-    private Embedder e;
-    private Collection metadata;
-
-    protected void setUp() throws Exception {
-        e = new Embedder();
-        String className = getClass().getName();
-        String name = className.substring(className.lastIndexOf(".") + 1) + ".xml";
-        URL resource = getClass().getResource(name);
-        e.setConfiguration(resource);
-        e.start();
-        JMICapableMetadataProvider ms = (JMICapableMetadataProvider) e.lookup(JMICapableMetadataProvider.ROLE);
-        UmlPackage model = ms.getModel();
-        CorePackage core = model.getCore();
-        ModelElementClass modelElement = core.getModelElement();
-        this.metadata = modelElement.refAllOfType();
-    }
-
+public class MetadataServiceTest extends MetadataTestBase {
     public void testRootClass() throws Exception {
         ModelElementImpl elem = null;
         for (Iterator it = metadata.iterator(); it.hasNext();) {
