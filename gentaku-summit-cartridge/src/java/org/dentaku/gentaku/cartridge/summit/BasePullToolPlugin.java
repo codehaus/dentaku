@@ -82,10 +82,13 @@ public class BasePullToolPlugin extends JavaPluginBase {
         Collection stereotypes = ((ModelElementImpl)metadata).getStereotypeNames();
         return stereotypes.contains("RootSelectable");
     }
-    
+
+    public String getDestinationPackage(Object metadata) {
+        return super.getDestinationPackage(metadata) + ".tools";
+    }
+
     public String getDestinationFilename(Object metadata) {
-    	String destName = metadataProvider.getOriginalPackageName(metadata) + ".tools."
-					+((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue()
+    	String destName = ((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue()
 					+"Base"+"PullTool";
     	return destName.replaceAll("\\.", "/");
     }
