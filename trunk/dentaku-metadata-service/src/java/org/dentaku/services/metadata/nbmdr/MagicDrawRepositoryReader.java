@@ -20,6 +20,8 @@ import org.netbeans.api.mdr.MDRManager;
 import org.netbeans.api.mdr.MDRepository;
 import org.netbeans.api.xmi.XMIReader;
 import org.netbeans.api.xmi.XMIReaderFactory;
+import org.netbeans.api.xmi.XMIInputConfig;
+import org.netbeans.api.xmi.XMIReferenceResolver;
 import org.omg.uml.UmlPackage;
 import org.dentaku.services.metadata.RepositoryReader;
 import org.dentaku.services.metadata.RepositoryException;
@@ -39,6 +41,8 @@ import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Collections;
 
 /**
  * This used to be completely URL based, then something broke with XStream because we have these crappy version conflicts
@@ -71,6 +75,7 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
     };
 
     private String model;
+    private List searchPaths = Collections.EMPTY_LIST;
     private Logger log = Logger.getLogger(MagicDrawRepositoryReader.class.getName());
     protected final static String META_PACKAGE = "UML";
     public static final String MODEL_NAME = "MODEL";
@@ -90,7 +95,6 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
         repository.beginTrans(true);
         try {
             URL metamodel = this.getClass().getResource("/M2_DiagramInterchangeModel.xml");
-            log.info("MDR: creating MetaModel using URL =" + metamodel.toExternalForm());
 
             // Use the metaModelURL as the name for the repository extent.
             // This ensures we can load mutiple metamodels without them colliding.
@@ -106,22 +110,15 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
                 // locate the UML package definition that was just loaded in
                 metaModelPackage = findPackage(META_PACKAGE, metaModelExtent);
             }
-            log.info("MDR: created MetaModel");
             MofPackage metaModel = metaModelPackage;
             JMIUMLMetadataProvider.booted = true;
-            log.info("MDR: creating Model");
             RefPackage model1 = repository.getExtent(MODEL_NAME);
             if (model1 != null) {
                 log.info("MDR: deleting exising model");
                 model1.refDelete();
             }
-            log.info("MDR: creating model extent");
             model1 = repository.createExtent(MODEL_NAME, metaModel);
-            log.info("MDR: created model extent");
-            log.info("MDR: reading XMI");
             readInputStream(model1);
-            log.info("MDR: read XMI ");
-            log.info("MDR: created Model");
             model = (UmlPackage) model1;
             repository.endTrans();
         } catch (Exception e) {
@@ -155,7 +152,7 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
         ZipFile zip = new ZipFile(file);
         ZipEntry entry = zip.getEntry(filename);
         InputStream input = zip.getInputStream(entry);
-        XMIReader xmiReader = XMIReaderFactory.getDefault().createXMIReader();
+        XMIReader xmiReader = XMIReaderFactory.getDefault().createXMIReader(new XMIInputConfigImpl(new RefPackage[] {umlModel}, searchPaths));
         xmiReader.read(input, fullname, umlModel);
     }
 

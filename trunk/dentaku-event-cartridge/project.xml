@@ -56,6 +56,9 @@
                     </includes>
                 </resource>
             </resources>
+            <excludes>
+                <include>org/dentaku/gentaku/cartridge/qtag_example/**/*Test.*</include>
+            </excludes>
         </unitTest>
     </build>
 </project>
