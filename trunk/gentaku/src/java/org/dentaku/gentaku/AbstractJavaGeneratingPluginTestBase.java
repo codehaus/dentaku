@@ -16,18 +16,16 @@
  */
 package org.dentaku.gentaku;
 
-import antlr.RecognitionException;
-import antlr.TokenStreamException;
-import com.thoughtworks.qdox.junit.APITestCase;
-import org.codehaus.plexus.embed.Embedder;
-import org.generama.MetadataProvider;
+import java.io.IOException;
+import java.net.URL;
+
 import org.generama.astunit.ASTTestCase;
 import org.generama.tests.AbstractPluginTestCase;
 
-import java.io.CharArrayWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.net.URL;
+import antlr.RecognitionException;
+import antlr.TokenStreamException;
+
+import com.thoughtworks.qdox.junit.APITestCase;
 
 /**
  * Baseclass for testing generation of Java sources. Uses QDox'

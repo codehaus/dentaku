@@ -17,19 +17,22 @@
 package org.dentaku.gentaku;
 
 import junit.framework.TestCase;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.defaults.DefaultPicoContainer;
+
+import org.dentaku.services.metadata.QDoxMetadataProvider;
 import org.generama.MetadataProvider;
 import org.generama.tests.SinkWriterMapper;
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.defaults.DefaultPicoContainer;
 
-public class TestGentaku extends TestCase {
+public class GentakuTest extends TestCase {
+    
     public void testGentaku() {
         Gentaku gt = new Gentaku(SinkWriterMapper.class);
         MutablePicoContainer pico = new DefaultPicoContainer();
         gt.composeContainer(pico, null);
 
-        JMIUMLMetadataProvider mp = (JMIUMLMetadataProvider) pico.getComponentInstanceOfType(MetadataProvider.class);
+        QDoxMetadataProvider mp = (QDoxMetadataProvider) pico.getComponentInstanceOfType(MetadataProvider.class);
         assertNotNull(mp);
     }
+    
 }
