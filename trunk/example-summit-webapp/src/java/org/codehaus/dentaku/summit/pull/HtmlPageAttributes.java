@@ -24,75 +24,70 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
 
-
 /**
- * @author David Wynter
+ * Template context tool that can be used to set various attributes of a
+ * HTML page.  This tool does not automatically make the changes in the HTML
+ * page for you.  You must use this tool in your layout template to retrieve
+ * the attributes.
+ * <p>
+ * The set/add methods are can be used from a screen template, action, screen
+ * class, layour template, or anywhere else.  The get methods should be used in
+ * your layout template(s) to construct the appropriate HTML tags.
+ *<p>
+ * Example usage of this tool to build the HEAD and BODY tags in your layout
+ * templates:
+ * <p>
+ *  <code>
+ *  ## Set defaults for all pages using this layout.  Anything set here can<br>
+ *  ## be overridden in the screen template.<br>
+ *  $page.setTitle("My default page title");<br>
+ *  $page.setHttpEquiv("Content-Style-Type","text/css")<br>
+ *  $page.addStyleSheet($content.getURI("myStyleSheet.css"))<br>
+ *  $page.addScript($content.getURI("globalJavascriptCode.js"))<br>
+ *  <br>
+ *  ## build the HTML, HEAD, and BODY tags dynamically<br>
+ *  &lt;html&gt;<br>
+ *    &lt;head&gt;<br>
+ *      #if( $page.Title != "" )<br>
+ *      &lt;title&gt;$page.Title&lt;/title&gt;<br>
+ *      #end<br>
+ *      #foreach($metaTag in $page.MetaTags.keySet())<br>
+ *      &lt;meta name="$metaTag" content="$page.MetaTags.get($metaTag)"&gt;<br>
+ *      #end<br>
+ *      #foreach($httpEquiv in $page.HttpEquivs.keySet())<br>
+ *      &lt;meta http-equiv="$httpEquiv" content="$page.HttpEquivs.get($httpEquiv)"&gt;<br>
+ *      #end<br>
+ *      #foreach( $styleSheet in $page.StyleSheets )<br>
+ *        &lt;link rel="stylesheet" href="$styleSheet.Url"<br>
+ *          #if($styleSheet.Type != "" ) type="$styleSheet.Type" #end<br>
+ *          #if($styleSheet.Media != "") media="$styleSheet.Media" #end<br>
+ *          #if($styleSheet.Title != "") title="$styleSheet.Title" #end<br>
+ *        &gt;<br>
+ *      #end<br>
+ *      #foreach( $script in $page.Scripts )<br>
+ *        &lt;script type="text/javascript" src="$script" language="JavaScript"&gt;&lt;/script&gt;<br>
+ *      #end<br>
+ *    &lt;/head&gt;<br>
+ *<br>
+ *    ## Construct the body tag.  Iterate through the body attributes to build the opening tag<br>
+ *    &lt;body<br>
+ *      #foreach( $attributeName in $page.BodyAttributes.keySet() )<br>
+ *        $attributeName = "$page.BodyAttributes.get($attributeName)"<br>
+ *      #end<br>
+ *     &gt;
+ * </code>
+ * <p>
+ * Example usages of this tool in your screen templates:<br>
+ *   <code>$page.addScript($content.getURI("myJavascript.js")<br>
+ *   $page.setTitle("My page title")<br>
+ *   $page.setHttpEquiv("refresh","5; URL=http://localhost/nextpage.html")</code>
  *
- * Add comment here
+ * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @version $Id$
  */
+
 public class HtmlPageAttributes implements RequestTool {
-	/**
-	 * Template context tool that can be used to set various attributes of a
-	 * HTML page.  This tool does not automatically make the changes in the HTML
-	 * page for you.  You must use this tool in your layout template to retrieve
-	 * the attributes.
-	 * <p>
-	 * The set/add methods are can be used from a screen template, action, screen
-	 * class, layour template, or anywhere else.  The get methods should be used in
-	 * your layout template(s) to construct the appropriate HTML tags.
-	 *<p>
-	 * Example usage of this tool to build the HEAD and BODY tags in your layout
-	 * templates:
-	 * <p>
-	 *  <code>
-	 *  ## Set defaults for all pages using this layout.  Anything set here can<br>
-	 *  ## be overridden in the screen template.<br>
-	 *  $page.setTitle("My default page title");<br>
-	 *  $page.setHttpEquiv("Content-Style-Type","text/css")<br>
-	 *  $page.addStyleSheet($content.getURI("myStyleSheet.css"))<br>
-	 *  $page.addScript($content.getURI("globalJavascriptCode.js"))<br>
-	 *  <br>
-	 *  ## build the HTML, HEAD, and BODY tags dynamically<br>
-	 *  &lt;html&gt;<br>
-	 *    &lt;head&gt;<br>
-	 *      #if( $page.Title != "" )<br>
-	 *      &lt;title&gt;$page.Title&lt;/title&gt;<br>
-	 *      #end<br>
-	 *      #foreach($metaTag in $page.MetaTags.keySet())<br>
-	 *      &lt;meta name="$metaTag" content="$page.MetaTags.get($metaTag)"&gt;<br>
-	 *      #end<br>
-	 *      #foreach($httpEquiv in $page.HttpEquivs.keySet())<br>
-	 *      &lt;meta http-equiv="$httpEquiv" content="$page.HttpEquivs.get($httpEquiv)"&gt;<br>
-	 *      #end<br>
-	 *      #foreach( $styleSheet in $page.StyleSheets )<br>
-	 *        &lt;link rel="stylesheet" href="$styleSheet.Url"<br>
-	 *          #if($styleSheet.Type != "" ) type="$styleSheet.Type" #end<br>
-	 *          #if($styleSheet.Media != "") media="$styleSheet.Media" #end<br>
-	 *          #if($styleSheet.Title != "") title="$styleSheet.Title" #end<br>
-	 *        &gt;<br>
-	 *      #end<br>
-	 *      #foreach( $script in $page.Scripts )<br>
-	 *        &lt;script type="text/javascript" src="$script" language="JavaScript"&gt;&lt;/script&gt;<br>
-	 *      #end<br>
-	 *    &lt;/head&gt;<br>
-	 *<br>
-	 *    ## Construct the body tag.  Iterate through the body attributes to build the opening tag<br>
-	 *    &lt;body<br>
-	 *      #foreach( $attributeName in $page.BodyAttributes.keySet() )<br>
-	 *        $attributeName = "$page.BodyAttributes.get($attributeName)"<br>
-	 *      #end<br>
-	 *     &gt;
-	 * </code>
-	 * <p>
-	 * Example usages of this tool in your screen templates:<br>
-	 *   <code>$page.addScript($content.getURI("myJavascript.js")<br>
-	 *   $page.setTitle("My page title")<br>
-	 *   $page.setHttpEquiv("refresh","5; URL=http://localhost/nextpage.html")</code>
-	 *
-	 * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
-	 * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
-	 * @version $Id$
-	 */
 
     /** The title */
     private String title;

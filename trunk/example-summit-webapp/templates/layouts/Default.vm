@@ -13,6 +13,9 @@ $page.addStyleSheet($content.getURI("resources/${filename}"))
     </td>
   </tr>
   <tr>
+    <td align="left" valign="top">
+      $navigation.setTemplate("menu.vm")
+    </td>
     <td align="left" valign="top" width="$ui.screenTableWidth">
       $screen_placeholder
     </td>

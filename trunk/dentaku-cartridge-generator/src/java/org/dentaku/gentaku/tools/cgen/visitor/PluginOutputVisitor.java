@@ -200,7 +200,11 @@ public class PluginOutputVisitor {
             String tagName = node.attributeValue("name");
             TaggedValueImpl taggedValue = (TaggedValueImpl) element.getTaggedValue(tagClass + "." + tagName);
             if (taggedValue != null) {
-                newLocalNode.addAttribute(tagName, taggedValue.getValue());
+            	if(tagClass.equals("package")) {
+                    newLocalNode.addAttribute(tagName, element.getFullyQualifiedName());            		
+            	} else {
+            		newLocalNode.addAttribute(tagName, taggedValue.getValue());
+            	}
                 result = true;
             }
         }

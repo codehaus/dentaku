@@ -89,7 +89,7 @@ public class BasePullToolPlugin extends JavaPluginBase {
 
     public String getDestinationPackage(Object metadata) {
     	String pack = super.getDestinationPackage(metadata);
-        return pack + ".tools";
+        return pack + ".tool";
     }
 
     public String getDestinationFilename(Object metadata) {

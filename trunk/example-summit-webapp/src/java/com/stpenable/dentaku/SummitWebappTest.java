@@ -16,8 +16,7 @@ import org.dentaku.gentaku.cartridge.summit.CrudActionPlugin;
 import org.dentaku.gentaku.cartridge.summit.PullToolPlugin;
 import org.dentaku.gentaku.cartridge.summit.VelocityFormPlugin;
 import org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin;
-import org.dentaku.services.metadata.JMICapableMetadataProvider;
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
+import org.dentaku.services.metadata.QDoxMetadataProvider;
 import org.dentaku.services.metadata.RepositoryReader;
 import org.dentaku.services.metadata.Utils;
 import org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader;
@@ -59,27 +58,27 @@ public class SummitWebappTest extends TestCase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		JMICapableMetadataProvider mp = new JMIUMLMetadataProvider(rr);
+		QDoxMetadataProvider mp = new QDoxMetadataProvider(rr);
         vte = new VelocityTemplateEngine();
         wm = new FileWriterMapper();
-        plugin6 = new GenGenPlugin(mp);
-        plugin5 = new POJOPlugin(vte, mp, wm);
-        plugin7 = new EventBasePlugin(vte, mp, wm);
         plugin1 = new BasePullToolPlugin(vte, mp, wm);
         plugin2 = new PullToolPlugin(vte, mp, wm);
         plugin3 = new CrudActionPlugin(vte, mp, wm);
         plugin4 = new VelocityFormPlugin(vte, mp, wm);
+        plugin6 = new GenGenPlugin(mp);
+        plugin5 = new POJOPlugin(vte, mp, wm);
+        plugin7 = new EventBasePlugin(vte, mp, wm);
 	}
 
     public void testAll()
     {
-        plugin6.start();
-        plugin5.start();
-        plugin7.start();
         plugin1.start();
         plugin2.start();
         plugin3.start();
         plugin4.start();
+        plugin6.start();
+        plugin5.start();
+        plugin7.start();
         assertTrue(true);
     }
 	

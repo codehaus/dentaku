@@ -82,9 +82,10 @@ public class EntityGenerator extends GeneratorSupport {
             classifier.setName(entityName + "Base");
             ClassifierImpl subclass = (ClassifierImpl) Utils.findUmlClass(umlPackage, ((ModelElementImpl) classifier.getNamespace()).getFullyQualifiedName(), entityName, true);
             subclass.getStereotype().add(classifierStereotype);
+            createGeneralization(core, classifier, subclass);
             Utils.createTaggedValue(core, subclass, findStereotypeTagdef(classifierStereotype, "class.name"), "class.name", "${parent.name}");
             Utils.createTaggedValue(core, subclass, findStereotypeTagdef(classifierStereotype, "class.persistence-capable-superclass"), "class.persistence-capable-superclass", ((ModelElementImpl) classifier).getFullyQualifiedName());
-            Utils.createTaggedValue(core, subclass, null, "gentaku.generate", "false");
+            Utils.createTaggedValue(core, subclass, null, "gentaku.generate", "true");
 
             // handle the fields
             Collection attributes = CollectionUtils.select(classifier.getFeature(), new InstanceofPredicate(Attribute.class));

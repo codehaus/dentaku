@@ -100,7 +100,7 @@ public class SummitHelper
 
 	private String screenname;
 	private HashMap valuelists = new HashMap();
-	private HashSet viewEntityDone = new HashSet();
+	private HashSet nodeVisited = new HashSet();
 	private String viewpackage;
 	private ClassView rootViewClass;
 	private ArrayList crudList = new ArrayList();
@@ -159,10 +159,12 @@ public class SummitHelper
 	public ClassView buildClassView(ClassifierImpl viewClass, ClassView parent) {
 		
 		String parentClassname = null;
-		ArrayList anc;
 
 		if(parent != null) {
 			parentClassname = parent.getEntityclassname();
+		} else {
+			// Put in top of tree node to prevent walk up tree
+			nodeVisited.add(viewClass);
 		}
 		ClassView aClassView = new ClassView(this, viewClass, parentClassname);
 		ArrayList classViewChildren = new ArrayList();
@@ -205,21 +207,25 @@ public class SummitHelper
             			}
             		}
             	}
-        		viewEntityDone.add(viewClass.getName());
             	// Find class with assocation of type VIEW_REF, a related child display, walk down tree only
-            	ClassifierImpl child = getChildClassifier((AssociationEndImpl)end, VIEW_REF);
-            	if(child!=null && entityname != null && !viewEntityDone.contains(child.getName())) {
+            	ClassifierImpl childview = getChildClassifier((AssociationEndImpl)end, VIEW_REF);
+            	if(entityname != null && childview!=null && !nodeVisited.contains(childview)) {
+            		nodeVisited.add(childview);
             		// the entityname sets the parent name
-            		if(parent == null) {
-            			anc = new ArrayList();
-            			aClassView.setAncestors(anc);
+            		HashSet anc;
+            		if(parent==null) {
+            			anc = new HashSet();
             		} else {
             			anc = parent.getAncestors();
-            			anc.add(parent);
-            			aClassView.setAncestors(anc);
+            			if(anc==null)
+            				anc = new HashSet();
+            				anc.add(parent);
+            				aClassView.setAncestors(anc);
             		}
+            		anc.add(aClassView);
         			parent = aClassView;
-            		ClassView childClassView = buildClassView(child, parent);
+            		ClassView childClassView = buildClassView(childview, parent);
+            		childClassView.setAncestors(anc);
             		classViewChildren.add(childClassView);
             	}
             }

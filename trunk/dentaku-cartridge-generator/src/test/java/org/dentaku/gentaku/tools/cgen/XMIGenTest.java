@@ -30,6 +30,6 @@ public class XMIGenTest extends TestCase {
     }
 
     public void testXMIGen() throws Exception {
-        gen.start();
+        gen.execute();
     }
 }

@@ -3,16 +3,33 @@
 ## Has an ordered list of related classes to all root classes in views
 #set ( $alldepclassviews = $rootClassView.getAllDependentClassEntity() )
 
-package ${metadata.packageName}.tools;
+package ${metadata.packageName}.tool;
 
-import ${metadata.packageName}.model.${rootClassView.entityclassname};
-#foreach( $depclassview in $alldepclassviews )
-import ${metadata.packageName}.model.${depclassview.entityclassname};
-#end
-public class ${ScreenName}BasePullTool {
-    public void init(Object data) {
-		JDOService jdos = 
-            ( JDOService ) lookup( JDOService.ROLE );
+import ${metadata.packageName}.model.*;
+import org.codehaus.plexus.jdo.JDOService;
+import org.codehaus.plexus.summit.pull.RequestTool;
+import org.codehaus.plexus.summit.rundata.RunData;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+
+import javax.jdo.PersistenceManager;
+
+import javax.jdo.Transaction;
+import javax.jdo.Extent;
+import javax.jdo.Query;
+
+import java.util.*;
+
+public class Base${ScreenName}PullTool extends AbstractLogEnabled implements RequestTool {
+
+	private JDOService jdos;
+	
+	public void setRunData(RunData data) {
+		try{
+			jdos = ( JDOService ) data.lookup( JDOService.ROLE );
+		} catch (ComponentLookupException e) {
+			getLogger().error(${Q}Lookup of the JDOService component failed, check components.xml${Q});
+		}
     }
 
     public void refresh() {
@@ -24,19 +41,15 @@ public class ${ScreenName}BasePullTool {
         return $Q[None Selected]$Q;
     }
 
-    public List getAll${rootClassView.entityclassname}() {
+    public Collection getAll${rootClassView.entityclassname}() {
         Collection entities;
-		PersistanceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
-
-        if (a${rootClassView.entityclassname} == null) {
-			entities = new ArrayList();
-            return entities;
-        }
+		PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+		Transaction tx=pm.currentTransaction();
 
 		// Need to add record paging for large sets
         try {
             tx.begin();       
-			Query q = new Query(${rootClassView.entityclassname}.class);
+			Query q = pm.newQuery(${rootClassView.entityclassname}.class);
 			entities = (Collection) q.execute();
             tx.commit();
         }
@@ -51,12 +64,14 @@ public class ${ScreenName}BasePullTool {
         return entities;
     }
 #foreach( $pullclass in $alldepclassviews )
-    public List get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}(${pullclass.parentsEntityname} a${pullclass.parentsEntityname})
+    public Collection get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}(${pullclass.parentsEntityname} a${pullclass.parentsEntityname})
     {
         Collection entities;
-		PersistanceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+		PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+		Transaction tx=pm.currentTransaction();
 
 		if (a${pullclass.parentsEntityname} == null) {
+			entities = new ArrayList();
             return entities;
         }
 
@@ -64,7 +79,7 @@ public class ${ScreenName}BasePullTool {
         try {
             tx.begin();       
             Extent e = pm.getExtent(${pullclass.parentsEntityname}.class, true);  
-			Query q = new Query(e, $Q${pullclass.entityclassname}.contains(a${pullclass.parentsEntityname})$Q);
+			Query q = pm.newQuery(e, $Q${pullclass.entityclassname}.contains(a${pullclass.parentsEntityname})$Q);
 			entities = (Collection) q.execute();
             tx.commit();
         }
@@ -74,7 +89,7 @@ public class ${ScreenName}BasePullTool {
                 tx.rollback();
             }
             pm.close();
-			entities = new ArryList();
+			entities = new ArrayList();
         }
 
         return entities;
@@ -82,10 +97,10 @@ public class ${ScreenName}BasePullTool {
 	
 #end
 #foreach( $pullclass in $alldepclassviews )
-    public List get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}WithDefault(${pullclass.parentsEntityname} a${pullclass.parentsEntityname})
+    public Collection get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}WithDefault(${pullclass.parentsEntityname} a${pullclass.parentsEntityname})
     {
-        List entities = new ArrayList();
-		entities = get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}(${pullclass.parentsEntityname} a${pullclass.parentsEntityname});
+        Collection entities;
+		entities = get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}(a${pullclass.parentsEntityname});
 		entities.add(getDefaultName());
 		
         return entities;
