@@ -3,16 +3,4 @@
     <goal name="dentaku-dist">
         <attainGoal name="ejb:install"/>
     </goal>
-    <preGoal name="test:compile">
-        <path id="gentaku.task.classpath">
-            <path refid="maven.dependency.classpath"/>
-        </path>
-        <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="gentaku.task.classpath"/>
-        <gentaku model="${basedir}/src/test/org/dentaku/services/persistence/synthetic/TestModel.xml.zip">
-            <component classname="org.dentaku.gentaku.cartridge.entity.EntityBasePlugin" destdir="${dentaku.test.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.entity.EntityPlugin" destdir="${dentaku.test.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.entity.EntityFactoryPlugin" destdir="${dentaku.test.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.dir}/test-config" destinationfilename="components.xml"/>
-        </gentaku>
-    </preGoal>
 </project>
