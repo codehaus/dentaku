@@ -40,11 +40,10 @@ import java.util.Iterator;
 
 public abstract class JMIMetadataProviderBase implements MetadataProvider {
     public static boolean booted;
+
     static {
         // configure MDR to use an in-memory storage implementation
-        System.setProperty(
-            "org.netbeans.mdr.storagemodel.StorageFactoryClassName",
-            "org.netbeans.mdr.persistence.memoryimpl.StorageFactoryImpl");
+        System.setProperty("org.netbeans.mdr.storagemodel.StorageFactoryClassName", "org.netbeans.mdr.persistence.memoryimpl.StorageFactoryImpl");
         // set the logging so output does not go to standard out
         System.setProperty("org.netbeans.lib.jmi.Logger.fileName", "mdr.log");
     };
@@ -54,7 +53,6 @@ public abstract class JMIMetadataProviderBase implements MetadataProvider {
     private static Log log = LogFactory.getLog(JMIUMLMetadataProvider.class);
     protected final static String META_PACKAGE = "UML";
     public static final String MODEL_NAME = "MODEL";
-
     final ConfigurableDocletTagFactory docletTagFactory = new ConfigurableDocletTagFactory();
 
     // injected parameters
@@ -64,11 +62,12 @@ public abstract class JMIMetadataProviderBase implements MetadataProvider {
 
     public JMIMetadataProviderBase(RepositoryReader reader) {
         this.reader = reader;
+        Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
         try {
             setupModel();
         } catch (RepositoryException e) {
             throw new RuntimeException("Couldn't parse UML", e);
-        }
+        } 
     }
 
     public abstract Collection getMetadata() throws GeneramaException;
