@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+Use is subject to license terms.
+
+-->
+<!--
+
+This is the DTD defining the Java Data Objects 2.0 metadata.
+
+The metadata must declare all persistence-capable classes. If any 
+field declarations are not provided in the metadata, then field 
+metadata is defaulted for the missing field declarations. 
+Therefore, the JDO implementation is able to determine based on the
+metadata whether a class is persistence-capable or not. 
+Any class not known to be persistence-capable by the JDO 
+specification (for example, java.lang.Integer) and not explicitly 
+named in the metadata is not persistence-capable. 
+
+The metadata associated with each persistence capable class must 
+be contained within a file, and its format is as defined in the DTD. 
+If the metadata is for only one class, then its file name should be 
+<class-name>.jdo. If the metadata is for a package, then its file name 
+should be <package-name>.jdo. For portability, files should be 
+available via resources loaded by the same class loader as the class. 
+These rules apply both to enhancement and to runtime.
+
+The metadata is used both at enhancement time and at runtime. 
+Information required at enhancement time is a subset of the information 
+needed at runtime. 
+
+-->
+
+<!NOTATION JDO.2_0 PUBLIC
+          "-//Sun Microsystems, Inc.//DTD Java Data Objects Metadata 2.0//EN">
+<!--
+This is the XML DTD for the JDO 2.0 Metadata.
+All JDO 2.0 metadata descriptors must include a DOCTYPE
+of the following form:
+
+<!DOCTYPE jdo 
+PUBLIC "-//Sun Microsystems, Inc.//DTD Java Data Objects Metadata 2.0//EN"
+"http://java.sun.com/dtd/jdo_2_0.dtd">
+
+-->
+
+<!ELEMENT jdo ((package)+, (query)*, (extension)*)>
+<!ELEMENT package ((interface)*, (class)+, (sequence)*, (extension)*)>
+<!ATTLIST package name CDATA #REQUIRED>
+<!ELEMENT interface ((property)*, (extension*))>
+<!ATTLIST interface name CDATA #REQUIRED>
+<!ATTLIST interface requires-extent (true|false) 'true'>
+<!ELEMENT property ((collection|map|array|column)? , extension*)>
+<!ATTLIST property name CDATA #REQUIRED>
+<!ATTLIST property column CDATA #IMPLIED>
+<!ELEMENT class (datastore-identity?, implements*, inheritance?,join*, foreign-key*, index*, field*, fetch-group*, version?, query*, extension*)>
+<!ATTLIST class name CDATA #REQUIRED>
+<!ATTLIST class identity-type (application|datastore|nondurable) #IMPLIED>
+<!ATTLIST class objectid-class CDATA #IMPLIED>
+<!ATTLIST class table CDATA #IMPLIED>
+<!ATTLIST class requires-extent (true|false) 'true'>
+<!ATTLIST class persistence-capable-superclass CDATA #IMPLIED>
+<!ATTLIST class embedded-only (true|false) #IMPLIED>
+<!ATTLIST class persistence-modifier (persistence-capable|persistence-aware|non-persistent) #IMPLIED>
+<!ELEMENT version (extension*)>
+<!ATTLIST version strategy (state-comparison|timestamp|version-number) #IMPLIED>
+<!ATTLIST version column CDATA #IMPLIED>
+<!ELEMENT join (column*, index?, foreign-key?, extension*)>
+<!ATTLIST join table CDATA #IMPLIED>
+<!ATTLIST join column CDATA #IMPLIED>
+<!ATTLIST join outer (true|false) 'false'>
+<!ATTLIST join foreign-key CDATA #IMPLIED>
+<!ELEMENT datastore-identity ((column)*, (extension)*)>
+<!ATTLIST datastore-identity column CDATA #IMPLIED>
+<!ATTLIST datastore-identity strategy CDATA #IMPLIED>
+<!ATTLIST datastore-identity sequence-name CDATA #IMPLIED>
+<!ATTLIST datastore-identity factory-class CDATA #IMPLIED>
+<!ELEMENT implements ((property-field)+, (extension)*)>
+<!ATTLIST implements name CDATA #REQUIRED>
+<!ELEMENT inheritance (discriminator?, extension*)>
+<!ATTLIST inheritance strategy CDATA #REQUIRED>
+<!ELEMENT discriminator (column?, extension*)>
+<!ATTLIST discriminator column CDATA #IMPLIED>
+<!ATTLIST discriminator value CDATA #IMPLIED>
+<!ATTLIST discriminator strategy (value-map|class-name|none) #IMPLIED>
+<!ELEMENT column (extension*)>
+<!ATTLIST column name CDATA #IMPLIED>
+<!ATTLIST column target CDATA #IMPLIED>
+<!ATTLIST column target-field CDATA #IMPLIED>
+<!ATTLIST column jdbc-type CDATA #IMPLIED>
+<!ATTLIST column sql-type CDATA #IMPLIED>
+<!ATTLIST column length CDATA #IMPLIED>
+<!ATTLIST column scale CDATA #IMPLIED>
+<!ATTLIST column precision CDATA #IMPLIED>
+<!ATTLIST column nulls-allowed CDATA #IMPLIED>
+<!ELEMENT property-field (extension*)>
+<!ATTLIST property-field name CDATA #REQUIRED>
+<!ATTLIST property-field field-name CDATA #REQUIRED>
+<!ELEMENT field ((collection|map|array|(column*))?, join?, element?, key?, value?, fetch-group*, order?, embedded?, index?, foreign-key?, extension*)?>
+<!ATTLIST field name CDATA #REQUIRED>
+<!ATTLIST field persistence-modifier (persistent|transactional|none) #IMPLIED>
+<!ATTLIST field table CDATA #IMPLIED>
+<!ATTLIST field primary-key (true|false) 'false'>
+<!ATTLIST field null-value (exception|default|none) 'none'>
+<!ATTLIST field default-fetch-group (true|false) #IMPLIED>
+<!ATTLIST field embedded (true|false) #IMPLIED>
+<!ATTLIST field serialized (true|false) #IMPLIED>
+<!ATTLIST field dependent (true|false) #IMPLIED>
+<!ATTLIST field value-factory CDATA #IMPLIED>
+<!ATTLIST field foreign-key CDATA #IMPLIED>
+<!ATTLIST field fetch-group CDATA #IMPLIED>
+<!ATTLIST field depth CDATA #IMPLIED>
+<!ATTLIST field column CDATA #IMPLIED>
+<!ATTLIST field mapped-by CDATA #IMPLIED>
+<!ELEMENT foreign-key (column*, extension*)>
+<!ATTLIST foreign-key deferred (true|false) #IMPLIED>
+<!ATTLIST foreign-key delete-action (cascade|restrict|nullify) #IMPLIED>
+<!ATTLIST foreign-key update-action (cascade|restrict) #IMPLIED>
+<!ATTLIST foreign-key unique (true|false) #IMPLIED>
+<!ATTLIST foreign-key name CDATA #IMPLIED>
+<!ELEMENT collection (order?, extension*)>
+<!ATTLIST collection element-type CDATA #IMPLIED>
+<!ATTLIST collection embedded-element (true|false) #IMPLIED>
+<!ATTLIST collection dependent-element (true|false) #IMPLIED>
+<!ELEMENT map (extension)*>
+<!ATTLIST map key-type CDATA #IMPLIED>
+<!ATTLIST map embedded-key (true|false) #IMPLIED>
+<!ATTLIST map dependent-key (true|false) #IMPLIED>
+<!ATTLIST map value-type CDATA #IMPLIED>
+<!ATTLIST map embedded-value (true|false) #IMPLIED>
+<!ATTLIST map dependent-value (true|false) #IMPLIED>
+<!ELEMENT key (column*, index?, embedded?, foreign-key?, extension*)>
+<!ATTLIST key column CDATA #IMPLIED>
+<!ATTLIST key serialized (true|false) #IMPLIED>
+<!ATTLIST key foreign-key CDATA #IMPLIED>
+<!ELEMENT value (column*, index?, embedded?, foreign-key?, extension*)>
+<!ATTLIST value column CDATA #IMPLIED>
+<!ATTLIST value serialized (true|false) #IMPLIED>
+<!ATTLIST value foreign-key CDATA #IMPLIED>
+<!ELEMENT array (column*, embedded?, foreign-key?, extension*)>
+<!ATTLIST array column (true|false) #IMPLIED>
+<!ATTLIST array serialized (true|false) #IMPLIED>
+<!ATTLIST array foreign-key CDATA #IMPLIED>
+<!ATTLIST array embedded-element (true|false) #IMPLIED>
+<!ATTLIST array dependent-element (true|false) #IMPLIED>
+<!ELEMENT element (column*, index?, embedded?, foreign-key?, extension*)>
+<!ATTLIST element column CDATA #IMPLIED>
+<!ATTLIST element serialized (true|false) #IMPLIED>
+<!ATTLIST element foreign-key CDATA #IMPLIED>
+<!ELEMENT order (column?, extension*)>
+<!ATTLIST order column CDATA #IMPLIED>
+<!ELEMENT fetch-group (fetch-group|field)*>
+<!ATTLIST fetch-group name CDATA #REQUIRED>
+<!ATTLIST fetch-group post-load (true|false) #IMPLIED>
+<!ELEMENT embedded (field*, owner?, extension*)>
+<!ELEMENT owner (field?, extension*)>
+<!ELEMENT sequence (extension*)>
+<!ATTLIST sequence name CDATA #REQUIRED>
+<!ATTLIST sequence sequence-name CDATA #REQUIRED>
+<!ATTLIST sequence strategy (non-transactional|transactional-contiguous|transactional-holes-allowed) #REQUIRED>
+<!ELEMENT index (extension*)>
+<!ATTLIST index name CDATA #IMPLIED>
+<!ATTLIST index unique (true|false) 'false'>
+<!ELEMENT query (declare?, filter?, sql?, result?, extension*)>
+<!ATTLIST query name CDATA #IMPLIED>
+<!ATTLIST query language CDATA #IMPLIED>
+<!ATTLIST query ignore-cache CDATA #IMPLIED>
+<!ATTLIST query include-subclasses CDATA #IMPLIED>
+<!ATTLIST query filter CDATA #IMPLIED>
+<!ATTLIST query sql CDATA #IMPLIED>
+<!ATTLIST query ordering CDATA #IMPLIED>
+<!ATTLIST query range CDATA #IMPLIED>
+<!ELEMENT filter ANY>
+<!ELEMENT sql ANY>
+<!ELEMENT declare (extension*)>
+<!ATTLIST declare imports CDATA #IMPLIED>
+<!ATTLIST declare parameters CDATA #IMPLIED>
+<!ATTLIST declare variables CDATA #IMPLIED>
+<!ELEMENT result (extension*)>
+<!ATTLIST result unique CDATA #IMPLIED>
+<!ATTLIST result class CDATA #IMPLIED>
+<!ATTLIST result grouping CDATA #IMPLIED>
+<!ELEMENT extension ANY>
+<!ATTLIST extension vendor-name CDATA #REQUIRED>
+<!ATTLIST extension key CDATA #IMPLIED>
+<!ATTLIST extension value CDATA #IMPLIED>

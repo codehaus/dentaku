@@ -18,7 +18,7 @@ package org.dentaku.services.persistence;
 
 public interface PersistenceFactory {
     public static final String ROLE = PersistenceFactory.class.getName();
-    void setup(PersistenceManagerStorage tpms) throws PersistenceException;
+    void setup(PersistenceManager tpms) throws PersistenceException;
 
     Entity create() throws PersistenceException;
     Entity create(Object source) throws PersistenceException;

@@ -21,6 +21,8 @@ import org.netbeans.mdr.storagemodel.StorableObject;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.TaggedValue;
 import org.omg.uml.modelmanagement.Model;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -113,6 +115,19 @@ abstract public class ModelElementImpl extends InstanceHandler implements ModelE
             }
         }
         return null;
+    }
+
+    /**
+     * This returns all tags that have the same name.  Can tags actually be defined with the same name twice?  This is JavaDoc style...
+     * @param name Name of tag
+     * @return Collection of TaggedValues that match
+     */
+    public Collection getTaggedValuesForName(final String name) {
+        return CollectionUtils.select(getTaggedValue(), new Predicate() {
+            public boolean evaluate(Object o) {
+                return ((TaggedValue)o).getName().equals(name);
+            }
+        });
     }
 
     public Collection getTaggedValues() {

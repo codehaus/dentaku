@@ -33,11 +33,6 @@ public class StrutsFormPlugin extends JavaPluginBase {
         setMultioutput(true);
     }
 
-    protected void populateContextMap(Map m) {
-        super.populateContextMap(m);
-        m.put("class", m.get("metadata"));
-    }
-
     protected Collection getMetadata() {
         return metadataProvider.getJMIMetadata();
     }

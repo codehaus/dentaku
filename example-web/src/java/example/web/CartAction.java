@@ -33,7 +33,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dentaku.foundation.connector.DirectConnector;
 import org.dentaku.services.container.ContainerManager;
-import org.dentaku.services.persistence.PersistenceManagerStorage;
+import org.dentaku.services.persistence.PersistenceManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,7 +80,7 @@ public class CartAction extends DispatchAction {
 
         if (item == null) {
             // create and populate a new line item entity
-            PersistenceManagerStorage pm = (PersistenceManagerStorage) ContainerManager.getInstance().getContainer().lookup(PersistenceManagerStorage.ROLE);
+            PersistenceManager pm = (PersistenceManager) ContainerManager.getInstance().getContainer().lookup(PersistenceManager.ROLE);
             SKUFactory skuFactory = (SKUFactory) pm.getPersistenceFactory(SKU.class.getName());
             SKU sku = (SKU) skuFactory.findByPrimaryKey(skuID);
             pm.releaseSession();

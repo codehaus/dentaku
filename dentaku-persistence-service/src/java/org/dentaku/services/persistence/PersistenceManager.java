@@ -16,5 +16,36 @@
  */
 package org.dentaku.services.persistence;
 
-public abstract class PersistenceManager {
+import org.dentaku.services.persistence.hibernate.SessionProvider;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
+/**
+ * A PersistenceManager is the lookup component for multiple PersistenceEngines.  This is pluggable,
+ * but little need to replace it is foreseen.  PersistenceEngines understand what classes they are
+ * responsible for, and when they are added to the manager, they populate the ability for a client
+ * to recover a factory for a given class.  The factory is responsible for the creation and read of objects,
+ * but the manager is responsible for update and delete.
+ */
+public interface PersistenceManager {
+    public static final String ROLE = PersistenceManager.class.getName();
+    public static final String dataSourceName = "java:comp/env/jdbc/DentakuDataSource";
+
+    SessionProvider getSessionProvider() throws PersistenceException;
+    PersistenceFactory getPersistenceFactory(String name) throws PersistenceException;
+    Object load(Class theClass, Serializable id) throws PersistenceException;
+    void saveOrUpdate(Entity object) throws PersistenceException;
+    void delete(Entity object) throws PersistenceException;
+    List find(String query, Object[] values, Class[] types) throws PersistenceException;
+    Collection filter(Collection c, String filter) throws PersistenceException;
+    void refresh(Object o) throws PersistenceException;
+    void releaseSession() throws PersistenceException;
+    void rollback();
+
+    void beginTrans(boolean write);
+
+    void endTrans();
+    void endTrans(boolean somethingUnknown);
 }

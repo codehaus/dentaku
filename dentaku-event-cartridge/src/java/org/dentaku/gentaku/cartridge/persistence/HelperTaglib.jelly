@@ -1,0 +1,20 @@
+<j:jelly xmlns:j="jelly:core" xmlns:d="jelly:define">
+    <d:taglib uri="helper">
+        <d:tag name="getFirstNonEmptyValue">
+            <j:choose>
+                <j:when test="${!empty value1}">
+                    <j:set scope="parent" var="${var}" value="${value1}"/>
+                </j:when>
+                <j:when test="${!empty value2}">
+                    <j:set scope="parent" var="${var}" value="${value2}"/>
+                </j:when>
+                <j:when test="${!empty value3}">
+                    <j:set scope="parent" var="${var}" value="${value3}"/>
+                </j:when>
+                <j:otherwise>
+                    <j:set scope="parent" var="${var}" value=""/>
+                </j:otherwise>
+            </j:choose>
+        </d:tag>
+    </d:taglib>
+</j:jelly>

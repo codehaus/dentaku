@@ -1,7 +1,43 @@
-<project default="dentaku-dist" xmlns:m="jelly:maven">
+<project default="dentaku-dist" xmlns:j="jelly:core" xmlns:maven="jelly:maven">
 
-  <goal name="dentaku-dist">
-    <attainGoal name="jar:install"/>
-  </goal>
+    <goal name="dentaku-dist">
+        <attainGoal name="jar:install"/>
+    </goal>
+    <preGoal name="java:compile">
+        <j:set var="generateQtags" value="${xdoclet.qtags.generate}"/>
+        <j:if test="${generateQtags == 'true'}">
+            <attainGoal name="qtags"/>
+        </j:if>
+    </preGoal>
+
+    <goal name="qtags">
+        <mkdir dir="${basedir}/target/src"/>
+        <path id="xdoclet.generated.path" location="${basedir}/target/src"/>
+        <maven:addPath id="maven.compile.src.set" refid="xdoclet.generated.path"/>
+
+        <path id="xdoclet.task.classpath">
+            <pathelement location="${basedir}/target/classes"/>
+            <path refid="maven.dependency.classpath"/>
+        </path>
+
+        <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="xdoclet.task.classpath"/>
+
+        <taskdef name="xdoclet" classname="org.xdoclet.ant.XDocletTask" classpathref="xdoclet.task.classpath"/>
+
+        <xdoclet>
+            <fileset dir="${pom.build.sourceDirectory}">
+                <include name="**/*.java"/>
+            </fileset>
+
+            <component classname="org.generama.VelocityTemplateEngine"/>
+            <component classname="org.generama.JellyTemplateEngine"/>
+
+            <component classname="org.dentaku.gentaku.cartridge.qtags.impl.QTagImplPlugin" destdir="${basedir}/target/src"/>
+            <component classname="org.dentaku.gentaku.cartridge.qtags.impl.QTagLibraryPlugin" destdir="${basedir}/target/src" packagereplace="org.dentaku.gentaku.cartridge.persistence.qtags"/>
+            <!---->
+            <!--            <component classname="org.dentaku.gentaku.cartridge.qtags.xdoc.QTagXDocPlugin" destdir="${basedir}/target/generated-xdocs" namespace="${xdoclet.qtags.namespace}"/>-->
+            <!--            <component classname="org.dentaku.gentaku.cartridge.qtags.confluence.QTagConfluencePlugin" destdir="${basedir}/target/confluence" namespace="${xdoclet.qtags.namespace}"/>-->
+        </xdoclet>
+    </goal>
 
 </project>
