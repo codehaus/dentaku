@@ -4,27 +4,25 @@
     </goal>
     <preGoal name="ejb:init">
         <attainGoal name="dentaku:gentaku"/>
-        <attainGoal name="xdoclet:hibernatedoclet"/>
+<!--        <attainGoal name="xdoclet:hibernatedoclet"/>-->
     </preGoal>
     <goal name="dentaku:gentaku">
-        <path id="gentaku.task.classpath">
-            <path refid="maven.dependency.classpath"/>
-        </path>
-        <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="gentaku.task.classpath"/>
+        <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
         <gentaku model="${maven.src.dir}/uml/model.xml.zip">
             <component classname="org.dentaku.gentaku.cartridge.entity.EntityBasePlugin" destdir="${maven.build.src}"/>
+            <component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${maven.build.dir}/xdoclet/hibernatedoclet"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.EntityPlugin" destdir="${maven.src.dir}/java"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.EntityFactoryPlugin" destdir="${maven.build.src}"/>
-
-            <component classname="org.dentaku.gentaku.cartridge.event.StrutsFormPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.event.EventPlugin" destdir="${maven.build.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.event.WerkflowPlugin" destdir="${maven.build.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.event.RulesPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}/META-INF/plexus" destinationfilename="components.xml"/>
-            <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionImplPlugin" destdir="${maven.src.dir}/java"/>
-            <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionPlugin" destdir="${maven.build.src}"/>
-            <!--            <component classname="org.xdoclet.plugin.ejb.interfaces.LocalInterfacePlugin" destdir="${basedir}/target/java"/>-->
-            <!--            <component classname="org.xdoclet.plugin.ejb.descriptor.EjbJarXmlPlugin" destdir="${basedir}/target/classes/META-INF"/>-->
+<!---->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.StrutsFormPlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.WerkflowPlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.RulesPlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionImplPlugin" destdir="${maven.src.dir}/java"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionPlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.xdoclet.plugin.ejb.interfaces.LocalInterfacePlugin" destdir="${basedir}/target/java"/>-->
+<!--            <component classname="org.xdoclet.plugin.ejb.descriptor.EjbJarXmlPlugin" destdir="${basedir}/target/classes/META-INF"/>-->
         </gentaku>
     </goal>
     <goal name="dentaku:initdb">
