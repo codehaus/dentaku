@@ -1,8 +1,8 @@
 <project>
     <extend>../project.xml</extend>
-    <artifactId>dentaku-entity-meta-cartridge</artifactId>
-    <name>Dentaku Entity Meta Cartridge</name>
-	<shortDescription>Meta cartidge to generate java code for entities and has some extensions point to be implemented by persistence specific cartridge.</shortDescription>
+    <artifactId>gentaku-java-cartridge</artifactId>
+    <name>Gentaku Java Cartridge</name>
+	<shortDescription>Cartrigde that generates java code like interfaces, bean interface and implementation.</shortDescription>
     <dependencies>
         <dependency>
             <groupId>${pom.groupId}</groupId>

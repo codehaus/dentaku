@@ -1,12 +1,13 @@
-package org.dentaku.gentaku.metacartridge;
+package org.dentaku.gentaku.java;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Collections;
 
 import org.netbeans.jmiimpl.omg.uml.foundation.core.AttributeImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
+import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.Comment;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.Stereotype;
@@ -28,6 +29,19 @@ public class JMIHelper {
         }
 
         return false;
+    }
+
+    public Classifier findSuperEntity(Classifier clazz) {
+        Iterator it = clazz.getGeneralization().iterator();
+        ModelElement superz;
+        while (it.hasNext()) {
+            superz = (ModelElement) it.next();
+            if ((superz instanceof Classifier) && (this.matchesStereotype(superz, "Entity"))) {
+                return (Classifier) superz;
+            }
+        }
+
+        return null;
     }
 
     public String getTaggedSingleValue(ModelElement me, String name) {
@@ -64,7 +78,7 @@ public class JMIHelper {
             }
         }
 
-        return this.countPrimaryKey((ClassifierImpl) c.getJavaGeneralization(), count);
+        return this.countPrimaryKey((ClassifierImpl) c.getSuperclass(), count);
     }
 
     public List getCommentLines(ModelElement me) {

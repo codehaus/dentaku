@@ -16,19 +16,20 @@
  */
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
-import java.util.Iterator;
 import java.util.Collection;
-
-import org.netbeans.mdr.storagemodel.StorableObject;
-import org.omg.uml.foundation.core.TaggedValue;
-import org.apache.commons.el.ExpressionEvaluatorImpl;
+import java.util.Iterator;
 
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.VariableResolver;
 
+import org.apache.commons.el.ExpressionEvaluatorImpl;
+import org.netbeans.mdr.storagemodel.StorableObject;
+import org.omg.uml.foundation.core.TaggedValue;
+
 abstract public class TaggedValueImpl extends ModelElementImpl implements TaggedValue {
     // todo is this threadsafe???
     static ExpressionEvaluatorImpl ev = new ExpressionEvaluatorImpl();
+    
     protected TaggedValueImpl(StorableObject storable) {
         super(storable);
     }

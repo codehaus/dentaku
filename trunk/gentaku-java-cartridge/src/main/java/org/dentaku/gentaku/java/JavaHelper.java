@@ -1,4 +1,4 @@
-package org.dentaku.gentaku.metacartridge;
+package org.dentaku.gentaku.java;
 
 
 public class JavaHelper {

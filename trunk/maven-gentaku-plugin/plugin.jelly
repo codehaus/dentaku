@@ -55,7 +55,7 @@
                 
                 <!-- set components -->
                 <DE:BUG>Configuring component(s) of Gentaku instance ${gentaku_index}.</DE:BUG>
-                <j:forEach var="component_index" items="${gentaku_name}">
+                <j:forEach var="component_index" items="${gentaku_name.split(',')}">
                     <j:set var="varname" value="maven.gentaku.${gentaku_index}.${component_index}"/>
                     <j:set var="component_class" value="${context.getVariable(varname)}"/>
                     <j:set var="varname" value="maven.gentaku.${gentaku_index}.${component_index}."/>
