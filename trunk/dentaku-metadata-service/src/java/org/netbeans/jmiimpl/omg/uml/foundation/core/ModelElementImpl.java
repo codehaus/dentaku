@@ -26,7 +26,7 @@ import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.TaggedValue;
 import org.omg.uml.modelmanagement.Model;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -81,7 +81,7 @@ abstract public class ModelElementImpl extends InstanceHandler implements ModelE
     public Collection getStereotypeNames() {
         Collection names = (Collection) stereotypeCache.get(this);
         if (names == null) {
-            names = new ArrayList();
+            names = new LinkedList();
             Collection stereotypes = getStereotype();
             for (Iterator i = stereotypes.iterator(); i.hasNext();) {
                 ModelElement stereotype = (ModelElement) i.next();

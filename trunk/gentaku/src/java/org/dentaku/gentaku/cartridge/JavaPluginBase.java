@@ -22,6 +22,7 @@ import org.generama.TemplateEngine;
 import org.generama.WriterMapper;
 import org.generama.defaults.FileWriterMapper;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
+import org.omg.uml.foundation.core.TaggedValue;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -68,24 +69,23 @@ public abstract class JavaPluginBase extends Plugin {
     public boolean shouldGenerate(Object metadata) {
         String stereotypeName = null;
         boolean result = false;
-        if (stereotypes.size() == 0) {
-            String className = getClass().getName();
-            String pluginName = className.substring(className.lastIndexOf(".") + 1);
-            stereotypeName = pluginName.substring(0, pluginName.indexOf("Plugin"));
-            result = matchesStereotype((ModelElementImpl) metadata, stereotypeName);
-        } else {
-            for (Iterator it = stereotypes.iterator(); it.hasNext();) {
-                stereotypeName = (String) it.next();
-                if (matchesStereotype((ModelElementImpl) metadata, stereotypeName)) {
-                    result = true;
+        TaggedValue taggedValue = ((ModelElementImpl) metadata).getTaggedValue("gentaku.generate");
+        if (!(taggedValue != null && taggedValue.getDataValue().contains("false"))) {
+            if (stereotypes.size() == 0) {
+                String className = getClass().getName();
+                String pluginName = className.substring(className.lastIndexOf(".") + 1);
+                stereotypeName = pluginName.substring(0, pluginName.indexOf("Plugin"));
+                result = matchesStereotype((ModelElementImpl) metadata, stereotypeName);
+            } else {
+                for (Iterator it = stereotypes.iterator(); it.hasNext();) {
+                    stereotypeName = (String) it.next();
+                    if (matchesStereotype((ModelElementImpl) metadata, stereotypeName)) {
+                        result = true;
+                    }
                 }
             }
         }
 
-        // in either case, if there is a tag on the object of 'generate=false', always return that
-        if (((ModelElementImpl)metadata).getTaggedValuesForName("generate", false).contains("false")) {
-            result = false;
-        }
         return result;
     }
 

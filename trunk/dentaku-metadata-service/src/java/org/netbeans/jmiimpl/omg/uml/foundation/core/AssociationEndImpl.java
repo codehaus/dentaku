@@ -71,7 +71,7 @@ abstract public class AssociationEndImpl extends ModelElementImpl implements Ass
         return false;
     }
 
-    protected AssociationEnd getOtherEnd() {
+    public AssociationEnd getOtherEnd() {
         Collection ends = getAssociation().getConnection();
         for (Iterator i = ends.iterator(); i.hasNext();) {
             AssociationEnd ae = (AssociationEnd) i.next();
