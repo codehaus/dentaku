@@ -4,7 +4,6 @@
     </goal>
     <preGoal name="ejb:init">
         <attainGoal name="dentaku:gentaku"/>
-<!--        <attainGoal name="dentaku:andromda"/>-->
         <attainGoal name="xdoclet:hibernatedoclet"/>
     </preGoal>
     <goal name="dentaku:gentaku">
@@ -21,32 +20,12 @@
             <component classname="org.dentaku.gentaku.cartridge.event.EventPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.event.WerkflowPlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.event.RulesPlugin" destdir="${maven.build.src}"/>
-<!--            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}" destinationfilename="META-INF/plexus/components.xml"/>-->
-<!--            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}"/>-->
+            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}" destinationfilename="META-INF/plexus/components.xml"/>
             <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionImplPlugin" destdir="${maven.src.dir}/java"/>
             <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionPlugin" destdir="${maven.build.src}"/>
             <!--            <component classname="org.xdoclet.plugin.ejb.interfaces.LocalInterfacePlugin" destdir="${basedir}/target/java"/>-->
             <!--            <component classname="org.xdoclet.plugin.ejb.descriptor.EjbJarXmlPlugin" destdir="${basedir}/target/classes/META-INF"/>-->
         </gentaku>
-    </goal>
-    <goal name="dentaku:andromda">
-        <mkdir dir="target/src"/>
-        <taskdef name="andromda" classname="org.andromda.core.anttasks.AndroMDAGenTask">
-            <classpath>
-                <path refid="maven.dependency.classpath"/>
-            </classpath>
-        </taskdef>
-        <andromda typeMappings="${maven.andromda.typeMappings}" basedir="${maven.andromda.basedir}" modelURL="${maven.andromda.modelURL}" lastModifiedCheck="${maven.andromda.lastModifiedCheck}" >
-            <userProperty name="foreignKeySuffix" value="_FK"/>
-            <outlet cartridge="dentaku-hibernate" outlet="value-objects" dir="${maven.build.src}"/>
-            <outlet cartridge="dentaku-hibernate" outlet="entities" dir="${maven.build.src}"/>
-            <outlet cartridge="dentaku-hibernate" outlet="entity-impls" dir="${maven.src.dir}/java"/>
-            <outlet cartridge="dentaku-hibernate" outlet="session-beans" dir="${maven.build.src}"/>
-            <outlet cartridge="dentaku-hibernate" outlet="session-impls" dir="${maven.src.dir}/java"/>
-        </andromda>
-
-        <!--        <mkdir dir="${maven.build.dir}/xdoclet/ejbdoclet"/>-->
-        <!--        <attainGoal name="xdoclet:ejbdoclet"/>-->
     </goal>
     <goal name="dentaku:initdb">
         <path id="schema.classpath">

@@ -13,12 +13,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="services" />
-    <orderEntry type="module" module-name="foundation" />
     <orderEntry type="library" name="Pico" level="application" />
     <orderEntry type="library" name="jboss" level="application" />
     <orderEntry type="library" name="Struts" level="application" />
-    <orderEntry type="library" name="AndroMDA" level="application" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -53,6 +50,8 @@
     <orderEntry type="library" name="Clover" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
     <orderEntry type="library" name="Generama" level="application" />
+    <orderEntry type="module" module-name="dentaku-foundation" />
+    <orderEntry type="module" module-name="dentaku-services" />
   </component>
 </module>
 
