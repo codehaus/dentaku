@@ -7,7 +7,7 @@
   <organization>
     <url>http://dentaku.codehaus.org</url>
   </organization>
-  <description>This cartridge geenrates the Velocity screens that will display the entities as modelled. It will generate code that manage the parent child relationships for display and for CRUD. It also generates the Pull tools used to extract the entities on display for the screen. Finally it generates the Action classes that manage the submisssions from each screen, multiple forms is modelled so.</description>
+  <description>This cartridge generates the Velocity screens that will display the entities as modelled. It will generate code that manage the parent child relationships for display and for CRUD. It also generates the Pull tools used to extract the entities on display for the screen. Finally it generates the Action classes that manage the submisssions from each screen, multiple forms is modelled so.</description>
   <shortDescription>Builds the Velocity screens, pull tools and the action code.</shortDescription>
   <repository />
   <developers>
