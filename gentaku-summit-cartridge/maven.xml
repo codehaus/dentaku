@@ -12,10 +12,10 @@
             <component classname="org.dentaku.gentaku.cartridge.core.POJOPlugin" destdir="${maven.build.src}" stereotype="Entity"/>
             <component classname="org.dentaku.gentaku.cartridge.event.EventBasePlugin" destdir="${maven.build.src}"/>
 
-            <component classname="org.dentaku.summit-cartridge.BasePullToolPlugin" destdir="${maven.build.src}/java"/>
-            <component classname="org.dentaku.summit-cartridge.PullToolPlugin" destdir="${maven.build.src}/java"/>
-            <component classname="org.dentaku.summit-cartridge.CrudActionPlugin" destdir="${maven.build.src}/java"/>-->
-            <component classname="org.dentaku.summit-cartridge.VelocityFormPlugin" destdir="${maven.src.dir}/velocity"/>-->
+            <component classname="org.dentaku.gentaku.cartridge.summit.BasePullToolPlugin" destdir="${maven.build.src}/java"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.PullToolPlugin" destdir="${maven.build.src}/java"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.CrudActionPlugin" destdir="${maven.build.src}/java"/>-->
+            <component classname="org.dentaku.gentaku.cartridge.summit.VelocityFormPlugin" destdir="${maven.src.dir}/velocity"/>-->
         </gentaku>
     </goal>
     <goal name="dentaku:initdb">
