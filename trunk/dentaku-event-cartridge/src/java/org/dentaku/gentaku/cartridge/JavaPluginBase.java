@@ -18,6 +18,7 @@ package org.dentaku.gentaku.cartridge;
 
 import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.dentaku.services.metadata.SimpleOOHelper;
+import org.dentaku.services.metadata.StringUtilsHelper;
 import org.dentaku.services.metadata.proxy.PClassifier;
 import org.generama.MetadataProvider;
 import org.generama.Plugin;
@@ -27,7 +28,6 @@ import org.generama.defaults.FileWriterMapper;
 import org.generama.defaults.JavaGeneratingPlugin;
 import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.ModelElement;
-import org.andromda.core.common.StringUtilsHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
