@@ -21,14 +21,15 @@ import org.omg.uml.UmlPackage;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.TaggedValue;
 import org.omg.uml.modelmanagement.Model;
-import org.xdoclet.ConfigurableDocletTagFactory;
+import org.generama.ConfigurableDocletTagFactory;
+import org.generama.ConfigurableDocletTagFactory;
 
 public abstract class JMIMetadataProviderBase implements JMICapableMetadataProvider {
     public static boolean booted;
 
     protected RepositoryReader reader;
     protected UmlPackage model;
-    final ConfigurableDocletTagFactory docletTagFactory = new ConfigurableDocletTagFactory();
+    protected final ConfigurableDocletTagFactory docletTagFactory = new ConfigurableDocletTagFactory();
 
     // injected parameters
 
@@ -90,7 +91,7 @@ public abstract class JMIMetadataProviderBase implements JMICapableMetadataProvi
         return model;
     }
 
-    public DocletTagFactory getDocletTagFactory() {
+    public ConfigurableDocletTagFactory getDocletTagFactory() {
         return docletTagFactory;
     }
 

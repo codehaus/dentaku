@@ -34,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -136,9 +137,17 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
         String filename = fullname.substring(fullname.lastIndexOf("/")+1, fullname.indexOf(".zip"));
 
         // check file exists
-        File file = new File(new URL(model).getFile());
+        URL url = null;
+        try {
+            url = new URL(model);
+        } catch (MalformedURLException e) {
+            // try relative path on classpath
+            // HACK: this should have a registered URL handler for res://
+            url = new URL(getClass().getClassLoader().getResource(""), model);
+        }
+        File file = new File(url.getFile());
         if (!file.exists()) {
-            throw new FileNotFoundException(fullname + " could not be found");
+            throw new FileNotFoundException(url.getFile() + " could not be found");
         }
 
         // get the input stream

@@ -17,16 +17,16 @@
 package org.dentaku.services.persistence.synthetic;
 
 import org.dentaku.services.PersistenceServiceTestBase;
-import org.dentaku.services.persistence.PersistenceManagerStorage;
+import org.dentaku.services.persistence.PersistenceManager;
 import test.Root;
 import test.Child;
 
 public class SyntheticPersistenceManagerTest extends PersistenceServiceTestBase {
-    private PersistenceManagerStorage pm;
+    private PersistenceManager pm;
 
     protected void setUp() throws Exception {
         super.setUp();
-        pm = (PersistenceManagerStorage)container.lookup(PersistenceManagerStorage.ROLE);
+        pm = (PersistenceManager)container.lookup(PersistenceManager.ROLE);
         assertNotNull(pm);
     }
 

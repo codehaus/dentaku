@@ -16,9 +16,9 @@
  */
 package org.dentaku.services.persistence.hibernate;
 
-import org.dentaku.services.persistence.PersistenceFactory;
 import org.dentaku.services.persistence.Entity;
 import org.dentaku.services.persistence.PersistenceException;
+import org.dentaku.services.persistence.PersistenceFactory;
 
 public abstract class AbstractHibernatePersistenceFactory implements PersistenceFactory {
     public abstract Entity create() throws PersistenceException;

@@ -1,0 +1,14 @@
+<jdo>
+    <class name="org.dentaku.cartridge.expected.User" identity-type="datastore">
+        <field name="id"/>
+        <field name="username"/>
+        <field name="password"/>
+        <field name="notes"/>
+    </class>
+    <class name="org.dentaku.cartridge.expected.Address" identity-type="datastore">
+        <field name="street"/>
+        <field name="city"/>
+        <field name="state"/>
+        <field name="postalcode"/>
+    </class>
+</jdo>

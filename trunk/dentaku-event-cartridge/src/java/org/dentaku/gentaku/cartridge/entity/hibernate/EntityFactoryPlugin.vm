@@ -5,9 +5,7 @@ package ${metadata.packageName};
 
 import org.dentaku.services.persistence.PersistenceException;
 import org.dentaku.services.persistence.PersistenceFactory;
-import org.dentaku.services.persistence.PersistenceManagerStorage;
-import org.tranql.schema.Entity;
-import org.dentaku.services.persistence.tranql.ModelEntity;
+import org.dentaku.services.persistence.PersistenceManager;
 
 /**
  * <p>
@@ -29,14 +27,9 @@ import org.dentaku.services.persistence.tranql.ModelEntity;
  *
  */
 public class ${class.name}Factory implements PersistenceFactory {
-    protected PersistenceManagerStorage pm = null;
-    protected ModelEntity e = null;
+    protected PersistenceManager pm = null;
 
-    public Entity getEntity() {
-        return e;
-    }
-
-    public void setup(PersistenceManagerStorage pm) {
+    public void setup(PersistenceManager pm) {
         this.pm = pm;
     }
 

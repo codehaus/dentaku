@@ -19,8 +19,8 @@ package org.dentaku.services;
 import junit.framework.TestCase;
 import org.axiondb.jdbc.AxionDataSource;
 import org.codehaus.plexus.embed.Embedder;
-import org.dentaku.services.persistence.TranQLPersistenceFactory;
 import org.mockejb.jndi.MockContextFactory;
+import org.dentaku.services.persistence.PersistenceManager;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -48,7 +48,7 @@ public abstract class PersistenceServiceTestBase extends TestCase {
         context = new InitialContext();
         // add to the context
         ds = new AxionDataSource("jdbc:axiondb:testdb");
-        context.rebind(TranQLPersistenceFactory.dataSourceName, ds);
+        context.rebind(PersistenceManager.dataSourceName, ds);
 
         Connection c = ds.getConnection();
         Statement s = c.createStatement();
@@ -66,7 +66,7 @@ public abstract class PersistenceServiceTestBase extends TestCase {
         // create the initial context that will be used for binding EJBs
         context = new InitialContext();
         // add to the context
-        context.rebind(TranQLPersistenceFactory.dataSourceName, ds);
+        context.rebind(PersistenceManager.dataSourceName, ds);
     }
 
     protected void tearDown() throws Exception {

@@ -16,13 +16,7 @@
  */
 package org.dentaku.services.persistence;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
 import java.util.Collection;
-
-import org.dentaku.services.persistence.hibernate.ThreadLocalSessionProvider;
 
 public abstract class Entity {
     public abstract Object getId();

@@ -20,7 +20,7 @@ import example.entity.Country;
 import example.entity.CountryFactory;
 import example.entity.Invoice;
 import org.dentaku.services.container.ContainerManager;
-import org.dentaku.services.persistence.PersistenceManagerStorage;
+import org.dentaku.services.persistence.PersistenceManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -30,7 +30,7 @@ public class SubmitInvoiceEvent extends SubmitInvoiceEventBase {
     private static Log log = LogFactory.getLog(SubmitInvoiceEvent.class);
     public boolean execute(Object o) throws Exception {
         boolean result = true;
-        PersistenceManagerStorage pm = (PersistenceManagerStorage) ContainerManager.getInstance().getContainer().lookup(PersistenceManagerStorage.ROLE);
+        PersistenceManager pm = (PersistenceManager) ContainerManager.getInstance().getContainer().lookup(PersistenceManager.ROLE);
         try {
             Invoice inv = getInvoice();
 
