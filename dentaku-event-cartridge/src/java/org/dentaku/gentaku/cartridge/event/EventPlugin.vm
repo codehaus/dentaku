@@ -1,0 +1,31 @@
+/**
+ * $dontedit
+ */
+#set( $class = $metadata )
+package ${plugin.getDestinationPackage($class)};
+
+public abstract class ${plugin.getDestinationClassname($class)} extends org.dentaku.foundation.event.AbstractEvent {
+    public ${plugin.getDestinationClassname($class)}() {
+    }
+    
+    public abstract boolean execute() throws Exception;
+
+    protected ${plugin.getDestinationClassname($class)}(org.dentaku.foundation.output.OutputContext response) {
+        super(response);
+    }
+
+#foreach ( $targetEnd in $plugin.umlUtils.getTargetEnds($class) )
+#if ( $plugin.umlUtils.isClass($targetEnd.participant) )
+    #set ($targettypename = $plugin.getDestinationFullyQualifiedClassName($targetEnd.participant))
+    private ${targettypename} ${targetEnd.name};
+
+    public ${targettypename} get${plugin.umlUtils.upperCaseFirstLetter(${targetEnd.name})}() {
+        return this.$targetEnd.name;
+    }
+
+    public void set${plugin.umlUtils.upperCaseFirstLetter(${targetEnd.name})}(${targettypename} ${targetEnd.name}) {
+        this.$targetEnd.name = $targetEnd.name;
+    }
+#end
+#end
+}

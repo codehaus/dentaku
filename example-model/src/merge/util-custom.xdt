@@ -1,0 +1,4 @@
+public static org.mockejb.SessionBeanDescriptor getSessionBeanDescriptor() {
+    return new org.mockejb.SessionBeanDescriptor(<XDtEjbHome:homeInterface type="remote"/>.<XDtEjbUtilObj:lookupKind/>, <XDtEjbHome:homeInterface type="remote"/>.class, <XDtClass:classOf><XDtEjbIntf:componentInterface type="remote"/></XDtClass:classOf>.class, <XDtClass:classOf><XDtEjbSession:sessionClass/></XDtClass:classOf>.class);
+}
+

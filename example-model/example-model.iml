@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4" relativePaths="false">
+  <component name="ModuleRootManager" />
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <exclude-output />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/target/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/xdoclet/hibernatedoclet" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="services" />
+    <orderEntry type="module" module-name="foundation" />
+    <orderEntry type="library" name="Pico" level="application" />
+    <orderEntry type="library" name="jboss" level="application" />
+    <orderEntry type="library" name="Struts" level="application" />
+    <orderEntry type="library" name="AndroMDA" level="application" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/src/uml/model.xml.zip!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Test" level="application" />
+    <orderEntry type="library" name="dom4j" level="application" />
+    <orderEntry type="library" name="Commons" level="application" />
+    <orderEntry type="library" name="Hibernate" level="application" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/tools/mySQL/mysql-connector-java-3.1.2-alpha-bin.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/plugins/clover-idea4-0.7.1/lib/clover-idea4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Clover" level="application" />
+    <orderEntry type="library" name="Plexus" level="application" />
+    <orderEntry type="library" name="Generama" level="application" />
+  </component>
+</module>
+

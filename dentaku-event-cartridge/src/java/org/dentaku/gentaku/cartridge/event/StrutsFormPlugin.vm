@@ -1,0 +1,36 @@
+/**
+ * $dontedit
+ */
+#set( $class = $metadata )
+package ${plugin.getDestinationPackage($class)};
+
+import org.apache.struts.action.ActionForm;
+
+#set ($interfaces = $plugin.umlUtils.getInterfaces($class) )
+/**
+ * @struts.form name="${plugin.getDestinationClassname($class)}"
+ */
+#if (!$interfaces)
+public class ${plugin.getDestinationClassname($class)} extends ActionForm {
+#else
+public class ${plugin.getDestinationClassname($class)} extends ActionForm implements $interfaces {
+#end
+#foreach ( $att in $plugin.umlUtils.getAttributes($class) )
+#set ($atttypename = $plugin.umlUtils.getFullyQualifiedName($att.type))
+    private $atttypename ${att.name};
+#end
+
+#foreach ( $att in $plugin.umlUtils.getAttributes($class) )
+#set ($atttypename = $plugin.umlUtils.getFullyQualifiedName($att.type))
+    public $atttypename get${plugin.umlUtils.upperCaseFirstLetter(${att.name})}()
+    {
+        return this.${att.name};
+    }
+
+    public void set${plugin.umlUtils.upperCaseFirstLetter(${att.name})}($atttypename newValue)
+    {
+        this.${att.name} = newValue;
+    }
+
+#end
+}

@@ -1,0 +1,14 @@
+<project default="main"
+         xmlns:j="jelly:core"
+         xmlns:maven="jelly:maven">
+
+    <goal name="main" prereqs="war:install"/>
+
+    <preGoal name="war:init">
+        <attainGoal name="xdoclet:webdoclet"/>
+        <copy todir="${maven.build.dir}/${pom.artifactId}">
+            <fileset dir="${maven.build.dir}/xdoclet/webdoclet" includes="**/*"/>
+        </copy>
+    </preGoal>
+    
+</project>

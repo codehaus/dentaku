@@ -1,0 +1,21 @@
+/**
+ * $dontedit
+ */
+#set( $class = $metadata )
+package ${plugin.getDestinationPackage($class)};
+
+import org.dentaku.foundation.workflow.AbstractWorkflowAction;
+
+public abstract class ${class.name}Workflow extends AbstractWorkflowAction {
+    protected static ${class.name}WorkflowImpl instance;
+    public static AbstractWorkflowAction getInstance() {
+        if (instance == null) {
+            instance = new ${class.name}WorkflowImpl();
+        }
+        return instance;
+    }
+
+#foreach ($action in ${plugin.umlUtils.getWorkflowActions($class)} )
+    abstract public void ${action.entry.name}();
+#end
+}

@@ -1,0 +1,12 @@
+/**
+ * This class is only generated once! It will never be overwritten.
+ * You can (and have to!) safely modify it by hand.
+ */
+package ${plugin.getDestinationPackage($metadata)};
+
+/**
+  * @hibernate.subclass discriminator-value="${metadata.name}Impl"
+  */
+public class ${metadata.name}Impl extends ${metadata.name} {
+
+}

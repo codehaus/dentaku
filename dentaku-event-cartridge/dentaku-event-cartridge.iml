@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4" relativePaths="false">
+  <component name="ModuleRootManager" />
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="dom4j" level="application" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPO_LOCAL$/commons-collections/jars/commons-collections-2.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Ant" level="application" />
+    <orderEntry type="library" name="Velocity" level="application" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/src/test/org/dentaku/cartridge/TestModel.xml.zip!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Generama" level="application" />
+    <orderEntry type="library" name="XDoclet2" level="application" />
+    <orderEntry type="library" name="Jelly" level="application" />
+    <orderEntry type="library" name="Netbeans MDR" level="application" />
+    <orderEntry type="library" name="Commons" level="application" />
+    <orderEntry type="library" name="Test" level="application" />
+    <orderEntry type="library" name="XStream-1.0" level="application" />
+  </component>
+</module>
+
