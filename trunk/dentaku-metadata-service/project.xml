@@ -50,14 +50,24 @@
 <!--        plexus-->
 
         <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+        <dependency>
             <groupId>generama</groupId>
             <artifactId>generama</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>qdox</groupId>
-            <artifactId>qdox</artifactId>
-            <version>1.5</version>
+            <groupId>xdoclet</groupId>
+            <artifactId>xdoclet</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>qfork</groupId>
+            <artifactId>qfork</artifactId>
+            <version>1.7-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>picocontainer</groupId>
@@ -87,7 +97,12 @@
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
-            <version>1.4-dev-8</version>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>1.1-beta-4</version>
         </dependency>
         <dependency>
             <groupId>commons-jexl</groupId>
@@ -119,31 +134,28 @@
             <version>3.8.1</version>
         </dependency>
         <dependency>
+            <id>jmi</id>
+        </dependency>
+        <dependency>
             <id>jmiuml14di</id>
         </dependency>
         <dependency>
             <id>jmiutils</id>
         </dependency>
         <dependency>
-            <id>mdrapi</id>
+            <id>mdr</id>
         </dependency>
         <dependency>
             <id>mof</id>
         </dependency>
         <dependency>
-            <id>nbmdr</id>
+            <id>openide-util</id>
         </dependency>
         <dependency>
-            <id>openide-fs</id>
+            <id>api-mdr</id>
         </dependency>
         <dependency>
-            <id>openide-lookup</id>
-        </dependency>
-        <dependency>
-            <id>jmi</id>
-        </dependency>
-        <dependency>
-            <id>jmitoolkit</id>
+            <id>modules-jmiutils</id>
         </dependency>
         <!--        gentaku-->
 

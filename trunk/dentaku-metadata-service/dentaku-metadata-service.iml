@@ -10,13 +10,29 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Generama" level="application" />
-    <orderEntry type="library" name="Netbeans MDR" level="application" />
     <orderEntry type="library" name="Commons" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
     <orderEntry type="library" name="Test" level="application" />
     <orderEntry type="library" name="Clover" level="application" />
+    <orderEntry type="module" module-name="qdox" />
+    <orderEntry type="module" module-name="generama" />
+    <orderEntry type="module" module-name="xdoclet" />
+    <orderEntry type="library" name="Classworlds" level="application" />
+    <orderEntry type="library" name="dom4j" level="application" />
     <orderEntry type="library" name="XStream-1.0" level="application" />
+    <orderEntry type="library" name="Hibernate" level="application" />
+    <orderEntry type="module" module-name="dentaku-persistence-service" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/src/resources" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="cglib" />
+    <orderEntry type="library" name="NBMDR New" level="application" />
     <orderEntryProperties />
   </component>
 </module>

@@ -1,5 +1,5 @@
 /*
- * RepositoryReader.java
+ * JMICapableMetadataProvider.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,16 +16,16 @@
  */
 package org.dentaku.services.metadata;
 
-import javax.jmi.xmi.MalformedXMIException;
-import javax.jmi.reflect.RefPackage;
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.net.MalformedURLException;
+import org.omg.uml.foundation.core.Classifier;
+import org.omg.uml.UmlPackage;
+import org.generama.MetadataProvider;
+import com.thoughtworks.qdox.model.AbstractJavaEntity;
 
-public interface RepositoryReader {
-    public static final String ROLE = RepositoryReader.class.getName();
+import java.util.Collection;
 
-    void readInputStream(RefPackage model) throws IOException, MalformedXMIException;
-    void setModel(String model) throws MalformedURLException;
+public interface JMICapableMetadataProvider extends MetadataProvider {
+    public Classifier mapQDoxToClassifier(AbstractJavaEntity qdox);
+    public UmlPackage getModel() throws RepositoryException;
+
+    public Collection getJMIMetadata();
 }

@@ -13,14 +13,42 @@
                 <requirement>
                     <role>org.dentaku.services.metadata.RepositoryReader</role>
                 </requirement>
+                <requirement>
+                    <role>org.netbeans.api.xmi.XMIReaderFactory</role>
+                </requirement>
+                <requirement>
+                    <role>org.netbeans.api.mdr.MDRepository</role>
+                </requirement>
             </requirements>
         </component>
         <component>
             <role>org.dentaku.services.metadata.RepositoryReader</role>
             <implementation>org.dentaku.services.metadata.MagicDrawRepositoryReader</implementation>
+            <requirements>
+                <requirement>
+                    <role>org.netbeans.api.xmi.XMIReaderFactory</role>
+                </requirement>
+            </requirements>
             <configuration>
-                <modelURL>file://src/test/org/dentaku/services/metadata/TestModel.xml.zip</modelURL>
+                <model>file:///c:/dev/dentaku/dentaku-metadata-service/src/test/org/dentaku/services/metadata/TestModel.xml.zip</model>
             </configuration>
+        </component>
+        <component>
+            <role>javax.jmi.xmi.XmiReader</role>
+            <implementation>org.netbeans.lib.jmi.xmi.XMISaxReaderImpl</implementation>
+        </component>
+        <component>
+            <role>org.netbeans.api.xmi.XMIReaderFactory</role>
+            <implementation>org.netbeans.lib.jmi.xmi.ReaderFactory</implementation>
+        </component>
+        <component>
+            <role>org.netbeans.api.mdr.MDRepository</role>
+            <implementation>org.netbeans.mdr.NBMDRepositoryImpl</implementation>
+            <requirements>
+                <requirement>
+                    <role>javax.jmi.xmi.XmiReader</role>
+                </requirement>
+            </requirements>
         </component>
     </components>
 </plexus>

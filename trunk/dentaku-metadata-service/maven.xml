@@ -3,4 +3,22 @@
     <goal name="dentaku-dist">
         <attainGoal name="jar:install"/>
     </goal>
+    <goal name="dentaku:analyze">
+        <attainGoal name="java:compile"/>
+
+        <path id="xdoclet.task.classpath">
+            <pathelement location="${basedir}/target/classes"/>
+            <path refid="maven.dependency.classpath"/>
+        </path>
+
+        <taskdef name="xdoclet" classname="org.xdoclet.ant.XDocletTask" classpathref="xdoclet.task.classpath"/>
+
+        <xdoclet>
+            <fileset dir="${pom.build.sourceDirectory}">
+                <include name="**/*.java"/>
+            </fileset>
+
+            <component classname="org.dentaku.services.metadata.scccheck.SCCCheck" destdir="${maven.docs.dest}/SCC/"/>
+        </xdoclet>
+    </goal>
 </project>
