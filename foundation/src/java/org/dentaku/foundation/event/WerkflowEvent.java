@@ -40,7 +40,7 @@ public abstract class WerkflowEvent extends AbstractEvent {
         super(response);
     }
 
-    public boolean execute() throws Exception {
+    public boolean execute(Object o) throws Exception {
         deploy(getWorkflowURL());
         SimpleAttributes attrs = new SimpleAttributes();
         attrs.setAttribute("event", this);

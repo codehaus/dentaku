@@ -6,6 +6,8 @@ package ${metadata.packageName};
 import org.dentaku.services.persistence.PersistenceException;
 import org.dentaku.services.persistence.PersistenceFactory;
 import org.dentaku.services.persistence.PersistenceManagerStorage;
+import org.tranql.schema.Entity;
+import org.dentaku.services.persistence.tranql.ModelEntity;
 
 /**
  * <p>
@@ -27,10 +29,39 @@ import org.dentaku.services.persistence.PersistenceManagerStorage;
  *
  */
 public class ${class.name}Factory implements PersistenceFactory {
-    PersistenceManagerStorage pm = null;
+    protected PersistenceManagerStorage pm = null;
+    protected ModelEntity e = null;
 
-    public void setManager(PersistenceManagerStorage pm) {
-        this.pm = pm;
+    public Entity getEntity() {
+        return e;
+    }
+
+    public void setup(PersistenceManagerStorage pm) {
+        if (this.pm == null) {
+            this.pm = pm;
+
+            e = pm.createEntity("${class.name}", ${class.name}.class);
+            // attributes
+#foreach ( $att in $class.attributes)
+#set ($attname =  ${plugin.fromDatabaseAttributeName(${att.name}, "_")})
+#if ($plugin.matchesStereotype($att, "PrimaryKey"))
+            e.addField(pm.createField("$attname", ${att.type.fullyQualifiedName}.class, true));
+#else
+            e.addField(pm.createField("$attname", ${att.type.fullyQualifiedName}.class, false));
+#end
+#end
+            // relations
+#foreach ( $assoc in $class.associationLinks )
+#if ($assoc.target.navigable == true)
+#set ($targettypename = $assoc.target.participant.fullyQualifiedName)
+            e.addRelation(pm.createRelation(${class.name}.class, ${targettypename}.class));
+#end
+#end
+        }
+    }
+
+    public Class getManagedClass() {
+        return ${class.name}.class;
     }
 
    // ---------------- create methods --------------------
@@ -39,7 +70,7 @@ public class ${class.name}Factory implements PersistenceFactory {
     * Creates a null ${class.name} object.
     * @return Object  the created ${class.name}
     */
-    public org.dentaku.services.persistence.ModelEntity create() throws PersistenceException {
+    public org.dentaku.services.persistence.Entity create() throws PersistenceException {
 #if ( $class.isAbstract() == false)
         return new ${class.name}();
 #else
@@ -51,13 +82,13 @@ public class ${class.name}Factory implements PersistenceFactory {
     * Clone the object.
     * @return ${class.name} the created object
     */
-    public org.dentaku.services.persistence.ModelEntity create(Object src) throws PersistenceException {
+    public org.dentaku.services.persistence.Entity create(Object src) throws PersistenceException {
 #if ( $class.isAbstract() == false)
         ${class.name} source = (${class.name})src;
         ${class.name} object = new ${class.name}();
 
 #foreach ( $att in $class.attributes)
-#if (!$plugin.matchesStereotype($att.getId(), "PrimaryKey"))
+#if (!$plugin.matchesStereotype($att, "PrimaryKey"))
 #set ($attname =  ${plugin.fromDatabaseAttributeName(${att.name}, "_")})
         object.set${plugin.upperCaseFirstLetter(${attname})} (source.get${plugin.upperCaseFirstLetter(${attname})}());
 #end
@@ -79,8 +110,8 @@ public class ${class.name}Factory implements PersistenceFactory {
      * In Hibernate, this is just a call to load().
      *
      */
-    public org.dentaku.services.persistence.ModelEntity findByPrimaryKey (java.io.Serializable ${primKey.name}) throws PersistenceException {
-        return (org.dentaku.services.persistence.ModelEntity)pm.load(${class.name}.class, ${primKey.name});
+    public org.dentaku.services.persistence.Entity findByPrimaryKey (java.io.Serializable ${primKey.name}) throws PersistenceException {
+        return (org.dentaku.services.persistence.Entity)pm.load(${class.name}.class, ${primKey.name});
     }
 
 #foreach ( $op in $class.operations)
@@ -128,7 +159,7 @@ public class ${class.name}Factory implements PersistenceFactory {
         values.add(${prm.name});
 #end
 ##
-        return pm.find("$querystring", values.toArray(), (net.sf.hibernate.type.Type [])types.toArray(new net.sf.hibernate.type.Type[types.size()]));
+        return pm.find("$querystring", null, null);
     }
 
 #end##if stereotype=="FinderMethod"

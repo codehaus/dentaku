@@ -18,6 +18,8 @@ package org.dentaku.services.persistence;
 
 import net.sf.hibernate.type.Type;
 import org.dentaku.services.persistence.hibernate.SessionProvider;
+import org.dentaku.services.persistence.tranql.ModelEntity;
+import org.tranql.schema.*;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -31,11 +33,11 @@ public class DefaultPersistenceManagerStorage implements PersistenceManagerStora
         return (PersistenceFactory)factories.get(name);
     }
 
-    public void saveOrUpdate(ModelEntity object) throws PersistenceException {
+    public void saveOrUpdate(Entity object) throws PersistenceException {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void delete(ModelEntity object) throws PersistenceException {
+    public void delete(Entity object) throws PersistenceException {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -47,11 +49,7 @@ public class DefaultPersistenceManagerStorage implements PersistenceManagerStora
         return null;
     }
 
-    public List find(String query, Object value, Type type) throws PersistenceException {
-        return null;
-    }
-
-    public List find(String query, Object[] values, Type[] types) throws PersistenceException {
+    public List find(String query, Object[] values, Class[] types) throws PersistenceException {
         return null;
     }
 
@@ -75,5 +73,17 @@ public class DefaultPersistenceManagerStorage implements PersistenceManagerStora
     }
 
     public void endTrans(boolean somethingUnknown) {
+    }
+
+    public ModelEntity createEntity(String name, Class clazz) {
+        return null;
+    }
+
+    public Attribute createField(String s, Class aClass, boolean b) {
+        return null;
+    }
+
+    public Association createRelation(Class r1, Class r2) {
+        return null;
     }
 }

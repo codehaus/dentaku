@@ -18,9 +18,12 @@ package org.dentaku.services.persistence.hibernate;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.type.Type;
-import org.dentaku.services.persistence.ModelEntity;
+import org.dentaku.services.persistence.Entity;
 import org.dentaku.services.persistence.PersistenceException;
 import org.dentaku.services.persistence.AbstractPersistenceManagerStorage;
+import org.dentaku.services.persistence.tranql.ModelEntity;
+import org.tranql.schema.Attribute;
+import org.tranql.schema.Association;
 
 import java.io.Serializable;
 import java.util.List;
@@ -31,7 +34,7 @@ public class HibernatePersistenceManagerStorage extends AbstractPersistenceManag
 
     }
 
-    public void saveOrUpdate(ModelEntity object) throws PersistenceException {
+    public void saveOrUpdate(Entity object) throws PersistenceException {
         try {
             if (object.getId() != null) {
                 sessionProvider.getSession().saveOrUpdate(object);
@@ -44,12 +47,16 @@ public class HibernatePersistenceManagerStorage extends AbstractPersistenceManag
         }
     }
 
-    public void delete(ModelEntity object) throws PersistenceException {
+    public void delete(Entity object) throws PersistenceException {
         try {
             sessionProvider.getSession().delete(object);
         } catch (HibernateException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    public List find(String query, Object[] values, Class[] types) throws PersistenceException {
+        return null;
     }
 
     public Object load(Class theClass, Serializable id) throws PersistenceException {
@@ -99,5 +106,17 @@ public class HibernatePersistenceManagerStorage extends AbstractPersistenceManag
     }
 
     public void endTrans(boolean somethingUnknown) {
+    }
+
+    public ModelEntity createEntity(String name, Class clazz) {
+        return null;
+    }
+
+    public Attribute createField(String s, Class aClass, boolean b) {
+        return null;
+    }
+
+    public Association createRelation(Class r1, Class r2) {
+        return null;
     }
 }

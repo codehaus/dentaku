@@ -17,7 +17,7 @@
 package org.dentaku.gentaku.ant;
 
 import org.dentaku.gentaku.Gentaku;
-import org.dentaku.services.metadata.MagicDrawRepositoryReader;
+import org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader;
 import org.generama.Generama;
 import org.generama.ant.AbstractGeneramaTask;
 import org.generama.defaults.FileWriterMapper;

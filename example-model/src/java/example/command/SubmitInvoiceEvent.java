@@ -1,5 +1,5 @@
 /*
- * SubmitInvoiceImpl.java
+ * SubmitInvoiceEvent.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package command;
+package example.command;
 
-import example.command.SubmitInvoice;
 import example.entity.Country;
 import example.entity.CountryFactory;
 import example.entity.Invoice;
@@ -27,9 +26,9 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.Date;
 
-public class SubmitInvoiceImpl extends SubmitInvoice {
-    private static Log log = LogFactory.getLog(SubmitInvoiceImpl.class);
-    public boolean execute() throws Exception {
+public class SubmitInvoiceEvent extends SubmitInvoiceEventBase {
+    private static Log log = LogFactory.getLog(SubmitInvoiceEvent.class);
+    public boolean execute(Object o) throws Exception {
         boolean result = true;
         PersistenceManagerStorage pm = (PersistenceManagerStorage) ContainerManager.getInstance().getContainer().lookup(PersistenceManagerStorage.ROLE);
         try {

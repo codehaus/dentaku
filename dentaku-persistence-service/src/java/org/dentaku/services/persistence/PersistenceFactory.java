@@ -16,14 +16,16 @@
  */
 package org.dentaku.services.persistence;
 
-
+import java.util.Map;
 
 public interface PersistenceFactory {
     public static final String ROLE = PersistenceFactory.class.getName();
 
-    ModelEntity create() throws PersistenceException;
-    ModelEntity create(Object source) throws PersistenceException;
-    ModelEntity findByPrimaryKey(java.io.Serializable pk) throws PersistenceException;
+    Entity create() throws PersistenceException;
+    Entity create(Object source) throws PersistenceException;
+    Entity findByPrimaryKey(java.io.Serializable pk) throws PersistenceException;
 
-    void setManager(PersistenceManagerStorage storage);
+    void setup(PersistenceManagerStorage storage);
+    public org.tranql.schema.Entity getEntity();
+    public Class getManagedClass();
 }

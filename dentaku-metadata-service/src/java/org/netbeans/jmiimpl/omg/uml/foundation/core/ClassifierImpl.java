@@ -18,6 +18,7 @@ package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
 import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.dentaku.services.metadata.RepositoryException;
+import org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader;
 import org.netbeans.mdr.storagemodel.StorableObject;
 import org.omg.uml.UmlPackage;
 import org.omg.uml.foundation.core.Abstraction;
@@ -67,7 +68,7 @@ abstract public class ClassifierImpl extends ModelElementImpl implements Classif
     }
 
     private CorePackage getCore() {
-        return ((UmlPackage)repository().getExtent(JMIUMLMetadataProvider.MODEL_NAME)).getCore();
+        return ((UmlPackage)repository().getExtent(MagicDrawRepositoryReader.MODEL_NAME)).getCore();
     }
 
     /**
@@ -146,16 +147,16 @@ abstract public class ClassifierImpl extends ModelElementImpl implements Classif
      * @return The primaryKeyAttribute value
      */
     public Attribute getPrimaryKeyAttribute() {
-        GeneralizableElement current = this;
+        ClassifierImpl current = this;
         while (current != null) {
-            Collection attributes = getAttributes();
+            Collection attributes = current.getAttributes();
             for (Iterator i = attributes.iterator(); i.hasNext();) {
                 AttributeImpl attribute = (AttributeImpl)i.next();
                 if (attribute.getStereotypeNames().contains(PRIMARY_KEY)) {
                     return (Attribute) attribute;
                 }
             }
-            current = ((Generalization) ((Classifier) current).getGeneralization().iterator().next()).getParent();
+            current = (ClassifierImpl)((Generalization) ((Classifier) current).getGeneralization().iterator().next()).getParent();
         }
         return null;
     }

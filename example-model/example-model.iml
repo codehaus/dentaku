@@ -48,10 +48,28 @@
     </orderEntry>
     <orderEntry type="library" name="Clover" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
-    <orderEntry type="module" module-name="services" />
-    <orderEntry type="module" module-name="foundation" />
     <orderEntry type="module" module-name="qdox" />
     <orderEntry type="module" module-name="dentaku-persistence-service" />
+    <orderEntry type="module" module-name="dentaku-foundation" />
+    <orderEntry type="module" module-name="dentaku-services" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPO_LOCAL$/tranql/jars/tranql-1.0-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPO_LOCAL$/prevayler/jars/prevayler-20040427.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntryProperties />
   </component>
 </module>

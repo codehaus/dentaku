@@ -17,7 +17,7 @@
         </component>
         <component>
             <role>org.dentaku.services.metadata.RepositoryReader</role>
-            <implementation>org.dentaku.services.metadata.MagicDrawRepositoryReader</implementation>
+            <implementation>org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader</implementation>
             <configuration>
                 <model>file:///c:/dev/dentaku/dentaku-metadata-service/src/test/org/dentaku/services/metadata/TestModel.xml.zip</model>
             </configuration>
