@@ -28,7 +28,6 @@ import org.dom4j.Element;
 import org.dom4j.QName;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
-import org.netbeans.jmiimpl.omg.uml.modelmanagement.ModelImpl;
 import org.omg.uml.UmlPackage;
 import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.Feature;
