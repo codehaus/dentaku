@@ -3,7 +3,7 @@
 <!--    <extend>${basedir}/../project.xml</extend>-->
     <pomVersion>3</pomVersion>
     <groupId>dentaku</groupId>
-    <currentVersion>0.7</currentVersion>
+    <currentVersion>0.8</currentVersion>
     <artifactId>example-model</artifactId>
     <name>Model for Example</name>
     <package>example.*</package>
@@ -15,19 +15,19 @@
         <dependency>
             <groupId>dentaku</groupId>
             <artifactId>dentaku-foundation</artifactId>
-            <version>0.7</version>
+            <version>0.8</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>dentaku</groupId>
             <artifactId>dentaku-services</artifactId>
-            <version>0.7</version>
+            <version>0.8</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>dentaku</groupId>
-            <artifactId>dentaku-hibernate-cartridge</artifactId>
-            <version>0.7</version>
+            <artifactId>dentaku-metadata-service</artifactId>
+            <version>0.8</version>
         </dependency>
         <!--    <dependency>-->
         <!--        <groupId>j2ee</groupId>-->
@@ -120,13 +120,8 @@
         </dependency>
         <dependency>
             <groupId>dentaku</groupId>
-            <artifactId>dentaku-hibernate-cartridge</artifactId>
-            <version>0.7</version>
-        </dependency>
-        <dependency>
-            <groupId>dentaku</groupId>
             <artifactId>dentaku-event-cartridge</artifactId>
-            <version>0.7</version>
+            <version>0.8</version>
         </dependency>
         <dependency>
             <groupId>xerces</groupId>
@@ -154,7 +149,7 @@
         <dependency>
             <groupId>dentaku</groupId>
             <artifactId>gentaku</artifactId>
-            <version>0.7</version>
+            <version>0.8</version>
         </dependency>
         <dependency>
             <groupId>dom4j</groupId>
@@ -383,7 +378,7 @@
         <dependency>
             <groupId>xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>0.4</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-digester</groupId>
@@ -400,7 +395,7 @@
 
         <!--dependency>
             <id>qdox-attributes</id>
-            <version>0.7</version>
+            <version>0.8</version>
             <url></url>
         </dependency-->
         <dependency>
@@ -515,12 +510,6 @@
             <properties>
                 <ejb.bundle>true</ejb.bundle>
             </properties>
-        </dependency>
-        <dependency>
-            <id>andromda</id>
-        </dependency>
-        <dependency>
-            <id>andromda-java</id>
         </dependency>
     </dependencies>
     <build>
