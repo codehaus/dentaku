@@ -19,15 +19,20 @@ package org.dentaku.services;
 import junit.framework.TestCase;
 import org.axiondb.jdbc.AxionDataSource;
 import org.codehaus.plexus.embed.Embedder;
+import org.mockejb.jndi.MockContextFactory;
+import org.dentaku.services.persistence.TranQLPersistenceFactory;
 
 import javax.sql.DataSource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Statement;
 
 public abstract class PersistenceServiceTestBase extends TestCase {
     protected Embedder container;
-    protected static AxionDataSource ds;
+    protected AxionDataSource ds;
+    private Context context;
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -39,20 +44,24 @@ public abstract class PersistenceServiceTestBase extends TestCase {
         container.setConfiguration(resource);
         container.start();
 
-        if (ds == null) {
-            ds = new AxionDataSource("jdbc:axiondb:testdb");
-            Connection c = ds.getConnection();
-            Statement s = c.createStatement();
+        ds = new AxionDataSource("jdbc:axiondb:testdb");
+        Connection c = ds.getConnection();
+        Statement s = c.createStatement();
 
-            s.execute("CREATE TABLE Root(id long, intVal integer, stringVal varchar(50))");
-            s.execute("CREATE TABLE Child(id long, intVal integer, stringVal varchar(50), rootFk long)");
-            s.execute("INSERT INTO Root VALUES(1, 10, 'hello')");
-            s.execute("INSERT INTO Child VALUES(1, 10, 'child1', 1)");
-            s.execute("INSERT INTO Child VALUES(2, 20, 'child2', 1)");
+        s.execute("CREATE TABLE Root(id long, intVal integer, stringVal varchar(50))");
+        s.execute("CREATE TABLE Child(id long, intVal integer, stringVal varchar(50), rootFk long)");
+        s.execute("INSERT INTO Root VALUES(1, 10, 'hello')");
+        s.execute("INSERT INTO Child VALUES(1, 10, 'child1', 1)");
+        s.execute("INSERT INTO Child VALUES(2, 20, 'child2', 1)");
 
-            s.close();
-            c.close();
-        }
+        s.close();
+        c.close();
+
+        MockContextFactory.setAsInitial();
+        // create the initial context that will be used for binding EJBs
+        context = new InitialContext();
+        // add to the context
+        context.rebind(TranQLPersistenceFactory.dataSourceName, ds);
     }
 
     protected void tearDown() throws Exception {
@@ -63,5 +72,4 @@ public abstract class PersistenceServiceTestBase extends TestCase {
         container.stop();
         super.tearDown();
     }
-
 }
