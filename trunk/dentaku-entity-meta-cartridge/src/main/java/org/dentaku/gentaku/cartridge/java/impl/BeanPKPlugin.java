@@ -8,6 +8,8 @@ import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 
 public class BeanPKPlugin extends JavaPluginBase {
 
+    private String callbackMacroVM = "org/dentaku/gentaku/cartridge/java/impl/nocallbacks.vm";
+    
     public BeanPKPlugin(VelocityTemplateEngine velocityTemplateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(new String[] { "Entity" }, velocityTemplateEngine, metadataProvider, writerMapper);
         setFileregex(".java");
@@ -29,4 +31,10 @@ public class BeanPKPlugin extends JavaPluginBase {
         return this.jmiHelper.countPrimaryKey(c) > 1;
     }
 
+    public String getCallbackMacroVM() {
+        return this.callbackMacroVM;
+    }
+    public void setCallbackMacroVM(String value) {
+        this.callbackMacroVM = value;
+    }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.collections.ListUtils;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.AttributeImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.omg.uml.foundation.core.Comment;
@@ -65,8 +66,12 @@ public class JMIHelper {
 
         return this.countPrimaryKey((ClassifierImpl) c.getJavaGeneralization(), count);
     }
-    
+
     public List getCommentLines(ModelElement me) {
+        if ((me == null) || (me.getComment() == null)) {
+            return ListUtils.EMPTY_LIST;
+        }
+
         List ret = new ArrayList();
         Iterator it = me.getComment().iterator();
         while (it.hasNext()) {
