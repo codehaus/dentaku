@@ -20,11 +20,14 @@ import org.dentaku.gentaku.tools.cgen.visitor.LocalDefaultElement;
 import org.dom4j.Branch;
 import org.dom4j.Element;
 import org.omg.uml.foundation.core.ModelElement;
+import org.netbeans.jmiimpl.omg.uml.modelmanagement.ModelImpl;
 
 public interface Generator {
+    void preProcessModel(ModelImpl model) throws GenerationException;
+
     void preGenerate(LocalDefaultElement mappingNode, Branch parentOutput, ModelElement modelElement) throws GenerationException;
-
     boolean generate(LocalDefaultElement mappingNode, Branch parentOutput, ModelElement modelElement) throws GenerationException;
-
     void postGenerate(LocalDefaultElement mappingNode, Branch parentOutput, ModelElement modelElement, Element outputElement) throws GenerationException;
+
+    void postProcessModel(ModelImpl model) throws GenerationException;
 }

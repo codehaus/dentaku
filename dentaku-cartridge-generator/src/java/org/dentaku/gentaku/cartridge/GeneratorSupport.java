@@ -20,9 +20,13 @@ import org.dentaku.gentaku.tools.cgen.visitor.LocalDefaultElement;
 import org.dom4j.Branch;
 import org.dom4j.Element;
 import org.omg.uml.foundation.core.ModelElement;
+import org.netbeans.jmiimpl.omg.uml.modelmanagement.ModelImpl;
 
 public class GeneratorSupport implements Generator {
     public GeneratorSupport() {
+    }
+
+    public void preProcessModel(ModelImpl model) throws GenerationException {
     }
 
     public void preGenerate(LocalDefaultElement mappingNode, Branch parentOutput, ModelElement modelElement) throws GenerationException {
@@ -33,5 +37,8 @@ public class GeneratorSupport implements Generator {
     }
 
     public void postGenerate(LocalDefaultElement mappingNode, Branch parentOutput, ModelElement modelElement, Element outputElement) throws GenerationException {
+    }
+
+    public void postProcessModel(ModelImpl model) throws GenerationException {
     }
 }
