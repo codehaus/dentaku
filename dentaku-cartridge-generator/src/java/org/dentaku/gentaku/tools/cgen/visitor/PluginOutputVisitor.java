@@ -18,13 +18,14 @@ package org.dentaku.gentaku.tools.cgen.visitor;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.dentaku.gentaku.cartridge.GenerationException;
+import org.dentaku.gentaku.tools.cgen.Util;
 import org.dom4j.Branch;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.dom4j.tree.DefaultElement;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
 import org.omg.uml.UmlPackage;
@@ -36,7 +37,11 @@ import org.omg.uml.foundation.core.TaggedValue;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class generates XML output descriptors based on a UML model.  It uses the visitor pattern support in dom4j, as during
@@ -50,69 +55,137 @@ import java.util.Iterator;
 public class PluginOutputVisitor {
     protected Document xsdDoc;
     protected UmlPackage model;
+    protected Map stereotypeMap;
 
-    public PluginOutputVisitor(Document xsdDoc, UmlPackage model) {
+    public PluginOutputVisitor(Document xsdDoc, UmlPackage model, Map stereotypeMap) {
         this.xsdDoc = xsdDoc;
         this.model = model;
+        this.stereotypeMap = stereotypeMap;
     }
 
     /**
      * Standard visitor pattern entry point.
-     * @param mappingNode Node that we are currently visiting in the mapping document
+     *
+     * @param mappingNode  Node that we are currently visiting in the mapping document
      * @param parentOutput Output node for document we are building.  Recursive calls gradually expand this
-     * @param parent ModelElement from UML that we are currently working on
+     * @param parent       ModelElement from UML that we are currently working on
      * @return true if we did something worth keeping
      */
-    public boolean visit(Element mappingNode, Branch parentOutput, ModelElement parent) {
+    public boolean visit(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement parent) throws GenerationException {
         boolean result = false;
-        if (mappingNode.getName().equals("element")) {
-            Element mappingXSD = (Element) xsdDoc.selectSingleNode(mappingNode.attributeValue("path"));
+        if (!mappingXSD.getName().equals("element")) {
+            result = iterateElements(mappingXSD, parentOutput, parent);
+        } else {
+            String ref = mappingXSD.attributeValue("ref");
+            if (ref != null) {
+                mappingXSD = (LocalDefaultElement) Util.selectSingleNode(xsdDoc, "/xs:schema/xs:element[@name='" + ref + "']");
+            }
+            preGenerate(mappingXSD, parentOutput);
 
-            // the location that this node is valid, {package, class, method, field...}
-            String location = mappingNode.attributeValue("location");
-            // the tag prefix we are looking for in tags named "prefix.tag"
-            String prefix = mappingXSD.attributeValue("name");
-                        
-            if (location.equals("root")) {
-                // root element is a special case because we always iterate it.  But is this the only occurence not caught
-                // in the following loop?  Smells fishy
-                Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
-                if (iterateElements(mappingNode, newLocalNode, parent)) {
-                    parentOutput.add(newLocalNode);
-                    result = true;
-                }
-            } else {
-                // iterate candidate ModelElements that match these criteria
-                Collection c = findElementsForLocationAndPrefix(location, prefix, parent);
-                for (Iterator elementIterator = c.iterator(); elementIterator.hasNext();) {
-                    ModelElementImpl element = (ModelElementImpl) elementIterator.next();
-                    if (element instanceof Namespace || element instanceof Feature) {
-                        parent = element;
-                    } else {
-                        throw new AssertionError("Please report this to Brian");
-                    }
-
+            if (generate(mappingXSD, parentOutput)) {
+                Set locations = getTextNodesSet(mappingXSD, "location");
+                if (locations.contains("root")) {
+                    // root element is a special case because we always iterate it.  But is this the only occurence not caught
+                    // in the following loop?  Smells fishy
                     Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
-                    // @todo note that in older versions of this code, we used to keep elements that properly rendered, even if a node did not have
-                    // any attributes that rendered.  This was removed organically in the process of tracking down problems, but it may be that with
-                    // that problem solved that the old behavior is the correct behavior.  If it is, the special case noise when a root element is
-                    // being rendered can probably be removed as well
-                    if (iterateAttributes(mappingXSD, element, newLocalNode)) {
-                        iterateElements(mappingNode, newLocalNode, parent);
+                    if (iterateElements(mappingXSD, newLocalNode, parent)) {
                         parentOutput.add(newLocalNode);
                         result = true;
                     }
+                } else {
+                    // iterate candidate ModelElements that match these criteria
+                    // the tag prefix we are looking for in tags named "prefix.tag"
+                    String prefix = mappingXSD.attributeValue("name");
+                    Collection c = findElementsForLocationAndPrefix(locations, prefix, parent);
+                    for (Iterator elementIterator = c.iterator(); elementIterator.hasNext();) {
+                        ModelElementImpl element = (ModelElementImpl) elementIterator.next();
+                        if (element instanceof Namespace || element instanceof Feature) {
+                            parent = element;
+                        } else {
+                            throw new AssertionError("Please report this to Brian");
+                        }
+
+                        Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
+                        // @todo note that in older versions of this code, we used to keep elements that properly rendered, even if a node did not have
+                        // any attributes that rendered.  This was removed organically in the process of tracking down problems, but it may be that with
+                        // that problem solved that the old behavior is the correct behavior.  If it is, the special case noise when a root element is
+                        // being rendered can probably be removed as well
+                        if (iterateAttributes(mappingXSD, element, newLocalNode)) {
+                            iterateElements(mappingXSD, newLocalNode, parent);
+                            parentOutput.add(newLocalNode);
+                            result = true;
+                        }
+                    }
                 }
+            } else {
+                result = true;
             }
+            postGenerate(mappingXSD, parentOutput);
         }
         return result;
+    }
+
+    private Set getTextNodesSet(LocalDefaultElement mappingXSD, String criteria) {
+        Set locations = new HashSet();
+        for (Iterator it = Util.selectNodes(mappingXSD.getAnnotation(), criteria).iterator(); it.hasNext();) {
+            String s = (String) ((Element) it.next()).getText();
+            locations.add(s);
+        }
+        return locations;
+    }
+
+    private void preGenerate(LocalDefaultElement mappingXSD, Branch parentOutput) throws GenerationException {
+        Set generators = getGenerators(mappingXSD);
+        for (Iterator genIter = generators.iterator(); genIter.hasNext();) {
+            LocalDefaultElement g = (LocalDefaultElement) genIter.next();
+            g.getGenerator().preGenerate(mappingXSD, parentOutput);
+        }
+    }
+
+    /**
+     * Standard generator calls, but if any one of them returns false, the aggregate is false.  This is to say that if one generator decides
+     * that it doesn't want document generation by the standard method, then no generation is done.  This may be backwards, please speak up
+     * if this doesn't work for you!
+     *
+     * @param mappingXSD
+     * @param parentOutput
+     * @return
+     * @throws GenerationException
+     */
+    private boolean generate(LocalDefaultElement mappingXSD, Branch parentOutput) throws GenerationException {
+        boolean result = true;
+        Set generators = getGenerators(mappingXSD);
+        for (Iterator genIter = generators.iterator(); genIter.hasNext();) {
+            LocalDefaultElement g = (LocalDefaultElement) genIter.next();
+            result = result && g.getGenerator().generate(mappingXSD, parentOutput);
+        }
+        return result;
+    }
+
+    private void postGenerate(LocalDefaultElement mappingXSD, Branch parentOutput) throws GenerationException {
+        Set generators = getGenerators(mappingXSD);
+        for (Iterator genIter = generators.iterator(); genIter.hasNext();) {
+            LocalDefaultElement g = (LocalDefaultElement) genIter.next();
+            g.getGenerator().postGenerate(mappingXSD, parentOutput);
+        }
+    }
+
+    private Set getGenerators(LocalDefaultElement mappingXSD) {
+        Set generators = new HashSet();
+        for (Iterator genIter = Util.selectNodes(mappingXSD.getAnnotation(), "stereotype").iterator(); genIter.hasNext();) {
+            LocalDefaultElement element = (LocalDefaultElement) genIter.next();
+            LocalDefaultElement stereotype = (LocalDefaultElement) stereotypeMap.get(element.attributeValue("ref"));
+            generators.addAll(Util.selectNodes(stereotype, "generator"));
+        }
+        return generators;
     }
 
     /**
      * Iterate all attributes for a node.  The result of this call is used to determine whether child elements are rendered
      * as well.
-     * @param mappingXSD The Schema document node for matching the element we are looking at
-     * @param element The model element that we are examining
+     *
+     * @param mappingXSD   The Schema document node for matching the element we are looking at
+     * @param element      The model element that we are examining
      * @param newLocalNode Output node for document we are building.  Recursive calls at higher level gradually expand this
      * @return true if we should keep this node
      */
@@ -133,14 +206,15 @@ public class PluginOutputVisitor {
 
     /**
      * Iterate all the elements of the mappingNode by visiting each one of them.
-     * @param mappingNode The node of the mapping document
+     *
+     * @param mappingXSD   The node of the XSD
      * @param newLocalNode Output node for document we are building.  Recursive calls gradually expand this
-     * @param parent The parent element from the UML model that we are parsing in parellel
+     * @param parent       The parent element from the UML model that we are parsing in parellel
      * @return true if we did anything of value
      */
-    private boolean iterateElements(Element mappingNode, Element newLocalNode, ModelElement parent) {
+    private boolean iterateElements(Element mappingXSD, Branch newLocalNode, ModelElement parent) throws GenerationException {
         boolean result = false;
-        for (Iterator it = mappingNode.elements().iterator(); it.hasNext();) {
+        for (Iterator it = mappingXSD.elements().iterator(); it.hasNext();) {
             LocalDefaultElement n = (LocalDefaultElement) it.next();
             result = n.accept(this, newLocalNode, parent) || result;
         }
@@ -152,15 +226,15 @@ public class PluginOutputVisitor {
      *
      * @param location Specifies the model base class to search through
      * @param prefix   Node is selected if it contains a tag of that prefix
-     * @param parent ModelElement in the UML model that we are currently considering
+     * @param parent   ModelElement in the UML model that we are currently considering
      * @return Nodes matching criteria
      */
-    private Collection findElementsForLocationAndPrefix(String location, final String prefix, final ModelElement parent) {
+    private Collection findElementsForLocationAndPrefix(Set locations, final String prefix, final ModelElement parent) {
         // special case if parent is not an element container, the list of candidate elements is just this element
         if (parent != null && !(parent instanceof Namespace)) {
             return Collections.singletonList(parent);
         }
-        Collection elements = getCandidateElementsForLocation(location);
+        Collection elements = getCandidateElementsForLocation(locations);
 
         Collection result = CollectionUtils.select(elements, new Predicate() {
             public boolean evaluate(Object object) {
@@ -183,19 +257,20 @@ public class PluginOutputVisitor {
 
     /**
      * Returns crosscut of all model elements for a type.
+     *
      * @param location The location we are wanting to look in, {package, class, method, field...}
      * @return All nodes in the model from that location
      */
-    private Collection getCandidateElementsForLocation(String location) {
-        Collection elements = Collections.EMPTY_LIST;
-        if (location.equals("package")) {
-            elements = model.getModelManagement().getUmlPackage().refAllOfType();
-        } else if (location.equals("class")) {
-            elements = model.getCore().getUmlClass().refAllOfType();
-        } else if (location.equals("method")) {
-            elements = model.getCore().getOperation().refAllOfType();
-        } else if (location.equals("field")) {
-            elements = model.getCore().getAttribute().refAllOfType();
+    private Collection getCandidateElementsForLocation(Set locations) {
+        Collection elements = new LinkedList();
+        if (locations.contains("package")) {
+            elements.addAll(model.getModelManagement().getUmlPackage().refAllOfType());
+        } else if (locations.contains("class")) {
+            elements.addAll(model.getCore().getUmlClass().refAllOfType());
+        } else if (locations.contains("method")) {
+            elements.addAll(model.getCore().getOperation().refAllOfType());
+        } else if (locations.contains("field")) {
+            elements.addAll(model.getCore().getAttribute().refAllOfType());
         }
         return elements;
     }
@@ -208,28 +283,6 @@ public class PluginOutputVisitor {
     public static class PluginDocumentFactory extends DocumentFactory {
         public Element createElement(QName qname) {
             return new LocalDefaultElement(qname);
-        }
-    }
-
-    /**
-     * The class that is instantiated by the factory.  Really only does something with the accept method.
-     */
-    public static class LocalDefaultElement extends DefaultElement {
-        public LocalDefaultElement(QName qname) {
-            super(qname);
-        }
-
-        /**
-         * Basic accept method, adding a couple of state parameters we need and *not* calling all the childen of a node as the
-         * defualt impl does.  We want to be discriminate about how we do that and update state parameters for children (using the
-         * stack in the process for recursive state)
-         * @param visitor
-         * @param newParent
-         * @param parent
-         * @return
-         */
-        public boolean accept(PluginOutputVisitor visitor, Branch newParent, ModelElement parent) {
-            return visitor.visit(this, newParent, parent);
         }
     }
 }
