@@ -37,7 +37,6 @@ import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
  * source for each of the screens
  */
 public class CrudActionPlugin extends JavaPluginBase {
-    JMIUMLMetadataProvider metadataProvider;
 	// Tag names
 	private final static String POSITION = "position";
 	private final static String LIST_ITEMS = "listItems";
@@ -57,7 +56,7 @@ public class CrudActionPlugin extends JavaPluginBase {
     }
 
     public Collection getMetadata() {
-        return metadataProvider.getJMIMetadata();
+        return ((JMICapableMetadataProvider)metadataProvider).getJMIMetadata();
     }
     
     protected void populateContextMap(Map m) {
