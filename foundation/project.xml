@@ -20,6 +20,12 @@
             <version>${pom.currentVersion}</version>
             <type>ejb</type>
         </dependency>
+        <dependency>
+            <groupId>xdoclet</groupId>
+            <artifactId>maven-xdoclet-plugin</artifactId>
+            <version>1.2.2</version>
+            <type>plugin</type>
+        </dependency>
         <!--        werkflow-->
         <dependency>
             <groupId>werkflow</groupId>
