@@ -42,6 +42,6 @@
 <!--            <pathelement location="${maven.build.src}"/>-->
 <!--        </path>-->
 
-    </preGoal>
+<!--    </preGoal>-->
 
 </project>
