@@ -61,48 +61,82 @@
             <version>1.0</version>
         </dependency>
 
-        <!--        netbeans mdr-->
+		<!-- Netbeans -->
         <dependency>
-            <id>jmi</id>
+			<groupId>netbeans</groupId>
+            <artifactId>jmi</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
-            <id>jmiuml14di</id>
+			<groupId>netbeans</groupId>
+            <artifactId>jmiuml14di</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
-            <id>jmiutils</id>
+			<groupId>netbeans</groupId>
+            <artifactId>jmiutils</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
-            <id>mdr</id>
+			<groupId>netbeans</groupId>
+            <artifactId>mdr</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
-            <id>mof</id>
+			<groupId>netbeans</groupId>
+            <artifactId>mof</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
-            <id>openide-util</id>
+			<groupId>netbeans</groupId>
+            <artifactId>openide-util</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
-            <id>api-mdr</id>
+			<groupId>netbeans</groupId>
+            <artifactId>org-netbeans-api-mdr</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
         </dependency>
         <dependency>
-            <id>modules-jmiutils</id>
+			<groupId>netbeans</groupId>
+            <artifactId>org-netbeans-modules-jmiutils</artifactId>
+			<version>unknow</version>
+			<url>http://www.netbeans.org</url>
         </dependency>
-        <!--        netbeans mdr-->
-<!--        plexus-->
+		
+		<!-- Plexus -->
         <dependency>
-            <id>plexus</id>
+			<groupId>plexus</groupId>
+            <artifactId>plexus-container-default</artifactId>
+			<version>1.0-alpha-1-SNAPSHOT</version>
+			<url>http://plexus.codehaus.org</url>
         </dependency>
         <dependency>
-            <id>plexus-utils</id>
+			<groupId>plexus</groupId>
+            <artifactId>plexus-container-api</artifactId>
+			<version>1.0-alpha-1-SNAPSHOT</version>
+			<url>http://plexus.codehaus.org</url>
         </dependency>
         <dependency>
-            <id>plexus-api</id>
+			<groupId>plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+			<version>1.0-alpha-1-SNAPSHOT</version>
+			<url>http://plexus.codehaus.org</url>
         </dependency>
         <dependency>
             <groupId>classworlds</groupId>
             <artifactId>classworlds</artifactId>
             <version>1.1-alpha-1</version>
+			<url>http://classworlds.codehaus.org</url>
         </dependency>
-<!--        plexus-->
+		
         <!--        gentaku-->
         <dependency>
             <groupId>generama</groupId>
