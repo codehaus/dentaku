@@ -20,8 +20,6 @@ import org.generama.MetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
 import org.dentaku.gentaku.cartridge.JavaPluginBase;
-import org.dentaku.gentaku.cartridge.entity.deprecated.SimpleOOHelper;
-import org.dentaku.gentaku.cartridge.entity.deprecated.StringUtilsHelper;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.omg.uml.foundation.core.Classifier;
 
