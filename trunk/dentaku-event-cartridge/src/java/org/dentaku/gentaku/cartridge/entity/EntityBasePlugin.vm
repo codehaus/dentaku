@@ -88,7 +88,7 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
     * @hibernate.generator-param name="sequence" value="$tgv.value"
 #end
 #end
-    * @hibernate.id generator-class="native"
+    * @hibernate.id generator-class="native" type="$transform.findFullyQualifiedName($att.type)"
 #else
 #set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
     * @hibernate.property
