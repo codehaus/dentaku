@@ -26,10 +26,6 @@ import org.picocontainer.MutablePicoContainer;
 import java.io.File;
 import java.net.URL;
 
-/**
- * @author Aslak Helles&oslash;y
- * @version $Revision$
- */
 public class GentakuTask extends AbstractGeneramaTask {
     private String encoding = System.getProperty("file.encoding");
     private URL modelURL;

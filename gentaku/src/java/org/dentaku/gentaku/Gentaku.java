@@ -1,6 +1,6 @@
 /*
  * Gentaku.java
- * Copyright 2002-2004 Bill2, Inc.
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.dentaku.gentaku;
 
 import org.dentaku.services.metadata.JMIUMLMetadataProvider;
+import org.dentaku.services.metadata.QDoxMetadataProvider;
 import org.generama.Generama;
 import org.picocontainer.MutablePicoContainer;
 
@@ -24,13 +25,11 @@ import org.picocontainer.MutablePicoContainer;
  * This class installs the core Gentaku components in a <a href="http://www.picocontainer.org/">PicoContainer</a>.
  * (It relies on the superclass to composeContainer the rest).
  *
- * @author Aslak Helles&oslash;y
- * @version $Revision$
  */
 public class Gentaku extends Generama {
 
     public Gentaku(Class writerMapperClass) {
-        super(JMIUMLMetadataProvider.class, writerMapperClass);
+        super(QDoxMetadataProvider.class, writerMapperClass);
     }
 
     public void composeContainer(MutablePicoContainer pico, Object scope) {
