@@ -1,6 +1,6 @@
 /*
  * TestPlugin.java
- * Copyright 2002-2004 Bill2, Inc.
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.io.IOException;
 
 /**
  * 
- * @author Aslak Helles&oslash;y
- * @version $Revision$
  */
 public class TestPlugin extends Plugin {
     public boolean wasExecuted = false;

@@ -2,7 +2,7 @@
 <project>
     <extend>${basedir}/../project.xml</extend>
     <artifactId>gentaku</artifactId>
-    <name>Source Generator for Dentaku</name>
+    <name>Gentaku</name>
     <package>org.dentaku.gentaku.*</package>
     <dependencies>
         <dependency>
@@ -16,9 +16,14 @@
             <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>qdox</groupId>
-            <artifactId>qdox</artifactId>
-            <version>1.5</version>
+            <groupId>plexus</groupId>
+            <artifactId>plexus</artifactId>
+            <version>0.14-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>qfork</groupId>
+            <artifactId>qfork</artifactId>
+            <version>1.7-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>picocontainer</groupId>
@@ -77,6 +82,11 @@
         <dependency>
             <id>ant</id>
             <version>1.5.3-1</version>
+        </dependency>
+        <dependency>
+            <groupId>qfork</groupId>
+            <artifactId>qfork</artifactId>
+            <version>1.7-SNAPSHOT</version>
         </dependency>
 
         <!-- Build/Test time only -->
