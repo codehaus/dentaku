@@ -28,6 +28,9 @@ import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.CorePackage;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.ModelElementClass;
+import org.omg.uml.foundation.core.Operation;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 
 public class MetadataServiceTest extends TestCase {
     
@@ -48,13 +51,25 @@ public class MetadataServiceTest extends TestCase {
         this.metadata = modelElement.refAllOfType();
     }
 
-    public void testFindRoot() throws Exception {
+    public void testRootClass() throws Exception {
+        ModelElementImpl elem = null;
         for (Iterator it = metadata.iterator(); it.hasNext();) {
-            ModelElement elem = (ModelElement) it.next();
+            elem = (ModelElementImpl) it.next();
             if (elem instanceof Classifier && elem.getName().equals("root")) {
-                return;
+                break;
             }
             fail("root element not found");
         }
+
+        ClassifierImpl c = (ClassifierImpl)elem;
+        Collection operations = c.getOperations();
+        assertTrue(operations.size() == 1);
+        Operation o = (Operation)operations.iterator().next();
+        assertEquals(o.getName(), "doSomething");
+        assertTrue(o.getParameter().size() == 2);
+        assertTrue(c.getAttributes().size() == 3);
+        assertTrue(c.getTargetEnds().size() == 1);
+        assertNotNull(c.getPrimaryKeyAttribute());
+        assertEquals(c.getPrimaryKeyAttribute().getName(), "one");
     }
 }

@@ -25,20 +25,16 @@
 
     </dependencies>
     <build>
+        <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
         <unitTest>
             <includes>
                 <include>**/*Test.java</include>
             </includes>
             <resources>
                 <resource>
-                    <directory>src/test</directory>
+                    <directory>src/test/java</directory>
                     <includes>
                         <include>**/*.xml</include>
-                    </includes>
-                </resource>
-                <resource>
-                    <directory>src/test</directory>
-                    <includes>
                         <include>**/*.drl</include>
                     </includes>
                 </resource>

@@ -19,7 +19,12 @@
             <role>org.dentaku.services.metadata.RepositoryReader</role>
             <implementation>org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader</implementation>
             <configuration>
-                <model>@BASEDIR_URL@src/test/org/dentaku/services/metadata/TestModel.xml.zip</model>
+                <model>dentaku-metadata-service/src/test/uml/TestModel.xml.zip</model>
+                <search-paths>
+                    <path-element>
+                        <id>gentaku/src/uml</id>
+                    </path-element>
+                </search-paths>
             </configuration>
         </component>
     </components>

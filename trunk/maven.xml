@@ -6,14 +6,14 @@
 		<attainGoal name="multiproject:install"/>
 <!--        local stuff-->
 	</goal>
-	
-	<postGoal name="test:test-resources">
-		
-		<u:file name="${basedir}" var="basedirFile"/>
-		<ant:replace dir="${maven.test.dest}" token="@BASEDIR_URL@" value="${basedirFile.toURL()}">
-			<ant:include name="**/*.xml"/>
-		</ant:replace>
-		
-	</postGoal>
-	
+
+<!--	<postGoal name="test:test-resources">-->
+<!---->
+<!--		<u:file name="${rootdir}" var="basedirFile"/>-->
+<!--		<ant:replace dir="${maven.test.dest}" token="@BASEDIR_URL@" value="${basedirFile.toURL()}">-->
+<!--			<ant:include name="**/*.xml"/>-->
+<!--		</ant:replace>-->
+<!---->
+<!--	</postGoal>-->
+
 </project>

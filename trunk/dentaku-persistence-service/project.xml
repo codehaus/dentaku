@@ -157,11 +157,6 @@
                     <directory>src/test/java</directory>
                     <includes>
                         <include>**/*.xml</include>
-                    </includes>
-                </resource>
-                <resource>
-                    <directory>src/test/java</directory>
-                    <includes>
                         <include>**/*.drl</include>
                     </includes>
                 </resource>

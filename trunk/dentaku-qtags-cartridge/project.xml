@@ -1,5 +1,5 @@
 <project>
-    <extend>../project.xml</extend>
+    <extend>${basedir}/../project.xml</extend>
     <artifactId>dentaku-qtags-cartridge</artifactId>
     <name>Gentaku QTags Cartridge</name>
     <dependencies>

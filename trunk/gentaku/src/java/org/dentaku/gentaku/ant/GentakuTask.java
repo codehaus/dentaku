@@ -16,8 +16,10 @@
  */
 package org.dentaku.gentaku.ant;
 
+import org.apache.tools.ant.types.FileSet;
 import org.dentaku.gentaku.Gentaku;
 import org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader;
+import org.dentaku.services.metadata.nbmdr.XMIInputConfigImpl;
 import org.generama.Generama;
 import org.generama.ant.AbstractGeneramaTask;
 import org.generama.defaults.FileWriterMapper;
@@ -25,16 +27,21 @@ import org.picocontainer.MutablePicoContainer;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class GentakuTask extends AbstractGeneramaTask {
     private String encoding = System.getProperty("file.encoding");
     private URL modelURL;
+    private Collection filesets = new ArrayList();
+
     protected Generama createGenerama() {
         return new Gentaku(FileWriterMapper.class) {
             public void composeContainer(MutablePicoContainer pico, Object scope) {
                 super.composeContainer(pico, scope);
                 pico.registerComponentInstance(getProject());
                 pico.registerComponentInstance(encoding);
+                pico.registerComponentInstance(filesets);
                 pico.registerComponentInstance(modelURL);
                 pico.registerComponentImplementation(MagicDrawRepositoryReader.class);
             }
@@ -43,6 +50,10 @@ public class GentakuTask extends AbstractGeneramaTask {
 
     public void setModel(String model) throws Exception {
         this.modelURL = new File(model).toURL();
+    }
+
+    public void addFileset(FileSet fileSet) {
+        filesets.add(fileSet);
     }
 
     public void setEncoding(String encoding) {
