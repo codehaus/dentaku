@@ -26,7 +26,7 @@ public class BeanPKPlugin extends JavaPluginBase {
 
         ClassifierImpl c = (ClassifierImpl) metadata;
 
-        return this.jmiHelper.countPrimaryKey(c) > 1;
+        return this.jmiHelper.countItsPrimaryKey(c) > 1;
     }
 
 }
