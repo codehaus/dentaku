@@ -7,14 +7,15 @@
     </preGoal>
     <goal name="gentaku">
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
-        <gentaku model="${basedir}/src/uml/SummitTestModel.xml.zip">
+        <gentaku model="${basedir}//src/uml/SummitTestModel.xml.zip">
             <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" destdir="${basedir}/target/classes/META-INF" destinationfilename="jdo.xml" encoding="UTF-8"/>
             <component classname="org.dentaku.gentaku.cartridge.core.POJOPlugin" destdir="${maven.build.src}" stereotype="Entity"/>
+            <component classname="org.dentaku.gentaku.cartridge.event.EventBasePlugin" destdir="${maven.build.src}"/> 
 
-            <component classname="org.dentaku.gentaku.cartridge.summit.BasePullToolPlugin" destdir="${maven.build.src}/java"/>
-            <component classname="org.dentaku.gentaku.cartridge.summit.PullToolPlugin" destdir="${maven.build.src}/java"/>
-            <component classname="org.dentaku.gentaku.cartridge.summit.CrudActionPlugin" destdir="${maven.build.src}/java"/>-->
-            <component classname="org.dentaku.gentaku.cartridge.summit.VelocityFormPlugin" destdir="${maven.src.dir}/velocity"/>-->
+            <component classname="org.dentaku.gentaku.cartridge.summit.BasePullToolPlugin" destdir="${maven.build.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.PullToolPlugin" destdir="${maven.build.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.CrudActionPlugin" destdir="${maven.build.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.VelocityFormPlugin" destdir="${velocityscreens}"/>
         </gentaku>
     </goal>
     <goal name="dentaku:initdb">
@@ -48,11 +49,11 @@
             <arg file="${maven.dentaku.sql.init}"/>
         </exec>
     </goal>
-    <preGoal name="java:compile">
+    <postGoal name="java:compile">
         <path id="maven.compile.src.set">
             <pathelement location="src/java"/>
             <pathelement location="target/src"/>
         </path>
-    </preGoal>
+    </postGoal>
     <!-- Need to copy the resultant .class files after testing to the example-summit-webapp/WEB-INF/classes dir -->
 </project>
