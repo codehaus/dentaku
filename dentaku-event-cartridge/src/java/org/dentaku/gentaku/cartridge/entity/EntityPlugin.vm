@@ -2,16 +2,17 @@
  * This class is only generated once! It will never be overwritten.
  * You can (and have to!) safely modify it by hand.
  */
-package ${plugin.getDestinationPackage($metadata)};
+#set ($packagename = $transform.findPackageName(${metadata.package}))
+package $packagename;
 
-#set ($superclass = $class.javaGeneralization)
+#set ($superclass = $metadata.javaGeneralization)
 
 /**
 #if ($superclass)
   * @hibernate.subclass discriminator-value="${metadata.name}"
 #else
   * @hibernate.class table="${metadata.name}"
-#endif
+#end
   */
 public class ${metadata.name} extends ${metadata.name}Base {
 
