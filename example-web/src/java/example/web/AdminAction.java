@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  *                      path="/admin/admin"
  * 						scope="session"
  * 						validate="false"
+ * 						unknown="false"
  *                      parameter="m"
  * @struts.action-forward name="viewTable" path="/admin/viewTable.jsp"
  */
