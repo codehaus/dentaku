@@ -19,20 +19,20 @@ package org.dentaku.services.persistence;
 import java.util.Collection;
 
 public abstract class Entity {
-    public abstract Object getId();
-    public abstract void setId(Object newValue);
-
-    public Collection refresh(Collection o) throws PersistenceException {
+//    public abstract Object getId();
+//    public abstract void setId(Object newValue);
+//
+//    public Collection refresh(Collection o) throws PersistenceException {
 //        try {
 //            Session sess = ThreadLocalSessionProvider.getThreadLocalSession();
 //            sess.refresh(this);
 //        } catch (HibernateException entity) {
 //            throw new PersistenceException(entity);
 //        }
-        return o;
-    }
-
-    public Object initialize(Object o) throws PersistenceException {
-        return o;
-    }
+//        return o;
+//    }
+//
+//    public Object initialize(Object o) throws PersistenceException {
+//        return o;
+//    }
 }

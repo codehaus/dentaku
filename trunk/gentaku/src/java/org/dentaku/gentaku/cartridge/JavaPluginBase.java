@@ -81,6 +81,11 @@ public abstract class JavaPluginBase extends Plugin {
                 }
             }
         }
+
+        // in either case, if there is a tag on the object of 'generate=false', always return that
+        if (((ModelElementImpl)metadata).getTaggedValuesForName("generate", false).contains("false")) {
+            result = false;
+        }
         return result;
     }
 

@@ -26,6 +26,7 @@ import java.util.Map;
 
 public class POJOPlugin extends JavaPluginBase {
     private JMICapableMetadataProvider metadataProvider;
+    private String extend;
 
     public POJOPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
@@ -37,7 +38,11 @@ public class POJOPlugin extends JavaPluginBase {
         return metadataProvider.getJMIMetadata();
     }
 
-    public void start() {
-        super.start();
+    public String getExtends() {
+        return extend;
+    }
+
+    public void setExtends(String extend) {
+        this.extend = extend;
     }
 }

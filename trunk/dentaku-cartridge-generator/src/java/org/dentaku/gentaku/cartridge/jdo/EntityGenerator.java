@@ -23,17 +23,19 @@ import org.dentaku.gentaku.cartridge.GenerationException;
 import org.dentaku.gentaku.cartridge.GeneratorSupport;
 import org.dentaku.gentaku.tools.cgen.visitor.LocalDefaultElement;
 import org.dom4j.Branch;
-import org.omg.uml.UmlPackage;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
+import org.netbeans.jmiimpl.omg.uml.modelmanagement.ModelImpl;
+import org.omg.uml.foundation.core.AssociationEnd;
 import org.omg.uml.foundation.core.Attribute;
+import org.omg.uml.foundation.core.CorePackage;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.Stereotype;
 import org.omg.uml.foundation.core.TagDefinition;
 import org.omg.uml.foundation.core.TaggedValue;
 import org.omg.uml.foundation.core.UmlClass;
-import org.omg.uml.foundation.core.CorePackage;
-import org.omg.uml.foundation.core.AssociationEnd;
-import org.omg.uml.foundation.core.Classifier;
-import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
+import org.omg.uml.foundation.core.Generalization;
+import org.omg.uml.modelmanagement.UmlPackage;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -46,7 +48,28 @@ public class EntityGenerator extends GeneratorSupport {
         }
 
         ClassifierImpl classifer = (ClassifierImpl) modelElement;
-        CorePackage core = ((UmlPackage) modelElement.refOutermostPackage()).getCore();
+        CorePackage core = ((CorePackage) modelElement.refImmediatePackage());
+
+        // get the model root (there can be only one...)
+        ModelImpl m = (ModelImpl)CollectionUtils.find(core.getNamespace().refAllOfType(), new Predicate() {
+            public boolean evaluate(Object o) {
+                if (((ModelElementImpl) o).getNamespace() == null) return true; else return false;
+            }
+        });
+
+        // set up our superclass package structure
+        UmlPackage newPackage = m.getChildPackage("org.dentaku.services.persistence", true);
+
+        // create the entity
+        UmlClass c = core.getUmlClass().createUmlClass();
+        c.setName("Entity");
+        createTaggedValue(core, c, modelElement, "generate", "false");
+        core.getANamespaceOwnedElement().add(newPackage, c);
+
+        // set it up as a generalization
+        Generalization g = core.getGeneralization().createGeneralization();
+        g.setChild(classifer);
+        g.setParent(c);
 
         // handle the fields
         Collection attributes = CollectionUtils.select(classifer.getFeature(), new InstanceofPredicate(Attribute.class));
@@ -60,21 +83,24 @@ public class EntityGenerator extends GeneratorSupport {
         for (Iterator assIter = classifer.getTargetEnds().iterator(); assIter.hasNext();) {
             AssociationEnd end = (AssociationEnd) assIter.next();
             if (end.isNavigable()) {
-                ClassifierImpl endClass = (ClassifierImpl)end.getParticipant();
+                ClassifierImpl endClass = (ClassifierImpl) end.getParticipant();
                 Attribute newAttr = core.getAttribute().createAttribute();
-                newAttr.setName(endClass.getName());
+                if (end.getName() != null) {
+                    newAttr.setName(end.getName());
+                } else {
+                    newAttr.setName(endClass.getName());
+                }
                 newAttr.setType(endClass);
 
-                Collection taggedValue = newAttr.getTaggedValue();
-                taggedValue.add(createTaggedValue(core, newAttr, modelElement, "field.name", "${parent.name}"));
-                taggedValue.add(createTaggedValue(core, newAttr, modelElement, "collection.element-type", endClass.getFullyQualifiedName()));
-                taggedValue.add(createTaggedValue(core, newAttr, modelElement, "join", ""));
+                createTaggedValue(core, newAttr, modelElement, "field.name", "${parent.name}");
+                createTaggedValue(core, newAttr, modelElement, "collection.element-type", endClass.getFullyQualifiedName());
+                createTaggedValue(core, newAttr, modelElement, "join", "");
                 newAttr.setOwner(classifer);
             }
         }
     }
 
-    private TaggedValue createTaggedValue(CorePackage core, Attribute attribute, ModelElement umlClass, final String key, String value) {
+    private TaggedValue createTaggedValue(CorePackage core, ModelElement attribute, ModelElement umlClass, final String key, String value) {
         TaggedValue taggedValue = core.getTaggedValue().createTaggedValue();
         taggedValue.setModelElement(attribute);
         taggedValue.setName(key);
