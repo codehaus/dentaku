@@ -26,7 +26,6 @@ import org.omg.uml.foundation.core.TaggedValue;
  * stereotypes <<RootSelectable>>
  * to generate the PullTool configuration file
  * which is included in the main Plexus config file
- * using the standard name SummitPull.xml
  * 
  * @author <a href="mailto:david@dwynter.plus.com">David Wynter</a>
  */
