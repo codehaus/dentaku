@@ -272,7 +272,7 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #foreach ( $att in $class.attributes )
 #set ($atttypename = $transform.findFullyQualifiedName($att.type))
 #set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
-#if ( $atttypename == "java.lang.String" )
+#if ( $atttypename == "java.lang.String" && $transform.getStereotype($att.id) != "PrimaryKey" )
             zeroObject.set${str.upperCaseFirstLetter(${attname})}("${att.name}");
 #end
 #end
@@ -283,7 +283,7 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #set ($targettype = $adata.target.type)
 #set ($targettypename = $transform.findFullyQualifiedName($targettype))
 #if ($adata.isOne2Many())
-#set ($attname =  ${str.fromDatabaseAttributeName(${$adata.target.roleName}, "_")})
+#set ($attname =  ${str.fromDatabaseAttributeName(${adata.target.roleName}, "_")})
             zeroObject.set${str.upperCaseFirstLetter($attname)}(new java.util.ArrayList(0));
 #end
 #end
@@ -297,7 +297,7 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
             // attributes
 #foreach ( $att in $class.attributes )
 #set ($atttypename = $transform.findFullyQualifiedName($att.type))
-#if ( $atttypename == "java.lang.String" )
+#if ( $atttypename == "java.lang.String" && $transform.getStereotype($att.id) != "PrimaryKey" )
 #set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
             ${obj}.set${str.upperCaseFirstLetter(${attname})}("${att.name}");
 #end
