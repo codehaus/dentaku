@@ -12,7 +12,7 @@
             <component classname="org.dentaku.gentaku.cartridge.entity.EntityBasePlugin" destdir="${dentaku.test.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.EntityPlugin" destdir="${dentaku.test.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.EntityFactoryPlugin" destdir="${dentaku.test.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${dentaku.test.src}/META-INF/plexus" destinationfilename="components.xml"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.dir}/test-config" destinationfilename="components.xml"/>
         </gentaku>
     </preGoal>
 </project>
