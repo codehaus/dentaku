@@ -1,0 +1,326 @@
+#set( $Q = '"' )
+   
+#macro( fetchselector $classView  )
+		#set ( $arraycount = 0 )
+		List ${classView.entityclassname}s = sess.createCriteria(${classView.entityclassname}.class)
+		#foreach($selectorname in ${classView.selectorNames})
+			#set ( $type = ${classView.selectorTypes}.get($arraycount) )
+			#set ( $selectorname = $Q$selectorname$Q )
+			#if($type == "Double")
+			.add( Expression.eq(${selectorname}, $QaData.getParameters().getDouble(${selectorname})$Q )
+			#elseif($type == "String")
+			.add( Expression.eq(${selectorname}, $QaData.getParameters().getString(${selectorname})$Q )
+			#elseif($type == "Integer")
+			.add( Expression.eq(${selectorname}, $QaData.getParameters().getInteger(${selectorname})$Q )
+			#elseif($type == "Long")
+			.add( Expression.eq(${selectorname}, $QaData.getParameters().getLong(${selectorname})$Q )
+			#elseif($type == "Boolean")
+			.add( Expression.eq(${selectorname}, $QaData.getParameters().getBoolean(${selectorname})$Q )
+			#elseif($type == "Float")
+			.add( Expression.eq(${selectorname}, $QaData.getParameters().getFloat(${selectorname})$Q )
+			#elseif($type == "Date")
+			.add( Expression.eq(${selectorname}, $QaData.getParameters().getDate(${selectorname})$Q )
+			#end
+			#set ($arraycount =  $arraycount + 1 )
+		#end
+			.list();
+		// Have to assume there is only one
+        ${classView.entityclassname} aObject = ${classView.entityclassname}s.get(0);
+#end
+ 
+/**
+ * $dontedit
+ */
+package ${plugin.getDestinationPackage($class)};
+
+## Has the root entity class on display
+#set ( $rootentity = $rootClassView.getRootEntity() )
+#set ( $entitieswithcrud = $SummitHelper.getCrudList() )
+#set ( $viewrefclasses = $rootClassView.getAllDependentClassView() )
+
+#set ( $packagename = $metadata.getFullyQualifiedName() )
+package $packagename.actions;
+
+import org.codehaus.dentaku.summit.modules.actions.CrudAction;
+import org.codehaus.dentaku.summit.modules.actions.FkException;
+import $packagename.model.*;
+import $packagename.util.*;
+
+import org.codehaus.plexus.summit.parameters.SummitRequestParameterParser;
+import org.codehaus.plexus.summit.rundata.RunData;
+
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.SessionFactory;
+import net.sf.hibernate.Transaction;
+
+import org.apache.velocity.context.Context;
+
+import java.util.*;
+/**
+ * Insert/Update/Delete instances of domain records
+ * then populate the context ready to be rendered by the Velocity page.
+ */
+public class Crud${SummitHelper.getScreenName}} extends CrudAction {
+
+    private SessionFactory _sessions;
+
+#foreach($viewclass in $entitieswithcrud)
+    /**
+     * Persist a new instance of ${viewclass.entityclassname}
+     */
+    public void doCreate${viewclass.entityclassnamee}(RunData aData, Context aContext) {
+        try {
+            logParameters(aData, $QCrud${viewclass.entityclassname}.create()$Q);
+
+            ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
+
+            // setProperties throws if the id has not been initialised,
+            // as will occur if nothing has been previously selected from
+            // the drop-down list (e.g. when no entities exist in the
+            // record).
+            ParameterParser parser = aData.getParameters();
+            parser.setProperties(instance);
+
+            if (err.length() != 0) {
+                contextMessage(aContext, err);
+                populateContext(aData, aContext);
+
+                return;
+            }
+
+            Session sess = _sessions.openSession();
+            try {
+                sess.save(instance);
+            } catch {HibernateException he) {
+                // no tx here
+            } finally {
+                sess.close();
+            }
+
+            try {
+            #foreach (${parentclass} in ${viewclass.parents})
+                populateContextWith${parentclass.entityclassname}(aData, aContext);
+            #end
+                populateContextWithSelected${viewclass.entityclassname}(instance,
+                    aData, aContext);
+            } catch (Exception e) {
+                handleException(aContext, $QCrud${viewclass.entityclassname}.doCreate{entityclass.name}()$Q,
+                    $QUnable to populate context with ${viewclass.entityclassname} details$Q, e);
+            }
+        } catch (Exception e) {
+            handleException(aContext, $QCrud${viewclass.entityclassname}.doCreate()$Q,
+                $QUnable to create ${viewclass.entityclassname}$Q, e);
+        }
+    }
+
+
+    /**
+     * Update an existing instance of ${viewclass.entityclassname}
+     */
+    public void doUpdate${viewclass.entityclassname}(RunData aData, Context aContext) {
+        try {
+            logParameters(aData, $Q${viewclass.entityclassname}.update()$Q);
+
+            ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
+            ParameterParser parser = aData.getParameters();
+            parser.setProperties(instance);
+
+            Session sess = _sessions.openSession();
+            try {
+                sess.save(instance);
+            } catch {HibernateException he) {
+                // no tx here
+            } finally {
+                sess.close();
+            }
+
+            try {
+            #foreach (${parentclass} in ${viewclass.parents})
+                populateContextWith${parentclass.entityclassname}(aData, aContext);
+            #end
+                populateContextFollowingUpdateWith${parentclass.entityclassname}(instance, aData, aContext);
+            } catch (Exception e) {
+                handleException(aContext, $QCrud${viewclass.entityclassname}.doUpdate()$Q,
+                    $QUnable to populate context with instance details$Q, e);
+            }
+        } catch (Exception e) {
+            handleException(aContext, $QCrud${viewclass.entityclassname}.doUpdate()$Q,
+                $QUnable to update instance$Q, e);
+        }
+    }
+
+    /**
+     * Delete an instance of ${viewclass.entityclassname}
+     */
+    public void doDelete${viewclass.entityclassname}(RunData aData, Context aContext) {
+        try {
+            logParameters(aData, $QCrud${viewclass.entityclassname}.delete()$Q);
+
+            ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
+            ParameterParser parser = aData.getParameters();
+            parser.setProperties(instance);
+
+            Session sess = _sessions.openSession();
+            try {
+                sess.delete(instance);
+            } catch {HibernateException he) {
+                // Normally because there are child records associated through foreign key
+                contextMessage(aContext,
+                        $QCannot delete the record named \$Q$Q +
+                        instance.get${class.displayname} +
+                        \$Q$Q until all child records have been deleted$Q);
+                    populateContext(aData, aContext);
+                    sess.close();
+                    return;
+                }
+            } finally {
+                sess.close();
+            }
+
+            contextMessage(aContext,
+                $QConfirmed deletion of record named \$Q$Q +
+                ${class.displayname} + \$Q$Q);
+            #foreach (${parentclass} in ${viewclass.parents})
+                populateContextWith${parentclass.entityclassname}(aData, aContext);
+            #end
+                populateContextWithSelected${viewclass.entityclassname}(null,
+                    aData, aContext);
+        } catch (Exception e) {
+            handleException(aContext, $QCrudRecord.doDelete()$Q,
+                $QUnable to delete record$Q, e);
+            populateContext(aData, aContext);
+        }
+    }
+#end
+
+    /**
+     * Invoked when a form is submitted without a specific doPerform action.
+     *
+     * This action is fired when a specific record is selected in a HTML select
+     * box, and serves to populate the aContext with the object representing
+     * the record. The template then renders the page with the objects fields.
+     */
+    public void doPerform(RunData aData, Context aContext) {
+        logParameters(aData, $QCrud${SummitHelper.getScreenName}.doPerform()$Q);
+
+        String selectionType = aData.getParameters().getString($QselectionType$Q);
+
+        /*
+           This method is invoked when the user modifies a drop-down list.
+           Not possible to invoke a specific submit input from javascript
+           (e.g. like doSubmit_blah), so instead the javascript sets a
+           hidden parameter to identify which drop-down was used.
+         */
+        if (selectionType.equals($Qselect${rootClassView.entityclassname}$Q)) {
+            // The user has updated the rootselectable list
+            // In this case we only populate the context
+            // with the selected rootselectable type, and effectively
+            // remove all other selections from the context
+            populateContextWith${rootClassView.entityclassname}(aData, aContext);
+        } 
+        #foreach($viewrefclass in $viewrefclasses)
+        else if (selectionType.equals($Qselect${viewrefclass.entityclassname}$Q)) {
+            // An event has originated from the ${viewrefclass.entityclassname} drop-down
+            // In this case, we want to populate the context with
+            // the selection down to the ${viewrefclass.entityclassname} lists,
+            // but not beyond, since these will be invalid now
+            // that a new ${viewrefclass.entityclassname} has been chosen.
+            populateContextWith${viewrefclass.entityclassname}(aData, aContext);
+        } 
+        #end
+    }
+    /**
+     * The selector attribute should always reside in the context so that drop-down
+     * lists can be populated by a pull tool
+     */
+    protected void populateContextWith${rootClassView.entityclassname}(RunData aData, Context aContext) {
+		#fetchselector($rootClassView)
+        if (aObject != null) {
+            aContext.put($Qselected${rootClassView.entityclassname}$Q, aObject);
+            ${rootClassView}.setSelectedObject(aObject);
+        }
+        else {
+            // Get the parent by association id, i.e. current foreign key
+            #set ($myparentsselectorvalue = ${rootClassView}.getSelectorValue() )
+            #if($myparentsselectorvalue)
+            List objects = sess.find( $Qfrom ${rootClassView.entityclassname} where ${rootClassView.selectorName} = ?$Q,
+                $myparentsselectorvalue,
+                ${rootClassView.selectorType} );
+            #else
+            List objects = sess.find( $Qfrom ${parentclass.entityclassname}$Q );
+            #end            
+            ${rootClassView} object = objects.get(0);
+            #set ( ${childclasses} = ${rootClassView}.children )
+            #foreach ( ${childclass} in ${childclasses} )
+            aData.put($Qselected${childclass.selectorName}$Q, object.get${childclass.selectorName}());
+            #end
+        }
+    }
+	protected void populateContextFollowingUpdateWith${rootClassView.entityclassname}(
+		${rootClassView.entityclassname}instance, RunData aData, Context aContext) {
+		// Updated root object and currently selected child objects put into RunData
+        if (instance != null) {
+            aContext.put($Qselected${rootClassView.entityclassname}$Q, instance);
+            ${rootClassView}.setSelectedObject(instance);
+        }
+        #set ( ${childclasses} = ${rootClassView}.children )
+        #foreach ( ${childclass} in ${childclasses} )
+		${childclass.entityclassname} instance = new ${childclass.entityclassname}();
+		ParameterParser parser = aData.getParameters();
+		parser.setProperties(instance);
+        populateContextWithSelected${childclass.entityclassname}(instance, aData, aContext);
+        #end
+	}
+
+#foreach(${viewrefclass} in ${viewrefclasses})
+    /**
+     * The selector attribute should always reside in the context so that drop-down
+     * lists can be populated by a pull tool
+     */
+    protected void populateContextWith${viewrefclass.entityclassname}(RunData aData, Context aContext) {
+		#fetchselector($viewrefclass)
+        if (aObject != null) {
+            aContext.put($Qselected${viewrefclass.entityclassname}$Q, aObject);
+            ${viewrefclass}.setSelectedObject(aObject);
+        }
+        else {
+            // Get the parent by association id, i.e. current foreign key
+            $myparentsselectorvalue = ${viewrefclass}.getParentsSelectorValue();
+            #if($myparentsselectorvalue)
+            List objects = sess.find( $Qfrom ${viewrefclass.entityclassname} where ${viewrefclass}parentsSelectorName() = ?$Q,
+                $myparentsselectorvalue,
+                ${viewrefclass}.parentsSelectorType() );
+            #else
+            List objects = sess.find( $Qfrom ${viewrefclass.entityclassname}$Q );
+            #end            
+            ${viewrefclass} object = objects.get(0);
+            #set ( ${childclasses} = ${viewrefclass}.children )
+            #foreach ( ${childclass} in ${childclasses} )
+            aData.put($Qselected${childclass.selectorName}$Q, object.get${childclass.selectorName}());
+            #end
+        }
+    }
+    protected void populateContextWithSelected${viewrefclass.entityclassname}(${viewrefclass.entityclassname} instance, RunData aData, Context aContext) {
+        if (instance != null) {
+            aContext.put($Qselected${viewrefclass.entityclassname}$Q, instance);
+            ${viewrefclass}.setSelectedObject(instance);
+        }
+    }
+#end
+
+    /**
+     * Normally used for recovering the screen values after an exception
+	 * pays no attention to current context. Will be improved by 
+	 * returning objects currently in context with the error message
+     */
+    protected void populateContext(RunData aData, Context aContext) {
+        // This could be done with javascript, but stick with the convention
+        #foreach (${parentclass} in ${parentclasses})
+            populateContextWith${parentclass.entityclassname}(aData, aContext);
+        #end
+            populateContextWithSelected${rootClassView.entityclassname}(null,
+                aData, aContext);
+    }
+}

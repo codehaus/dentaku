@@ -1,0 +1,27 @@
+/**
+ * This class is only generated once! It will never be overwritten.
+ * You can safely modify it by hand to add any special pull methods.
+ */
+package ${metadata.packageName};
+
+import org.codehaus.plexus.summit.pull.RequestTool;
+
+public class ${ScreenName}${class}PullTool extends ${ScreenName}Base${class}PullTool implements RequestTool {
+
+	/**
+     * Refresh method - does nothing
+     */
+    public void refresh()
+    {
+        // empty
+    }
+	
+	/**
+     * Don't need RunData, Context has everything
+     */
+    public void setRunData(RunData data)
+    {
+        // empty
+    }
+
+}

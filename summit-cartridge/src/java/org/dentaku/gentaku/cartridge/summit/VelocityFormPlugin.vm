@@ -1,0 +1,175 @@
+#set( $Q = '"' )
+#set( $D = '$' )
+#set( $P = '#' )
+#set( $N = '!' )
+
+#macro ( $setwidget $entry $viewentity $listOfObjects $key $displayname)
+	    #if ($entry.getSterotype() == "Singleline" )
+    		$PTextWidget ( $colspan $Q${entry.attributename}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
+        #elseif ($entry.getSterotype() == "Dropdown" )
+    		$PDropdown ( $colspan $Q${entry.attributename}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
+        #elseif ($entry.getSterotype() == "ViewSelector" )
+    		$PViewSelector ( $colspan $Q${viewentity}$Q $Q$key$Q $Q$D$listOfObjects$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
+        #elseif ($entry.getSterotype() == "ViewSelectorName" )
+			#set ( $keyFields = $viewentity.getKeyFields() )
+    		$PViewSelectorName ( $colspan $Q${viewentity}$Q $Q$displayname$Q $Q$D$listOfObjects$Q $Q$D$Nselected${viewentity.entityclassname}$Q $Q$keyFields$Q)
+        #elseif ($entry.getSterotype() == "Dropdown" )
+    		$PViewList ( $colspan $Q${entry.attributename}$Q $Q$Dlist${viewentity.entityclassname}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
+        #elseif ($entry.getSterotype() == "Radiobutton" )
+    		$PRadiobutton ( $colspan $Q${entry.attributename}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
+        #elseif ($entry.getSterotype() == "Checkbox" )
+    		$PCheckboxWidget ( $colspan $Q${entry.attributename}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q)
+        #elseif ($entry.getSterotype() == "Multiline" )
+    		$PTextAreaWidget ( $colspan  $Q${entry.attributename}$Q $Q$D$Nselected${viewentity.entityclassname}.get${entry.attributename}()$Q $Q50$Q)
+		#end
+#end
+
+#macro  ( $tablelayout $viewClass $listOfObjects)
+    #set ( $endOfRow=false )
+    #set ( $startOfRow=true )
+    #set ( $defaultColSpan=$viewClass.getColumncount() )
+    #set ( $currentColSpan=0 )
+	#foreach( $entry in $viewClass.attributes )
+		$colspan = $entry.getColspan()
+		$currentColSpan=$currentColSpan+$colspan+1
+	
+		#if($currentColSpan>$defaultColSpan)
+			$diffSpan=$currentColSpan-$defaultColSpan
+		<td colspan="$diffSpan"></td>
+		</tr>
+			#set ( $startOfRow=true )
+			#set ( $currentColSpan=0 )
+		#end
+		#if($startOfRow)
+	<tr>
+			#set ( $startOfRow=false )	
+		#end
+	$PLabelCell ($Q${entry.attributename}$Q)
+	#setwidget(${entry} ${viewClass} ${listOfObjects} ${key} ${displayname})
+		#if($currentColSpan==$defaultColSpan)
+		</tr>
+			#set ( $startOfRow=true )		
+			#set ( $currentColSpan=0 )
+		#end
+	#end
+#end
+
+#set ( $screenname = $SummitHelper.getScreenname() )
+#set ( $rootclass = $rootClassView.getRootEntity() )
+## Has an ordered list of related classes to root class on display
+#set ( $classesnotroot = $rootClassView.getAllDependentClassView() )
+
+#set ( $listnames = $SummitHelper.getValueListnames($rootclass) )
+#foreach( $listname in listnames )
+	#set ( $Dlist${listname} = $SummitHelper.getList($listname) )
+#end
+
+$P$P Get the collection of existing ${rootclass.name}, and 
+$P$P make the first ${rootclass.name} selected, if no ${rootclass.name}
+$P$P has already been selected
+$Pset ( $D${rootclass.name} = ${screenname}PullTool.getAll${rootclass.name}() )
+$Pif ($N$Dselected${rootclass.name} && ($D${rootclass.name}s.size()>0) )
+	$Pset ( $Dselected${rootclass.name} = $D${rootclass.name}s.get(0) )
+$Pend
+$Pset ( $Dselected${rootclass.name}Id = $Dselected${rootclass.name}.get${rootclass.name}Id() )
+
+#foreach($childentity in $classesnotroot)
+$P$P Get the collection of existing ${childentity.entityclassname}, and 
+$P$P make the first ${childentity.entityclassname} selected, if no ${childentity.entityclassname}
+$P$P has already been selected
+$Pset ( $D${childentity.entityclassname}s = $D${screenname}PullTool.get${childentity.entityclassname}For${childentity.parentname}($Dselected${childentity.parentname}.${childentity.parentpkname}) )
+$Pif ($N$Dselected${childentity.entityclassname} && ($D${childentity.entityclassname}s.size()>0) )
+	$Pset ( $Dselected${childentity.entityclassname} = $D${childentity.entityclassname}s.get(0) )
+$Pend
+	#foreach($selectorname in ${childentity.selectorNames}
+	$Pset ( $Dselected${selectorname} = $Dselected${childentity.entityclassname}.${selectorname} )
+	#end
+#end
+
+#set ( $linkname = "link.setPage($Q${screenname}.vm" )
+<form method=$Qpost$Q action=$Q$D$linkname$Q).setAction($QCrud${rootclass.name}$Q)$Q>
+
+	#foreach($selectorname in ${childentity.selectorNames}
+	$Pset ( $Dselected${selectorname} = $Dselected${childentity.entityclassname}.${selectorname} )
+	#end
+	<input type=$Qhidden$Q name=$Q${class.selectorname}$Q value=$Q$!selected${rootclass.selectorname}$Q/>
+	<table width=$Q$ui.screenTableWidth$Q cellspacing=$Q5$Q>
+	<tr>
+		$PLabelCell (${rootclass.name})
+		<td width=$Q$Dui.screenWidgetWidth$Q >
+			<select name=$Qselected${rootclass.name}Name$Q>
+				$Pforeach ($D${rootclass.name} in ${rootclass.name}s)
+					$Pif ($D{$rootclass.name}.get{$rootclass.name}Id() == $Dselected${rootclass.name}Id)
+						<option value=$D{$rootclass}.getSelectorValue() selected>$D${rootclass.name}.getDisplayValue()</option>
+					$Pelse
+						<option value=$D{$rootclass}.getSelectorValue()>$D${rootclass.name}.getDisplayValue()</option>
+					$Pend
+				$Pend
+			</select>
+		</td>
+	</tr>
+#tablelayout($D$rootViewClass $D${rootclass.name}s)
+#if( $startOfRow=false )
+	#if($currentColSpan<$defaultColSpan)
+		$diffSpan=$defaultColSpan-$currentColSpan
+		<td colspan="$diffSpan"></td>
+	#end
+	</tr>
+#end
+#if( $rootclass.hasCRUD() )
+	<tr>
+		$PLabelCell ($Q$Q)
+		$PCrudButtons($defaultColSpan-1 ${rootViewClass.entityclassname})
+	</tr>
+#end
+#foreach($childentity in $classesnotroot)
+#if($childentity.getSterotype()=="ChildSelectable")
+	<input type=$Qhidden$Q name=$Q${childentity.name}$Q value=$Q$!selected${childentity.name}Id$Q/>
+	<input type=$Qhidden$Q name=$Qselectiontype$Q value=$Qinitial$Q/>
+	<table width=$Q$ui.screenTableWidth$Q cellspacing=$Q5$Q>
+	<tr>
+		$PLabelCell (${childentity.name})
+		<td width=$Q$Dui.screenWidgetWidth$Q >
+			<select name=$Qselected{$childentity.name}Name$Q>
+				$Pforeach ($D$childentity.name} in ${childentity.name}s)
+					$Pif ($D{$childentity.name}.get{$childentity.name}Id() == $Dselected{$childentity.name}Id)
+						<option value=$D{$childentity}.getSelectorValue() selected>$D{$childentity.name}.getDisplayValue()</option>
+					$Pelse
+						<option value=$D{$childentity}.getSelectorValue()>$D{$childentity.name}.getDisplayValue()</option>
+					$Pend
+				$Pend
+			</select>
+		</td>
+	</tr>
+#tablelayout($D$childentity $D${childentity.entityclassname}s)
+	#if( $childentity.hasCRUD() )
+	<tr>
+		$PLabelCell ($Q$Q)
+		$PCrudButtons($defaultColSpan-1 ${childentity.classname})
+	</tr>
+	#end
+#elseif($childentity.getSterotype()=="ChildTable")
+	<tr>
+		$PLabelCellW ($Q${childentity.name}$Q $Q$ui.screenLabelWidth$Q)
+		<td colspan=$Q$defaultColSpan-1$Q>
+			<table cellpadding=$Q3$Q border=$Q2$Q>
+				<tr>
+				$attributes = ${childentity}.getAttributes()
+				#foreach($attribute in $attributes)
+				    <td><b>$attribute.attributename</b></td>
+				#end
+				</tr>
+				#Pforeach ($D${childentity.attributename} in $D${childentity.attributename}s)
+				<tr>
+				#foreach ($attribute in $attributes)
+					<td>$D${childentity.attributename}.get$attribute.getValue()</td>
+				#end
+				</tr>
+				#Pend
+			</table>
+		</td>
+	</tr>
+#end
+#end
+	</table>
+</form>

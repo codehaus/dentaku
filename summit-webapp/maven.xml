@@ -1,0 +1,66 @@
+<project default="dentaku-dist" xmlns:m="jelly:maven">
+    <goal name="dentaku-dist">
+        <attainGoal name="ejb:install"/>
+    </goal>
+    <preGoal name="ejb:init">
+        <attainGoal name="dentaku:gentaku"/>
+<!--        <attainGoal name="xdoclet:hibernatedoclet"/>-->
+    </preGoal>
+    <goal name="dentaku:gentaku">
+        <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
+        <gentaku model="${maven.src.dir}/SummitTestModel.xml.zip">
+            <component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${maven.build.dir}/xdoclet/hibernatedoclet"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityBasePlugin" destdir="${maven.build.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityPlugin" destdir="${maven.src.dir}/java"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityFactoryPlugin" destdir="${maven.build.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.event.EventBasePlugin" destdir="${maven.build.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}/META-INF/plexus" destinationfilename="components.xml"/>
+<!---->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.StrutsFormPlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.WerkflowPlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.RulesPlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionImplPlugin" destdir="${maven.src.dir}/java"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.WorkflowActionPlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.xdoclet.plugin.ejb.interfaces.LocalInterfacePlugin" destdir="${basedir}/target/java"/>-->
+<!--            <component classname="org.xdoclet.plugin.ejb.descriptor.EjbJarXmlPlugin" destdir="${basedir}/target/classes/META-INF"/>-->
+        </gentaku>
+    </goal>
+    <goal name="dentaku:initdb">
+        <path id="schema.classpath">
+            <path refid="maven.dependency.classpath"/>
+            <pathelement location="target/xdoclet/hibernatedoclet"/>
+            <pathelement location="target/classes"/>
+            <pathelement location="tools/mySQL/mysql-connector-java-3.1.2-alpha-bin.jar"/>
+        </path>
+        <fileset id="hibernate.mapping.files" dir="target/xdoclet/hibernatedoclet">
+            <include name="**/*.hbm.xml"/>
+        </fileset>
+        <pathconvert refid="hibernate.mapping.files" property="hibernate.mappings" pathsep=" "/>
+        <java classname="net.sf.hibernate.tool.hbm2ddl.SchemaExport" fork="true">
+            <jvmarg value="-Dhibernate.dialect=net.sf.hibernate.dialect.MySQLDialect"/>
+            <jvmarg value="-Dhibernate.connection.driver_class=org.gjt.mm.mysql.Driver"/>
+            <jvmarg value="-Dhibernate.connection.url=jdbc:mysql://${mysql.host}:3306/dentaku-summit-example"/>
+            <jvmarg value="-Dhibernate.connection.username=${mysql.username}"/>
+            <jvmarg value="-Dhibernate.connection.password=${mysql.password}"/>
+            <!--            <jvmarg value="-Xdebug"/>-->
+            <!--            <jvmarg value="-Xnoagent"/>-->
+            <!--            <jvmarg value="-Djava.compiler=NONE"/>-->
+            <!--            <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"/>-->
+            <arg line="${hibernate.mappings}"/>
+            <classpath refid="schema.classpath"/>
+        </java>
+        <exec executable="cmd.exe">
+            <arg file="tools/MySQL/mysql.exe"/>
+            <arg line="-h ${mysql.host} -u ${mysql.username} --password=${mysql.password} ${mysql.database}"/>
+            <arg line="&lt;"/>
+            <arg file="${maven.dentaku.sql.init}"/>
+        </exec>
+    </goal>
+    <preGoal name="java:compile">
+        <path id="maven.compile.src.set">
+            <pathelement location="src/java"/>
+            <pathelement location="target/src"/>
+            <pathelement location="target/xdoclet/hibernatedoclet"/>
+        </path>
+    </preGoal>
+</project>

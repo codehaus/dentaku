@@ -1,0 +1,66 @@
+#set( $Q = '"' )
+
+## Has an ordered list of related classes to all root classes in views
+#set ( $alldepclassviews = $rootClassView.getAllDependentClassView() )
+
+package ${metadata.getFullyQualifiedName()}.tools;
+
+import ${metadata.packageName}.model.${rootClassView.entityclassname};
+#foreach( $depclassview in $alldepclassviews )
+import ${metadata.packageName}.model.${depclassview.entityclassname};
+#end
+public class ${metadata.getScreenName}BasePullTool {
+    public void init(Object data) {
+        /* empty */
+    }
+
+    public void refresh() {
+        /* empty */
+    }
+
+    public String getDefaultName() {
+        return $Q[None Selected]$Q;
+    }
+
+    public List getAll${rootClassView.entityclassname}() {
+        List entities = new ArrayList();
+
+        if (a${rootClassView.entityclassname} == null) {
+            return entities;
+        }
+
+        try {
+			entities = sess.find( $Qfrom ${rootClassView.entityclassname}$Q);
+		} catch (HibernateException e) {
+		}
+
+        return entities;
+    }
+#foreach( $pullclass in $alldepclassviews )
+    public List get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}(${pullclass.parentsEntityname} a${pullclass.parentsEntityname})
+    {
+        List entities = new ArrayList();
+
+        if (a${pullclass.parentsEntityname} == null) {
+            return entities;
+        }
+
+        try {
+			entities = a${pullclass.parentsEntityname}.get${pullclass.entityclassname}{}$Q);
+		} catch (HibernateException e) {
+		}
+
+        return entities;
+    }
+#end
+#foreach( $pullclass in $alldepclassviews )
+    public List get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}WithDefault(${pullclass.parentsEntityname} a${pullclass.parentsEntityname})
+    {
+        List entities = new ArrayList();
+		entities = get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}(${pullclass.parentsEntityname} a${pullclass.parentsEntityname});
+		entities.add(getDefaultName());
+		
+        return entities;
+    }
+#end
+}
