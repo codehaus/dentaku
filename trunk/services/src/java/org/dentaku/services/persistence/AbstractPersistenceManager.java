@@ -17,9 +17,6 @@
 package org.dentaku.services.persistence;
 
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.dentaku.services.persistence.PersistenceException;
-import org.dentaku.services.persistence.PersistenceFactory;
-import org.dentaku.services.persistence.PersistenceManager;
 import org.dentaku.services.persistence.hibernate.SessionProvider;
 
 import java.util.Iterator;
