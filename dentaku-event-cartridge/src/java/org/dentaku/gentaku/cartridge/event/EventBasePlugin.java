@@ -1,5 +1,5 @@
 /*
- * StrutsActionTestPlugin.java
+ * EventBasePlugin.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,25 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dentaku.gentaku.cartridge.struts;
+package org.dentaku.gentaku.cartridge.event;
 
 import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
 
 import java.util.Collection;
+import java.util.Map;
 
-public class StrutsActionTestPlugin extends JavaPluginBase {
-    JMIUMLMetadataProvider metadataProvider;
+public class EventBasePlugin extends JavaPluginBase {
+    private JMICapableMetadataProvider metadataProvider;
 
-    public StrutsActionTestPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public EventBasePlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
-        getStereotypes().add("StrutsAction");
-        setCreateonly(true);
+        this.metadataProvider = metadataProvider;
+        getStereotypes().add("Event");
         setFileregex(".java");
-        setFilereplace("Test.java");
+        setFilereplace("EventBase.java");
+        setMultioutput(true);
+    }
+
+    protected void populateContextMap(Map m) {
+        super.populateContextMap(m);
+        m.put("class", m.get("metadata"));
     }
 
     protected Collection getMetadata() {

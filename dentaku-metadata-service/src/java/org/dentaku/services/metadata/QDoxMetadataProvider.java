@@ -27,6 +27,7 @@ import com.thoughtworks.qdox.parser.structs.FieldDef;
 import com.thoughtworks.qdox.parser.structs.MethodDef;
 import com.thoughtworks.qdox.parser.structs.TagDef;
 import org.generama.GeneramaException;
+import org.generama.QDoxCapableMetadataProvider;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.OperationImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
@@ -45,7 +46,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class QDoxMetadataProvider extends JMIMetadataProviderBase implements JavaClassCache, JMICapableMetadataProvider {
+public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDoxCapableMetadataProvider, JavaClassCache {
     private ClassLibrary classLibrary = new ClassLibrary(this);
     private Map classes;
     private Map qdoxJMIMap;
@@ -96,8 +97,17 @@ public class QDoxMetadataProvider extends JMIMetadataProviderBase implements Jav
         }
     }
 
-    public Classifier mapQDoxToClassifier(AbstractJavaEntity qdox) {
-        return (Classifier)qdoxJMIMap.get(qdox);
+    /**
+     * This method is used to map to other known types
+     * @param object
+     * @return
+     */
+    public Classifier mapObjectToClassifier(Object object) {
+        if (object instanceof AbstractJavaEntity) {
+            return (Classifier)qdoxJMIMap.get(object);
+        } else {
+            throw new IllegalArgumentException("Unknown type to map");
+        }
     }
 
     private void addClass(JavaClass cls) {

@@ -40,8 +40,8 @@ public class MetadataServiceTest extends TestCase {
         URL resource = getClass().getResource(name);
         e.setConfiguration(resource);
         e.start();
-        MetadataProvider ms = (MetadataProvider) e.lookup(MetadataProvider.ROLE);
-        UmlPackage model = ((JMIUMLMetadataProvider) ms).getModel();
+        JMICapableMetadataProvider ms = (JMICapableMetadataProvider) e.lookup(JMICapableMetadataProvider.ROLE);
+        UmlPackage model = ms.getModel();
         CorePackage core = model.getCore();
         ModelElementClass modelElement = core.getModelElement();
         this.metadata = modelElement.refAllOfType();

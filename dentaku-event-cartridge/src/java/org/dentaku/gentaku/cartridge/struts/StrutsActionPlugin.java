@@ -17,15 +17,23 @@
 package org.dentaku.gentaku.cartridge.struts;
 
 import org.dentaku.gentaku.cartridge.JavaPluginBase;
-import org.generama.TemplateEngine;
-import org.generama.MetadataProvider;
-import org.generama.WriterMapper;
+import org.dentaku.services.metadata.JMICapableMetadataProvider;
+import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.generama.VelocityTemplateEngine;
+import org.generama.WriterMapper;
+
+import java.util.Collection;
 
 public class StrutsActionPlugin extends JavaPluginBase {
-    public StrutsActionPlugin(VelocityTemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
+    JMIUMLMetadataProvider metadataProvider;
+
+    public StrutsActionPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
         getStereotypes().add("StrutsAction");
         setCreateonly(true);
+    }
+
+    protected Collection getMetadata() {
+        return metadataProvider.getJMIMetadata();
     }
 }

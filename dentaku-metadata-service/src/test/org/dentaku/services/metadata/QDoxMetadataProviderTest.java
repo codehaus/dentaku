@@ -19,6 +19,7 @@ package org.dentaku.services.metadata;
 import junit.framework.TestCase;
 import org.codehaus.plexus.embed.Embedder;
 import org.generama.MetadataProvider;
+import org.generama.QDoxCapableMetadataProvider;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.Classifier;
 
@@ -40,7 +41,7 @@ public class QDoxMetadataProviderTest extends TestCase {
         URL resource = getClass().getResource(name);
         e.setConfiguration(resource);
         e.start();
-        MetadataProvider ms = (MetadataProvider)e.lookup(MetadataProvider.ROLE);
+        QDoxCapableMetadataProvider ms = (QDoxCapableMetadataProvider)e.lookup(QDoxCapableMetadataProvider.ROLE);
         metadata = ms.getMetadata();
     }
 

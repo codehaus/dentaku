@@ -16,18 +16,13 @@
  */
 package org.dentaku.gentaku.cartridge.entity;
 
-import org.generama.MetadataProvider;
-import org.generama.VelocityTemplateEngine;
-import org.generama.WriterMapper;
 import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
-import org.omg.uml.foundation.core.Classifier;
+import org.generama.VelocityTemplateEngine;
+import org.generama.WriterMapper;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Collection;
-
-import com.thoughtworks.qdox.model.AbstractJavaEntity;
+import java.util.Map;
 
 public class EntityFactoryPlugin extends JavaPluginBase {
     private JMICapableMetadataProvider metadataProvider;

@@ -16,12 +16,10 @@
  */
 package org.dentaku.gentaku.cartridge.entity;
 
-import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.generama.JellyTemplateEngine;
-import org.generama.MetadataProvider;
-import org.generama.WriterMapper;
 import org.generama.Plugin;
+import org.generama.WriterMapper;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 
 import java.util.Collection;

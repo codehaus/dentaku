@@ -25,12 +25,14 @@ import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import java.util.Collection;
 
 public class WerkflowPlugin extends Plugin {
+    JMIUMLMetadataProvider metadataProvider;
 
     public WerkflowPlugin(JellyTemplateEngine jellyTemplateEngine, JMIUMLMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(jellyTemplateEngine, metadataProvider, writerMapper);
 
         setMultioutput(true);
         setEncoding("UTF-8");
+        this.metadataProvider = metadataProvider;
     }
 
     public boolean shouldGenerate(Object metadata) {
@@ -40,5 +42,9 @@ public class WerkflowPlugin extends Plugin {
 
     public String getDestinationFilename(Object metadata) {
         return ((ModelElementImpl)metadata).getName() + ".xml";
+    }
+
+    protected Collection getMetadata() {
+        return metadataProvider.getJMIMetadata();
     }
 }

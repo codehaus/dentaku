@@ -16,30 +16,10 @@
  */
 package org.dentaku.services.metadata;
 
-import org.generama.MetadataProvider;
 import org.generama.GeneramaException;
-import org.omg.uml.UmlPackage;
-import org.omg.uml.modelmanagement.Model;
-import org.omg.uml.foundation.core.ModelElement;
-import org.omg.uml.foundation.core.TaggedValue;
-import org.netbeans.api.mdr.MDRepository;
-import org.netbeans.api.mdr.MDRManager;
-import org.netbeans.api.mdr.CreationFailedException;
-import org.netbeans.api.xmi.XMIReader;
-import org.netbeans.api.xmi.XMIReaderFactory;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
+import org.omg.uml.foundation.core.Classifier;
 
-import javax.jmi.model.MofPackage;
-import javax.jmi.model.ModelPackage;
-import javax.jmi.xmi.MalformedXMIException;
-import javax.jmi.reflect.RefPackage;
 import java.util.Collection;
-import java.util.Iterator;
-import java.net.URL;
-import java.io.IOException;
-
-import com.thoughtworks.qdox.model.DocletTagFactory;
 
 public class JMIUMLMetadataProvider extends JMIMetadataProviderBase {
 
@@ -51,11 +31,20 @@ public class JMIUMLMetadataProvider extends JMIMetadataProviderBase {
         super(reader);
     }
 
-    public Collection getMetadata() throws GeneramaException {
+    public Collection getJMIMetadata() throws GeneramaException {
         try {
             return getModel().getCore().getModelElement().refAllOfType();
         } catch (RepositoryException e) {
             throw new GeneramaException("problem getting metadata", e);
         }
+    }
+
+    /**
+     * This really belongs as a mixin in a superclass interface or as a
+     * @param qdox
+     * @return
+     */
+    public Classifier mapObjectToClassifier(Object qdox) {
+        return null;
     }
 }

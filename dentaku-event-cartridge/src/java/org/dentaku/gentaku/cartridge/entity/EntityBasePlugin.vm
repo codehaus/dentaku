@@ -18,7 +18,7 @@ public abstract class ${class.name}Base
 #else
         extends org.dentaku.services.persistence.ModelEntity
 #end
-        implements org.dentaku.services.persistence.XMLBean {
+        implements org.dentaku.services.persistence.XMLBean, java.io.Serializable {
     public void getXML(org.dom4j.Element el) throws org.dentaku.services.exception.XMLBeanException {
         try {
             org.dom4j.Element beanElement = el.addElement("${class.name}");
