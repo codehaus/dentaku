@@ -8,7 +8,7 @@
     <organization>
         <name>Dentaku Team</name>
         <url>http://www.dentaku.org</url>
-        <!--        <logo>http://dentaku.org/images/calculator.gif</logo>-->
+        <!--<logo>http://dentaku.org/images/calculator.gif</logo>-->
     </organization>
     <inceptionYear>2003</inceptionYear>
     <package>org.dentaku.*</package>
