@@ -74,7 +74,7 @@ public class LocalDefaultElement extends DefaultElement {
     }
 
     /**
-     * Used for XMIGen, keeps a cache of strings of the locations that this element is valid
+     * Used for XMIGenTask, keeps a cache of strings of the locations that this element is valid
      * @return
      */
     public Set getLocations() {
