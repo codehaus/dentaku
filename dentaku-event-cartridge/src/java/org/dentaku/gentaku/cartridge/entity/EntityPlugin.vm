@@ -7,6 +7,6 @@ package ${plugin.getDestinationPackage($metadata)};
 /**
   * @hibernate.subclass discriminator-value="${metadata.name}Impl"
   */
-public class ${metadata.name}Impl extends ${metadata.name} {
+public class ${metadata.name} extends ${metadata.name}Base {
 
 }

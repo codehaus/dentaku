@@ -99,7 +99,7 @@ public class ${class.name}Factory implements PersistenceFactory {
      * In Hibernate, this is just a call to load().
      *
      */
-    public org.dentaku.services.persistence.ModelEntity findByPrimaryKey ($primKeyTypeName ${primKey.name}) throws PersistenceException {
+    public org.dentaku.services.persistence.ModelEntity findByPrimaryKey (java.io.Serializable ${primKey.name}) throws PersistenceException {
         return (org.dentaku.services.persistence.ModelEntity)pm.load(${class.name}.class, ${primKey.name});
     }
 

@@ -377,16 +377,15 @@ public class SimpleOOHelper extends UMLStaticHelper {
      * @return String the string to be used as SQL type
      */
     public String findAttributeSQLType(Attribute attribute) {
-//        String value = findTagValue(attribute, "andromda.persistence.SQLType", true);
-//
-//        if (null == value)
-//        {
-//            Object type = attribute.getType();
-//            String typeName = findFullyQualifiedName(type);
-//            value = this.typeMappings.getSQLType(typeName, findAttributeSQLFieldLength(attribute));
-//        }
-//        return value;
-        return null;
+        String value = findTagValue(attribute, "andromda.persistence.SQLType", true);
+
+        if (null == value)
+        {
+            Object type = attribute.getType();
+            String typeName = findFullyQualifiedName(type);
+            value = this.typeMappings.getSQLType(typeName, findAttributeSQLFieldLength(attribute));
+        }
+        return value;
     }
 
     /**
