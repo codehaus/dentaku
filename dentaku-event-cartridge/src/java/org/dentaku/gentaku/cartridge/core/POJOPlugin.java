@@ -20,6 +20,7 @@ import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 
 import java.util.Collection;
 
@@ -35,6 +36,16 @@ public class POJOPlugin extends JavaPluginBase {
 
     protected Collection getMetadata() {
         return metadataProvider.getJMIMetadata();
+    }
+    
+    public boolean shouldGenerate(Object metadata) {
+    	if(super.shouldGenerate(metadata)) {
+    		return true;
+    	} else {
+            boolean result = false;
+            result = matchesStereotype((ModelElementImpl) metadata, "POJO");
+            return result;
+    	}
     }
 
     public String getExtends() {
