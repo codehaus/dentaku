@@ -1,5 +1,5 @@
 /*
- * RepositoryReader.java
+ * StaticUtils.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dentaku.services.metadata;
+package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
-import javax.jmi.xmi.MalformedXMIException;
-import javax.jmi.reflect.RefPackage;
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.net.MalformedURLException;
-
-public interface RepositoryReader {
-    public static final String ROLE = RepositoryReader.class.getName();
-
-    void readInputStream(RefPackage model) throws IOException, MalformedXMIException;
-    void setModel(String model) throws MalformedURLException;
+public class StaticUtils {
 }

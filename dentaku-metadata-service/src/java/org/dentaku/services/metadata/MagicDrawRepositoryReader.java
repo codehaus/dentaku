@@ -1,6 +1,6 @@
 /*
  * MagicDrawRepositoryReader.java
- * Copyright 2002-2004 Bill2, Inc.
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,42 +30,52 @@ import java.net.MalformedURLException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+/**
+ * This used to be completely URL based, then something broke with XStream because we have these crappy version conflicts
+ * with Plexus.  When that's fixed, change the model field back to a URL and get this cleaned up.
+ */
 public class MagicDrawRepositoryReader implements RepositoryReader {
-    private URL modelURL = null;
+    private String model = null;
 
     public MagicDrawRepositoryReader() {
         // i sure hope pico is initialized correctly
     }
 
     public MagicDrawRepositoryReader(URL modelURL) {
-        this.modelURL = modelURL;
+        this.model = modelURL.toString();
     }
 
-    public URL getModelURL() {
-        return modelURL;
+    public String getModel() {
+        return model;
     }
 
-    public void setModelURL(URL modelURL) {
-        this.modelURL = modelURL;
+    public void setModel(String model) throws MalformedURLException {
+        this.model = model;
     }
 
-    public void readInputStream(RefPackage model) throws IOException, MalformedXMIException {
-        String fullname = modelURL.toExternalForm();
+    public void readInputStream(RefPackage umlModel) throws IOException, MalformedXMIException {
+        String fullname = model;
         // the embedded XMI is always saved as the filename minus the ".zip" suffix
         String filename = fullname.substring(fullname.lastIndexOf("/")+1, fullname.indexOf(".zip"));
 
         // check file exists
-        File file = new File(modelURL.getFile());
+        File file = null;
+        try {
+            file = new File(new URL(this.model).getFile());
+        } catch (MalformedURLException e) {
+            // maybe it's a pathname?
+            file = new File(this.model);
+        }
         if (!file.exists()) {
             throw new FileNotFoundException(fullname + " could not be found");
         }
 
         // get the input stream
         System.out.println("Reading from MagicDraw repository: "+ fullname);
-        ZipFile zip = new ZipFile("/"+file);
+        ZipFile zip = new ZipFile(file);
         ZipEntry entry = zip.getEntry(filename);
         InputStream input = zip.getInputStream(entry);
         XMIReader xmiReader = XMIReaderFactory.getDefault().createXMIReader();
-        xmiReader.read(input, fullname, model);
+        xmiReader.read(input, fullname, umlModel);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * MetadataServiceTest.java
+ * QDoxMetadataProviderTest.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,15 +21,15 @@ import org.codehaus.plexus.embed.Embedder;
 import org.generama.MetadataProvider;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.Classifier;
-import org.omg.uml.foundation.core.CorePackage;
-import org.omg.uml.foundation.core.ModelElementClass;
-import org.omg.uml.UmlPackage;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.net.URL;
 
-public class MetadataServiceTest extends TestCase {
+import com.thoughtworks.qdox.model.AbstractJavaEntity;
+import com.thoughtworks.qdox.model.JavaClass;
+
+public class QDoxMetadataProviderTest extends TestCase {
     private Embedder e;
     private Collection metadata;
 
@@ -40,20 +40,17 @@ public class MetadataServiceTest extends TestCase {
         URL resource = getClass().getResource(name);
         e.setConfiguration(resource);
         e.start();
-        MetadataProvider ms = (MetadataProvider) e.lookup(MetadataProvider.ROLE);
-        UmlPackage model = ((JMIUMLMetadataProvider) ms).getModel();
-        CorePackage core = model.getCore();
-        ModelElementClass modelElement = core.getModelElement();
-        this.metadata = modelElement.refAllOfType();
+        MetadataProvider ms = (MetadataProvider)e.lookup(MetadataProvider.ROLE);
+        metadata = ms.getMetadata();
     }
 
     public void testFindRoot() throws Exception {
         for (Iterator it = metadata.iterator(); it.hasNext();) {
-            ModelElement elem = (ModelElement) it.next();
-            if (elem instanceof Classifier && elem.getName().equals("root")) {
+            AbstractJavaEntity elem = (AbstractJavaEntity) it.next();
+            if (elem instanceof JavaClass && elem.getName().equals("root")) {
                 return;
             }
-            fail("root element not found");
         }
+        fail("root element not found");
     }
 }
