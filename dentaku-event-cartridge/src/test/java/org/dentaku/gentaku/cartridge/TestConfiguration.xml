@@ -20,6 +20,11 @@
             <implementation>org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader</implementation>
             <configuration>
                 <model>uml/TestModel.xml.zip</model>
+                <search-paths>
+                    <path-element>
+                        <id>gentaku/src/uml</id>               
+                    </path-element>
+                </search-paths>
             </configuration>
         </component>
     </components>
