@@ -282,6 +282,8 @@ public abstract class ${class.name}Base
 #set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
 #if ( $atttypename == "java.lang.String" && $transform.getStereotype($att.id) != "PrimaryKey" )
             zeroObject.set${str.upperCaseFirstLetter(${attname})}("${att.name}");
+#elseif ($atttypename == "java.math.BigDecimal" && $transform.getStereotype($att.id) != "PrimaryKey" )
+            zeroObject.set${str.upperCaseFirstLetter(${attname})}(new java.math.BigDecimal(0));
 #end
 #end
             // relations
@@ -305,9 +307,11 @@ public abstract class ${class.name}Base
             // attributes
 #foreach ( $att in $class.attributes )
 #set ($atttypename = $transform.findFullyQualifiedName($att.type))
-#if ( $atttypename == "java.lang.String" && $transform.getStereotype($att.id) != "PrimaryKey" )
 #set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
+#if ( $atttypename == "java.lang.String" && $transform.getStereotype($att.id) != "PrimaryKey" )
             ${obj}.set${str.upperCaseFirstLetter(${attname})}("${att.name}");
+#elseif ($atttypename == "java.math.BigDecimal" && $transform.getStereotype($att.id) != "PrimaryKey" )
+            ${obj}.set${str.upperCaseFirstLetter(${attname})}(new java.math.BigDecimal(0));
 #end
 #end
             // relations

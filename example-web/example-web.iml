@@ -21,19 +21,12 @@
     <orderEntry type="library" name="Test" level="application" />
     <orderEntry type="library" name="Commons" level="application" />
     <orderEntry type="library" name="mx4j" level="application" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/pager-taglib.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="Hibernate" level="application" />
     <orderEntry type="library" name="Clover" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
     <orderEntry type="library" name="XStream-1.0" level="application" />
+    <orderEntry type="module" module-name="services" />
+    <orderEntry type="module" module-name="foundation" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -46,14 +39,36 @@
     <setting name="RUN_JASPER_VALIDATION" value="false" />
   </component>
   <component name="WebModuleProperties">
+    <containerElement type="module" name="dentaku-metadata-service">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+    </containerElement>
+    <containerElement type="module" name="foundation">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+    </containerElement>
+    <containerElement type="module" name="services">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+    </containerElement>
     <containerElement type="library" level="application" name="Apache Regexp">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib" />
     </containerElement>
     <containerElement type="library" level="module">
-      <url>jar://$MODULE_DIR$/lib/pager-taglib.jar!/</url>
+      <url>jar://C:/dev/dentaku/services/lib/ccc_ssl.jar!/</url>
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib" />
+      <attribute name="URI" value="/WEB-INF/lib/ccc_ssl.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://C:/dev/dentaku/services/lib/jsr94-1.0.jar!/</url>
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/jsr94-1.0.jar" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <url>jar://$MAVEN_REPO_LOCAL$/classworlds/jars/classworlds-1.1-SNAPSHOT.jar!/</url>
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/classworlds-1.1-SNAPSHOT.jar" />
     </containerElement>
     <containerElement type="library" level="application" name="Commons">
       <attribute name="method" value="1" />
@@ -63,7 +78,15 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib" />
     </containerElement>
+    <containerElement type="library" level="application" name="Drools">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
     <containerElement type="library" level="application" name="Hibernate">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Netbeans MDR">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib" />
     </containerElement>
@@ -72,6 +95,14 @@
       <attribute name="URI" value="/WEB-INF/lib" />
     </containerElement>
     <containerElement type="library" level="application" name="Test">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Velocity">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" level="application" name="Werkflow">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib" />
     </containerElement>

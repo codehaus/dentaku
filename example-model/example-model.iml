@@ -50,6 +50,8 @@
     <orderEntry type="library" name="Clover" level="application" />
     <orderEntry type="library" name="Plexus" level="application" />
     <orderEntry type="library" name="Generama" level="application" />
+    <orderEntry type="module" module-name="services" />
+    <orderEntry type="module" module-name="foundation" />
     <orderEntryProperties />
   </component>
 </module>
