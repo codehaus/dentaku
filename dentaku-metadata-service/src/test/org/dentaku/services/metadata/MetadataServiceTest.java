@@ -16,20 +16,21 @@
  */
 package org.dentaku.services.metadata;
 
-import junit.framework.TestCase;
-import org.codehaus.plexus.embed.Embedder;
-import org.generama.MetadataProvider;
-import org.omg.uml.foundation.core.ModelElement;
-import org.omg.uml.foundation.core.Classifier;
-import org.omg.uml.foundation.core.CorePackage;
-import org.omg.uml.foundation.core.ModelElementClass;
-import org.omg.uml.UmlPackage;
-
+import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
-import java.net.URL;
+
+import junit.framework.TestCase;
+
+import org.codehaus.plexus.embed.Embedder;
+import org.omg.uml.UmlPackage;
+import org.omg.uml.foundation.core.Classifier;
+import org.omg.uml.foundation.core.CorePackage;
+import org.omg.uml.foundation.core.ModelElement;
+import org.omg.uml.foundation.core.ModelElementClass;
 
 public class MetadataServiceTest extends TestCase {
+    
     private Embedder e;
     private Collection metadata;
 

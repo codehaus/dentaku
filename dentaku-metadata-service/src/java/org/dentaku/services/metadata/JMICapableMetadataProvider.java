@@ -16,11 +16,11 @@
  */
 package org.dentaku.services.metadata;
 
+import java.util.Collection;
+
 import org.generama.MetadataProvider;
 import org.omg.uml.UmlPackage;
 import org.omg.uml.foundation.core.Classifier;
-
-import java.util.Collection;
 
 public interface JMICapableMetadataProvider extends MetadataProvider {
     public static final String ROLE = JMICapableMetadataProvider.class.getName();

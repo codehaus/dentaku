@@ -16,16 +16,16 @@
  */
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
+import java.util.Collection;
+import java.util.Iterator;
+
+import org.netbeans.mdr.storagemodel.StorableObject;
+import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.Operation;
 import org.omg.uml.foundation.core.Parameter;
-import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.datatypes.ParameterDirectionKindEnum;
 import org.omg.uml.foundation.datatypes.VisibilityKind;
 import org.omg.uml.foundation.datatypes.VisibilityKindEnum;
-import org.netbeans.mdr.storagemodel.StorableObject;
-
-import java.util.Iterator;
-import java.util.Collection;
 
 public abstract class OperationImpl extends ModelElementImpl implements Operation {
     protected OperationImpl(StorableObject storable) {

@@ -18,10 +18,6 @@ package org.dentaku.services.metadata;
 
 import org.omg.uml.UmlPackage;
 
-import javax.jmi.reflect.RefPackage;
-import javax.jmi.xmi.MalformedXMIException;
-import java.io.IOException;
-
 public interface RepositoryReader {
     public static final String ROLE = RepositoryReader.class.getName();
 

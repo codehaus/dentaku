@@ -16,20 +16,20 @@
  */
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
-import org.netbeans.mdr.handlers.InstanceHandler;
-import org.netbeans.mdr.storagemodel.StorableObject;
-import org.omg.uml.foundation.core.ModelElement;
-import org.omg.uml.foundation.core.TaggedValue;
-import org.omg.uml.modelmanagement.Model;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
+import org.netbeans.mdr.handlers.InstanceHandler;
+import org.netbeans.mdr.storagemodel.StorableObject;
+import org.omg.uml.foundation.core.ModelElement;
+import org.omg.uml.foundation.core.TaggedValue;
+import org.omg.uml.modelmanagement.Model;
 
 abstract public class ModelElementImpl extends InstanceHandler implements ModelElement {
     private static Map stereotypeCache = new HashMap();

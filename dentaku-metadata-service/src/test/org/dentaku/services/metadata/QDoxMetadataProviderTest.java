@@ -16,16 +16,14 @@
  */
 package org.dentaku.services.metadata;
 
-import junit.framework.TestCase;
-import org.codehaus.plexus.embed.Embedder;
-import org.generama.MetadataProvider;
-import org.generama.QDoxCapableMetadataProvider;
-import org.omg.uml.foundation.core.ModelElement;
-import org.omg.uml.foundation.core.Classifier;
-
+import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
-import java.net.URL;
+
+import junit.framework.TestCase;
+
+import org.codehaus.plexus.embed.Embedder;
+import org.generama.QDoxCapableMetadataProvider;
 
 import com.thoughtworks.qdox.model.AbstractJavaEntity;
 import com.thoughtworks.qdox.model.JavaClass;

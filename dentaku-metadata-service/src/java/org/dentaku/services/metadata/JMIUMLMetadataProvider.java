@@ -16,10 +16,10 @@
  */
 package org.dentaku.services.metadata;
 
+import java.util.Collection;
+
 import org.generama.GeneramaException;
 import org.omg.uml.foundation.core.Classifier;
-
-import java.util.Collection;
 
 public class JMIUMLMetadataProvider extends JMIMetadataProviderBase {
 

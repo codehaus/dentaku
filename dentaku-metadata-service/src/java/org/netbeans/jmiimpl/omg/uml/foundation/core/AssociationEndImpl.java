@@ -16,15 +16,14 @@
  */
 package org.netbeans.jmiimpl.omg.uml.foundation.core;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.netbeans.mdr.storagemodel.StorableObject;
 import org.omg.uml.foundation.core.AssociationEnd;
-import org.omg.uml.foundation.core.Classifier;
 import org.omg.uml.foundation.core.UmlClass;
 import org.omg.uml.foundation.datatypes.Multiplicity;
 import org.omg.uml.foundation.datatypes.MultiplicityRange;
-
-import java.util.Collection;
-import java.util.Iterator;
 
 abstract public class AssociationEndImpl extends ModelElementImpl implements AssociationEnd {
     protected AssociationEndImpl(StorableObject storable) {

@@ -16,13 +16,11 @@
  */
 package org.dentaku.services.metadata;
 
-import com.thoughtworks.qdox.model.DocletTagFactory;
+import org.generama.ConfigurableDocletTagFactory;
 import org.omg.uml.UmlPackage;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.TaggedValue;
 import org.omg.uml.modelmanagement.Model;
-import org.generama.ConfigurableDocletTagFactory;
-import org.generama.ConfigurableDocletTagFactory;
 
 public abstract class JMIMetadataProviderBase implements JMICapableMetadataProvider {
     public static boolean booted;
