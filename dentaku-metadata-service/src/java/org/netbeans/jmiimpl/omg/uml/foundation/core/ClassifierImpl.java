@@ -30,6 +30,8 @@ import org.omg.uml.foundation.core.CorePackage;
 import org.omg.uml.foundation.core.Generalization;
 import org.omg.uml.foundation.core.Operation;
 import org.omg.uml.foundation.core.GeneralizableElement;
+import org.omg.uml.foundation.core.Stereotype;
+import org.omg.uml.foundation.core.UmlAssociation;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -126,5 +128,34 @@ abstract public class  ClassifierImpl extends ModelElementImpl implements Classi
             }
         }
         return result;
+    }
+    
+    public Collection getAllAssocClassOfType(String AssocStereoName, String ClassSteroName) {
+    	ArrayList result = new ArrayList();
+		Collection classAssociations = this.getAssociationLinks();
+		ArrayList classAssociationsList = new ArrayList(classAssociations);
+        for (Iterator it = classAssociationsList.iterator(); it.hasNext();) {
+            Object end = it.next();
+            if (end instanceof AssociationEnd) {
+            	// Find class of the entity we are building the action for
+                UmlAssociation assocRefAssoc = ((AssociationEnd) end).getAssociation();
+                Collection sterotypesForAssoc = assocRefAssoc.getStereotype();
+        		ArrayList sterotypesForAssocList = new ArrayList(sterotypesForAssoc);
+        		for (Iterator ie = sterotypesForAssocList.iterator(); ie.hasNext();) {
+                    Stereotype stero = (Stereotype)ie.next();
+                    if(stero.getName().equals(AssocStereoName)) {
+                    	// now we know it is the right type get the other end
+                    	AssociationEndImpl otherEnd = (AssociationEndImpl) ((AssociationEndImpl)end).getTarget();
+                    	// 
+                    	if(otherEnd.isClass()) {
+                    		ClassifierImpl aClassifier = (ClassifierImpl)otherEnd.getParticipant();
+                    		if(aClassifier.getStereotypeNames().contains(ClassSteroName))
+                    			result.add(aClassifier);
+                    	}
+                    }
+        		}
+            }
+        }
+    	return result;
     }
 }
