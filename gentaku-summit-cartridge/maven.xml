@@ -28,7 +28,7 @@
         <pathconvert refid="hibernate.mapping.files" property="hibernate.mappings" pathsep=" "/>
         <java classname="net.sf.hibernate.tool.hbm2ddl.SchemaExport" fork="true">
             <jvmarg value="-Dhibernate.dialect=net.sf.hibernate.dialect.MySQLDialect"/>
-            <jvmarg value="-Dhibernate.connection.driver_class=org.gjt.mm.mysql.Driver"/>
+            <jvmarg value="-Dhibernate.connection.driver_class=com.mysql.jdbc.Driver"/>
             <jvmarg value="-Dhibernate.connection.url=jdbc:mysql://${mysql.host}:3306/dentaku-summit-example"/>
             <jvmarg value="-Dhibernate.connection.username=${mysql.username}"/>
             <jvmarg value="-Dhibernate.connection.password=${mysql.password}"/>
