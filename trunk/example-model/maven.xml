@@ -9,7 +9,7 @@
     <goal name="dentaku:gentaku">
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
         <gentaku model="${maven.src.dir}/uml/model.xml.zip">
-            <component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${maven.build.dir}/xdoclet/hibernatedoclet"/>
+<!--            <component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${maven.build.dir}/xdoclet/hibernatedoclet"/>-->
             <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityBasePlugin" destdir="${maven.build.src}"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityPlugin" destdir="${maven.src.dir}/java"/>
             <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityFactoryPlugin" destdir="${maven.build.src}"/>
