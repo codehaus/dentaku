@@ -7,34 +7,33 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
 /**
- * A utility object for doing string manipulation operations that are commonly 
+ * A utility object for doing string manipulation operations that are commonly
  * needed by the code generation templates.
- * 
+ *
  * @author Matthias Bohlen
  * @author Chris Shaw
  */
 public class StringUtilsHelper {
-    
+
     /**
      * <p>Capitalizes a string.  That is, it returns "Hamburger" when
      * eating a "hamburger".</p>
      *
-     * @deprecated - use upperCaseFirstLetter
-     *
      * @param s the input string
      * @return String the output string
+     * @deprecated - use upperCaseFirstLetter
      */
     public static String capitalize(String s) {
-        return s.substring(0,1).toUpperCase() + s.substring(1);
+        return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
 
-    /** 
-    * <p>Capitalizes a string. That is, it returns "HamburgerStall" 
-    * when receiving a "hamburgerStall".</p> 
-    * 
-    * @param s the input string 
-    * @return String the output string. 
-    */
+    /**
+     * <p>Capitalizes a string. That is, it returns "HamburgerStall"
+     * when receiving a "hamburgerStall".</p>
+     *
+     * @param s the input string
+     * @return String the output string.
+     */
     public static String upperCaseFirstLetter(String s) {
         if (s != null && s.length() > 0) {
             return s.substring(0, 1).toUpperCase() + s.substring(1);
@@ -43,13 +42,13 @@ public class StringUtilsHelper {
         }
     }
 
-    /** 
-    * <p>Removes the capitalization of a string. That is, it returns 
-    * "hamburgerStall" when receiving a "HamburgerStall".</p> 
-    * 
-    * @param s the input string 
-    * @return String the output string. 
-    */
+    /**
+     * <p>Removes the capitalization of a string. That is, it returns
+     * "hamburgerStall" when receiving a "HamburgerStall".</p>
+     *
+     * @param s the input string
+     * @return String the output string.
+     */
     public static String lowerCaseFirstLetter(String s) {
         if (s != null && s.length() > 0) {
             return s.substring(0, 1).toLowerCase() + s.substring(1);
@@ -58,39 +57,43 @@ public class StringUtilsHelper {
         }
     }
 
-
     /**
      * <p>Converts a string following the Java naming conventions to a
      * database attribute name.  For example convert customerName to
      * CUSTOMER_NAME.</p>
      *
-     * @param s string to convert
-     * @param separator character used to separate words     
+     * @param s         string to convert
+     * @param separator character used to separate words
      * @return string converted to database attribute format
      */
     public static String toDatabaseAttributeName(String s, String separator) {
         StringBuffer databaseAttributeName = new StringBuffer();
-        StringCharacterIterator iter = new StringCharacterIterator(
-                lowerCaseFirstLetter(s));
-        
-        for (char character = iter.first(); character != CharacterIterator.DONE; 
-                character = iter.next()) {
-
+        StringCharacterIterator iter = new StringCharacterIterator(lowerCaseFirstLetter(s));
+        for (char character = iter.first(); character != CharacterIterator.DONE;
+             character = iter.next()) {
             if (Character.isUpperCase(character)) {
                 databaseAttributeName.append(separator);
             }
-            
-            character = Character.toUpperCase(character);                
+            character = Character.toUpperCase(character);
             databaseAttributeName.append(character);
         }
-        
         return databaseAttributeName.toString();
     }
-    
+
+    public static String fromDatabaseAttributeName(String s, String separator) {
+        String tok[] = s.split(separator);
+        StringBuffer databaseAttributeName = new StringBuffer();
+        databaseAttributeName.append(lowerCaseFirstLetter(tok[0]));
+        for (int i = 1; i < tok.length; i++) {
+            databaseAttributeName.append(upperCaseFirstLetter(tok[i]));
+        }
+        return databaseAttributeName.toString();
+    }
+
     /**
      * <p>Returns a consistent name for a relation, independent from
      * the end of the relation one is looking at.</p>
-     *
+     * <p/>
      * <p>In order to guarantee consistency with relation names, they
      * must appear the same whichever angle (ie entity) that you come
      * from.  For example, if you are at Customer end of a
@@ -106,13 +109,12 @@ public class StringUtilsHelper {
      * @param separator      character used to separate words
      * @return uniform mapping name (in alphabetical order)
      */
-    public static String toRelationName(String roleName, String targetRoleName, 
-            String separator) {
+    public static String toRelationName(String roleName, String targetRoleName,
+                                        String separator) {
         if (roleName.compareTo(targetRoleName) <= 0) {
             return (roleName + separator + targetRoleName);
         }
-        
-        return (targetRoleName + separator + roleName);        
+        return (targetRoleName + separator + roleName);
     }
 
     /**
@@ -120,7 +122,7 @@ public class StringUtilsHelper {
      * If the suffix isn't present, the string is returned
      * unmodified.</p>
      *
-     * @param src the <code>String</code> for which the suffix should be replaced
+     * @param src       the <code>String</code> for which the suffix should be replaced
      * @param suffixOld a <code>String</code> with the suffix that should be replaced
      * @param suffixNew a <code>String</code> with the new suffix
      * @return a <code>String</code> with the given suffix replaced or
@@ -128,9 +130,8 @@ public class StringUtilsHelper {
      */
     public static String replaceSuffix(String src, String suffixOld, String suffixNew) {
         if (src.endsWith(suffixOld)) {
-            return src.substring(0, src.length()-suffixOld.length())+suffixNew;
+            return src.substring(0, src.length() - suffixOld.length()) + suffixNew;
         }
-
         return src;
     }
 
@@ -142,7 +143,7 @@ public class StringUtilsHelper {
      *         primitive type; <code>false</code> if not
      */
     public static boolean isPrimitiveType(String name) {
-        return (   "void".equals(name)
+        return ("void".equals(name)
                 || "char".equals(name)
                 || "byte".equals(name)
                 || "short".equals(name)
@@ -150,7 +151,7 @@ public class StringUtilsHelper {
                 || "long".equals(name)
                 || "float".equals(name)
                 || "double".equals(name)
-                || "boolean".equals(name) );
+                || "boolean".equals(name));
     }
 
     /**
@@ -166,7 +167,6 @@ public class StringUtilsHelper {
         if (!isPrimitiveType(name)) {
             return null;
         }
-
         if ("void".equals(name)) {
             return null;
         }
@@ -176,12 +176,10 @@ public class StringUtilsHelper {
         if ("int".equals(name)) {
             return "java.lang.Integer";
         }
-
-        return "java.lang."+upperCaseFirstLetter(name);
+        return "java.lang." + upperCaseFirstLetter(name);
     }
-    
-    public static String toUpperCase(String val)
-    {
+
+    public static String toUpperCase(String val) {
         return val.toUpperCase();
     }
 

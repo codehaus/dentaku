@@ -27,14 +27,18 @@ public abstract class ServiceTestBase extends TestCase {
     protected DentakuPlexusContainer container;
 
     protected void setUp() throws Exception {
+
+        ContainerManager instance = ContainerManager.getInstance();
+        setupConfiguration(instance);
+        instance.setup();
+        container = instance.getContainer();
+    }
+
+    protected void setupConfiguration(ContainerManager instance) {
         String className = this.getClass().getName();
         String filename = className.substring(className.lastIndexOf(".") + 1) + ".xml";
         InputStream configurationStream = this.getClass().getResourceAsStream(filename);
-
-        ContainerManager instance = ContainerManager.getInstance();
         instance.add(new InputStreamReader(configurationStream));
-        instance.setup();
-        container = instance.getContainer();
     }
 
     public void tearDown() throws Exception {

@@ -14,12 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dentaku.services.persistence.hibernate;
+package org.dentaku.services.persistence;
 
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.dentaku.services.persistence.PersistenceException;
 import org.dentaku.services.persistence.PersistenceFactory;
 import org.dentaku.services.persistence.PersistenceManager;
+import org.dentaku.services.persistence.hibernate.SessionProvider;
 
 import java.util.Iterator;
 import java.util.Map;

@@ -20,6 +20,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.type.Type;
 import org.dentaku.services.persistence.ModelEntity;
 import org.dentaku.services.persistence.PersistenceException;
+import org.dentaku.services.persistence.AbstractPersistenceManager;
 
 import java.io.Serializable;
 import java.util.List;

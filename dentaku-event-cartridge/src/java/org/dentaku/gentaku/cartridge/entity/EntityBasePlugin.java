@@ -18,12 +18,13 @@ package org.dentaku.gentaku.cartridge.entity;
 
 import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.dentaku.services.metadata.UMLStaticHelper;
+import org.dentaku.gentaku.cartridge.JavaPluginBase;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
 
 import java.util.Map;
 
-public class EntityBasePlugin extends EntityBase {
+public class EntityBasePlugin extends JavaPluginBase {
     public EntityBasePlugin(VelocityTemplateEngine templateEngine, JMIUMLMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
         getStereotypes().add("Entity");

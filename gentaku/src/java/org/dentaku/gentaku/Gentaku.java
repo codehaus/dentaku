@@ -16,9 +16,9 @@
  */
 package org.dentaku.gentaku;
 
+import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.generama.Generama;
 import org.picocontainer.MutablePicoContainer;
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 
 /**
  * This class installs the core Gentaku components in a <a href="http://www.picocontainer.org/">PicoContainer</a>.

@@ -21,6 +21,8 @@ import junit.framework.TestCase;
 import java.util.List;
 import java.util.Map;
 
+import org.dentaku.services.metadata.dbmapping.DbMappingTable;
+
 public class MiscTestCase extends TestCase {
     public void testMapping() throws Exception {
         DbMappingTable mtable = new DbMappingTable();

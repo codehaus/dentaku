@@ -73,13 +73,13 @@ public class ContainerManager {
     public void setup() throws ContainerException {
         if (container == null) {
             container = new DentakuPlexusContainer();
-        }
-        try {
-            container.setConfigurationResources(configurationResources);
-            container.initialize();
-            container.start();
-        } catch (Exception e) {
-            throw new ContainerException(e);
+            try {
+                container.setConfigurationResources(configurationResources);
+                container.initialize();
+                container.start();
+            } catch (Exception e) {
+                throw new ContainerException(e);
+            }
         }
     }
 
