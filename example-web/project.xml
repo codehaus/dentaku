@@ -6,24 +6,23 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>example-model</artifactId>
-            <version>${pom.currentVersion}</version>
-            <type>ejb</type>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-persistence-service</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-foundation</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
             <type>ejb</type>
         </dependency>
         <dependency>

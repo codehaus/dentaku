@@ -8,7 +8,7 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-metadata-service</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
         </dependency>
 
         <!-- Build/Test time only -->

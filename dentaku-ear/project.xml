@@ -8,7 +8,7 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-foundation</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
             <type>ejb</type>
             <properties>
                 <ear.bundle>true</ear.bundle>
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
             <type>ejb</type>
             <properties>
                 <ear.bundle>true</ear.bundle>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>example-web</artifactId>
-            <version>${pom.currentVersion}</version>
+            <version>SNAPSHOT</version>
             <type>war</type>
             <properties>
                 <ear.bundle>true</ear.bundle>
