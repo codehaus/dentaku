@@ -382,10 +382,12 @@ public class SummitHelper
                 Stereotype stero = (Stereotype)ie.next();
                 if(stero.getName().equals(type)) {
                 	// now we know it is the right type get the other end
-                	AssociationEnd otherEnd = ((AssociationEndImpl)end).getTarget();
+                	AssociationEndImpl otherEnd = (AssociationEndImpl) ((AssociationEndImpl)end).getTarget();
                 	// 
+                	if(otherEnd.isClass()) {
                 	ClassifierImpl aClassifier = (ClassifierImpl)otherEnd.getParticipant();
                 	return aClassifier;
+                	}
                 }
     		}
         }
