@@ -28,10 +28,10 @@ import org.omg.uml.foundation.core.TaggedValue;
  * 
  * @author <a href="mailto:david@dwynter.plus.com">David Wynter</a>
  */
-public class PullConfigPlugin extends Plugin {
+public class ComponentConfigPlugin extends Plugin {
     JMIUMLMetadataProvider metadataProvider;
 
-    public PullConfigPlugin(JellyTemplateEngine jellyTemplateEngine, JMIUMLMetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public ComponentConfigPlugin(JellyTemplateEngine jellyTemplateEngine, JMIUMLMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(jellyTemplateEngine, metadataProvider, writerMapper);
 
         setMultioutput(false);

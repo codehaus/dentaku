@@ -52,7 +52,7 @@ public class BasePullToolPlugin extends JavaPluginBase {
         super(templateEngine, metadataProvider, writerMapper);
         setStereotype("RootSelectable");
         // a cludge to get the thing to generate
-        setCreateonly(true);
+        setCreateonly(false);
     }
 
     public Collection getMetadata() {
@@ -73,10 +73,6 @@ public class BasePullToolPlugin extends JavaPluginBase {
     		rootClassView = helper.buildClassView((ClassifierImpl)metadata, null);
 	        m.put(SummitHelper.SCRN_NAME, ((TaggedValueImpl)metadata.getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
             m.put("rootClassView", rootClassView);
-            m.put("qualifiedScreenName", 
-            		((ClassifierImpl)metadata).getFullyQualifiedName()
-            		+ ((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
-
     	}
     }
     public boolean shouldGenerate(Object metadata) {

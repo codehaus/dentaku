@@ -1,0 +1,38 @@
+package ${metadata.packageName};
+
+import org.codehaus.plexus.action.AbstractAction;
+import org.codehaus.plexus.summit.parameters.SummitRequestParameterParser;
+import org.codehaus.plexus.summit.rundata.RunData;
+import org.apache.velocity.context.Context;
+#set ( $listImports = $metadata.getAllAssocClassOfType("Imports", "Entity") )
+#set ( $statename = "state")
+#set ( $state = "$metadata.getTaggedValue(${statename}).getValue()" )
+#foreach($import in $listImports)
+import ${plugin.getDestinationFullyQualifiedClassName($import)};
+#end
+
+class ${metadata.name}Groovy
+    implements AbstractAction
+{
+    public void execute( Map map )
+        throws Exception
+    {
+#if($state == "preAction")
+        // Add your manipulation of the objects submitted in the form 
+		ParameterParser parser = ((RunData)map.get("data")).getParameters();
+#foreach($entity in $listImports)
+        ${entity.name} a${entity.name} = new ${entity.name}();
+        parser.setProperties(a${entity.name});
+#end
+        // Add your code here, validation maybe?
+#elseif($state == "postAction") 	
+		// Default code generated for postAction expects the objects
+		// associated in the model to be in the Context
+#foreach($entity in $listImports)
+        ${entity.name} a${entity.name} = map.get(${entity.name});
+#end
+        // Add your manipulation of the object here, also get anything else out of context you need
+#end
+    }
+}
+

@@ -30,6 +30,7 @@ import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
 import org.omg.uml.foundation.core.TaggedValue;
 
 /**
@@ -53,7 +54,9 @@ public class VelocityFormPlugin extends JavaPluginBase {
         setStereotype("RootSelectable");
      
         this.metadataProvider = metadataProvider;
-        setCreateonly(true);
+        setCreateonly(false);
+        setPackageregex("[^>]+");
+        setPackagereplace("");
         setMultioutput(true);
     }
 
@@ -72,6 +75,7 @@ public class VelocityFormPlugin extends JavaPluginBase {
     	}
         m.put("rootClassView", rootClassView);
         m.put("SummitHelper", helper);
+        m.put(SummitHelper.SCRN_NAME, ((TaggedValueImpl)metadata.getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
     }
     
     public Collection getMetadata() {
@@ -96,9 +100,9 @@ public class VelocityFormPlugin extends JavaPluginBase {
         	for (Iterator it = tags.iterator(); it.hasNext();) {
         		Object name = it.next();
                 if (name instanceof String) {
-                    return (String)name + ".vm";
+                    return ((String)name) + ".vm";
                 } else {
-                	//error in model
+                	//error in model .substring(((String)name).lastIndexOf('.'), ((String)name).length())
                 }
                 // error in model, should always return on first elem in Collection, should only be one
         	}

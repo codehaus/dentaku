@@ -57,13 +57,17 @@ public class SummitHelper
 	final static String CHILD_SELECTOR_STEREOTYPE = "ChildSelectable";
 	final static String CHILD_TABLE_STEREOTYPE = "ChildTable";
 	final static String ENTITY_BEAN = "Entity";
-	final static String PRIMARY_KEY = "PrimaryKey";
+	final static String PRIMARY_KEY = "field.primary-key";
 	final static String APP_NAME = "Application";
+	// Validator & Processing sterotypes
+	final static String GROOVY = "Groovy";
+	final static String FORMICA = "FormicaValidator";
 	// Association sterotypes
 	final static String VIEW = "View";
 	final static String VIEW_REF = "ViewRef";
 	// Attribute sterotypes for view objects
 	final static String VIEWSELECTOR = "ViewSelector";
+	final static String VIEWSELECTORNAME = "ViewSelectorName";
 	final static String HIDDENSELECTOR = "HiddenSelector";
 	final static String SINGLELINE = "Singleline";
 	final static String MULTILINE = "Multiline";
@@ -75,17 +79,27 @@ public class SummitHelper
 	// Tagged values for Attributes
 	// Tag names
 	final static String POSITION = "position";
+	final static String IDPOSITION = "idposition";
+	final static String DISPPOSITION = "displayposition";
+	final static String SIZE = "size";
 	final static String LIST_ITEMS = "listItems";
 	final static String COLUMNS = "TRcolumns";
 	final static String SCRN_NAME = "ScreenName";
 	final static String LABEL = "label";
-	final static String SPAN = "span";
+	final static String SPAN = "colspan";
 	final static String CRUD = "hasCrud";
+	final static String DIVENDTAG = "divendtag";
+	final static String DIVSTARTTAG = "divstarttag";
+	final static String DIVSTARTLABEL = "divstartlabel";
+	final static String DIVENDLABEL = "divendlabel";
+	final static String TAGSTYLE = "tagstyle";
+	final static String LABELSTYLE = "labelstyle";
+	final static String MULT = "multiple";
 	
 	private UmlPackage umlPackage;
 
 	private String screenname;
-	private HashMap valuelists;
+	private HashMap valuelists = new HashMap();
 	private HashSet viewEntityDone = new HashSet();
 	private String viewpackage;
 	private ClassView rootViewClass;
@@ -103,11 +117,12 @@ public class SummitHelper
 	public SummitHelper() {
 	}
 	
-	public ArrayList getListnames(ClassView rootClass) {
+	public ArrayList getValueListnames(ClassView viewClass) {
 		ArrayList names = new ArrayList();
-		ArrayList attributes = rootClass.getAttributes();
+		if(viewClass == null)
+			return names;
+		ArrayList attributes = viewClass.getAttributes();
 		names = addName(attributes, names);
-		rootClass.getChildren();
 		return names;
 	}
 		
@@ -141,8 +156,14 @@ public class SummitHelper
 	 * @param viewClass
 	 * @param sterotypeName
 	 */
-	public ClassView buildClassView(ClassifierImpl viewClass, String parentClassname) {
+	public ClassView buildClassView(ClassifierImpl viewClass, ClassView parent) {
 		
+		String parentClassname = null;
+		ArrayList anc;
+
+		if(parent != null) {
+			parentClassname = parent.getEntityclassname();
+		}
 		ClassView aClassView = new ClassView(this, viewClass, parentClassname);
 		ArrayList classViewChildren = new ArrayList();
 		ArrayList viewattributes = new ArrayList();
@@ -173,14 +194,12 @@ public class SummitHelper
             			entityname = entity.getName();
             			aClassView.setEntityclassname(entity.getName());
             			Collection entityattributes = entity.getAttributes();
-            			ArrayList entityattributeclassifiers = new ArrayList(entityattributes);
-            			for(Iterator ie = entityattributeclassifiers.iterator(); ie.hasNext();) {
+            			for(Iterator ie = entityattributes.iterator(); ie.hasNext();) {
             				Object attr = ie.next();
             				if(attr instanceof Attribute) {
-	            				Collection attributestereotypes = ((AttributeImpl)attr).getStereotypeNames();
-	            				if(isPKname(attributestereotypes)) {
+	            				Collection attributetagvalues = ((AttributeImpl)attr).getTaggedValuesForName(PRIMARY_KEY, false);
+	            				if(attributetagvalues.size()>0) {
 	            					aClassView.getSelectorNames().add(((AttributeImpl)attr).getName());
-	            					aClassView.getSelectorTypes().add(((AttributeImpl)attr).getType().getName());
 	            				}
             				}
             			}
@@ -191,7 +210,16 @@ public class SummitHelper
             	ClassifierImpl child = getChildClassifier((AssociationEndImpl)end, VIEW_REF);
             	if(child!=null && entityname != null && !viewEntityDone.contains(child.getName())) {
             		// the entityname sets the parent name
-            		ClassView childClassView = buildClassView(child, entityname);
+            		if(parent == null) {
+            			anc = new ArrayList();
+            			aClassView.setAncestors(anc);
+            		} else {
+            			anc = parent.getAncestors();
+            			anc.add(parent);
+            			aClassView.setAncestors(anc);
+            		}
+        			parent = aClassView;
+            		ClassView childClassView = buildClassView(child, parent);
             		classViewChildren.add(childClassView);
             	}
             }
@@ -208,37 +236,35 @@ public class SummitHelper
         for (Iterator ie = attributeImplList.iterator(); ie.hasNext();) {
             Object attr = ie.next();
             if (attr instanceof Attribute) {
-            	AttributeView aViewAttr = buildAttributeView((AttributeImpl)attr);
+            	AttributeView aViewAttr = buildAttributeView((AttributeImpl)attr, aClassView);
             	if(aViewAttr != null)
             		viewattributes.add(aViewAttr);
             }
+        }
+        // need to remove all ViewSelectorName type attributes bar the 1 with the position
+        int numwithposn = 0;
+        for(int i=0; i< viewattributes.size(); i++) {
+        	AttributeView attr = (AttributeView)viewattributes.get(i);
+        	if(attr.getSterotype() != null && attr.getSterotype().equals(VIEWSELECTORNAME) && attr.getPosition()!=null) {
+        		numwithposn++;
+        	} else if (attr.getSterotype() != null && attr.getSterotype().equals(VIEWSELECTORNAME)) {
+        		viewattributes.remove(attr);
+        	}
+        	if(numwithposn > 1) {
+        		// model error need to report it
+        	}
         }
         aClassView.setAttributes(viewattributes);
         return aClassView;
 	}
 	
 	/**
-	 * @param attributestereotypes
-	 * @return
-	 */
-	private boolean isPKname(Collection attributestereotypes) {
-        for (Iterator it = attributestereotypes.iterator(); it.hasNext();) {
-            String name = (String) it.next();
-            // rather than throw an error if > 1 return the first of them
-            if (name.equals(PRIMARY_KEY)) {
-                return true;
-            }
-        }
-        return false;
-	}
-
-	/**
 	 * Individual attribute to be displayed on screen
 	 * 
 	 * @param attr
 	 * @return
 	 */
-	private AttributeView buildAttributeView(AttributeImpl attr) {
+	private AttributeView buildAttributeView(AttributeImpl attr, ClassView currentview) {
 		// 
 		AttributeView attrView = new AttributeView();
 		attrView.setAttributename(attr.getName());
@@ -246,9 +272,12 @@ public class SummitHelper
 		Collection steroCollection = attr.getStereotypeNames();
 		if(steroCollection != null) {
 			for(Iterator ie = steroCollection.iterator(); ie.hasNext();) {
-	            Object steroObject = ie.next();
-				if(steroObject.getClass().isInstance(String.class)) {
-					attrView.setSterotype((String)steroObject);
+	            Object stereoObject = ie.next();
+				if(stereoObject instanceof String) {
+					attrView.setSterotype(((String)stereoObject).trim());
+					if(((String)stereoObject).equals(VIEWSELECTORNAME)) {
+						setCompositeSelector(attr, currentview);
+					}
 				}
 			}
 		}
@@ -261,10 +290,30 @@ public class SummitHelper
 				Integer posn = null;
 				for(Iterator ie = posnObjectCollection.iterator(); ie.hasNext();) {
 		            Object posnObject = ie.next();
-					if(posnObject.getClass().isInstance(String.class)) {
+					if(posnObject instanceof String) {
 						try {
-							posn = Integer.getInteger((String)posnObject);
+							posn = Integer.valueOf(((String)posnObject).trim());
 							attrView.setPosition(posn);
+						} catch (NumberFormatException nfe) {
+							// error in model need to report
+						}
+					}
+				}
+			}
+		}
+		// set the list size, if there is one
+		TaggedValue aSizeValue = attr.getTaggedValue(SIZE);
+		Collection sizeObjectCollection = null;
+		if(aSizeValue != null) {
+			sizeObjectCollection = aSizeValue.getDataValue();
+			if(sizeObjectCollection != null) {
+				Integer size = null;
+				for(Iterator ie = sizeObjectCollection.iterator(); ie.hasNext();) {
+		            Object sizeObject = ie.next();
+					if(sizeObject instanceof String) {
+						try {
+							size = Integer.valueOf(((String)sizeObject).trim());
+							attrView.setSize(size);
 						} catch (NumberFormatException nfe) {
 							// error in model need to report
 						}
@@ -280,9 +329,9 @@ public class SummitHelper
 				Integer span = null;
 				for(Iterator ie = spanObjectCollection.iterator(); ie.hasNext();) {
 		            Object spanObject = ie.next();
-					if(spanObject.getClass().isInstance(String.class)) {
+					if(spanObject instanceof String) {
 						try {
-							span = Integer.getInteger((String)spanObject);
+							span = Integer.valueOf(((String)spanObject).trim());
 							attrView.setColspan(span);
 						} catch (NumberFormatException nfe) {
 							// error in model need to report
@@ -290,6 +339,8 @@ public class SummitHelper
 					}
 				}
 			}
+		} else {
+			attrView.setColspan(new Integer(1));
 		}
 		TaggedValue aLabelTagValue = attr.getTaggedValue(LABEL);
 		if(aLabelTagValue != null) {
@@ -297,41 +348,190 @@ public class SummitHelper
 			if(labelObjectCollection != null) {
 				for(Iterator ie = labelObjectCollection.iterator(); ie.hasNext();) {
 		            Object labelObject = ie.next();
-					if(labelObject.getClass().isInstance(String.class)) {
-						attrView.setLabel((String)labelObject);
+					if(labelObject instanceof String) {
+						if(((String)labelObject).length()>0)
+						attrView.setLabel(((String)labelObject).trim());
 					}
 				}
-				if(attrView.getLabel()==null)
-					attrView.setLabel(attrView.getAttributename());
 			}
+		} else {
+			attrView.setLabel(attrView.getAttributename());			
 		}
 		TaggedValue aListItemsTagValue = attr.getTaggedValue(LIST_ITEMS);
 		if(aListItemsTagValue != null) {
 			Collection listObjectCollection = aListItemsTagValue.getDataValue();
 			if(listObjectCollection != null) {
-				String list = null;
-				for(Iterator ie = posnObjectCollection.iterator(); ie.hasNext();) {
+				String listitem = null;
+				ArrayList listitems = new ArrayList();
+				for(Iterator ie = listObjectCollection.iterator(); ie.hasNext();) {
 		            Object listObject = ie.next();
-					if(listObject.getClass().isInstance(String.class)) {
-						list = (String)listObject;
-						String listItem;
-						int pos=0, i=0;
-						ArrayList listItems = new ArrayList();
-						while(true) {
-							i = list.indexOf(',', pos);
-							if(i>-1) {
-							listItem=list.substring(0, i).trim();
-							listItems.add(listItem);
-							} else {
-								break;
-							}
+					if(listObject instanceof String) {
+						listitem = ((String)listObject).trim();
+						if(listitem.length()>0)
+							listitems.add(listitem);
+					}
+				}
+				attrView.setListvalues(listitems);
+			}
+		}
+		// Be nice to check for matching CSS Class strings for each divstart* and divdend*
+		TaggedValue aDivendtagTagValue = attr.getTaggedValue(DIVENDTAG);
+		if(aDivendtagTagValue != null) {
+			Collection divObjectCollection = aDivendtagTagValue.getDataValue();
+			if(divObjectCollection != null) {
+				String divitem = null;
+				for(Iterator ie = divObjectCollection.iterator(); ie.hasNext();) {
+		            Object divObject = ie.next();
+					if(divObject instanceof String) {
+						try {
+							divitem = ((String)divObject).trim();
+							if(divitem.length()>0)
+								attrView.setDivendtag(divitem);
+						} catch (Exception e) {
+							// error in model need to report
 						}
-						attrView.setListvalues((String[])listItems.toArray());
 					}
 				}
 			}
 		}
-		return null;
+		TaggedValue aDivstarttagTagValue = attr.getTaggedValue(DIVSTARTTAG);
+		if(aDivstarttagTagValue != null) {
+			Collection divObjectCollection = aDivstarttagTagValue.getDataValue();
+			if(divObjectCollection != null) {
+				String divitem = null;
+				for(Iterator ie = divObjectCollection.iterator(); ie.hasNext();) {
+		            Object divObject = ie.next();
+					if(divObject instanceof String) {
+						try {
+							divitem = ((String)divObject).trim();
+							if(divitem.length()>0)
+								attrView.setDivstarttag(divitem);
+						} catch (Exception e) {
+							// error in model need to report
+						}
+					}
+				}
+			}
+		}
+		TaggedValue aDivstartlabelTagValue = attr.getTaggedValue(DIVSTARTLABEL);
+		if(aDivstartlabelTagValue != null) {
+			Collection divObjectCollection = aDivstartlabelTagValue.getDataValue();
+			if(divObjectCollection != null) {
+				String divitem = null;
+				for(Iterator ie = divObjectCollection.iterator(); ie.hasNext();) {
+		            Object divObject = ie.next();
+					if(divObject instanceof String) {
+						try {
+							divitem = ((String)divObject).trim();
+							if(divitem.length()>0)
+								attrView.setDivstartlabel(divitem);
+						} catch (Exception e) {
+							// error in model need to report
+						}
+					}
+				}
+			}
+		}
+		TaggedValue aDivendlabelTagValue = attr.getTaggedValue(DIVENDLABEL);
+		if(aDivendtagTagValue != null) {
+			Collection divObjectCollection = aDivendtagTagValue.getDataValue();
+			if(divObjectCollection != null) {
+				String divitem = null;
+				for(Iterator ie = divObjectCollection.iterator(); ie.hasNext();) {
+		            Object divObject = ie.next();
+					if(divObject instanceof String) {
+						try {
+							divitem = ((String)divObject).trim();
+							if(divitem.length()>0)
+								attrView.setDivendtag(divitem);
+						} catch (Exception e) {
+							// error in model need to report
+						}
+					}
+				}
+			}
+		}
+		TaggedValue aLabelstyleTagValue = attr.getTaggedValue(LABELSTYLE);
+		if(aLabelstyleTagValue != null) {
+			Collection styleObjectCollection = aLabelstyleTagValue.getDataValue();
+			if(styleObjectCollection != null) {
+				String styleitem = null;
+				for(Iterator ie = styleObjectCollection.iterator(); ie.hasNext();) {
+		            Object styleObject = ie.next();
+					if(styleObject instanceof String) {
+						try {
+							styleitem = ((String)styleObject).trim();
+							if(styleitem.length()>0)
+								attrView.setLabelstyle(styleitem);
+						} catch (Exception e) {
+							// error in model need to report
+						}
+					}
+				}
+			}
+		}
+		TaggedValue aTagstyleTagValue = attr.getTaggedValue(TAGSTYLE);
+		if(aTagstyleTagValue != null) {
+			Collection styleObjectCollection = aTagstyleTagValue.getDataValue();
+			if(styleObjectCollection != null) {
+				String styleitem = null;
+				for(Iterator ie = styleObjectCollection.iterator(); ie.hasNext();) {
+		            Object styleObject = ie.next();
+					if(styleObject instanceof String) {
+						try {
+							styleitem = ((String)styleObject).trim();
+							if(styleitem.length()>0)
+								attrView.setTagstyle(styleitem);
+						} catch (Exception e) {
+							// error in model need to report
+						}
+					}
+				}
+			}
+		}
+		TaggedValue aMultValue = attr.getTaggedValue(MULT);
+		if(aMultValue != null) {
+			Collection multObjectCollection = aMultValue.getDataValue();
+			if(multObjectCollection != null) {
+				Boolean multitem = null;
+				for(Iterator ie = multObjectCollection.iterator(); ie.hasNext();) {
+		            Object multObject = ie.next();
+					if(multObject instanceof Boolean) {
+						try {
+							multitem = ((Boolean)multObject);
+							attrView.setMultiple(multitem);
+						} catch (Exception e) {
+							// error in model need to report
+						}
+					}
+				}
+			}
+		}
+		return attrView;
+	}
+	
+	/**
+	 * @param attr
+	 */
+	private void setCompositeSelector(AttributeImpl attr, ClassView currentview) {
+		TaggedValue aDispPosnTagValue = attr.getTaggedValue(DISPPOSITION);
+		if(aDispPosnTagValue != null) {
+			Collection dispposnObjectCollection = aDispPosnTagValue.getDataValue();
+			if(dispposnObjectCollection != null) {
+				Integer dispposn = null;
+				for(Iterator ie = dispposnObjectCollection.iterator(); ie.hasNext();) {
+		            Object dispposnObject = ie.next();
+					if(dispposnObject instanceof String) {
+						try {
+							dispposn = Integer.valueOf(((String)dispposnObject).trim());
+							currentview.getSelectorDisplay().add(dispposn.intValue(), (String)attr.getName());
+						} catch (NumberFormatException e) {
+							// error in model need to report
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private String getKnownViewSterotypeName(Collection steroNames) {

@@ -1,7 +1,7 @@
 #set( $Q = '"' )
 
 ## Has an ordered list of related classes to all root classes in views
-#set ( $alldepclassviews = $rootClassView.getAllDependentClassView() )
+#set ( $alldepclassviews = $rootClassView.getAllDependentClassEntity() )
 
 package ${metadata.packageName}.tools;
 
@@ -54,8 +54,9 @@ public class ${ScreenName}BasePullTool {
     public List get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}(${pullclass.parentsEntityname} a${pullclass.parentsEntityname})
     {
         Collection entities;
+		PersistanceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
 
-        if (a${pullclass.parentsEntityname} == null) {
+		if (a${pullclass.parentsEntityname} == null) {
             return entities;
         }
 
@@ -78,6 +79,7 @@ public class ${ScreenName}BasePullTool {
 
         return entities;
     }
+	
 #end
 #foreach( $pullclass in $alldepclassviews )
     public List get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}WithDefault(${pullclass.parentsEntityname} a${pullclass.parentsEntityname})
@@ -88,5 +90,6 @@ public class ${ScreenName}BasePullTool {
 		
         return entities;
     }
+	
 #end
 }

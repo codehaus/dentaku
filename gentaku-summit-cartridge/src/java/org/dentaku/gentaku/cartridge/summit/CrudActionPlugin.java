@@ -39,13 +39,6 @@ import org.omg.uml.foundation.core.TaggedValue;
  * source for each of the screens
  */
 public class CrudActionPlugin extends JavaPluginBase {
-	// Tag names
-	private final static String POSITION = "position";
-	private final static String LIST_ITEMS = "listItems";
-	private final static String COLUMNS = "TRcolumns";
-	private final static String SCRN_NAME = "screenName";
-	private final static String LABEL = "label";
-	private final static String SPAN = "span";
 	
 	private Collection metadata;
 	private ClassView rootClassView = null;
@@ -76,9 +69,7 @@ public class CrudActionPlugin extends JavaPluginBase {
     	}
         m.put("rootClassView", rootClassView);
         m.put("SummitHelper", helper);
-        m.put("qualifiedScreenName", 
-        		metadata.getFullyQualifiedName()
-        		+ ((TaggedValueImpl)((ModelElementImpl)metadata).getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
+        m.put(SummitHelper.SCRN_NAME, ((TaggedValueImpl)metadata.getTaggedValue(SummitHelper.SCRN_NAME)).getValue());
     }
 
     public boolean shouldGenerate(Object metadata) {
