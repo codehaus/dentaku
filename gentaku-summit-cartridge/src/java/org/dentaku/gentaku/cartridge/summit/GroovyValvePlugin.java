@@ -51,8 +51,6 @@ public class GroovyValvePlugin  extends JavaPluginBase {
         setCreateonly(true);
 	}
 
-	private Collection metadata;
-
 	/* (non-Javadoc)
 	 * @see org.generama.Plugin#getMetadata()
 	 */
