@@ -258,7 +258,9 @@ public class QDoxMetadataProvider extends JMIMetadataProviderBase implements QDo
         FieldDef fieldDef = new FieldDef();
         Classifier fieldType = field.getType();
         fieldDef.name = field.getName();
-        fieldDef.type = fieldType.getName();
+        if (fieldType != null) {
+            fieldDef.type = fieldType.getName();
+        }
 //        fieldDef.dimensions = getDimension(fieldType);
         // add tags
         addTags(field, binaryBuilder);

@@ -10,12 +10,12 @@
         <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
         <gentaku model="${dentaku.rootdir}/example-model/src/uml/model.xml.zip">
             <fileset dir="${dentaku.rootdir}/gentaku/src/uml"/>
-<!--            <component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${maven.build.dir}/xdoclet/hibernatedoclet"/>-->
-            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityBasePlugin" destdir="${maven.build.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityPlugin" destdir="${maven.src.dir}/java"/>
-            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityFactoryPlugin" destdir="${maven.build.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.event.EventBasePlugin" destdir="${maven.build.src}"/>
-            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}/META-INF/plexus" destinationfilename="components.xml"/>
+            <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" />
+<!--            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityBasePlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityPlugin" destdir="${maven.src.dir}/java"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityFactoryPlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.event.EventBasePlugin" destdir="${maven.build.src}"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${maven.build.src}/META-INF/plexus" destinationfilename="components.xml"/>-->
 <!---->
 <!--            <component classname="org.dentaku.gentaku.cartridge.event.StrutsFormPlugin" destdir="${maven.build.src}"/>-->
 <!--            <component classname="org.dentaku.gentaku.cartridge.event.WerkflowPlugin" destdir="${maven.build.src}"/>-->
