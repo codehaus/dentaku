@@ -17,13 +17,12 @@
 package org.dentaku.services.metadata.dbmapping;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.objecttree.reflection.JavaReflectionObjectFactory;
-import com.thoughtworks.xstream.alias.DefaultNameMapper;
-import com.thoughtworks.xstream.alias.DefaultClassMapper;
-import com.thoughtworks.xstream.xml.xpp3.Xpp3DomXMLReaderDriver;
+import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
+import com.thoughtworks.xstream.io.xml.XppDomDriver;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -71,7 +70,7 @@ public class DbMappingTable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            XStream xstream =  new XStream( new JavaReflectionObjectFactory(), new DefaultClassMapper(new DefaultNameMapper() ), new Xpp3DomXMLReaderDriver());
+            XStream xstream =  new XStream( new PureJavaReflectionProvider(), new XppDomDriver());
 
             xstream.alias("mapping", TypeMapping.class);
             List configuration = (List) xstream.fromXML(input);
