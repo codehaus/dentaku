@@ -22,7 +22,6 @@ import org.generama.TemplateEngine;
 import org.generama.WriterMapper;
 import org.generama.defaults.FileWriterMapper;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
-import org.picocontainer.Startable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,9 +46,6 @@ public abstract class JavaPluginBase extends Plugin {
         super(templateEngine, metadataProvider, new CheckFileWriterMapper(writerMapper));
         setMultioutput(true);
         stereotypes = new LinkedList();
-        if (stereotype != null) {
-            stereotypes.add(stereotype);
-        }
     }
 
     public Map getContextObjects() {
@@ -114,12 +110,8 @@ public abstract class JavaPluginBase extends Plugin {
         this.stereotypes = stereotypes;
     }
 
-    public String getStereotype() {
-        return stereotype;
-    }
-
     public void setStereotype(String stereotype) {
-        this.stereotype = stereotype;
+        this.stereotypes.add(stereotype);
     }
 
     private static class CheckFileWriterMapper implements WriterMapper {

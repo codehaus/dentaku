@@ -73,6 +73,7 @@ public class XMIGen implements ContainerComposer, Startable {
     }
 
     public void start() {
+        System.out.println("Running " + getClass().getName());
         SAXReader reader = new SAXReader();
         try {
             String filename = "dentaku-cartridge-generator/src/xml/mapping.xml";

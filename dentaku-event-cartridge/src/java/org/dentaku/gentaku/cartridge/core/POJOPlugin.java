@@ -36,4 +36,8 @@ public class POJOPlugin extends JavaPluginBase {
     protected Collection getMetadata() {
         return metadataProvider.getJMIMetadata();
     }
+
+    public void start() {
+        super.start();
+    }
 }
