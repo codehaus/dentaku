@@ -48,8 +48,14 @@ ${indent}* </p>
 #end
 #end
  */
-public abstract class ${class.name}Base extends org.dentaku.services.persistence.ModelEntity implements org.dentaku.services.persistence.XMLBean {
-
+public abstract class ${class.name}Base
+#set ($superclass = $class.javaGeneralization)
+#if($superclass)
+        extends $superclass.name
+#else
+        extends org.dentaku.services.persistence.ModelEntity
+#end
+        implements org.dentaku.services.persistence.XMLBean {
     public void getXML(org.dom4j.Element el) throws org.dentaku.services.exception.XMLBeanException {
         try {
             org.dom4j.Element beanElement = el.addElement("${class.name}");
@@ -264,7 +270,7 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
     private static java.util.List oneCollection;
     private static java.util.List manyObject;
 
-    public static ${class.name} getTestClassZero() {
+    public static Object getTestClassZero() {
         if (zeroObject == null) {
             zeroObject = new ${class.name}();
             zeroObject.setId(new Long(0));
@@ -312,13 +318,13 @@ public abstract class ${class.name}Base extends org.dentaku.services.persistence
 #if ($adata.isOne2Many())
             ${obj}.set${str.upperCaseFirstLetter($attname)}(${targettypename}.${meth}());
 #elseif ($adata.isOne2One() || $adata.isMany2One())
-            ${obj}.set${str.upperCaseFirstLetter($attname)}(${targettypename}.getTestClassOne());
+            ${obj}.set${str.upperCaseFirstLetter($attname)}((${targettypename})${targettypename}.getTestClassOne());
 #end
 #end
 #end
 #end
 
-    public static ${class.name} getTestClassOne() {
+    public static Object getTestClassOne() {
         if (oneObject == null) {
             oneObject = new ${class.name}();
             oneObject.setId(new Long(1));

@@ -7,17 +7,19 @@
     </logging>
     <components>
         <component>
-            <role>org.dentaku.services.metadata.MetadataService</role>
-            <implementation>org.dentaku.services.metadata.DefaultMetadataService</implementation>
-            <requirement>
-                <role>org.dentaku.foundation.pipeline.Pipeline</role>
-            </requirement>
+            <role>org.generama.MetadataProvider</role>
+            <implementation>org.dentaku.services.metadata.JMIUMLMetadataProvider</implementation>
+            <requirements>
+                <requirement>
+                    <role>org.dentaku.services.metadata.RepositoryReader</role>
+                </requirement>
+            </requirements>
         </component>
         <component>
             <role>org.dentaku.services.metadata.RepositoryReader</role>
             <implementation>org.dentaku.services.metadata.MagicDrawRepositoryReader</implementation>
             <configuration>
-                <modelPath>src/test/org/dentaku/services/metadata/TestModel.xml.zip</modelPath>
+                <modelURL>file://src/test/org/dentaku/services/metadata/TestModel.xml.zip</modelURL>
             </configuration>
         </component>
     </components>

@@ -40,6 +40,10 @@ public class JMIUMLMetadataProvider implements MetadataProvider {
         System.setProperty("org.netbeans.lib.jmi.Logger.fileName", "mdr.log");
     };
 
+    public JMIUMLMetadataProvider() {
+        // I sure hope pico is configured correctly!
+    }
+
     public JMIUMLMetadataProvider(RepositoryReader reader) {
         this.reader = reader;
         try {

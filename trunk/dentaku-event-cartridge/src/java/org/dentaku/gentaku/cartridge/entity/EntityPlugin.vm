@@ -4,8 +4,14 @@
  */
 package ${plugin.getDestinationPackage($metadata)};
 
+#set ($superclass = $class.javaGeneralization)
+
 /**
+#if ($superclass)
+  * @hibernate.subclass discriminator-value="${metadata.name}"
+#else
   * @hibernate.class table="${metadata.name}"
+#endif
   */
 public class ${metadata.name} extends ${metadata.name}Base {
 
