@@ -3,7 +3,7 @@ package ${plugin.getDestinationPackage($metadata)};
 import org.generama.QDoxCapableMetadataProvider;
 
 public class TagLibrary {
-    public TagLibrary(QDoxCapableMetadataProvider metadataProvider) {
+    public TagLibrary(MetadataProvider metadataProvider) {
 #foreach($class in $metadata)
 #if( ${plugin.shouldGenerate($class)} )
         metadataProvider.getDocletTagFactory().registerTag(${class.name}Impl.NAME, ${class.name}Impl.class);

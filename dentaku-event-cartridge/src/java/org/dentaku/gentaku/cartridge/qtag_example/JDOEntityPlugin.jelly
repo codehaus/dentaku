@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <j:jelly xmlns:j="jelly:core" xmlns:jxml="jelly:xml" xmlns:d="jelly:define" xmlns:helper="helper">
     <j:import uri="org/dentaku/gentaku/cartridge/persistence/HelperTaglib.jelly"/>
-    <jdo test="foo">
-        <j:set var="classTag" value="${class.getTagByName('jdo.class')}"/>
-        <helper:getFirstNonEmptyValue var="className" value1="${classTag.name_}" value2="${class.fullyQualifiedName}"/>
+    <jdo>
         <j:forEach var="class" items="${metadata}">
+            <j:set var="classTag" value="${class.getTagByName('jdo.class')}"/>
+            <helper:getFirstNonEmptyValue var="className" value1="${classTag.name_}" value2="${class.fullyQualifiedName}"/>
             <class name="${className}" identity-type="${classTag.identityType}">
-                <j:forEach var="field" items="${class.attributes}">
-                    <field name="${field.name}"/>
+                <j:forEach var="property" items="${plugin.getClassProperties(class)}">
+                    <field name="${property.name}"/>
                 </j:forEach>
             </class>
         </j:forEach>

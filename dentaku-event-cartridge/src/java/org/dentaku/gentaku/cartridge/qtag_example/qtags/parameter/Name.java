@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.dentaku.gentaku.cartridge.persistence.qtags.parameter;
+package org.dentaku.gentaku.cartridge.qtag_example.qtags.parameter;
 
 public interface Name {
     String getName_();

@@ -67,20 +67,21 @@ public abstract class JavaPluginBase extends Plugin {
 
     public boolean shouldGenerate(Object metadata) {
         String stereotypeName = null;
+        boolean result = false;
         if (stereotypes.size() == 0) {
             String className = getClass().getName();
             String pluginName = className.substring(className.lastIndexOf(".") + 1);
             stereotypeName = pluginName.substring(0, pluginName.indexOf("Plugin"));
-            return matchesStereotype((ModelElementImpl)metadata, stereotypeName);
+            result = matchesStereotype((ModelElementImpl)metadata, stereotypeName);
         } else {
             for (Iterator it = stereotypes.iterator(); it.hasNext();) {
                 stereotypeName = (String) it.next();
                 if (matchesStereotype((ModelElementImpl)metadata, stereotypeName)) {
-                    return true;
+                    result = true;
                 }
             }
-            return false;
         }
+        return result;
     }
 
     public static boolean matchesStereotype(ModelElementImpl object, String stereotype) {

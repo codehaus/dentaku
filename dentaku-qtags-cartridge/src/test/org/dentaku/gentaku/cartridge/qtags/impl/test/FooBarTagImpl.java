@@ -1,13 +1,13 @@
 package org.dentaku.gentaku.cartridge.qtags.impl.test;
 
 public class FooBarTagImpl
-    extends org.xdoclet.XDocletTag implements org.dentaku.gentaku.cartridge.qtags.impl.test.FooBarTag {
+    extends org.dentaku.gentaku.GentakuTagImpl implements org.dentaku.gentaku.cartridge.qtags.impl.test.FooBarTag {
     public static final String NAME = "foo.bar";
     private static final java.util.List ALLOWED_PARAMETERS = java.util.Arrays
             .asList(new String[]{"apple", "grape-fruit", "funny", "age",""});
     private static final java.util.List ALLOWED_VALUES = java.util.Arrays.asList( new String[] {""});
 
-    public FooBarTagImpl(String name, String value, com.thoughtworks.qdox.model.AbstractJavaEntity entity, int lineNumber) {
+    public FooBarTagImpl(String name, String value, org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl entity, int lineNumber) {
         super(name, value, entity, lineNumber);
     }
 

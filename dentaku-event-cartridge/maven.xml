@@ -32,11 +32,12 @@
             <component classname="org.generama.VelocityTemplateEngine"/>
             <component classname="org.generama.JellyTemplateEngine"/>
 
-            <component classname="org.dentaku.gentaku.cartridge.qtags.impl.QTagImplPlugin" destdir="${basedir}/target/src"/>
-            <component classname="org.dentaku.gentaku.cartridge.qtags.impl.QTagLibraryPlugin" destdir="${basedir}/target/src" packagereplace="org.dentaku.gentaku.cartridge.persistence.qtags"/>
+            <component classname="org.xdoclet.plugin.qtags.impl.QTagImplPlugin" destdir="${basedir}/target/src"/>
+            <component classname="org.xdoclet.plugin.qtags.impl.QTagLibraryPlugin" destdir="${basedir}/target/src" packagereplace="org.dentaku.gentaku.cartridge.qtag_example.qtags"/>
+
+<!--            <component classname="org.dentaku.gentaku.cartridge.qtags.impl.QTagImplPlugin" destdir="${basedir}/target/src"/>-->
+<!--            <component classname="org.dentaku.gentaku.cartridge.qtags.impl.QTagLibraryPlugin" destdir="${basedir}/target/src" packagereplace="org.dentaku.gentaku.cartridge.persistence.qtags"/>-->
             <!---->
-            <!--            <component classname="org.dentaku.gentaku.cartridge.qtags.xdoc.QTagXDocPlugin" destdir="${basedir}/target/generated-xdocs" namespace="${xdoclet.qtags.namespace}"/>-->
-            <!--            <component classname="org.dentaku.gentaku.cartridge.qtags.confluence.QTagConfluencePlugin" destdir="${basedir}/target/confluence" namespace="${xdoclet.qtags.namespace}"/>-->
         </xdoclet>
     </goal>
 
