@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<project>
+    <extend>${basedir}/../project.xml</extend>
+    <artifactId>summit-webapp</artifactId>
+    <name>Summit Example Webapp</name>
+    <package>org.dentaku.summit.webapp.*</package>
+    <dependencies>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>gentaku</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>dentaku-metadata-service</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>dentaku-persistence-service</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>gentaku-summit-cartridge</artifactId>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>dentaku-event-cartridge</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>xdoclet-plugins</groupId>
+            <artifactId>xdoclet-plugin-hibernate</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>xdoclet-plugins</groupId>
+            <artifactId>xdoclet-plugin-qtags</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xerces</artifactId>
+            <version>1.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>servletapi</groupId>
+            <artifactId>servletapi</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>b9</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>1.1-beta-4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jpox</groupId>
+            <artifactId>maven-jpox-plugin</artifactId>
+            <version>1.1.0-beta-1</version>
+            <type>plugin</type>
+        </dependency>
+
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>gentaku</artifactId>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+
+		<!--        cgen-->
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>dentaku-cartridge-generator</artifactId>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-el</groupId>
+            <artifactId>commons-el</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-el</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <!--        cgen-->
+
+        <!-- to be added for initdb-->
+    </dependencies>
+    <build>
+        <unitTest>
+            <includes>
+                <include>**/Test*.java</include>
+            </includes>
+            <excludes>
+                <exclude>**/*Test*All.java</exclude>
+            </excludes>
+        </unitTest>
+        <resources>
+            <resource>
+                <directory>target/src</directory>
+            </resource>
+        </resources>
+    </build>
+
+</project>

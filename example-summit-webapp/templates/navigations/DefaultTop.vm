@@ -1,0 +1,6 @@
+<table width="$ui.totalTopWidth" cellspacing="1">
+	<tr>
+		<td width="$ui.remainderTopWidth" align="center"><h1>Gentaku generated Summit test weeapp</h1></td>
+	</tr>
+</table>
+<hr>
