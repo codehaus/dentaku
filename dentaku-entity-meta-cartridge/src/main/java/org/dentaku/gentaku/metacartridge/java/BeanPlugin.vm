@@ -4,9 +4,6 @@
 //
 // See: http://dentaku.codehaus.org/gentaku
 //
-$plugin.callbackMacroVM
-
-#parse( $plugin.callbackMacroVM )
 
 package ${class.packageName};
 
@@ -75,7 +72,7 @@ implements ${plugin.getInterfaceFullname($class)}
 							*
 						#end
 						
-						#fieldComment($att)
+						#parse( "${plugin.callbacksPath}/EntityField.bean.vm" )
 						
 						*/
 						public ${javaHelper.parseType($att.type.fullyQualifiedName)} get${plugin.upperCaseFirstLetter($att.name)}() { return this.${att.name}; }

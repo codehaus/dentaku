@@ -1,4 +1,4 @@
-package org.dentaku.gentaku.cartridge;
+package org.dentaku.gentaku.metacartridge;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -64,7 +64,7 @@ public class JMIHelper {
             }
         }
 
-        return this.countPrimaryKey((ClassifierImpl) c.getStereotype(), count);
+        return this.countPrimaryKey((ClassifierImpl) c.getJavaGeneralization(), count);
     }
 
     public List getCommentLines(ModelElement me) {

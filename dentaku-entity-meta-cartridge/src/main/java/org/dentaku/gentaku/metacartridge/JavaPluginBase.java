@@ -1,4 +1,4 @@
-package org.dentaku.gentaku.cartridge;
+package org.dentaku.gentaku.metacartridge;
 
 import java.io.File;
 import java.io.FileOutputStream;
