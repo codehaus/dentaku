@@ -18,18 +18,20 @@ package org.dentaku.gentaku.cartridge;
 
 import org.dentaku.gentaku.tools.cgen.visitor.LocalDefaultElement;
 import org.dom4j.Branch;
+import org.dom4j.Element;
+import org.omg.uml.foundation.core.ModelElement;
 
 public class GeneratorSupport implements Generator {
     public GeneratorSupport() {
     }
 
-    public void preGenerate(LocalDefaultElement mappingNode, Branch parentOutput) throws GenerationException {
+    public void preGenerate(LocalDefaultElement mappingNode, Branch parentOutput, ModelElement modelElement) throws GenerationException {
     }
 
-    public boolean generate(LocalDefaultElement mappingNode, Branch parentOutput) throws GenerationException {
+    public boolean generate(LocalDefaultElement mappingNode, Branch parentOutput, ModelElement modelElement) throws GenerationException {
         return true;
     }
 
-    public void postGenerate(LocalDefaultElement mappingNode, Branch parentOutput) throws GenerationException {
+    public void postGenerate(LocalDefaultElement mappingNode, Branch parentOutput, ModelElement modelElement, Element outputElement) throws GenerationException {
     }
 }
