@@ -25,7 +25,8 @@ import org.omg.uml.foundation.core.UmlClass;
 import org.omg.uml.foundation.datatypes.Multiplicity;
 import org.omg.uml.foundation.datatypes.MultiplicityRange;
 
-abstract public class AssociationEndImpl extends ModelElementImpl implements AssociationEnd {
+abstract public class AssociationEndImpl extends ModelElementImpl implements org.dentaku.services.metadata.jmi.core.AssociationEnd {
+
     protected AssociationEndImpl(StorableObject storable) {
         super(storable);
     }
@@ -55,12 +56,12 @@ abstract public class AssociationEndImpl extends ModelElementImpl implements Ass
     protected static boolean isMany(AssociationEnd ae) {
         Multiplicity multiplicity = ae.getMultiplicity();
         if (multiplicity == null) {
-            return false;  // no multiplicity means multiplicity==1
+            return false; // no multiplicity means multiplicity==1
         }
         Collection ranges = multiplicity.getRange();
         for (Iterator i = ranges.iterator(); i.hasNext();) {
             MultiplicityRange range = (MultiplicityRange) i.next();
-			if ((range.getUpper() > 1) || (range.getUpper() < 0)) {
+            if ((range.getUpper() > 1) || (range.getUpper() < 0)) {
                 return true;
             }
             int rangeSize = range.getUpper() - range.getLower();

@@ -24,9 +24,8 @@ import javax.servlet.jsp.el.VariableResolver;
 
 import org.apache.commons.el.ExpressionEvaluatorImpl;
 import org.netbeans.mdr.storagemodel.StorableObject;
-import org.omg.uml.foundation.core.TaggedValue;
 
-abstract public class TaggedValueImpl extends ModelElementImpl implements TaggedValue {
+abstract public class TaggedValueImpl extends ModelElementImpl implements org.dentaku.services.metadata.jmi.core.TaggedValue {
     // todo is this threadsafe???
     static ExpressionEvaluatorImpl ev = new ExpressionEvaluatorImpl();
     
@@ -47,7 +46,7 @@ abstract public class TaggedValueImpl extends ModelElementImpl implements Tagged
 
     private void append(StringBuffer sb, Collection contents) {
         for (Iterator it = contents.iterator(); it.hasNext();) {
-            Object o = (Object) it.next();
+            Object o = it.next();
             try {
                 VariableResolver vr = new VariableResolver() {
                     public Object resolveVariable(String string) throws ELException {
