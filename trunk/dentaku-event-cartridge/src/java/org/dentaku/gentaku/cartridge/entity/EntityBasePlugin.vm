@@ -156,15 +156,15 @@ public abstract class ${class.name}Base
 #end
 
 #set ($foreignKeyAtt = $transform.getPrimaryKeyAttribute($sourcetype))
-    * @hibernate.set role="$adata.target.roleName" lazy="$lazy"
+    * @hibernate.set lazy="$lazy"
 #if ($inverse != "")
                 inverse="$inverse"
 #end
 #if ($order != "")
                 order-by="$order"
 #end
-    * @hibernate.collection-key column="$foreignKeyColumn"
-    * @hibernate.collection-one-to-many class="$targettypename"
+    * @hibernate.key column="$foreignKeyColumn"
+    * @hibernate.one-to-many class="$targettypename"
     */
     public java.util.Collection get${str.upperCaseFirstLetter($adata.target.roleName)}()
     {
@@ -192,8 +192,8 @@ public abstract class ${class.name}Base
 #set ($joinTableName = ${str.toRelationName($sourceColumn, $targetColumn, $sep)})
 ##
     * @hibernate.set lazy="$lazy" table="${joinTableName}"
-    * @hibernate.collection-key column="$sourceColumn"
-    * @hibernate.collection-many-to-many column="$targetColumn" class="$targettypename"
+    * @hibernate.key column="$sourceColumn"
+    * @hibernate.many-to-many column="$targetColumn" class="$targettypename"
     */
     public java.util.Collection get${str.upperCaseFirstLetter($adata.target.roleName)}()
     {
@@ -224,7 +224,9 @@ public abstract class ${class.name}Base
 #if ( $foreignKeyColumn == "" )
 #set($foreignKeyColumn = "${str.toDatabaseAttributeName(${adata.target.roleName}, $sep)}$suffix")
 #end
+#if ($adata.isMany2One())
     *       column="${foreignKeyColumn}"
+#end
     */
     public ${targettypename} get${str.upperCaseFirstLetter($adata.target.roleName)}()
     {

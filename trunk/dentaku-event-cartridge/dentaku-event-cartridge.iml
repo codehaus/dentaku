@@ -41,6 +41,7 @@
     <orderEntry type="module" module-name="gentaku" />
     <orderEntry type="module" module-name="dentaku-services" />
     <orderEntry type="module" module-name="dentaku-metadata-service" />
+    <orderEntry type="module" module-name="generama" />
   </component>
 </module>
 

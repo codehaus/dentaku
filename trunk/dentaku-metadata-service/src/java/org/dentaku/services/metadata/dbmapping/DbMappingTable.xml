@@ -111,5 +111,6 @@
 		</typeNames>
 		<jdbcType>DECIMAL</jdbcType>
 		<sqlPattern>DECIMAL({0})</sqlPattern>
+        <sqlDefaultLength>10</sqlDefaultLength>
 	</mapping>
 </list>
