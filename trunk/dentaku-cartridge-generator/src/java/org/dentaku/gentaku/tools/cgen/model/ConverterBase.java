@@ -16,12 +16,12 @@
  */
 package org.dentaku.gentaku.tools.cgen.model;
 
+import com.thoughtworks.xstream.alias.ClassMapper;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import java.lang.reflect.Field;
 
@@ -29,6 +29,8 @@ public abstract class ConverterBase implements Converter {
     protected Class convertingClass = null;
     protected ClassMapper classMapper;
     protected String classAttributeIdentifier;
+
+    abstract protected void setValue(Object result, Object o);
 
     protected ConverterBase(Class convertingClass, ClassMapper classMapper, String classAttributeIdentifier) {
         this.convertingClass = convertingClass;
@@ -54,11 +56,23 @@ public abstract class ConverterBase implements Converter {
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
             try {
-                field.set(result, reader.getAttribute(field.getName()));
+                String name = field.getName();
+                if (name.endsWith("_")) {
+                    name = name.substring(0, name.length()-1);
+                }
+                field.set(result, reader.getAttribute(name));
             } catch (IllegalAccessException e) {
                 // do nothing
             }
         }
+
+        while (reader.hasMoreChildren()) {
+            reader.moveDown();
+            Object o = readItem(reader, context, null);
+            setValue(result, o);
+            reader.moveUp();
+        }
+
         return result;
     }
 
@@ -71,5 +85,9 @@ public abstract class ConverterBase implements Converter {
             type = classMapper.lookupType(classAttribute);
         }
         return context.convertAnother(current, type);
+    }
+
+    public boolean canConvert(Class type) {
+        return type.equals(convertingClass);
     }
 }

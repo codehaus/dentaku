@@ -17,4 +17,22 @@
 package org.dentaku.gentaku.tools.cgen.model;
 
 public class SimpleType {
+    public String base;
+    protected Restriction restriction;
+
+    public String getBase() {
+        return base;
+    }
+
+    public void setBase(String base) {
+        this.base = base;
+    }
+
+    public Restriction getRestriction() {
+        return restriction;
+    }
+
+    public void setRestriction(Restriction restriction) {
+        this.restriction = restriction;
+    }
 }

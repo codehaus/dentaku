@@ -16,11 +16,6 @@
  */
 package org.dentaku.gentaku.tools.cgen.model;
 
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.alias.ClassMapper;
 
 public class SequenceConverter extends ConverterBase {
@@ -28,8 +23,8 @@ public class SequenceConverter extends ConverterBase {
         super(Sequence.class, classMapper, classAttributeIdentifier);
     }
 
-    public boolean canConvert(Class type) {
-        return type.equals(Schema.class);
+    protected void setValue(Object result, Object o) {
+        ((Sequence) result).getElements().add(o);
     }
 }
 

@@ -16,32 +16,14 @@
  */
 package org.dentaku.gentaku.tools.cgen.model;
 
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.alias.ClassMapper;
-
-import java.util.List;
-import java.util.ArrayList;
 
 public class SchemaConverter extends ConverterBase {
     public SchemaConverter(ClassMapper mapper, String classAttributeIdentifier) {
         super(Schema.class, mapper, classAttributeIdentifier);
     }
 
-    public boolean canConvert(Class type) {
-        return type.equals(Schema.class);
-    }
-
-    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-        Schema result = (Schema)super.unmarshal(reader, context);
-        List elements = new ArrayList();
-        while (reader.hasMoreChildren()) {
-            reader.moveDown();
-            Object item = readItem(reader, context, null); // TODO: arg, what should replace null?
-            elements.add(item);
-            reader.moveUp();
-        }
-        result.setElements(elements);
-        return result;
+    protected void setValue(Object result, Object o) {
+        ((Schema) result).getElements().add(o);
     }
 }

@@ -17,4 +17,67 @@
 package org.dentaku.gentaku.tools.cgen.model;
 
 public class Attribute {
+    public String name;
+    public String type;
+    public String use;
+    public String fixed;
+    public String ref;
+    public String default_;
+    protected SimpleType simpleType;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUse() {
+        return use;
+    }
+
+    public void setUse(String use) {
+        this.use = use;
+    }
+
+    public String getFixed() {
+        return fixed;
+    }
+
+    public void setFixed(String fixed) {
+        this.fixed = fixed;
+    }
+
+    public String getRef() {
+        return ref;
+    }
+
+    public void setRef(String ref) {
+        this.ref = ref;
+    }
+
+    public String getDefault() {
+        return default_;
+    }
+
+    public void setDefault(String default_) {
+        this.default_ = default_;
+    }
+
+    public SimpleType getSimpleType() {
+        return simpleType;
+    }
+
+    public void setSimpleType(SimpleType simpleType) {
+        this.simpleType = simpleType;
+    }
 }

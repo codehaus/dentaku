@@ -62,26 +62,26 @@ public class CodeGenTest extends junit.framework.TestCase {
         xs.alias("xs:element", Element.class);
         xs.registerConverter(new ElementConverter(classMapper, "xs:element"));
 
-        xs.alias("xs:attribute", Attribute.class);
-//        xs.registerConverter(new AttributeConverter(classMapper, "xs:attribute"));
-
         xs.alias("xs:complexType", ComplexType.class);
-//        xs.registerConverter(new ComplexTypeConverter(classMapper, "xs:complexType"));
+        xs.registerConverter(new ComplexTypeConverter(classMapper, "xs:complexType"));
+
+        xs.alias("xs:attribute", Attribute.class);
+        xs.registerConverter(new AttributeConverter(classMapper, "xs:attribute"));
 
         xs.alias("xs:sequence", Sequence.class);
-//        xs.registerConverter(new SequenceConverter(classMapper, "xs:sequence"));
+        xs.registerConverter(new SequenceConverter(classMapper, "xs:sequence"));
 
         xs.alias("xs:simpleType", SimpleType.class);
-//        xs.registerConverter(new SimpleTypeConverter(classMapper, "xs:simpleType"));
+        xs.registerConverter(new SimpleTypeConverter(classMapper, "xs:simpleType"));
 
         xs.alias("xs:restriction", Restriction.class);
-//        xs.registerConverter(new RestrictionConverter(classMapper, "xs:restriction"));
+        xs.registerConverter(new RestrictionConverter(classMapper, "xs:restriction"));
 
         xs.alias("xs:enumeration", Enumeration.class);
-//        xs.registerConverter(new EnumerationConverter(classMapper, "xs:enumeration"));
+        xs.registerConverter(new EnumerationConverter(classMapper, "xs:enumeration"));
 
         xs.alias("xs:choice", Choice.class);
-//        xs.registerConverter(new ChoiceConverter(classMapper, "xs:choice"));
+        xs.registerConverter(new ChoiceConverter(classMapper, "xs:choice"));
 
         xs.alias("xs:notation", Notation.class);
 //        xs.registerConverter(new NotationConverter(classMapper, "xs:notation"));

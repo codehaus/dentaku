@@ -16,5 +16,26 @@
  */
 package org.dentaku.gentaku.tools.cgen.model;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Restriction {
+    public String base;
+    protected List elements = new ArrayList();
+
+    public String getBase() {
+        return base;
+    }
+
+    public void setBase(String base) {
+        this.base = base;
+    }
+
+    public List getElements() {
+        return elements;
+    }
+
+    public void setElements(List elements) {
+        this.elements = elements;
+    }
 }
