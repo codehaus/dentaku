@@ -1,0 +1,245 @@
+#* ------------------------------------------------------------------
+#
+# Macros that are used for displaying input forms.
+#
+*# ------------------------------------------------------------------
+#macro (HtmlHead)
+<head>
+  #if ($!page.Title)
+    <title>$page.Title</title>
+  #end
+  #if ($page.MetaTags.size() > 0)
+    #foreach($metaTag in $page.MetaTags.keySet())
+      <meta name="$metaTag" content="$page.MetaTags.get($metaTag)">
+    #end
+  #end
+  #if ($page.HttpEquivs.size() > 0)
+    #foreach($httpEquiv in $page.HttpEquivs.keySet())
+      <meta http-equiv="$httpEquiv" content="$page.HttpEquivs.get($httpEquiv)">
+    #end
+  #end
+  #if ($page.StyleSheets.size() > 0)
+    #foreach( $styleSheet in $page.StyleSheets )
+      <link rel="stylesheet" href="$styleSheet.Url"
+        #if($!styleSheet.Type)  type="$styleSheet.Type"   #end
+        #if($!styleSheet.Media) media="$styleSheet.Media" #end
+        #if($!styleSheet.Title) title="$styleSheet.Title" #end
+      >
+    #end
+  #end
+  #if ($page.Styles.size() > 0)
+      <style type="text/css">
+    #foreach( $style in $page.Styles )
+        $!style
+    #end
+      </style>
+  #end
+  #if ($page.Scripts.size() > 0)
+    #foreach( $script in $page.Scripts )
+      <script type="text/javascript" src="$script" language="JavaScript"></script>
+    #end
+  #end
+</head>
+#end
+
+##
+## Build the Tags for the Body start tag of a web page with VelocityOnly Layout
+## <body #HtmlBodyAttributes() >
+## 
+
+#macro (HtmlBodyAttributes)
+#if ($page.BodyAttributes.size() > 0)
+    #foreach( $attributeName in $page.BodyAttributes.keySet() )
+      $attributeName = "$page.BodyAttributes.get($attributeName)"
+    #end
+#end
+#end
+
+## ------------------------------------------------------------------
+##
+## Macros for Dentaku Summit generated Velocity Screen
+##
+## ------------------------------------------------------------------
+#macro (HeaderCell $content $headeradjust)
+  <td>
+    <table>
+      <tr>
+        <td width="$headeradjust"></td>
+        <td>
+          <p><b>$content</b></p>
+        </td>
+      </tr>
+    </table>
+  </td>
+#end
+
+#macro (HeaderCellCol $content $headeradjust $colspan)
+  <td colspan="$colspan">
+    <table>
+      <tr>
+        <td width="$headeradjust"></td>
+        <td>
+          <p><b>$content</b></p>
+        </td>
+      </tr>
+    </table>
+  </td>
+#end
+
+#macro (LabelCell  $content)
+  <td width="$ui.screenLabelWidth">
+  	<p>$content</p>
+  </td>
+#end
+
+#macro (LabelColourCell  $content $colour)
+  <td BGCOLOR="$colour" width="$ui.screenLabelWidth">
+  	<p>$content</p>
+  </td>
+#end
+
+#macro (LabelCellW  $content $width)
+  <td width="$width">
+  	<p>$content</p>
+  </td>
+#end
+
+#macro (MessageWidget  $colspan $content)
+  <td colspan="$colspan"><p class="serverMessage">$content</p></td>
+#end
+
+#macro (ViewSelector  $colspan $type $key $objects $selectedObjectKey)
+	<td  colspan="$colspan" width="$ui.screenWidgetWidth" >
+		<select name="$type" onChange="fireSelectionType(this.form, &quot;$type&quot;)">
+			#foreach ($object in $objects)
+				#if ($selectedObjectKey == ${object}.$key)
+					<option selected>${object}.$key</option>
+				#else
+					<option>${object}.$key</option>
+				#end
+			#end
+		</select>
+	</td>
+#end
+
+#macro (ViewSelectorName  $colspan $type $displayname $objects $selectedObject $keyFields)
+	<td  colspan="$colspan" width="$ui.screenWidgetWidth" >
+		<select name="$type" onChange="fireSelectionType(this.form, &quot;$type&quot;)">
+			#foreach ($object in $objects)
+				#set ( $uid = "" )
+				#set ( $manyCols = false )
+				#foreach ($objectKeyPart in $keyFields )
+					#if(!$manyCols)
+						#set ( $uid = ${object}.$objectKeyPart )
+					#else
+						#set ( $uid = $uid$separator${object}.$objectKeyPart )
+					#end
+					#set ( $manyCols = true )
+				#end
+				#if ($selectedObjectKey == $uid)
+					<option value=$uid selected>${selectedObject}.$displayname</option>
+				#else
+					<option value=$uid>${selectedObject}.$displayname</option>
+				#end
+			#end
+		</select>
+	</td>
+#end
+
+#macro (ViewList $colspan $type $typeObjects $selectedTypeObject)
+	<td width="$ui.screenWidgetWidth" colspan="$colspan">
+		<select name="$type" onChange="fireSelectionType(this.form, &quot;$type&quot;)">
+			#foreach ($typeObject in $typeObjects)
+				#if ($selectedTypeObject == $typeObject)
+					<option selected>$typeObject</option>
+				#else
+					<option>$typeObject</option>
+				#end
+			#end
+		</select>
+	</td>
+#end
+
+#macro (CheckboxWidget $colspan $name $value)
+  #if ("$value"=="true")
+  	<td colspan="$colspan" width="$ui.screenWidgetWidth"><input type="checkbox" checked name="$name" value="true"/></td>
+  #else
+  	<td colspan="$colspan" width="$ui.screenWidgetWidth"><input type="checkbox" name="$name" value="true"/></td>
+  #end
+
+  ## Ensure that a parameter called name is always sent
+  ## put it last so that a successful checkbox will appear first
+  <input type="hidden" name="$name" value="false"/>
+#end
+
+#macro (CheckboxWidgetW  $colspan $name $value $width)
+  #if ("$value"=="true")
+  	<td colspan="$colspan" width="$width"><input type="checkbox" checked name="$name" value="true"/></td>
+  #else
+  	<td colspan="$colspan" width="$width"><input type="checkbox" name="$name" value="true"/></td>
+  #end
+
+  ## Ensure that a parameter called name is always sent
+  ## put it last so that a successful checkbox will appear first
+  <input type="hidden" name="$name" value="false"/>
+#end
+
+#macro (TextWidget $colspan $name $value $length)
+  <td colspan="$colspan" width="$ui.screenWidgetWidth">
+      <input type="text" name="$name" value="$value" size="$length" maxlength="$length"/>
+  </td>
+#end
+
+#macro (PasswordWidget $colspan $name $value $tdwidth $length)
+  <td  colspan=" $colspan" width="$tdwidth">
+      <input align="left" type="password" name="$name" value="$value" size="15" maxlength="$length"/>
+  </td>
+#end
+
+#macro (TextWidgetW $colspan $name $value $length $width)
+  <td colspan="$colspan" width="$width">
+      <input type="text" name="$name" value="$value" maxlength="$length"/>
+  </td>
+#end
+
+#macro (TextWidgetSW $colspan $name $value $maxlength $tdwidth $size)
+  <td  colspan=" $colspan" width="$tdwidth">
+      <input type="text" name="$name" value="$value" maxlength="$maxlength" size="$size"/>
+  </td>
+#end
+
+#macro (TextWidgetSWCol $colspan $name $value $maxlength $tdwidth $size)
+  <td colspan="$colspan" width="$tdwidth">
+      <input type="text" name="$name" value="$value" maxlength="$maxlength" size="$size"/>
+  </td>
+#end
+
+#macro (TextAreaWidget $colspan $name $value $cols)
+<td colspan="$colspan" width="$ui.screenWidgetWidth">
+<textarea name="$name" rows="5" cols="$cols" wrap>$value</textarea>
+</td>
+#end
+
+#macro (TextAreaWidgetWCol $colspan $name $value $cols $width)
+<td width="$width" colspan="$colspan">
+<textarea name="$name" rows="5" cols="$cols" wrap>$value</textarea>
+</td>
+#end
+
+#macro (TextAreaWidgetRW $colspan $name $value $cols $width $rows)
+<td colspan="$colspan" width="$width">
+<textarea name="$name" rows="$rows" cols="$cols" wrap>$value</textarea>
+</td>
+#end
+
+#macro (CrudButtons $colspan $classname)
+  <td colspan="$colspan" width="$ui.screenWidgetWidth">
+      <input type="button" name="reset" value="Clear" onClick="clearFormElements(this.form)"/>
+      <input type="submit" name="eventSubmit_doCreate${classname}" value="Create"/>
+      <input type="submit" name="eventSubmit_doUpdate${classname}" value="Update"/>
+      <input type="submit" name="eventSubmit_doDelete${classname}" value="Delete"/>
+  </td>
+#end
+
+
+
