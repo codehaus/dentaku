@@ -16,10 +16,12 @@
  */
 package org.dentaku.services.persistence.synthetic;
 
-import org.dentaku.services.ServiceTestBase;
+import org.dentaku.services.PersistenceServiceTestBase;
 import org.dentaku.services.persistence.PersistenceManagerStorage;
+import test.Root;
+import test.Child;
 
-public class SyntheticPersistenceManagerTest extends ServiceTestBase {
+public class SyntheticPersistenceManagerTest extends PersistenceServiceTestBase {
     private PersistenceManagerStorage pm;
 
     protected void setUp() throws Exception {
@@ -41,10 +43,10 @@ public class SyntheticPersistenceManagerTest extends ServiceTestBase {
     }
 
     public void testManyRelation() throws Exception {
-        Long id = new Long((System.currentTimeMillis() % 50) * 3 + 2);
+        Long id = new Long(Math.max(2, System.currentTimeMillis() % Root.getTestCollectionSize()));
         Root r = (Root)pm.load(Root.class, id);
         assertNotNull(r);
-        assertTrue(Root.getTestCollectionSize() == r.getChild().size());
+        assertTrue(Child.getTestCollectionSize() == r.getChild().size());
     }
 
 

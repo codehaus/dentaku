@@ -23,6 +23,25 @@
     <orderEntry type="module" module-name="xdoclet" />
     <orderEntry type="library" name="Pico" level="application" />
     <orderEntry type="library" name="XML" level="application" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jmiuml14di.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jmi.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="mdr" />
     <orderEntryProperties />
   </component>
 </module>

@@ -322,7 +322,7 @@ public abstract class ${class.name}Base
     }
 
     public static int getTestCollectionSize() {
-        return ${class.name}.class.hashCode() % 100;
+        return Math.max(3, ${class.name}.class.hashCode() % 100);
     }
 
 }

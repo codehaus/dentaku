@@ -1,5 +1,5 @@
 /*
- * ServiceTestBase.java
+ * PersistenceServiceTestBase.java
  * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 
-public abstract class ServiceTestBase extends TestCase {
+public abstract class PersistenceServiceTestBase extends TestCase {
     protected DentakuPlexusContainer container;
     protected DataSource ds;
 

@@ -39,7 +39,7 @@ import java.util.List;
 public class SyntheticPersistenceManagerStorage extends AbstractPersistenceManagerStorage {
 
     public Object load(Class theClass, Serializable id) throws PersistenceException {
-        long key = ((Long)id).longValue() % 3;
+        long key = ((Long)id).longValue();
         try {
             if (key == 0) {
                 Method m = theClass.getMethod("getTestClassZero", null);
