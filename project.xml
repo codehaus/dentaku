@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<project>
+	<pomVersion>3</pomVersion>
+	<id>dentaku-main</id>
+	<groupId>dentaku</groupId>
+	<currentVersion>0.5</currentVersion>
+	<name>Dentaku Project</name>
+	<!-- ################################################################ -->
+	<!--        Project management section                                -->
+	<!-- ################################################################ -->
+	<organization>
+		<name>Dentaku Team</name>
+		<url>http://www.dentaku.org</url>
+		<!--        <logo>http://dentaku.org/images/calculator.gif</logo>-->
+	</organization>
+	<inceptionYear>2003</inceptionYear>
+	<package>org.dentaku.*</package>
+	<!--    <logo></logo>-->
+	<url/>
+	<issueTrackingUrl>http://www.dentaku.org</issueTrackingUrl>
+	<siteAddress>http://www.dentaku.org</siteAddress>
+	<siteDirectory/>
+	<distributionDirectory>/dentaku/dist/${pom.artifactId}/</distributionDirectory>
+	<!--
+    <repository>
+        <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:maven</connection>
+        <url>http://cvs.apache.org/viewcvs/maven/</url>
+    </repository>
+    -->
+	<versions/>
+	<mailingLists/>
+	<developers>
+		<developer>
+			<name>Brian Topping</name>
+			<email>topping@bill2.com</email>
+			<organization>Bill2, Inc.</organization>
+			<roles>
+				<role>Developer</role>
+				<role>Architect</role>
+			</roles>
+			<timezone>-5</timezone>
+		</developer>
+	</developers>
+	<!-- ################################################################ -->
+	<!--        Project build and reports section                         -->
+	<!-- ################################################################ -->
+	<build>
+		<nagEmailAddress>dev@dentaku.codehaus.org</nagEmailAddress>
+		<sourceDirectory>${basedir}/src/java</sourceDirectory>
+		<unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
+		<unitTest>
+			<includes>
+				<include>**/Test*.java</include>
+			</includes>
+			<excludes>
+				<exclude>**/*Test*All.java</exclude>
+			</excludes>
+		</unitTest>
+		<resources/>
+		<!-- (OPTIONAL) Resources packaged inside the JAR file. -->
+	</build>
+	<reports>
+		<report>maven-changes-plugin</report>
+		<report>maven-jdepend-plugin</report>
+		<report>maven-pmd-plugin</report>
+		<report>maven-junit-report-plugin</report>
+		<report>maven-clover-plugin</report>
+		<report>maven-changelog-plugin</report>
+		<report>maven-file-activity-plugin</report>
+		<report>maven-developer-activity-plugin</report>
+		<report>maven-file-activity-plugin</report>
+		<report>maven-license-plugin</report>
+		<report>maven-linkcheck-plugin</report>
+		<report>maven-jxr-plugin</report>
+		<report>maven-javadoc-plugin</report>
+	</reports>
+</project>
