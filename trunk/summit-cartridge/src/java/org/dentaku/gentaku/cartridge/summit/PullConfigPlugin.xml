@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<j:jelly xmlns:j="jelly:core">
+<components>
+  <component>
+    <role>org.codehaus.plexus.summit.pull.PullService</role>
+    <implementation>org.codehaus.plexus.summit.pull.DefaultPullService</implementation>
+    <configuration>
+      <tools>
+        <j:forEach var="property" items="${plugin.getScreenNames}">
+		<tool>
+		  <name>tool</name>
+		  <role>"${property}"</role>
+		  <scope>global</scope>
+		</tool>
+        </j:forEach>
+      </tools>
+    </configuration>
+  </component>
+  <j:forEach var="property" items="${plugin.getScreenNames}">
+  <component>
+    <role>"${property}"</role>
+    <implementation>"${metadata.getFullyQualifiedName()}".tools."${property}"BasePullTool</implementation>
+  </component>
+  </j:forEach>
+</components>
+</j:jelly>
