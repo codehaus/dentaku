@@ -23,16 +23,9 @@
             <version>1.0-RC1</version>
             <url>http://jakarta.apache.org/jelly/</url>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>commons-jelly</groupId>-->
-<!--            <artifactId>commons-jelly-tags-xml</artifactId>-->
-<!--            <version>20030211.142705</version>-->
-<!--            <url>http://jakarta.apache.org/jelly/</url>-->
-<!--        </dependency>-->
-
     </dependencies>
     <build>
+        <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
         <resources>
             <resource>
                 <directory>${basedir}/src/java</directory>
@@ -43,6 +36,9 @@
             </resource>
         </resources>
         <unitTest>
+            <includes>
+                <include>**/*Test.java</include>
+            </includes>
             <resources>
                 <resource>
                     <directory>${basedir}/src/test</directory>

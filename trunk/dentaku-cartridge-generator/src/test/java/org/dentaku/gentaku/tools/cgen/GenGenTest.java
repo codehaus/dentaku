@@ -23,11 +23,14 @@ import org.dentaku.services.metadata.Utils;
 import org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader;
 import org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin;
 
+import java.io.File;
+
 public class GenGenTest extends junit.framework.TestCase {
     public GenGenPlugin plugin;
 
     protected void setUp() throws Exception {
-        RepositoryReader rr = new MagicDrawRepositoryReader(Utils.checkURL("dentaku-cartridge-generator/src/test/uml/test2.xml.zip"));
+        String filename = "dentaku-cartridge-generator/src/test/uml/test2.xml.zip";
+        RepositoryReader rr = new MagicDrawRepositoryReader(Utils.checkURL(new File(Utils.getRootDir(), filename).toURL()));
         JMICapableMetadataProvider mp = new JMIUMLMetadataProvider(rr);
         plugin = new GenGenPlugin(mp);
     }
