@@ -11,9 +11,9 @@
                 <pathelement path="${maven.build.dest}"/>
             </classpath>
         </taskdef>
-        <xmigen schema="dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/jdo/xml/jdo_2_0.xsd"
-            mapping="dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/jdo/xml/mapping.xsd"
-            destdir="dentaku-cartridge-generator/target/xmi" filename="jdo.xmi"/>
+        <xmigen schema="${maven.src.dir}/java/org/dentaku/gentaku/cartridge/jdo/xml/jdo_2_0.xsd"
+            mapping="${maven.src.dir}/java/org/dentaku/gentaku/cartridge/jdo/xml/mapping.xml"
+            destdir="${maven.build.dir}/xmi" filename="jdo.xmi"/>
 
     </goal>
 </project>

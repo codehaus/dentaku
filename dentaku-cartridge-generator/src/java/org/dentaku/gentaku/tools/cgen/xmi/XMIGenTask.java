@@ -68,8 +68,8 @@ public class XMIGenTask extends Task {
             throw new BuildException("you must provide both a mapping and a schema argument to the XMIGenTask");
         }
         try {
-            Document mappingDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), mapping).toURL()));
-            schemaDoc = reader.read(Utils.checkURL(new File(Utils.getRootDir(), schema).toURL()));
+            Document mappingDoc = reader.read(Utils.checkURL(new File(mapping).toURL()));
+            schemaDoc = reader.read(Utils.checkURL(new File(schema).toURL()));
 
             // annotate XSD with mapping document
             mappingDoc.accept(new VisitorSupport() {
@@ -90,7 +90,7 @@ public class XMIGenTask extends Task {
 
             Document document = createXMIDoc(mappingDoc, schemaDoc, mappingDoc.getRootElement().attributeValue("tagNameBase"), rootNode);
 
-            File file = new File(Utils.getRootDir() + destdir);
+            File file = new File(destdir);
             file.mkdirs();
             writeFile(document, new File(file, filename));
         } catch (DocumentException e) {
