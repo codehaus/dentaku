@@ -25,6 +25,7 @@ import org.dentaku.gentaku.cartridge.GenerationException;
 import org.omg.uml.foundation.core.ModelElement;
 
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * The class that is instantiated by the factory.  Really only does something with the accept method.
@@ -32,6 +33,8 @@ import java.util.Iterator;
 public class LocalDefaultElement extends DefaultElement {
     private LocalDefaultElement annotation;
     private Generator generator;
+    private Set locations;
+
     public LocalDefaultElement(QName qname) {
         super(qname);
     }
@@ -43,10 +46,11 @@ public class LocalDefaultElement extends DefaultElement {
      * @param visitor
      * @param newParent
      * @param parent
+     * @param location
      * @return
      */
-    public boolean accept(PluginOutputVisitor visitor, Branch newParent, ModelElement parent) throws GenerationException {
-        return visitor.visit(this, newParent, parent);
+    public boolean accept(PluginOutputVisitor visitor, Branch newParent, ModelElement parent, String location) throws GenerationException {
+        return visitor.visit(this, newParent, parent, location);
     }
 
     public LocalDefaultElement getAnnotation() {
@@ -57,6 +61,10 @@ public class LocalDefaultElement extends DefaultElement {
         this.annotation = annotation;
     }
 
+    /**
+     * Used for GenGenPlugin, holds a live Generator object
+     * @return
+     */
     public Generator getGenerator() {
         return generator;
     }
@@ -65,10 +73,22 @@ public class LocalDefaultElement extends DefaultElement {
         this.generator = generator;
     }
 
+    /**
+     * Used for XMIGen, keeps a cache of strings of the locations that this element is valid
+     * @return
+     */
+    public Set getLocations() {
+        return locations;
+    }
+
+    public void setLocations(Set locations) {
+        this.locations = locations;
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         if (getPath().length() > 75) {
-            sb.append("..." + getPath().substring(getPath().length() - 50));
+            sb.append("..." + getPath().substring(getPath().length() - 75));
         } else {
             sb.append(getPath());
         }

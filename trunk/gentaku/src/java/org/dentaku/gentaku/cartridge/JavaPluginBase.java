@@ -22,6 +22,7 @@ import org.generama.TemplateEngine;
 import org.generama.WriterMapper;
 import org.generama.defaults.FileWriterMapper;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
+import org.picocontainer.Startable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,27 +32,30 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public abstract class JavaPluginBase extends Plugin {
     private boolean createonly;
-
-    public Map getContextObjects() {
-        Map result = super.getContextObjects();
-        result.put("class", result.get("metadata"));
-        return result;
-    }
-
+    protected String stereotype;
     protected List stereotypes;
 
     public JavaPluginBase(TemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, new CheckFileWriterMapper(writerMapper));
         setMultioutput(true);
-        stereotypes = new ArrayList();
+        stereotypes = new LinkedList();
+        if (stereotype != null) {
+            stereotypes.add(stereotype);
+        }
+    }
+
+    public Map getContextObjects() {
+        Map result = super.getContextObjects();
+        result.put("class", result.get("metadata"));
+        return result;
     }
 
     public String getDestinationClassname(Object metadata) {
@@ -72,11 +76,11 @@ public abstract class JavaPluginBase extends Plugin {
             String className = getClass().getName();
             String pluginName = className.substring(className.lastIndexOf(".") + 1);
             stereotypeName = pluginName.substring(0, pluginName.indexOf("Plugin"));
-            result = matchesStereotype((ModelElementImpl)metadata, stereotypeName);
+            result = matchesStereotype((ModelElementImpl) metadata, stereotypeName);
         } else {
             for (Iterator it = stereotypes.iterator(); it.hasNext();) {
                 stereotypeName = (String) it.next();
-                if (matchesStereotype((ModelElementImpl)metadata, stereotypeName)) {
+                if (matchesStereotype((ModelElementImpl) metadata, stereotypeName)) {
                     result = true;
                 }
             }
@@ -108,6 +112,14 @@ public abstract class JavaPluginBase extends Plugin {
 
     public void setStereotypes(List stereotypes) {
         this.stereotypes = stereotypes;
+    }
+
+    public String getStereotype() {
+        return stereotype;
+    }
+
+    public void setStereotype(String stereotype) {
+        this.stereotype = stereotype;
     }
 
     private static class CheckFileWriterMapper implements WriterMapper {
@@ -184,7 +196,7 @@ public abstract class JavaPluginBase extends Plugin {
         return databaseAttributeName.toString();
     }
 
-   /**
+    /**
      * <p>Removes the capitalization of a string. That is, it returns
      * "hamburgerStall" when receiving a "HamburgerStall".</p>
      *
@@ -206,6 +218,4 @@ public abstract class JavaPluginBase extends Plugin {
             return s;
         }
     }
-
-
 }

@@ -29,9 +29,7 @@ public class GraphProcessor {
     private ArrayList topological = null;
 
     public GraphResults scc(Collection verticies, GraphIterator nav) {
-        dfsResults = dfs(verticies, nav);
-        topological = topologicalSort(dfsResults);
-        sccResults = dfs(topological, new ReverseGraphIterator(nav));
+        init(verticies, nav);
         return sccResults;
     }
 
@@ -66,7 +64,7 @@ public class GraphProcessor {
         for (Iterator i = nextEdges.iterator(); i.hasNext();) {
             Object nextEdge = i.next();
             Object nextVertex = nav.getTarget(nextEdge);
-            System.out.println("dfsVisit: thisVertex="+((StateVertex)vertex).getName()+"; nextEdge="+getEdgeType(results, nextEdge)+"; nextVertex="+((StateVertex)nextVertex).getName());
+            System.out.println("dfsVisit: thisVertex="+vertex.toString()+"; nextEdge="+getEdgeType(results, nextEdge)+"; nextVertex="+nextVertex.toString());
             classifyEdge(results, nav, nextEdge);
             if (!results.getDiscoveredVertex().containsKey(nextVertex)) {
                 dfsVisit(results, nextVertex, nav);
@@ -83,20 +81,20 @@ public class GraphProcessor {
             int sourceTime = ((Integer) results.getDiscoveredVertex().get(source)).intValue();
             int targetTime = ((Integer) results.getDiscoveredVertex().get(target)).intValue();
             if (sourceTime < targetTime) {
-                System.out.println("classifyEdge - FORWARD: source="+((StateVertex)source).getName()+"; dest="+((StateVertex)target).getName());
+                System.out.println("classifyEdge - FORWARD: source="+source.toString()+"; dest="+target.toString());
                 results.getForwardEdges().add(edge);
             } else {
-                System.out.println("classifyEdge - CROSS: source="+((StateVertex)source).getName()+"; dest="+((StateVertex)target).getName());
+                System.out.println("classifyEdge - CROSS: source="+source.toString()+"; dest="+target.toString());
                 results.getCrossEdges().add(edge);
             }
         } else {
             if (results.getDiscoveredVertex().containsKey(target)) {
                 // gray, back edge
-                System.out.println("classifyEdge - BACK: source="+((StateVertex)source).getName()+"; dest="+((StateVertex)target).getName());
+                System.out.println("classifyEdge - BACK: source="+source.toString()+"; dest="+target.toString());
                 results.getBackEdges().add(edge);
             } else {
                 // white, tree edge
-                System.out.println("classifyEdge - TREE: source="+((StateVertex)source).getName()+"; dest="+((StateVertex)target).getName());
+                System.out.println("classifyEdge - TREE: source="+source.toString()+"; dest="+target.toString());
                 results.getTreeEdges().add(edge);
             }
         }
@@ -125,9 +123,7 @@ public class GraphProcessor {
      */
     public void validate(Collection verticies, GraphIterator nav) throws GraphException {
         // do the basics
-        dfsResults = dfs(verticies, nav);
-        topological = topologicalSort(dfsResults);
-        sccResults = dfs(topological, new ReverseGraphIterator(nav));
+        init(verticies, nav);
 
         // TEST 1: nodes are have only one path
         StateVertex lastVertex = null;
@@ -142,6 +138,12 @@ public class GraphProcessor {
             }
             lastVertex = thisVertex;
         }
+    }
+
+    public void init(Collection verticies, GraphIterator nav) {
+        dfsResults = dfs(verticies, nav);
+        topological = topologicalSort(dfsResults);
+        sccResults = dfs(topological, new ReverseGraphIterator(nav));
     }
 
     public GraphResults getDfsResults() {

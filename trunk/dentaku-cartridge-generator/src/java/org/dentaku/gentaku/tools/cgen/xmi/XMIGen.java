@@ -47,11 +47,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class XMIGen implements ContainerComposer, Startable {
     private UUID uuid = new UUID();
     private Document schemaDoc;
-    private Set visited;
+    private Set visited = new HashSet();
     private final Map typeCache = new HashMap();
 
     public XMIGen() {
@@ -90,8 +91,13 @@ public class XMIGen implements ContainerComposer, Startable {
                 }
             });
 
-            String rootPath = ((Element) Util.selectSingleNode(mappingDoc, "/mapping/element[location='root']")).attributeValue("path");
-            Document document = createXMIDoc(mappingDoc, schemaDoc, mappingDoc.getRootElement().attributeValue("tagNameBase"), rootPath);
+            String rootPath = ((Element) Util.selectSingleNode(mappingDoc, "/mapping/element[@location='root']")).attributeValue("path");
+            LocalDefaultElement rootNode = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, rootPath);
+
+            // create the location sets
+            createLocationSets(rootNode, "root", new Stack());
+
+            Document document = createXMIDoc(mappingDoc, schemaDoc, mappingDoc.getRootElement().attributeValue("tagNameBase"), rootNode);
 
             File file = new File(Utils.getRootDir() + "/dentaku-cartridge-generator/target/xmi");
             file.mkdirs();
@@ -103,7 +109,47 @@ public class XMIGen implements ContainerComposer, Startable {
         }
     }
 
-    private Document createXMIDoc(Document mappingDoc, Document jdoDoc, String packageName, String rootPath) {
+    private void createLocationSets(LocalDefaultElement schemaDoc, String location, Stack stack) {
+        boolean pushed = false;
+        if (schemaDoc.getName().equals("element")) {
+            String ref = schemaDoc.attributeValue("ref");
+            if (ref != null) {
+                schemaDoc = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, "/xs:schema/xs:element[@name='" + ref + "']");
+            }
+
+            if (stack.contains(schemaDoc)) {
+                return;
+            }
+
+            stack.push(schemaDoc);
+            pushed = true;
+
+            Element annotation = schemaDoc.getAnnotation();
+            if (annotation != null) {
+                String candidateLocation = annotation.attributeValue("location");
+                if (candidateLocation != null) {
+                    location = candidateLocation;
+                }
+            }
+            Set s = schemaDoc.getLocations();
+            if (s == null) {
+                s = new HashSet();
+                schemaDoc.setLocations(s);
+            }
+            s.add(location);
+        }
+
+        for (Iterator elementIter = schemaDoc.elements().iterator(); elementIter.hasNext();) {
+            LocalDefaultElement element = (LocalDefaultElement) elementIter.next();
+            createLocationSets(element, location, stack);
+        }
+
+        if (pushed) {
+            stack.pop();
+        }
+    }
+
+    private Document createXMIDoc(Document mappingDoc, Document jdoDoc, String packageName, LocalDefaultElement rootNode) {
         Document document = DocumentHelper.createDocument();
         Branch content = createXMIDocument(document);
 
@@ -146,7 +192,7 @@ public class XMIGen implements ContainerComposer, Startable {
         Element enumeration = createIdentifiedEmptyElement(scratchPackage, "Enumeration").addAttribute("name", packageName).addElement("UML:Enumeration.literal", "omg.org/UML/1.4");
 
         // this is the real work
-        generateTags(scratchPackage, jdoDoc, enumeration, rootPath, groupTagdef);
+        processNodeTags(rootNode, enumeration, scratchPackage, null, rootNode, groupTagdef, new String[0]);
 
         // finally, create the stereotypes that are defined in the mapping doc
         generateStereotypes(mappingDoc, scratchPackage, jdoDoc);
@@ -160,10 +206,10 @@ public class XMIGen implements ContainerComposer, Startable {
             Element s = (Element) it.next();
             Element stereotype = createIdentifiedEmptyElement(scratchPackage, "Stereotype").addAttribute("name", s.attributeValue("name"));
 
-            for (Iterator locationIter = Util.selectNodes(s.getParent(), "location").iterator(); locationIter.hasNext();) {
-                LocalDefaultElement element = (LocalDefaultElement) locationIter.next();
-                String location = mapLocationName((String) element.getText());
-                createTextElement(stereotype, "Stereotype.baseClass", location);
+            LocalDefaultElement stereotypedElement = (LocalDefaultElement)Util.selectSingleNode(schemaDoc, ((LocalDefaultElement) s.getParent()).attributeValue("path"));
+            for (Iterator locIter = stereotypedElement.getLocations().iterator(); locIter.hasNext();) {
+                String location = (String) locIter.next();
+                createTextElement(stereotype, "Stereotype.baseClass", mapLocationName(location));
             }
 
             Element se = s.getParent();
@@ -178,15 +224,6 @@ public class XMIGen implements ContainerComposer, Startable {
                 createTaggedValueDefinition(tag, xsdNode.attributeValue("name") + "." + attribute.attributeValue("name"), null, null, tagdefType, required); // todo documentation value from XSD
             }
         }
-    }
-
-    /**
-     * We want to generate tags for walk of the root and all referenced elements, grouped by global element name.
-     */
-    private void generateTags(Element tagPackage, Document jdoDoc, Element enumeration, String rootPath, Element groupTagdef) {
-        LocalDefaultElement elem = (LocalDefaultElement) Util.selectSingleNode(jdoDoc, rootPath);
-        visited = new HashSet();
-        processNodeTags(elem, enumeration, tagPackage, null, elem, groupTagdef, new String[0]);
     }
 
     private void processNodeTags(LocalDefaultElement xsdNode, Element enumeration, Element tagPackage, Element literal, LocalDefaultElement parentElement, Element groupTagdef, String[] locations) {
@@ -206,23 +243,13 @@ public class XMIGen implements ContainerComposer, Startable {
             literal = createIdentifiedEmptyElement(enumeration, "EnumerationLiteral").addAttribute("name", xsdNode.attributeValue("name"));
             parentElement = xsdNode;
 
-            Element annotation = xsdNode.getAnnotation();
-            locations = new String[0];
-            if (annotation != null) {
-                List locationElems = Util.selectNodes(annotation, "location");
-                locations = new String[locationElems.size()];
-                for (int i = 0; i < locations.length; i++) {
-                    LocalDefaultElement o = (LocalDefaultElement) locationElems.get(i);
-                    locations[i] = mapLocationName((String) o.getText());
-                }
-                createGroupedTagdef(tagPackage, parentElement.attributeValue("name"), locations, "String", false, literal, groupTagdef);
-            }
+            locations = (String[])xsdNode.getLocations().toArray(new String[xsdNode.getLocations().size()]);
+            createGroupedTagdef(tagPackage, parentElement.attributeValue("name"), locations, "String", false, literal, groupTagdef);
         }
 
         for (Iterator it = xsdNode.elementIterator(); it.hasNext();) {
             LocalDefaultElement thisElem = (LocalDefaultElement) it.next();
             if (thisElem.getName().equals("attribute")) {
-//                Element enum = (Element) enumeration.attributes().get(enumeration.attributeCount() - 1);
                 if (locations.length > 0) {
                     String tagdefType = getType(thisElem, tagPackage);
                     boolean required = thisElem.attributeValue("use") != null && thisElem.attributeValue("use").equals("true");
@@ -354,7 +381,7 @@ public class XMIGen implements ContainerComposer, Startable {
         // add base classes
         if (baseClass != null) {
             for (int i = 0; i < baseClass.length; i++) {
-                String baseName = baseClass[i];
+                String baseName = mapLocationName(baseClass[i]);
                 modelPackage.addElement("TagDefinition.baseClass").setText(baseName);
             }
         }

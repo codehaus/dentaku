@@ -23,16 +23,17 @@ import org.dentaku.gentaku.cartridge.GenerationException;
 import org.dentaku.gentaku.cartridge.GeneratorSupport;
 import org.dentaku.gentaku.tools.cgen.visitor.LocalDefaultElement;
 import org.dom4j.Branch;
-import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.omg.uml.UmlPackage;
-import org.omg.uml.foundation.core.AssociationEnd;
 import org.omg.uml.foundation.core.Attribute;
-import org.omg.uml.foundation.core.CorePackage;
 import org.omg.uml.foundation.core.ModelElement;
 import org.omg.uml.foundation.core.Stereotype;
 import org.omg.uml.foundation.core.TagDefinition;
 import org.omg.uml.foundation.core.TaggedValue;
 import org.omg.uml.foundation.core.UmlClass;
+import org.omg.uml.foundation.core.CorePackage;
+import org.omg.uml.foundation.core.AssociationEnd;
+import org.omg.uml.foundation.core.Classifier;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -59,7 +60,7 @@ public class EntityGenerator extends GeneratorSupport {
         for (Iterator assIter = classifer.getTargetEnds().iterator(); assIter.hasNext();) {
             AssociationEnd end = (AssociationEnd) assIter.next();
             if (end.isNavigable()) {
-                ClassifierImpl endClass = (ClassifierImpl) end.getParticipant();
+                ClassifierImpl endClass = (ClassifierImpl)end.getParticipant();
                 Attribute newAttr = core.getAttribute().createAttribute();
                 newAttr.setName(endClass.getName());
                 newAttr.setType(endClass);
