@@ -11,7 +11,7 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-foundation</artifactId>
-            <version>0.6</version>
+            <version>0.7</version>
             <type>ejb</type>
             <properties>
                 <ear.bundle>true</ear.bundle>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
-            <version>0.6</version>
+            <version>0.8</version>
             <type>jar</type>
             <properties>
                 <ear.bundle>true</ear.bundle>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-web</artifactId>
-            <version>0.6</version>
+            <version>0.7</version>
             <type>war</type>
             <properties>
                 <ear.bundle>true</ear.bundle>

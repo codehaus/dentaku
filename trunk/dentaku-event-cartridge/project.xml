@@ -1,7 +1,7 @@
 <project>
     <pomVersion>3</pomVersion>
     <groupId>dentaku</groupId>
-    <currentVersion>0.7</currentVersion>
+    <currentVersion>0.8</currentVersion>
     <id>dentaku-event-cartridge</id>
     <artifactId>dentaku-event-cartridge</artifactId>
     <name>Gentaku Event Cartridge</name>
@@ -9,13 +9,13 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>dentaku-services</artifactId>
-            <version>0.7</version>
+            <version>0.8</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>gentaku</artifactId>
-            <version>0.7</version>
+            <version>0.8</version>
         </dependency>
         <dependency>
             <groupId>generama</groupId>
