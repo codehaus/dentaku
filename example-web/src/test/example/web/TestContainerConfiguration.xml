@@ -11,8 +11,8 @@
             <implementation>org.dentaku.services.persistence.hibernate.NullSessionProvider</implementation>
         </component>
         <component>
-            <role>org.dentaku.services.persistence.PersistenceManager</role>
-            <implementation>org.dentaku.services.persistence.synthetic.SyntheticPersistenceManager</implementation>
+            <role>org.dentaku.services.persistence.PersistenceManagerStorage</role>
+            <implementation>org.dentaku.services.persistence.synthetic.SyntheticPersistenceManagerStorage</implementation>
             <requirements>
                 <requirement>
                     <role>org.dentaku.services.persistence.PersistenceFactory</role>
