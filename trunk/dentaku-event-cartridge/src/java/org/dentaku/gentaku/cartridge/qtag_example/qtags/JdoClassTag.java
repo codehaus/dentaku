@@ -14,11 +14,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.dentaku.gentaku.cartridge.persistence.qtags;
+package org.dentaku.gentaku.cartridge.qtag_example.qtags;
 
-import com.thoughtworks.qdox.model.DocletTag;
-import org.dentaku.gentaku.cartridge.persistence.qtags.parameter.Name;
 import org.dentaku.gentaku.GentakuTag;
+import org.dentaku.gentaku.cartridge.qtag_example.qtags.parameter.Name;
+import com.thoughtworks.qdox.model.DocletTag;
 
 /**
  * Declare a persistent class
@@ -27,7 +27,7 @@ import org.dentaku.gentaku.GentakuTag;
  * @qtags.once
  */
 
-public interface JdoClassTag extends GentakuTag,
+public interface JdoClassTag extends DocletTag,
         Name  {
 
     /**

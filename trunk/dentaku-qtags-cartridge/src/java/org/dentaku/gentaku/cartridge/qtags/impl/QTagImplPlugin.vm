@@ -6,7 +6,7 @@ public class ${plugin.getDestinationClassname($class)} extends org.dentaku.genta
     private org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl entity;
     private static final java.util.List ALLOWED_PARAMETERS = java.util.Arrays.asList( new String[] {
    #foreach($method in ${class.getMethods(true)})
-        #if(!$method.parentClass.fullyQualifiedName.equals('com.thoughtworks.qdox.model.DocletTag'))
+        #if(!$method.parentClass.fullyQualifiedName.equals('org.dentaku.gentaku.GentakuTag'))
             "${plugin.getQTagUtils().getDocletTagParameterName($method)}",
         #end
     #end
@@ -19,13 +19,13 @@ public class ${plugin.getDestinationClassname($class)} extends org.dentaku.genta
         #end
         ""
     });
-    public ${plugin.getDestinationClassname($class)}(String name, String value, org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl entity, int lineNumber) {
+    public ${plugin.getDestinationClassname($class)}(String name, String value, com.thoughtworks.qdox.model.AbstractJavaEntity entity, int lineNumber) {
         super(name, value, entity, lineNumber);
         this.entity = entity;
     }
 
 #foreach($method in ${class.getMethods(true)})
-    #if(!$method.parentClass.fullyQualifiedName.equals('com.thoughtworks.qdox.model.DocletTag'))
+    #if(!$method.parentClass.fullyQualifiedName.equals('org.dentaku.gentaku.GentakuTag'))
     #set( $checkParameters = 'true' ) 
     public $method.getDeclarationSignature(true) {
         #if($method.getTagByName("qtags.required"))

@@ -1,12 +1,10 @@
 package org.dentaku.gentaku.cartridge.qtags.impl;
 
-import org.dentaku.services.metadata.QDoxMetadataProvider;
-import org.generama.Plugin;
+import com.thoughtworks.qdox.model.JavaClass;
+import org.dentaku.gentaku.GentakuTag;
 import org.generama.QDoxCapableMetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
-
-import java.util.Collection;
 
 /**
  * An empty subclass to get VelocityTemplateEngine to grab our configuration instead
@@ -15,5 +13,14 @@ import java.util.Collection;
 public class QTagLibraryPlugin extends org.xdoclet.plugin.qtags.impl.QTagLibraryPlugin {
     public QTagLibraryPlugin(VelocityTemplateEngine velocityTemplateEngine, QDoxCapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(velocityTemplateEngine, metadataProvider, writerMapper);
+    }
+
+    public boolean shouldGenerate(Object metadata) {
+        JavaClass javaClass = (JavaClass) metadata;
+        boolean isTagClass = javaClass.isA(GentakuTag.class.getName());
+
+        boolean enabled = javaClass.getTagByName("qtags.ignore") == null;
+
+        return javaClass.isInterface() && isTagClass && enabled;
     }
 }

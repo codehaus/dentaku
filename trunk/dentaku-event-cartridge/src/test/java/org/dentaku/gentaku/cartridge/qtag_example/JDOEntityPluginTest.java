@@ -14,10 +14,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.dentaku.gentaku.cartridge.jdo;
+package org.dentaku.gentaku.cartridge.qtag_example;
 
 import org.dentaku.gentaku.cartridge.AbstractXMLGeneratingPluginTestBase;
-import org.dentaku.gentaku.cartridge.persistence.JDOEntityPlugin;
+import org.dentaku.gentaku.cartridge.qtag_example.JDOEntityPlugin;
 import org.dentaku.services.metadata.QDoxMetadataProvider;
 import org.generama.JellyTemplateEngine;
 import org.generama.MetadataProvider;
