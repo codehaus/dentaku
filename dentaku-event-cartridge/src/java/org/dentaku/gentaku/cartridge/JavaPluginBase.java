@@ -1,6 +1,6 @@
 /*
- * EntityBase.java
- * Copyright 2002-2004 Bill2, Inc.
+ * JavaPluginBase.java
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,13 @@
  */
 package org.dentaku.gentaku.cartridge;
 
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
-import org.dentaku.services.metadata.SimpleOOHelper;
-import org.dentaku.services.metadata.StringUtilsHelper;
-import org.dentaku.services.metadata.proxy.PClassifier;
 import org.generama.MetadataProvider;
 import org.generama.Plugin;
 import org.generama.TemplateEngine;
 import org.generama.WriterMapper;
 import org.generama.defaults.FileWriterMapper;
 import org.generama.defaults.JavaGeneratingPlugin;
-import org.omg.uml.foundation.core.Classifier;
-import org.omg.uml.foundation.core.ModelElement;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,27 +30,29 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public abstract class JavaPluginBase extends JavaGeneratingPlugin {
     private boolean createonly;
-    private List stereotypes;
-    private SimpleOOHelper simpleOOHelper;
-    protected Map stereotypeCache;
+
+    public Map getContextObjects() {
+        Map result = super.getContextObjects();
+        result.put("class", result.get("metadata"));
+        return result;
+    }
+
+    protected List stereotypes;
 
     public JavaPluginBase(TemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, new CheckFileWriterMapper(writerMapper));
         setMultioutput(true);
-        JMIUMLMetadataProvider mp = (JMIUMLMetadataProvider) getMetadataProvider();
         stereotypes = new ArrayList();
-        stereotypeCache = new HashMap();
-        simpleOOHelper = SimpleOOHelper.getInstance(mp.getModel(), this);
     }
 
     public boolean shouldGenerate(Object metadata) {
@@ -64,11 +61,11 @@ public abstract class JavaPluginBase extends JavaGeneratingPlugin {
             String className = getClass().getName();
             String pluginName = className.substring(className.lastIndexOf(".") + 1);
             stereotypeName = pluginName.substring(0, pluginName.indexOf("Plugin"));
-            return matchesStereotype(metadata, stereotypeName);
+            return matchesStereotype((ModelElementImpl)metadata, stereotypeName);
         } else {
             for (Iterator it = stereotypes.iterator(); it.hasNext();) {
                 stereotypeName = (String) it.next();
-                if (matchesStereotype(metadata, stereotypeName)) {
+                if (matchesStereotype((ModelElementImpl)metadata, stereotypeName)) {
                     return true;
                 }
             }
@@ -76,36 +73,22 @@ public abstract class JavaPluginBase extends JavaGeneratingPlugin {
         }
     }
 
-    public Collection getStereotypeNames(Object object) {
-        Collection names = (Collection) stereotypeCache.get(object);
-        if (names == null) {
-            if ((object == null) || !(object instanceof ModelElement)) {
-                return Collections.EMPTY_LIST;
-            }
-            names = new ArrayList();
-            Collection stereotypes = ((ModelElement) object).getStereotype();
-            for (Iterator i = stereotypes.iterator(); i.hasNext();) {
-                ModelElement stereotype = (ModelElement) i.next();
-                names.add(stereotype.getName());
-            }
-            stereotypeCache.put(object, names);
+    public static boolean matchesStereotype(ModelElementImpl object, String stereotype) {
+        boolean b = false;
+        if (object != null) {
+            Collection names = object.getStereotypeNames();
+            b = names.contains(stereotype);
         }
-        return names;
-    }
-
-    public boolean matchesStereotype(Object object, String stereotype) {
-        Collection names = getStereotypeNames(object);
-        boolean b = names.contains(stereotype);
         return b;
     }
 
-    protected void putMetadata(Map m, Object meta) {
-        if (meta instanceof Classifier) {
-            m.put("metadata", PClassifier.newInstance(simpleOOHelper, (Classifier) meta));
-        } else {
-            super.putMetadata(m, meta);
-        }
-    }
+//    protected void putMetadata(Map m, Object meta) {
+//        if (meta instanceof Classifier) {
+//            m.put("metadata", PClassifier.newInstance((Classifier) meta, model));
+//        } else {
+//            super.putMetadata(m, meta);
+//        }
+//    }
 
 //    public URL getResourceURLRelativeToThisPackage(Class clazz, String resourceName) {
 //        String className = clazz.getName();
@@ -199,11 +182,63 @@ public abstract class JavaPluginBase extends JavaGeneratingPlugin {
         }
     }
 
-    public void start() {
-        Map context = getContextObjects();
-        context.put("transform", simpleOOHelper);
-        context.put("str", new StringUtilsHelper());
-        super.start();    //To change body of overridden methods use File | Settings | File Templates.
+    /**
+     * <p>Converts a string following the Java naming conventions to a
+     * database attribute name.  For example convert customerName to
+     * CUSTOMER_NAME.</p>
+     *
+     * @param s         string to convert
+     * @param separator character used to separate words
+     * @return string converted to database attribute format
+     */
+    public static String toDatabaseAttributeName(String s, String separator) {
+        StringBuffer databaseAttributeName = new StringBuffer();
+        StringCharacterIterator iter = new StringCharacterIterator(lowerCaseFirstLetter(s));
+        for (char character = iter.first(); character != CharacterIterator.DONE; character = iter.next()) {
+            if (Character.isUpperCase(character)) {
+                databaseAttributeName.append(separator);
+            }
+            character = Character.toUpperCase(character);
+            databaseAttributeName.append(character);
+        }
+        return databaseAttributeName.toString();
     }
+
+    public String fromDatabaseAttributeName(String s, String separator) {
+        if (s == null) {
+            return null;
+        }
+        String tok[] = s.split(separator);
+        StringBuffer databaseAttributeName = new StringBuffer();
+        databaseAttributeName.append(lowerCaseFirstLetter(tok[0]));
+        for (int i = 1; i < tok.length; i++) {
+            databaseAttributeName.append(upperCaseFirstLetter(tok[i]));
+        }
+        return databaseAttributeName.toString();
+    }
+
+   /**
+     * <p>Removes the capitalization of a string. That is, it returns
+     * "hamburgerStall" when receiving a "HamburgerStall".</p>
+     *
+     * @param s the input string
+     * @return String the output string.
+     */
+    public static String lowerCaseFirstLetter(String s) {
+        if (s != null && s.length() > 0) {
+            return s.substring(0, 1).toLowerCase() + s.substring(1);
+        } else {
+            return s;
+        }
+    }
+
+    public String upperCaseFirstLetter(String s) {
+        if (s != null && s.length() > 0) {
+            return s.substring(0, 1).toUpperCase() + s.substring(1);
+        } else {
+            return s;
+        }
+    }
+
 
 }

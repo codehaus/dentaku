@@ -2,10 +2,10 @@
 <j:jelly xmlns:j="jelly:core" xmlns:jxml="jelly:xml" xmlns:d="jelly:define" xmlns:x="jelly:org.xdoclet.plugin.web.jelly.XdocletTaglib">
     <ruleSet xmlns="http://drools.org/rules" xmlns:java="http://drools.org/semantics/java">
         <j:forEach var="object" items="${metadata}">
-            <j:if test="${plugin.umlUtils.matchesStereotype(object, 'Event')}">
-                <rule name="${plugin.getDestinationClassname(object)}Rule">
+            <j:if test="${JavaPluginBase.matchesStereotype(object, 'Event')}">
+                <rule name="${object.name}Rule">
                     <parameter identifier="event">
-                        <java:class>${plugin.getDestinationFullyQualifiedClassName(object)}</java:class>
+                        <java:class>${object.fullyQualifiedName}</java:class>
                     </parameter>
                     <java:condition>1 == 1</java:condition>
                     <java:consequence>import org.dentaku.foundation.orphan.WerkflowHelper; WerkflowHelper.getInstance().dispatch(event);</java:consequence>

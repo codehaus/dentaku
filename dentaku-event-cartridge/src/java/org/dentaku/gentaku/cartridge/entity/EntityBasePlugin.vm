@@ -1,55 +1,18 @@
-/*
+/**
  * $dontedit
  */
-#set( $class = $metadata )
-#set ($packagename = $transform.findPackageName(${class.package}))
-package $packagename;
-##
-#macro ( generateDocumentation $item $indent)
-#foreach ( $tgv in $item.taggedValues )
-#if ($tgv.tag == "gentaku.persistence.SQLTableName")
-#set ( $tablename = $tgv.value )
-#elseif ($tgv.tag == "documentation")
-#set ($paras = $transform.formatHTMLStringAsParagraphs($tgv.value))
-#foreach ( $par in $paras )
-${indent}*
-${indent}* <p>
-#foreach ( $line in $par.lines )
-${indent}* $line
-#end
-${indent}* </p>
-#end
-#end
-#end
-#end
-##
-#set ($primKey = $transform.getPrimaryKeyAttribute($class))
-#set ($primKeyTypeName = $transform.findFullyQualifiedName($primKey.type))
-##
-#foreach ( $dep in $class.dependencies )
-    #if ($transform.getStereotype($dep.id) == "Exception")
-        #set ($class2 = $transform.findClassById($dep.targetType))
-        #set ($defaultException = $transform.findFullyQualifiedName($class2))
-    #end
-#end
+package ${metadata.packageName};
+
+#set ($superclass = $metadata.javaGeneralization)
 
 /**
-#generateDocumentation ($class " ")
- *
-/**
-#foreach ( $tgv in $class.taggedValues )
-#if ($tgv.tag != "documentation")
-#if ($tgv.tag == "---")
-    #set ($tag = "")
+#if ($superclass)
+  * @hibernate.subclass discriminator-value="${metadata.name}"
 #else
-    #set ($tag = $tgv.tag)
+  * @hibernate.class table="${metadata.name}"
 #end
- * $tag    $tgv.value
-#end
-#end
- */
+  */
 public abstract class ${class.name}Base
-#set ($superclass = $class.javaGeneralization)
 #if($superclass)
         extends $superclass.name
 #else
@@ -73,45 +36,34 @@ public abstract class ${class.name}Base
 
     // --------------- attributes ---------------------
 #foreach ( $att in $class.attributes )
-#set ($atttypename = $transform.findFullyQualifiedName($att.type))
-#set ($attcolumnname = $str.toDatabaseAttributeName(${att.name}, "_"))
-#foreach ( $tgv in $att.taggedValues )
-#if ( $tgv.tag == "gentaku.persistence.SQLColumnName" )
-#set ( $attcolumnname = $tgv.value )
-#end
-#end
+#set ($atttypename = $att.type.fullyQualifiedName)
+#set ($worktypename = $atttypename)
+    protected $atttypename ${att.name};
 
    /**
-#generateDocumentation ($att "    ")
     *
-#set ($attjdbctype   = $transform.findAttributeJDBCType($att))
-#set ($attsqltype    = $transform.findAttributeSQLType($att))
-#if ($transform.getStereotype($att.id) == "PrimaryKey")
-#set ($attname =  "id")
-#set ($atttypename = "java.lang.Object")
-#foreach ( $tgv in $att.taggedValues )
-#if ($tgv.tag == "gentaku.sequence.name")
-    * @hibernate.generator-param name="sequence" value="$tgv.value"
-#end
-#end
-    * @hibernate.id generator-class="native" type="$transform.findFullyQualifiedName($att.type)"
+#if ($plugin.matchesStereotype($att, "PrimaryKey"))
+    * @hibernate.id generator-class="native"
+#set ($worktypename = "Object")
 #else
-#set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
     * @hibernate.property
 #end
-    *     column="$attcolumnname"
-    * @hibernate.column name="$attcolumnname" sql-type="$attsqltype"
+    *     column="$att.databaseColumnName"
+    * @hibernate.column name="$att.databaseColumnName" sql-type="$att.attributeSQLType"
     */
-    public $atttypename get${str.upperCaseFirstLetter(${attname})}()
+    public $worktypename get${plugin.upperCaseFirstLetter(${att.name})}()
     {
-        return this.${attname};
+        return this.${att.name};
     }
 
-    public void set${str.upperCaseFirstLetter(${attname})}(${atttypename} newValue)
+    public void set${plugin.upperCaseFirstLetter(${att.name})}($worktypename newValue)
     {
-        this.${attname} = newValue;
+#if ($worktypename != $atttypename )
+        this.${att.name} = ($atttypename)newValue;
+#else
+        this.${att.name} = newValue;
+#end
     }
-    protected $atttypename ${attname};
 
 
 #end
@@ -122,27 +74,24 @@ public abstract class ${class.name}Base
 #set ($suffix = "_FK")
 #foreach ( $assoc in $class.associationLinks )
 #set ($foreignKeyColumn = "")
-    #if ($transform.getStereotype($assoc) == "EagerLoading")
+    #if ($plugin.matchesStereotype($assoc, "EagerLoading"))
       #set ($lazy = "false")
     #else
       #set ($lazy = "true")
     #end
-    #set ($adata = $transform.getAssociationData($assoc))
-    #set ($sourcetype = $adata.source.type)
-    #set ($targettype = $adata.target.type)
-    #set ($targettypename = $transform.findFullyQualifiedName($targettype))
-#if ($adata.target.navigable == "true")
+    #set ($sourcetype = $assoc.source.participant)
+    #set ($targettype = $assoc.target.participant)
+    #set ($targettypename = $targettype.fullyQualifiedName)
+#if ($assoc.target.navigable == true)
    /**
-#generateDocumentation ($adata.target.end "    ")
-    * multiplicity:     $adata.multiplicities
-    * source navigable: $adata.source.navigable
-    * target navigable: $adata.target.navigable
+    * source navigable: $assoc.source.navigable
+    * target navigable: $assoc.target.navigable
     *
-#if ($adata.isOne2Many())
+#if ($assoc.isOne2Many())
 #set ( $order = "" )
 #set ( $tgv = "" )
 #set ( $foreignKeyColumn = "" )
-#foreach ( $tgv in $adata.target.taggedValues )
+#foreach ( $tgv in $assoc.target.taggedValues )
 #if ($tgv.tag == "gentaku.persistence.SQLFKColumnName")
 #set ( $foreignKeyColumn = $tgv.value )
 #elseif ($tgv.tag == "gentaku.persistence.HibernateInverse")
@@ -152,12 +101,10 @@ public abstract class ${class.name}Base
 #end
 #end
 #if ( $foreignKeyColumn == "" )
-#set($foreignKeyColumn = "${str.toDatabaseAttributeName(${adata.source.roleName}, $sep)}$suffix")
+#set($foreignKeyColumn = "${plugin.toDatabaseAttributeName(${assoc.source.roleName}, $sep)}$suffix")
 #end
-
-#set ($foreignKeyAtt = $transform.getPrimaryKeyAttribute($sourcetype))
     * @hibernate.set lazy="$lazy"
-#if ($inverse != "")
+#if ($inverse)
                 inverse="$inverse"
 #end
 #if ($order != "")
@@ -166,55 +113,55 @@ public abstract class ${class.name}Base
     * @hibernate.key column="$foreignKeyColumn"
     * @hibernate.one-to-many class="$targettypename"
     */
-    public java.util.Collection get${str.upperCaseFirstLetter($adata.target.roleName)}()
+    public java.util.Collection get${plugin.upperCaseFirstLetter($assoc.target.roleName)}()
     {
-        return (this.${adata.target.roleName});
+        return (this.${assoc.target.roleName});
     }
 
-    public void set${str.upperCaseFirstLetter($adata.target.roleName)}(java.util.Collection ${adata.target.roleName})
+    public void set${plugin.upperCaseFirstLetter($assoc.target.roleName)}(java.util.Collection ${assoc.target.roleName})
     {
-        this.${adata.target.roleName} = ${adata.target.roleName};
+        this.${assoc.target.roleName} = ${assoc.target.roleName};
     }
 
-    private java.util.Collection ${adata.target.roleName};
+    private java.util.Collection ${assoc.target.roleName};
 
 #end
-#if ($adata.isMany2Many())
+#if ($assoc.isMany2Many())
 ##
-#set ($sourceKeyAtt  = $str.upperCaseFirstLetter(${transform.getPrimaryKeyAttribute($sourcetype).name}))
-#set ($sourceColumn  = "${adata.source.roleName}$sourceKeyAtt")
-#set ($sourceColumn  = ${str.toDatabaseAttributeName($sourceColumn, $sep)})
+#set ($sourceKeyAtt  = $plugin.upperCaseFirstLetter(${transform.getPrimaryKeyAttribute($sourcetype).name}))
+#set ($sourceColumn  = "${assoc.source.roleName}$sourceKeyAtt")
+#set ($sourceColumn  = ${plugin.toDatabaseAttributeName($sourceColumn, $sep)})
 ##
-#set ($targetKeyAtt  = $str.upperCaseFirstLetter(${transform.getPrimaryKeyAttribute($targettype).name}))
-#set ($targetColumn  = "${adata.target.roleName}$targetKeyAtt")
-#set ($targetColumn  = ${str.toDatabaseAttributeName($targetColumn, $sep)})
+#set ($targetKeyAtt  = $plugin.upperCaseFirstLetter(${transform.getPrimaryKeyAttribute($targettype).name}))
+#set ($targetColumn  = "${assoc.target.roleName}$targetKeyAtt")
+#set ($targetColumn  = ${plugin.toDatabaseAttributeName($targetColumn, $sep)})
 ##
-#set ($joinTableName = ${str.toRelationName($sourceColumn, $targetColumn, $sep)})
+#set ($joinTableName = ${plugin.toRelationName($sourceColumn, $targetColumn, $sep)})
 ##
     * @hibernate.set lazy="$lazy" table="${joinTableName}"
     * @hibernate.key column="$sourceColumn"
     * @hibernate.many-to-many column="$targetColumn" class="$targettypename"
     */
-    public java.util.Collection get${str.upperCaseFirstLetter($adata.target.roleName)}()
+    public java.util.Collection get${plugin.upperCaseFirstLetter($assoc.target.roleName)}()
     {
-        return (this.${adata.target.roleName});
+        return (this.${assoc.target.roleName});
     }
 
-    public void set${str.upperCaseFirstLetter($adata.target.roleName)}(java.util.Collection ${adata.target.roleName})
+    public void set${plugin.upperCaseFirstLetter($assoc.target.roleName)}(java.util.Collection ${assoc.target.roleName})
     {
-        this.${adata.target.roleName} = ${adata.target.roleName};
+        this.${assoc.target.roleName} = ${assoc.target.roleName};
     }
 
-    private java.util.Collection ${adata.target.roleName};
+    private java.util.Collection ${assoc.target.roleName};
 
 #end
-#if ($adata.isOne2One() || $adata.isMany2One())
-#if ($adata.isMany2One())
+#if ($assoc.isOne2One() || $assoc.isMany2One())
+#if ($assoc.isMany2One())
     *   @hibernate.many-to-one
-#elseif ($adata.isOne2One())
+#elseif ($assoc.isOne2One())
     *   @hibernate.one-to-one
 #end
-#foreach ( $tgv in $adata.source.taggedValues )
+#foreach ( $tgv in $assoc.source.taggedValues )
 #if ($tgv.tag == "gentaku.persistence.SQLFKColumnName")
 #set ( $foreignKeyColumn = $tgv.value )
 #elseif ($tgv.tag == "gentaku.persistence.HibernateInverse")
@@ -222,23 +169,23 @@ public abstract class ${class.name}Base
 #end
 #end
 #if ( $foreignKeyColumn == "" )
-#set($foreignKeyColumn = "${str.toDatabaseAttributeName(${adata.target.roleName}, $sep)}$suffix")
+#set($foreignKeyColumn = "${plugin.toDatabaseAttributeName(${assoc.target.roleName}, $sep)}$suffix")
 #end
-#if ($adata.isMany2One())
+#if ($assoc.isMany2One())
     *       column="${foreignKeyColumn}"
 #end
     */
-    public ${targettypename} get${str.upperCaseFirstLetter($adata.target.roleName)}()
+    public ${targettypename} get${plugin.upperCaseFirstLetter($assoc.target.roleName)}()
     {
-        return this.${adata.target.roleName};
+        return this.${assoc.target.roleName};
     }
 
-    public void set${str.upperCaseFirstLetter($adata.target.roleName)}(${targettypename} ${adata.target.roleName})
+    public void set${plugin.upperCaseFirstLetter($assoc.target.roleName)}(${targettypename} ${assoc.target.roleName})
     {
-        this.${adata.target.roleName} = ${adata.target.roleName};
+        this.${assoc.target.roleName} = ${assoc.target.roleName};
     }
 
-    private ${targettypename} ${adata.target.roleName};
+    private ${targettypename} ${assoc.target.roleName};
 
 #end
 
@@ -249,18 +196,17 @@ public abstract class ${class.name}Base
     // ---------------- business methods  ----------------------
 
 #foreach ( $op in $class.operations)
-#if ($transform.getStereotype($op.id) != "FinderMethod" && $transform.getStereotype($op.id) != "FilterMethod")
+#if (!$plugin.matchesStereotype($op, "FinderMethod") && !$plugin.matchesStereotype($op, "FilterMethod"))
    /**
-#generateDocumentation ($op "    ")
     *
     */
-#set ($msig = $transform.getOperationSignature($op))
-#set ($returntype = $transform.findFullyQualifiedName($op.getType()))
+#set ($msig = $op.signature)
+#set ($returntype = $op.returnType.fullyQualifiedName)
 #if ($defaultException)
-    $op.visibility abstract $returntype ${msig}
+    $op.visibilityName abstract $returntype ${msig}
         throws $defaultException;
 #else
-    $op.visibility abstract $returntype ${msig};
+    $op.visibilityName abstract $returntype ${msig};
 #end
 #end
 #end
@@ -278,23 +224,22 @@ public abstract class ${class.name}Base
             zeroObject.setId(new Long(0));
             // attributes
 #foreach ( $att in $class.attributes )
-#set ($atttypename = $transform.findFullyQualifiedName($att.type))
-#set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
-#if ( $atttypename == "java.lang.String" && $transform.getStereotype($att.id) != "PrimaryKey" )
-            zeroObject.set${str.upperCaseFirstLetter(${attname})}("${att.name}");
-#elseif ($atttypename == "java.math.BigDecimal" && $transform.getStereotype($att.id) != "PrimaryKey" )
-            zeroObject.set${str.upperCaseFirstLetter(${attname})}(new java.math.BigDecimal(0));
+#set ($atttypename = $att.type.fullyQualifiedName)
+#set ($attname =  ${plugin.fromDatabaseAttributeName(${att.name}, "_")})
+#if ( $atttypename == "java.lang.String" && !${plugin.matchesStereotype($att.id, "PrimaryKey")} )
+            zeroObject.set${plugin.upperCaseFirstLetter(${attname})}("${att.name}");
+#elseif ($atttypename == "java.math.BigDecimal" && !$plugin.matchesStereotype($att.id, "PrimaryKey"))
+            zeroObject.set${plugin.upperCaseFirstLetter(${attname})}(new java.math.BigDecimal(0));
 #end
 #end
             // relations
 #foreach ( $assoc in $class.associationLinks )
-#set ($adata = $transform.getAssociationData($assoc))
-#if ($adata.target.navigable == "true")
-#set ($targettype = $adata.target.type)
-#set ($targettypename = $transform.findFullyQualifiedName($targettype))
-#if ($adata.isOne2Many())
-#set ($attname =  ${str.fromDatabaseAttributeName(${adata.target.roleName}, "_")})
-            zeroObject.set${str.upperCaseFirstLetter($attname)}(new java.util.ArrayList(0));
+#if ($assoc.target.navigable == true)
+#set ($targettype = $assoc.target.type)
+#set ($targettypename = $targettype.fullyQualifiedName)
+#if ($assoc.isOne2Many())
+#set ($attname =  ${plugin.fromDatabaseAttributeName(${assoc.target.roleName}, "_")})
+            zeroObject.set${plugin.upperCaseFirstLetter($attname)}(new java.util.ArrayList(0));
 #end
 #end
 #end
@@ -306,25 +251,24 @@ public abstract class ${class.name}Base
 #macro( body $obj $meth)
             // attributes
 #foreach ( $att in $class.attributes )
-#set ($atttypename = $transform.findFullyQualifiedName($att.type))
-#set ($attname =  ${str.fromDatabaseAttributeName(${att.name}, "_")})
-#if ( $atttypename == "java.lang.String" && $transform.getStereotype($att.id) != "PrimaryKey" )
-            ${obj}.set${str.upperCaseFirstLetter(${attname})}("${att.name}");
-#elseif ($atttypename == "java.math.BigDecimal" && $transform.getStereotype($att.id) != "PrimaryKey" )
-            ${obj}.set${str.upperCaseFirstLetter(${attname})}(new java.math.BigDecimal(0));
+#set ($atttypename = $att.type.fullyQualifiedName)
+#set ($attname =  ${plugin.fromDatabaseAttributeName(${att.name}, "_")})
+#if ( $atttypename == "java.lang.String" && !$plugin.matchesStereotype($att.id, "PrimaryKey"))
+            ${obj}.set${plugin.upperCaseFirstLetter(${attname})}("${att.name}");
+#elseif ($atttypename == "java.math.BigDecimal" && !$plugin.matchesStereotype($att.id, "PrimaryKey"))
+            ${obj}.set${plugin.upperCaseFirstLetter(${attname})}(new java.math.BigDecimal(0));
 #end
 #end
             // relations
 #foreach ( $assoc in $class.associationLinks )
-#set ($adata = $transform.getAssociationData($assoc))
-#if ($adata.target.navigable == "true")
-#set ($targettype = $adata.target.type)
-#set ($targettypename = $transform.findFullyQualifiedName($targettype))
-#set ($attname =  ${str.fromDatabaseAttributeName(${adata.target.roleName}, "_")})
-#if ($adata.isOne2Many())
-            ${obj}.set${str.upperCaseFirstLetter($attname)}(${targettypename}.${meth}());
-#elseif ($adata.isOne2One() || $adata.isMany2One())
-            ${obj}.set${str.upperCaseFirstLetter($attname)}((${targettypename})${targettypename}.getTestClassOne());
+#if ($assoc.target.navigable == true)
+#set ($targettypename = $assoc.target.participant.fullyQualifiedName)
+#set ($attname =  ${plugin.fromDatabaseAttributeName(${assoc.target.roleName}, "_")})
+#set ($foo = $assoc.isClass())
+#if ($assoc.isOne2Many())
+            ${obj}.set${plugin.upperCaseFirstLetter($attname)}(${targettypename}.${meth}());
+#elseif ($assoc.isOne2One() || $assoc.isMany2One())
+            ${obj}.set${plugin.upperCaseFirstLetter($attname)}((${targettypename})${targettypename}.getTestClassOne());
 #end
 #end
 #end

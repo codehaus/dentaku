@@ -1,6 +1,6 @@
 /*
- * EntityImplPlugin.java
- * Copyright 2002-2004 Bill2, Inc.
+ * EntityPlugin.java
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,32 @@
  */
 package org.dentaku.gentaku.cartridge.entity;
 
-import org.generama.MetadataProvider;
+import org.dentaku.gentaku.cartridge.JavaPluginBase;
+import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
-import org.dentaku.gentaku.cartridge.JavaPluginBase;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.HashMap;
 
 public class EntityPlugin extends JavaPluginBase {
-    public EntityPlugin(VelocityTemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
+    private JMICapableMetadataProvider metadataProvider;
+
+    public EntityPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
+        this.metadataProvider = metadataProvider;
         getStereotypes().add("Entity");
         setCreateonly(true);
         setMultioutput(true);
+    }
+
+    protected void populateContextMap(Map m) {
+        super.populateContextMap(m);
+        m.put("class", m.get("metadata"));
+    }
+
+    protected Collection getMetadata() {
+        return metadataProvider.getJMIMetadata();
     }
 }

@@ -1,6 +1,6 @@
 /*
  * PlexusEntityFactoryConfiguration.java
- * Copyright 2002-2004 Bill2, Inc.
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +16,24 @@
  */
 package org.dentaku.gentaku.cartridge.entity;
 
-import org.dentaku.gentaku.cartridge.UMLUtils;
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
-import org.dentaku.services.metadata.SimpleOOHelper;
+import org.dentaku.gentaku.cartridge.JavaPluginBase;
+import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.generama.JellyTemplateEngine;
 import org.generama.MetadataProvider;
 import org.generama.WriterMapper;
-import org.generama.defaults.JavaGeneratingPlugin;
+import org.generama.Plugin;
+import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
-public class PlexusEntityFactoryConfiguration extends JavaGeneratingPlugin {
-    protected UMLUtils umlUtils;
-    private List stereotypes = new ArrayList();
+public class PlexusEntityFactoryConfiguration extends Plugin {
+    private JMICapableMetadataProvider metadataProvider;
     private String configFilename = "org/dentaku/conf/persistence/factory.xml";
-    private SimpleOOHelper simpleOOHelper;
 
-    public PlexusEntityFactoryConfiguration(JellyTemplateEngine jellyTemplateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public PlexusEntityFactoryConfiguration(JellyTemplateEngine jellyTemplateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(jellyTemplateEngine, metadataProvider, writerMapper);
-        JMIUMLMetadataProvider mp = (JMIUMLMetadataProvider) getMetadataProvider();
-        simpleOOHelper = SimpleOOHelper.getInstance(mp.getModel(), this);
-        umlUtils = UMLUtils.getInstance((JMIUMLMetadataProvider)getMetadataProvider(), this);
+        this.metadataProvider = metadataProvider;
         setEncoding("UTF-8");
-        getStereotypes().add("Entity");
-        getStereotypes().add("SubtypeEntity");
     }
 
     /**
@@ -62,39 +53,12 @@ public class PlexusEntityFactoryConfiguration extends JavaGeneratingPlugin {
         configFilename = filename;
     }
 
+    protected Collection getMetadata() {
+        return metadataProvider.getJMIMetadata();
+    }
+
     public boolean shouldGenerate(Object metadata) {
-        String stereotypeName = null;
-        if (stereotypes.size() == 0) {
-            String className = getClass().getName();
-            String pluginName = className.substring(className.lastIndexOf(".") + 1);
-            stereotypeName = pluginName.substring(0, pluginName.indexOf("Plugin"));
-            return umlUtils.matchesStereotype(metadata, stereotypeName);
-        } else {
-            for (Iterator it = stereotypes.iterator(); it.hasNext();) {
-                stereotypeName = (String) it.next();
-                if (umlUtils.matchesStereotype(metadata, stereotypeName)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    public UMLUtils getUmlUtils() {
-        return umlUtils;
-    }
-
-    public List getStereotypes() {
-        return stereotypes;
-    }
-
-    public void setStereotypes(List stereotypes) {
-        this.stereotypes = stereotypes;
-    }
-
-    public void start() {
-        Map context = getContextObjects();
-        context.put("transform", simpleOOHelper);
-        super.start();
+        Collection stereotypes = ((ModelElementImpl) metadata).getStereotypeNames();
+        return stereotypes.contains("Entity") || stereotypes.contains("SubtypeEntity");
     }
 }

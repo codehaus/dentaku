@@ -1,6 +1,6 @@
 /*
  * StrutsFormPlugin.java
- * Copyright 2002-2004 Bill2, Inc.
+ * Copyright 2004-2004 Bill2, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,29 @@
  */
 package org.dentaku.gentaku.cartridge.event;
 
-import org.dentaku.services.metadata.JMIUMLMetadataProvider;
-import org.dentaku.gentaku.cartridge.UMLUtils;
-import org.generama.MetadataProvider;
+import org.dentaku.gentaku.cartridge.JavaPluginBase;
+import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.generama.VelocityTemplateEngine;
 import org.generama.WriterMapper;
-import org.generama.defaults.JavaGeneratingPlugin;
 
 import java.util.Collection;
+import java.util.Map;
 
-public class StrutsFormPlugin extends JavaGeneratingPlugin {
-    protected UMLUtils umlUtils;
+public class StrutsFormPlugin extends JavaPluginBase {
+    private JMICapableMetadataProvider metadataProvider;
 
-    public StrutsFormPlugin(VelocityTemplateEngine templateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
+    public StrutsFormPlugin(VelocityTemplateEngine templateEngine, JMICapableMetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(templateEngine, metadataProvider, writerMapper);
-        umlUtils = UMLUtils.getInstance((JMIUMLMetadataProvider)getMetadataProvider(), this);
+        this.metadataProvider = metadataProvider;
         setMultioutput(true);
     }
 
-    public boolean shouldGenerate(Object metadata) {
-        Collection stereotypes = umlUtils.getStereotypeNames(metadata);
-        return stereotypes.contains("StrutsForm");
+    protected void populateContextMap(Map m) {
+        super.populateContextMap(m);
+        m.put("class", m.get("metadata"));
     }
 
-    public UMLUtils getUmlUtils() {
-        return umlUtils;
+    protected Collection getMetadata() {
+        return metadataProvider.getJMIMetadata();
     }
 }
