@@ -3,8 +3,8 @@ package org.dentaku.gentaku.cartridge;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
 
-import org.apache.commons.collections.ListUtils;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.AttributeImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ClassifierImpl;
 import org.omg.uml.foundation.core.Comment;
@@ -64,12 +64,12 @@ public class JMIHelper {
             }
         }
 
-        return this.countPrimaryKey((ClassifierImpl) c.getJavaGeneralization(), count);
+        return this.countPrimaryKey((ClassifierImpl) c.getStereotype(), count);
     }
 
     public List getCommentLines(ModelElement me) {
         if ((me == null) || (me.getComment() == null)) {
-            return ListUtils.EMPTY_LIST;
+            return Collections.EMPTY_LIST;
         }
 
         List ret = new ArrayList();

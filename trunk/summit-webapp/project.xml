@@ -17,6 +17,11 @@
         </dependency>
         <dependency>
             <groupId>dentaku</groupId>
+            <artifactId>dentaku-event-cartridge</artifactId>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>dentaku</groupId>
             <artifactId>gentaku</artifactId>
             <version>0.9-SNAPSHOT</version>
         </dependency>
@@ -76,7 +81,16 @@
             <artifactId>jaxen</artifactId>
             <version>1.1-beta-4</version>
         </dependency>
-
+        <dependency>
+            <groupId>commons-el</groupId>
+            <artifactId>commons-el</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-el</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
 
         <!--         for initdb-->
         <dependency>

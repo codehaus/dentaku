@@ -23,6 +23,7 @@ package example.entity;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * @hibernate.class
@@ -32,8 +33,8 @@ public class Invoice
        extends InvoiceBase
 {
     public Invoice() {
-        setCcCharges(new HashSet());
-        setLineItems(new HashSet());
+        setCcCharges(new LinkedList());
+        setLineItems(new LinkedList());
     }
 
     // concrete business methods that were declared

@@ -10,7 +10,7 @@ public class ${plugin.getDestinationClassname($class)}
         implements java.io.Serializable {
 #foreach ( $att in $class.attributes )
 #set ($atttypename = $att.type.fullyQualifiedName)
-    private $atttypename ${att.name};
+    protected $atttypename ${att.name};
 #end
 #foreach ( $att in $class.attributes )
 #set ($atttypename = $att.type.fullyQualifiedName)

@@ -17,7 +17,7 @@
 package example.command;
 
 import example.entity.Country;
-import example.entity.CountryFactory;
+//import example.entity.CountryFactory;
 import example.entity.Invoice;
 import org.dentaku.services.container.ContainerManager;
 import org.dentaku.services.persistence.PersistenceManager;
@@ -35,8 +35,8 @@ public class SubmitInvoiceEvent extends SubmitInvoiceEventBase {
             Invoice inv = getInvoice();
 
             // relate the country
-            CountryFactory countryFactory = (CountryFactory) pm.getPersistenceFactory(Country.class.getName());
-            Country c = (Country)countryFactory.findByCountryAbbr("US").iterator().next();
+//            CountryFactory countryFactory = (CountryFactory) pm.getPersistenceFactory(Country.class.getName());
+            Country c = null; // (Country)countryFactory.findByCountryAbbr("US").iterator().next();
             //YUCK
             inv.getBillAddress().setCountry(c);
             inv.getShipAddress().setCountry(c);

@@ -23,7 +23,7 @@ import example.entity.CreditCard;
 import example.entity.Invoice;
 import example.entity.LineItem;
 import example.entity.SKU;
-import example.entity.SKUFactory;
+//import example.entity.SKUFactory;
 import example.web.form.CartForm;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.struts.action.ActionErrors;
@@ -81,8 +81,8 @@ public class CartAction extends DispatchAction {
         if (item == null) {
             // create and populate a new line item entity
             PersistenceManager pm = (PersistenceManager) ContainerManager.getInstance().getContainer().lookup(PersistenceManager.ROLE);
-            SKUFactory skuFactory = (SKUFactory) pm.getPersistenceFactory(SKU.class.getName());
-            SKU sku = (SKU) skuFactory.findByPrimaryKey(skuID);
+//            SKUFactory skuFactory = (SKUFactory) pm.getPersistenceFactory(SKU.class.getName());
+            SKU sku = null;//(SKU) skuFactory.findByPrimaryKey(skuID);
             pm.releaseSession();
 
             item = new LineItem();
