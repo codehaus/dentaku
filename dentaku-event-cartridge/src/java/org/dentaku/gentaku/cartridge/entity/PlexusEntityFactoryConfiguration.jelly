@@ -4,7 +4,7 @@
         <components>
             <j:forEach var="object" items="${metadata}">
                 <j:if test="${plugin.shouldGenerate(object)}">
-                    <j:set var="factoryName" value="${plugin.umlUtils.getDestinationFullyQualifiedClassName(object)}Factory"/>
+                    <j:set var="factoryName" value="${transform.findFullyQualifiedName(object)}Factory"/>
                     <component>
                         <role>org.dentaku.services.persistence.PersistenceFactory</role>
                         <implementation>${factoryName}</implementation>

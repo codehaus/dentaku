@@ -18,22 +18,27 @@ package org.dentaku.gentaku.cartridge.entity;
 
 import org.dentaku.gentaku.cartridge.UMLUtils;
 import org.dentaku.services.metadata.JMIUMLMetadataProvider;
+import org.dentaku.services.metadata.SimpleOOHelper;
 import org.generama.JellyTemplateEngine;
 import org.generama.MetadataProvider;
-import org.generama.Plugin;
 import org.generama.WriterMapper;
+import org.generama.defaults.JavaGeneratingPlugin;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-public class PlexusEntityFactoryConfiguration extends Plugin {
+public class PlexusEntityFactoryConfiguration extends JavaGeneratingPlugin {
     protected UMLUtils umlUtils;
     private List stereotypes = new ArrayList();
     private String configFilename = "org/dentaku/conf/persistence/factory.xml";
+    private SimpleOOHelper simpleOOHelper;
 
     public PlexusEntityFactoryConfiguration(JellyTemplateEngine jellyTemplateEngine, MetadataProvider metadataProvider, WriterMapper writerMapper) {
         super(jellyTemplateEngine, metadataProvider, writerMapper);
+        JMIUMLMetadataProvider mp = (JMIUMLMetadataProvider) getMetadataProvider();
+        simpleOOHelper = SimpleOOHelper.getInstance(mp.getModel(), this);
         umlUtils = UMLUtils.getInstance((JMIUMLMetadataProvider)getMetadataProvider(), this);
         setEncoding("UTF-8");
         getStereotypes().add("Entity");
@@ -85,5 +90,11 @@ public class PlexusEntityFactoryConfiguration extends Plugin {
 
     public void setStereotypes(List stereotypes) {
         this.stereotypes = stereotypes;
+    }
+
+    public void start() {
+        Map context = getContextObjects();
+        context.put("transform", simpleOOHelper);
+        super.start();
     }
 }
