@@ -72,10 +72,10 @@ abstract public class AssociationEndImpl extends ModelElementImpl implements org
         return false;
     }
 
-    public AssociationEnd getOtherEnd() {
+    public AssociationEndImpl getOtherEnd() {
         Collection ends = getAssociation().getConnection();
         for (Iterator i = ends.iterator(); i.hasNext();) {
-            AssociationEnd ae = (AssociationEnd) i.next();
+            AssociationEndImpl ae = (AssociationEndImpl) i.next();
             if (!this.equals(ae)) {
                 return ae;
             }
@@ -83,11 +83,11 @@ abstract public class AssociationEndImpl extends ModelElementImpl implements org
         return null;
     }
 
-    public AssociationEnd getSource() {
+    public AssociationEndImpl getSource() {
         return this;
     }
 
-    public AssociationEnd getTarget() {
+    public AssociationEndImpl getTarget() {
         return getOtherEnd();
     }
 

@@ -67,8 +67,9 @@ abstract public class AttributeImpl extends ModelElementImpl implements org.dent
      * </p>
      *
      * @return String the string to be used with JDBC
+     * @return String the string to be used with JDBC
      */
-    public String getAttributeJDBCType() {
+    public String getAttributAneJDBCType() {
         String value = findTagValue("andromda.persistence.JDBCType");
         if (null == value) {
             value = ((ModelElementImpl) getType()).getFullyQualifiedName();

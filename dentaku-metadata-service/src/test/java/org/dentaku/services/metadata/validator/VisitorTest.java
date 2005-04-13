@@ -34,7 +34,7 @@ public class VisitorTest extends MetadataTestBase {
         ModelElementImpl elem = null;
         for (Iterator it = metadata.iterator(); it.hasNext();) {
             elem = (ModelElementImpl) it.next();
-            if (elem instanceof Classifier && elem.getName().equals("root")) {
+            if (elem instanceof Classifier && elem.getName().equals("Root")) {
                 break;
             }
             fail("root element not found");

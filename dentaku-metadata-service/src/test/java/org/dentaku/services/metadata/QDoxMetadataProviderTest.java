@@ -46,7 +46,7 @@ public class QDoxMetadataProviderTest extends TestCase {
     public void testFindRoot() throws Exception {
         for (Iterator it = metadata.iterator(); it.hasNext();) {
             AbstractJavaEntity elem = (AbstractJavaEntity) it.next();
-            if (elem instanceof JavaClass && elem.getName().equals("root")) {
+            if (elem instanceof JavaClass && elem.getName().equals("Root")) {
                 return;
             }
         }

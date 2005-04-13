@@ -67,8 +67,12 @@ public class Utils {
 
     public static ClassifierImpl findUmlClass(org.omg.uml.UmlPackage umlPackage, String pkgName, final String entityName, boolean create) {
         // set up our superclass package structure
+<<<<<<< Utils.java
+        UmlPackage newPackage = findUmlPackage(umlPackage, pkgName, create);
+=======
         ModelImpl model = Utils.getModelRoot(umlPackage);
         UmlPackage newPackage = model.getChildPackage(pkgName, create);
+>>>>>>> 1.3
 
         ClassifierImpl result = (ClassifierImpl) CollectionUtils.find(newPackage.getOwnedElement(), new Predicate() {
             public boolean evaluate(Object object) {
@@ -85,15 +89,25 @@ public class Utils {
         return result;
     }
 
-    public static TaggedValue createTaggedValue(CorePackage core, ModelElement owner, TagDefinition tagdefType, final String key, String value) {
-        TaggedValue taggedValue = core.getTaggedValue().createTaggedValue();
+    public static UmlPackage findUmlPackage(org.omg.uml.UmlPackage umlPackage, String pkgName, boolean create) {
+        ModelImpl model = (ModelImpl)Utils.getModelRoot(umlPackage);
+        UmlPackage newPackage = model.getChildPackage(pkgName, create);
+        return newPackage;
+    }
+
+    public static TaggedValue createTaggedValue(CorePackage core, ModelElement owner, final String key, String value) {
+        TagDefinition tagdefType = core.getTagDefinition().createTagDefinition();
+        tagdefType.setTagType("String");
+        TaggedValue taggedValue = createTaggedValue(core, owner, tagdefType, value);
         taggedValue.setName(key);
+        return taggedValue;
+    }
+
+    public static TaggedValue createTaggedValue(CorePackage core, ModelElement owner, TagDefinition tagdefType, String value) {
+        TaggedValue taggedValue = core.getTaggedValue().createTaggedValue();
+        taggedValue.setName(tagdefType.getName());
         taggedValue.getDataValue().add(value);
 
-        if (tagdefType == null) {
-            tagdefType = core.getTagDefinition().createTagDefinition();
-            tagdefType.setTagType("String");
-        }
         taggedValue.setType(tagdefType);
 
         core.getAModelElementTaggedValue().add(owner, taggedValue);

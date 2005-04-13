@@ -19,11 +19,15 @@ package org.dentaku.gentaku.cartridge;
 import org.dentaku.gentaku.tools.cgen.visitor.LocalDefaultElement;
 import org.dom4j.Branch;
 import org.dom4j.Element;
+import org.dom4j.Document;
 import org.omg.uml.foundation.core.ModelElement;
 import org.netbeans.jmiimpl.omg.uml.modelmanagement.ModelImpl;
 
 public class GeneratorSupport implements Generator {
     public GeneratorSupport() {
+    }
+
+    public void touchupOutputDocument(Document outputDocument) throws GenerationException {
     }
 
     public void preProcessModel(ModelImpl model) throws GenerationException {

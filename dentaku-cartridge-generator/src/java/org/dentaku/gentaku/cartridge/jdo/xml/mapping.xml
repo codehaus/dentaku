@@ -8,5 +8,6 @@
 	<element path="/xs:schema/xs:element[@name='class']" location="class">
 		<stereotype name="Entity"/>
 	</element>
+	<element path="/xs:schema/xs:element[@name='inheritance']" location="class"/>
 	<element path="/xs:schema/xs:element[@name='field']" location="field"/>
 </mapping>

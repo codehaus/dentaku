@@ -19,6 +19,7 @@ package org.dentaku.gentaku.cartridge;
 import org.dentaku.gentaku.tools.cgen.visitor.LocalDefaultElement;
 import org.dom4j.Branch;
 import org.dom4j.Element;
+import org.dom4j.Document;
 import org.omg.uml.foundation.core.ModelElement;
 import org.netbeans.jmiimpl.omg.uml.modelmanagement.ModelImpl;
 
@@ -30,4 +31,6 @@ public interface Generator {
     void postGenerate(LocalDefaultElement mappingNode, Branch parentOutput, ModelElement modelElement, Element outputElement) throws GenerationException;
 
     void postProcessModel(ModelImpl model) throws GenerationException;
+
+    void touchupOutputDocument(Document outputDocument) throws GenerationException;
 }
