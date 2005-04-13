@@ -27,6 +27,7 @@ public class XMIGenTest extends TestCase {
         gen = new XMIGenTask();
         gen.setMapping("dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/jdo/xml/mapping.xml");
         gen.setSchema("dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/jdo/xml/jdo_2_0.xsd");
+        gen.setDestdir("/tmp");
     }
 
     public void testXMIGen() throws Exception {

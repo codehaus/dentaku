@@ -36,6 +36,8 @@ import org.omg.uml.foundation.core.TaggedValue;
 import org.omg.uml.foundation.core.UmlAssociation;
 import org.omg.uml.foundation.core.UmlClass;
 import org.omg.uml.foundation.datatypes.MultiplicityRange;
+import org.omg.uml.modelmanagement.UmlPackage;
+import org.dom4j.Document;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,6 +52,10 @@ import java.util.LinkedList;
  * probably want to have this plugin listed (and run) before any other plugins that require accurate entity information.
  */
 public class EntityGenerator extends GeneratorSupport {
+    public void touchupOutputDocument(Document outputDocument) throws GenerationException {
+        outputDocument.addDocType("jdo", "-//Sun Microsystems, Inc.//DTD Java Data Objects Metadata 2.0//EN", "http://java.sun.com/dtd/jdo_2_0.dtd");
+    }
+
     // add the items that we implicitly generate for Entity objects
     public void preProcessModel(ModelImpl model) throws GenerationException {
         final org.omg.uml.UmlPackage umlPackage = (org.omg.uml.UmlPackage)model.refOutermostPackage();
@@ -59,6 +65,8 @@ public class EntityGenerator extends GeneratorSupport {
                 return ((ModelElementImpl) object).getName().equals("Entity");
             }
         });
+
+        UmlPackage jdoPackage = Utils.findUmlPackage(umlPackage, "org.dentaku.gentaku.jdo", false);
 
         ClassifierImpl odspEntity = Utils.findUmlClass(umlPackage, "org.dentaku.services.persistence", "Entity", true);
         ClassifierImpl javaUtilList = Utils.findUmlClass(umlPackage, "java.util", "List", true);
@@ -74,6 +82,7 @@ public class EntityGenerator extends GeneratorSupport {
             }
 
             ClassifierImpl classifier = (ClassifierImpl) modelElement;
+            Utils.createTaggedValue(core, classifier, findTagdef(jdoPackage.getOwnedElement(), "inheritance.strategy"), "no-table");
 
             createGeneralization(core, odspEntity, classifier);
 
@@ -82,16 +91,15 @@ public class EntityGenerator extends GeneratorSupport {
             classifier.setName(entityName + "Base");
             ClassifierImpl subclass = (ClassifierImpl) Utils.findUmlClass(umlPackage, ((ModelElementImpl) classifier.getNamespace()).getFullyQualifiedName(), entityName, true);
             subclass.getStereotype().add(classifierStereotype);
-            createGeneralization(core, classifier, subclass);
-            Utils.createTaggedValue(core, subclass, findStereotypeTagdef(classifierStereotype, "class.name"), "class.name", "${parent.name}");
-            Utils.createTaggedValue(core, subclass, findStereotypeTagdef(classifierStereotype, "class.persistence-capable-superclass"), "class.persistence-capable-superclass", ((ModelElementImpl) classifier).getFullyQualifiedName());
-            Utils.createTaggedValue(core, subclass, null, "gentaku.generate", "true");
+            Utils.createTaggedValue(core, subclass, findTagdef(jdoPackage.getOwnedElement(), "class.name"), "${parent.name}");
+            Utils.createTaggedValue(core, subclass, findTagdef(jdoPackage.getOwnedElement(), "class.persistence-capable-superclass"), ((ModelElementImpl) classifier).getFullyQualifiedName());
+            Utils.createTaggedValue(core, subclass, "gentaku.generate", "false");
 
             // handle the fields
             Collection attributes = CollectionUtils.select(classifier.getFeature(), new InstanceofPredicate(Attribute.class));
             for (Iterator attIterator = attributes.iterator(); attIterator.hasNext();) {
                 Attribute attribute = (Attribute) attIterator.next();
-                TaggedValue taggedValue = Utils.createTaggedValue(core, attribute, findStereotypeTagdef(classifierStereotype, "field.name"), "field.name", "${parent.name}");
+                TaggedValue taggedValue = Utils.createTaggedValue(core, attribute, findTagdef(jdoPackage.getOwnedElement(), "field.name"), "${parent.name}");
                 attribute.getTaggedValue().add(taggedValue);
             }
 
@@ -125,20 +133,27 @@ public class EntityGenerator extends GeneratorSupport {
                         newAttr.setName(name);
                     }
 
-                    Utils.createTaggedValue(core, newAttr, findStereotypeTagdef(classifierStereotype, "field.name"), "field.name", "${parent.name}");
+                    Utils.createTaggedValue(core, newAttr, findTagdef(jdoPackage.getOwnedElement(), "field.name"), "${parent.name}");
                     if (end.getMultiplicity() != null) {
-                        MultiplicityRange multiplicityRange = (MultiplicityRange) end.getMultiplicity().getRange().iterator().next();
-                        int lower = multiplicityRange.getLower();
-                        int upper = multiplicityRange.getUpper();
-                        if (upper - lower > 1 || upper == -1) {
-                            Utils.createTaggedValue(core, newAttr, findStereotypeTagdef(classifierStereotype, "collection.element-type"), "collection.element-type", endClass.getFullyQualifiedName());
-                            Utils.createTaggedValue(core, newAttr, findStereotypeTagdef(classifierStereotype, "join"), "join", "");
+                        if (isCollection(end)) {
+                            Utils.createTaggedValue(core, newAttr, findTagdef(jdoPackage.getOwnedElement(), "collection.element-type"), endClass.getFullyQualifiedName());
+
+                            AssociationEndImpl otherEnd = end.getOtherEnd();
+                            if (!isCollection(otherEnd) && otherEnd.isNavigable()) {
+                                String name = otherEnd.getName();
+                                if (name == null) {
+                                    name = otherEnd.getParticipant().getName();
+                                    name = name.substring(0,1).toLowerCase() + name.substring(1);
+                                }
+                                Utils.createTaggedValue(core, newAttr, findTagdef(jdoPackage.getOwnedElement(), "field.mapped-by"), name);
+                            }
+
                             core.getATypedFeatureType().add(newAttr, javaUtilList);
                         } else {
                             core.getATypedFeatureType().add(newAttr, endClass);
                         }
                     } else {
-                        // if no multiplicity, assume 1
+                        // if no multiplicity, assume
                         System.out.println("warning - no multiplicty found: " + ((ClassifierImpl) end.getParticipant()).getFullyQualifiedName() + "<->" + ((ClassifierImpl) ((AssociationEndImpl) end).getOtherEnd().getParticipant()).getFullyQualifiedName());
                         core.getATypedFeatureType().add(newAttr, endClass);
                     }
@@ -146,6 +161,17 @@ public class EntityGenerator extends GeneratorSupport {
                 }
             }
         }
+    }
+
+    private boolean isCollection(AssociationEndImpl end) {
+        MultiplicityRange multiplicityRange = (MultiplicityRange) end.getMultiplicity().getRange().iterator().next();
+        int lower = multiplicityRange.getLower();
+        int upper = multiplicityRange.getUpper();
+        boolean result = false;
+        if (upper - lower > 1 || upper == -1) {
+            result = true;
+        }
+        return result;
     }
 
     /**
@@ -158,8 +184,8 @@ public class EntityGenerator extends GeneratorSupport {
 		ArrayList sterotypesForAssocList = new ArrayList(stereotypesForAssoc);
 		for (Iterator ie = sterotypesForAssocList.iterator(); ie.hasNext();) {
             Stereotype stereo = (Stereotype)ie.next();
-            if(stereo.getName().equals("View") || 
-            		stereo.getName().equals("Validates") || 
+            if(stereo.getName().equals("View") ||
+            		stereo.getName().equals("Validates") ||
 					stereo.getName().equals("Imports")) {
             	return true;
             }
@@ -184,12 +210,14 @@ public class EntityGenerator extends GeneratorSupport {
         }
     }
 
-    private TagDefinition findStereotypeTagdef(Stereotype stereotype, final String key) {
-        TagDefinition definedTag = (TagDefinition) CollectionUtils.find(stereotype.getDefinedTag(), new Predicate() {
+    private TagDefinition findTagdef(Collection definedTag, final String key) {
+        TagDefinition tag = (TagDefinition) CollectionUtils.find(definedTag, new Predicate() {
             public boolean evaluate(Object object) {
-                return ((TagDefinition) object).getName().equals(key);
+                return          object instanceof TagDefinition
+                                && ((TagDefinition) object).getName() != null
+                                && ((TagDefinition) object).getName().equals(key);
             }
         });
-        return definedTag;
+        return tag;
     }
 }

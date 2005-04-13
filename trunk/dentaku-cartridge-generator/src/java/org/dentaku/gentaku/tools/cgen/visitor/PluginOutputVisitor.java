@@ -20,28 +20,15 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.dentaku.gentaku.cartridge.GenerationException;
 import org.dentaku.gentaku.tools.cgen.Util;
-import org.dom4j.Branch;
-import org.dom4j.Document;
-import org.dom4j.DocumentFactory;
-import org.dom4j.DocumentHelper;
+import org.dom4j.*;
 import org.dom4j.Element;
-import org.dom4j.QName;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.TaggedValueImpl;
 import org.omg.uml.UmlPackage;
-import org.omg.uml.foundation.core.Classifier;
-import org.omg.uml.foundation.core.Feature;
-import org.omg.uml.foundation.core.ModelElement;
+import org.omg.uml.foundation.core.*;
 import org.omg.uml.foundation.core.Namespace;
-import org.omg.uml.foundation.core.TaggedValue;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class generates XML output descriptors based on a UML model.  It uses the visitor pattern support in dom4j, as during
@@ -80,13 +67,7 @@ public class PluginOutputVisitor {
                 mappingXSD = (LocalDefaultElement) Util.selectSingleNode(xsdDoc, "/xs:schema/xs:element[@name='" + ref + "']");
             }
 
-            LocalDefaultElement annotation = mappingXSD.getAnnotation();
-            if (annotation != null) {
-                String candidateLocation = annotation.attributeValue("location");
-                if (candidateLocation != null) {
-                    location = candidateLocation;
-                }
-            }
+            location = updateLocation(mappingXSD, location);
 
             if (location.equals("root")) {
                 // root element is a special case because we always iterate it.  But is this the only occurence not caught
@@ -129,6 +110,25 @@ public class PluginOutputVisitor {
             }
         }
         return result;
+    }
+
+    /**
+     * See if we can replace our current location with one that matches the mapping document.  We find that through
+     * the annotations that we added earlier.  This corresponds to the 'location' attribute in the mapping document.
+     * @param mappingXSD
+     * @param location
+     * @return
+     */
+    private String updateLocation(LocalDefaultElement mappingXSD, String location) {
+        LocalDefaultElement annotation = mappingXSD.getAnnotation();
+        if (annotation != null) {
+            String candidateLocation = annotation.attributeValue("location");
+            if (candidateLocation != null) {
+                // if we have an annotation and it contains a location, use it
+                location = candidateLocation;
+            }
+        }
+        return location;
     }
 
     private void preGenerate(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement modelElement) throws GenerationException {
@@ -212,14 +212,14 @@ public class PluginOutputVisitor {
     }
 
     /**
-     * Iterate all the elements of the mappingNode by visiting each one of them.
-     *
-     * @param mappingXSD   The node of the XSD
-     * @return true if we did anything of value
-     * @param newLocalNode Output node for document we are building.  Recursive calls gradually expand this
-     * @param parent       The parent element from the UML model that we are parsing in parellel
-     * @param location
-     */
+         * Iterate all the elements of the mappingNode by visiting each one of them.
+         *
+         * @param mappingXSD   The node of the XSD
+         * @param newLocalNode Output node for document we are building.  Recursive calls gradually expand this
+         * @param parent       The parent element from the UML model that we are parsing in parellel
+         * @param location
+         * @return true if we did anything of value
+         */
     private boolean iterateElements(Element mappingXSD, Branch newLocalNode, ModelElement parent, String location) throws GenerationException {
         boolean result = false;
         for (Iterator it = mappingXSD.elements().iterator(); it.hasNext();) {
@@ -245,22 +245,36 @@ public class PluginOutputVisitor {
         Collection elements = getCandidateElementsForLocation(location);
 
         Collection result = CollectionUtils.select(elements, new Predicate() {
-            public boolean evaluate(Object object) {
-                ModelElement mei = (ModelElement) object;
-                if (parent != null && ((mei instanceof Classifier && mei.getNamespace() != parent) || (mei instanceof Feature && ((Feature) mei).getOwner() != parent)) || (mei instanceof HashMap)) {
-                    return false;
-                }
-                Collection c = mei.getTaggedValue();
-                for (Iterator it = c.iterator(); it.hasNext();) {
-                    TaggedValue taggedValue = (TaggedValue) it.next();
-                    if (taggedValue.getName().startsWith(prefix)) {
-                        return true;
+                    public boolean evaluate(Object object) {
+                        ModelElement candidate = (ModelElement) object;
+                        if (notTheDroidsYoureLookingFor(candidate, parent) || (candidate instanceof HashMap)) {
+                            return false;
+                        }
+                        Collection c = candidate.getTaggedValue();
+                        for (Iterator it = c.iterator(); it.hasNext();) {
+                            TaggedValue taggedValue = (TaggedValue) it.next();
+                            if (taggedValue.getName().startsWith(prefix)) {
+                                return true;
+                            }
+                        }
+                        return false;
                     }
-                }
-                return false;
-            }
-        });
+                });
         return result;
+    }
+
+    /**
+     * Don't even ask what this is supposed to do because I frankly don't remember.  But if you figure it out, please
+     * do rename it and replace the javadocs with something more meaningful.
+     * @param candidate
+     * @param parent
+     * @return
+     */
+    private boolean notTheDroidsYoureLookingFor(ModelElement candidate, final ModelElement parent) {
+        return parent != null
+                       && candidate != parent
+                       && ((candidate instanceof Classifier && candidate.getNamespace() != parent)
+                            || (candidate instanceof Feature && ((Feature) candidate).getOwner() != parent));
     }
 
     /**

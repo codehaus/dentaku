@@ -29,7 +29,7 @@ public class MetadataServiceTest extends MetadataTestBase {
         ModelElementImpl elem = null;
         for (Iterator it = metadata.iterator(); it.hasNext();) {
             elem = (ModelElementImpl) it.next();
-            if (elem instanceof Classifier && elem.getName().equals("root")) {
+            if (elem instanceof Classifier && elem.getName().equals("Root")) {
                 break;
             }
             fail("root element not found");
@@ -44,6 +44,6 @@ public class MetadataServiceTest extends MetadataTestBase {
         assertTrue(c.getAttributes().size() == 3);
         assertTrue(c.getTargetEnds().size() == 1);
         assertNotNull(c.getPrimaryKeyAttribute());
-        assertEquals(c.getPrimaryKeyAttribute().getName(), "one");
+        assertEquals("id", c.getPrimaryKeyAttribute().getName());
     }
 }

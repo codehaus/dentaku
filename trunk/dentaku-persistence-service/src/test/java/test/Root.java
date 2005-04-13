@@ -9,5 +9,7 @@ package test;
   * @hibernate.class table="Root"
   */
 public class Root extends RootBase implements java.io.Serializable {
+    public void doSomething(long someParam) {
+    }
 
 }
