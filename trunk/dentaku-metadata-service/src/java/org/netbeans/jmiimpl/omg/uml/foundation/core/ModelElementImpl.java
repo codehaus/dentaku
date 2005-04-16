@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-abstract public class ModelElementImpl extends InstanceHandler implements org.dentaku.services.metadata.jmi.core.ModelElement {
+abstract public class ModelElementImpl extends InstanceHandler implements ModelElement {
     private static Map stereotypeCache = new HashMap();
 
     public ModelElementImpl(StorableObject storable) {

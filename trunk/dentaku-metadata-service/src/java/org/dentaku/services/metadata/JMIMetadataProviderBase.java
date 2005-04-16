@@ -182,7 +182,7 @@ public abstract class JMIMetadataProviderBase implements JMICapableMetadataProvi
         DocletTag[] tags = aClass.getTags();
         for (int j = 0; j < tags.length; j++) {
             DocletTag tag = tags[j];
-            Utils.createTaggedValue(umlPackage.getCore(), cls, null, tag.getName(), tag.getValue());
+            Utils.createTaggedValue(umlPackage.getCore(), cls, tag.getName(), tag.getValue());
         }
     }
 
