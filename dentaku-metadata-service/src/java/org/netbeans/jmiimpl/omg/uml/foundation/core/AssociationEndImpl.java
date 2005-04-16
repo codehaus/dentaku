@@ -25,7 +25,7 @@ import org.omg.uml.foundation.core.UmlClass;
 import org.omg.uml.foundation.datatypes.Multiplicity;
 import org.omg.uml.foundation.datatypes.MultiplicityRange;
 
-abstract public class AssociationEndImpl extends ModelElementImpl implements org.dentaku.services.metadata.jmi.core.AssociationEnd {
+abstract public class AssociationEndImpl extends ModelElementImpl implements AssociationEnd {
 
     protected AssociationEndImpl(StorableObject storable) {
         super(storable);

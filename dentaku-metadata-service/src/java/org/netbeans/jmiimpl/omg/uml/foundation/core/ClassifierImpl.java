@@ -31,12 +31,13 @@ import org.omg.uml.foundation.core.Operation;
 import org.omg.uml.foundation.core.GeneralizableElement;
 import org.omg.uml.foundation.core.Stereotype;
 import org.omg.uml.foundation.core.UmlAssociation;
+import org.omg.uml.foundation.core.Classifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-abstract public class ClassifierImpl extends ModelElementImpl implements org.dentaku.services.metadata.jmi.core.Classifier {
+abstract public class ClassifierImpl extends ModelElementImpl implements Classifier {
     private final static String PRIMARY_KEY = "PrimaryKey";
 
     protected ClassifierImpl(StorableObject storable) {

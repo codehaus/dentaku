@@ -24,8 +24,9 @@ import javax.servlet.jsp.el.VariableResolver;
 
 import org.apache.commons.el.ExpressionEvaluatorImpl;
 import org.netbeans.mdr.storagemodel.StorableObject;
+import org.omg.uml.foundation.core.TaggedValue;
 
-abstract public class TaggedValueImpl extends ModelElementImpl implements org.dentaku.services.metadata.jmi.core.TaggedValue {
+abstract public class TaggedValueImpl extends ModelElementImpl implements TaggedValue {
     // todo is this threadsafe???
     static ExpressionEvaluatorImpl ev = new ExpressionEvaluatorImpl();
     
@@ -49,7 +50,7 @@ abstract public class TaggedValueImpl extends ModelElementImpl implements org.de
             Object o = it.next();
             try {
                 VariableResolver vr = new VariableResolver() {
-                    public Object resolveVariable(String string) throws ELException {
+                    public Object resolveVariable(String string) {
                         Object result = null;
                         if (string.equals("model")) {
                             result = getModelElement().refOutermostPackage();

@@ -25,7 +25,7 @@ import org.omg.uml.modelmanagement.ModelManagementPackage;
 import org.omg.uml.modelmanagement.UmlPackage;
 import org.omg.uml.modelmanagement.UmlPackageClass;
 
-public abstract class UmlPackageImpl extends ModelElementImpl implements org.dentaku.services.metadata.jmi.modelmanagement.UmlPackage {
+public abstract class UmlPackageImpl extends ModelElementImpl implements UmlPackage {
 
     public UmlPackageImpl(StorableObject storable) {
         super(storable);
