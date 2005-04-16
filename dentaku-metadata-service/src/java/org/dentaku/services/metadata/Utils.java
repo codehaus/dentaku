@@ -67,7 +67,8 @@ public class Utils {
 
     public static ClassifierImpl findUmlClass(org.omg.uml.UmlPackage umlPackage, String pkgName, final String entityName, boolean create) {
         // set up our superclass package structure
-        UmlPackage newPackage = findUmlPackage(umlPackage, pkgName, create);
+        ModelImpl model = Utils.getModelRoot(umlPackage);
+        UmlPackage newPackage = model.getChildPackage(pkgName, create);
 
         ClassifierImpl result = (ClassifierImpl) CollectionUtils.find(newPackage.getOwnedElement(), new Predicate() {
             public boolean evaluate(Object object) {
