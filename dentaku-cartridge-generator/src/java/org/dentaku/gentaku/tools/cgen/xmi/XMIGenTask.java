@@ -16,9 +16,10 @@
  */
 package org.dentaku.gentaku.tools.cgen.xmi;
 
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
 import org.dentaku.gentaku.tools.cgen.Util;
 import org.dentaku.gentaku.tools.cgen.visitor.LocalDefaultElement;
-import org.dentaku.services.metadata.Utils;
 import org.dom4j.Branch;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -31,13 +32,12 @@ import org.dom4j.VisitorSupport;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.apache.tools.ant.Task;
-import org.apache.tools.ant.BuildException;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,13 +49,11 @@ import java.util.Stack;
 
 public class XMIGenTask extends Task {
     private UUID uuid = new UUID();
-    private Document schemaDoc;
     private Set visited = new HashSet();
     private final Map typeCache = new HashMap();
-    private String mapping;
-    private String schema;
     private String destdir;
     public String filename = "MDProfile.xmi";
+    private List antSpecifiedModules = new ArrayList();
 
     public XMIGenTask() {
         System.setProperty("org.dom4j.factory", PluginDocumentFactory.class.getName());
@@ -64,42 +62,58 @@ public class XMIGenTask extends Task {
     public void execute() throws BuildException {
         System.out.println("Running " + getClass().getName());
         SAXReader reader = new SAXReader();
-        if (mapping == null || schema == null) {
-            throw new BuildException("you must provide both a mapping and a schema argument to the XMIGenTask");
-        }
+
+        Document outputDocument = DocumentHelper.createDocument();
+        Branch content = createXMIDocument(outputDocument);
+
+        Element model = createIdentifiedEmptyElement(content, "Model").addAttribute("name", "foo");
+
+        // add the XSD and mapping documents as tagged values into the package
+        Element gengenPackage = createPackageHierarchy("org.dentaku.gentaku.gengen", model);
+
         try {
-            Document mappingDoc = reader.read(Utils.checkURL(new File(mapping).toURL()));
-            schemaDoc = reader.read(Utils.checkURL(new File(schema).toURL()));
-
-            // annotate XSD with mapping document
-            mappingDoc.accept(new VisitorSupport() {
-                public void visit(Element node) {
-                    String path = node.attributeValue("path");
-                    if (path != null) {
-                        LocalDefaultElement xsdVisit = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, path);
-                        xsdVisit.setAnnotation((LocalDefaultElement) node);
-                    }
+            for (Iterator it = antSpecifiedModules.iterator(); it.hasNext();) {
+                Module module = (Module) it.next();
+                if (module.getMapping() == null || module.getSchema() == null) {
+                    throw new BuildException("you must provide both a mapping and a schema argument to the XMIGenTask");
                 }
-            });
+                Document mappingDoc = reader.read(new File(module.getMapping()));
+                final Document schemaDoc = reader.read(new File(module.getSchema()));
 
-            String rootPath = ((Element) Util.selectSingleNode(mappingDoc, "/mapping/element[@location='root']")).attributeValue("path");
-            LocalDefaultElement rootNode = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, rootPath);
+                // annotate XSD with mapping document
+                mappingDoc.accept(new VisitorSupport() {
+                    public void visit(Element node) {
+                        String path = node.attributeValue("path");
+                        if (path != null) {
+                            LocalDefaultElement xsdVisit = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, path);
+                            xsdVisit.setAnnotation((LocalDefaultElement) node);
+                        }
+                    }
+                });
 
-            // create the location sets
-            createLocationSets(rootNode, "root", new Stack());
+                String rootPath = ((Element) Util.selectSingleNode(mappingDoc, "/mapping/element[@location='root']")).attributeValue("path");
+                LocalDefaultElement rootNode = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, rootPath);
 
-            Document document = createXMIDoc(mappingDoc, schemaDoc, mappingDoc.getRootElement().attributeValue("tagNameBase"), rootNode);
+                // create the location sets
+                createLocationSets(rootNode, "root", new Stack());
 
-            if(destdir==null)
-            	destdir="./";
+                buildDocument(model, gengenPackage, schemaDoc, mappingDoc, rootNode);
+            }
+
+            if (destdir == null)
+                destdir = "./";
             File file = new File(destdir);
             file.mkdirs();
-            writeFile(document, new File(file, filename));
+            writeFile(outputDocument, new File(file, filename));
         } catch (DocumentException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void addModule(Module module) {
+        antSpecifiedModules.add(module);
     }
 
     private void createLocationSets(LocalDefaultElement schemaDoc, String location, Stack stack) {
@@ -142,27 +156,20 @@ public class XMIGenTask extends Task {
         }
     }
 
-    private Document createXMIDoc(Document mappingDoc, Document jdoDoc, String packageName, LocalDefaultElement rootNode) {
-        Document document = DocumentHelper.createDocument();
-        Branch content = createXMIDocument(document);
+    // create the package hierarchy.  we have two elements that we need to manage here, the space for the plugin and
+    // the space for the generator metadata.  if the paths overlap, there's extra work.
+    private void buildDocument(Element model, Element gengenPackage, Document schemaDoc, Document mappingDoc, LocalDefaultElement rootNode) {
+        Element modelPackage;
 
-        Element model = createIdentifiedEmptyElement(content, "Model").addAttribute("name", "foo");
-
-        // create the package hierarchy.  we have two elements that we need to manage here, the space for the plugin and
-        // the space for the generator metadata.  if the paths overlap, there's extra work.
-        Element modelPackage = model;
-
-        // add the XSD and mapping documents as tagged values into the package
-        Element gengenPackage = createPackageHierarchy("org.dentaku.gentaku.gengen", model);
-
-        // add the package for this package
+        String packageName = mappingDoc.getRootElement().attributeValue("tagNameBase");
+       // add the package for this package
         modelPackage = createPackageHierarchy(packageName, model);
 
         // create tagdefs into gengen
         Element gengenOwnedElement = createOwnedElement(gengenPackage);
         Element xsdTagdef = createTaggedValueDefinition(gengenOwnedElement, "gengen.XSD", null, new String[]{"Package"}, "String", false); // todo documentation value from XSD
         Element emptyUMLElement = createEmptyUMLElement(modelPackage, "ModelElement.taggedValue");
-        createUMLTaggedValue(emptyUMLElement, xsdTagdef, DocumentHelper.createCDATA(jdoDoc.asXML()));
+        createUMLTaggedValue(emptyUMLElement, xsdTagdef, DocumentHelper.createCDATA(schemaDoc.asXML()));
 
         // create the gengen stereotype marker
         Element gengenStereotype = createIdentifiedEmptyElement(gengenOwnedElement, "Stereotype").addAttribute("name", "GenGenPackage");
@@ -185,21 +192,20 @@ public class XMIGenTask extends Task {
         Element enumeration = createIdentifiedEmptyElement(scratchPackage, "Enumeration").addAttribute("name", packageName).addElement("UML:Enumeration.literal", "omg.org/UML/1.4");
 
         // this is the real work
-        processNodeTags(rootNode, enumeration, scratchPackage, null, rootNode, groupTagdef, new String[0]);
+        String groupPrefix = packageName.substring(packageName.lastIndexOf(".")+1);
+        processNodeTags(rootNode, enumeration, scratchPackage, null, rootNode, groupTagdef, new String[0], schemaDoc, groupPrefix);
 
         // finally, create the stereotypes that are defined in the mapping doc
-        generateStereotypes(mappingDoc, scratchPackage, jdoDoc);
-
-        return document;
+        generateStereotypes(mappingDoc, scratchPackage, schemaDoc, schemaDoc);
     }
 
-    private void generateStereotypes(Document mappingDoc, Element scratchPackage, Document jdoDoc) {
+    private void generateStereotypes(Document mappingDoc, Element scratchPackage, Document jdoDoc, Branch schemaDoc) {
         List stereotypes = Util.selectNodes(mappingDoc, "//stereotype");
         for (Iterator it = stereotypes.iterator(); it.hasNext();) {
             Element s = (Element) it.next();
             Element stereotype = createIdentifiedEmptyElement(scratchPackage, "Stereotype").addAttribute("name", s.attributeValue("name"));
 
-            LocalDefaultElement stereotypedElement = (LocalDefaultElement)Util.selectSingleNode(schemaDoc, ((LocalDefaultElement) s.getParent()).attributeValue("path"));
+            LocalDefaultElement stereotypedElement = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, ((LocalDefaultElement) s.getParent()).attributeValue("path"));
             for (Iterator locIter = stereotypedElement.getLocations().iterator(); locIter.hasNext();) {
                 String location = (String) locIter.next();
                 createTextElement(stereotype, "Stereotype.baseClass", mapLocationName(location));
@@ -219,12 +225,12 @@ public class XMIGenTask extends Task {
         }
     }
 
-    private void processNodeTags(LocalDefaultElement xsdNode, Element enumeration, Element tagPackage, Element literal, LocalDefaultElement parentElement, Element groupTagdef, String[] locations) {
+    private void processNodeTags(LocalDefaultElement xsdNode, Element enumeration, Element tagPackage, Element literal, LocalDefaultElement parentElement, Element groupTagdef, String[] locations, Branch schemaDoc, String groupPrefix) {
         if (xsdNode.getName().equals("element")) {
             String ref = xsdNode.attributeValue("ref");
             if (ref != null) {
                 LocalDefaultElement thisElem = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, "/xs:schema/xs:element[@name='" + ref + "']");
-                processNodeTags(thisElem, enumeration, tagPackage, literal, parentElement, groupTagdef, locations);
+                processNodeTags(thisElem, enumeration, tagPackage, literal, parentElement, groupTagdef, locations, schemaDoc, groupPrefix);
                 return;
             }
 
@@ -233,10 +239,10 @@ public class XMIGenTask extends Task {
                 return;
             }
             visited.add(name);
-            literal = createIdentifiedEmptyElement(enumeration, "EnumerationLiteral").addAttribute("name", xsdNode.attributeValue("name"));
+            literal = createIdentifiedEmptyElement(enumeration, "EnumerationLiteral").addAttribute("name", groupPrefix + "-" + xsdNode.attributeValue("name"));
             parentElement = xsdNode;
 
-            locations = (String[])xsdNode.getLocations().toArray(new String[xsdNode.getLocations().size()]);
+            locations = (String[]) xsdNode.getLocations().toArray(new String[xsdNode.getLocations().size()]);
             createGroupedTagdef(tagPackage, parentElement.attributeValue("name"), locations, "String", false, literal, groupTagdef);
         }
 
@@ -249,7 +255,7 @@ public class XMIGenTask extends Task {
                     createGroupedTagdef(tagPackage, parentElement.attributeValue("name") + "." + thisElem.attributeValue("name"), locations, tagdefType, required, literal, groupTagdef);
                 }
             } else {
-                processNodeTags(thisElem, enumeration, tagPackage, literal, parentElement, groupTagdef, locations);
+                processNodeTags(thisElem, enumeration, tagPackage, literal, parentElement, groupTagdef, locations, schemaDoc, groupPrefix);
             }
         }
     }
@@ -429,7 +435,7 @@ public class XMIGenTask extends Task {
 
     private Branch createXMIDocument(Document document) {
         Element root = document.addElement("XMI").addAttribute("xmi.version", "1.2").addAttribute("timestamp", GregorianCalendar.getInstance().getTime().toString()).addNamespace("UML", "omg.org/UML/1.4");
-//        xmi.addDocType("XMI", "SYSTEM", "uml14xmi12.dtd");
+        //        xmi.addDocType("XMI", "SYSTEM", "uml14xmi12.dtd");
         Element header = root.addElement("XMI.header");
         header.addElement("XMI.documentation").addElement("XMI.exporter").setText("Gentaku Generator Generator");
         header.addElement("XMI.metamodel").addAttribute("xmi.name", "UML").addAttribute("xmi.version", "1.4");
@@ -447,22 +453,6 @@ public class XMIGenTask extends Task {
         public Element createElement(QName qname) {
             return new LocalDefaultElement(qname);
         }
-    }
-
-    public String getMapping() {
-        return mapping;
-    }
-
-    public void setMapping(String mapping) {
-        this.mapping = mapping;
-    }
-
-    public String getSchema() {
-        return schema;
-    }
-
-    public void setSchema(String schema) {
-        this.schema = schema;
     }
 
     public String getDestdir() {

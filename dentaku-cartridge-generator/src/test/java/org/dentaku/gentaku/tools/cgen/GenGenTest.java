@@ -16,12 +16,11 @@
  */
 package org.dentaku.gentaku.tools.cgen;
 
+import org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin;
 import org.dentaku.services.metadata.JMICapableMetadataProvider;
 import org.dentaku.services.metadata.JMIUMLMetadataProvider;
 import org.dentaku.services.metadata.RepositoryReader;
-import org.dentaku.services.metadata.Utils;
 import org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader;
-import org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin;
 
 import java.io.File;
 
@@ -29,8 +28,8 @@ public class GenGenTest extends junit.framework.TestCase {
     public GenGenPlugin plugin;
 
     protected void setUp() throws Exception {
-        String filename = "example-model/src/uml/model.xml.zip";
-        RepositoryReader rr = new MagicDrawRepositoryReader(Utils.checkURL(new File(filename).toURL()));
+        String filename = System.getProperty("dentaku.rootdir") + "/example-model/src/uml/model.xml.zip";
+        RepositoryReader rr = new MagicDrawRepositoryReader(new File(filename).toURL());
         JMICapableMetadataProvider mp = new JMIUMLMetadataProvider(rr);
         ((JMIUMLMetadataProvider)mp).start();
         plugin = new GenGenPlugin(mp);
