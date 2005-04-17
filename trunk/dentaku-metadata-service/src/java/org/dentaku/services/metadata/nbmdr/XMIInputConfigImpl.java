@@ -74,7 +74,6 @@ public class XMIInputConfigImpl extends XMIInputConfig {
                 if (result == null) {
                     paths.add(".");
                     String filename = systemId.substring(systemId.lastIndexOf("/") + 1);
-                    String rootdir = Utils.getRootDir();
                     for (Iterator it = paths.iterator(); it.hasNext();) {
                         try {
                             String parent = (String) it.next();
@@ -82,7 +81,7 @@ public class XMIInputConfigImpl extends XMIInputConfig {
                             if (result != null) {
                                 break;
                             }
-                            result = Utils.checkURL(new File(rootdir + parent, filename).toURL());
+                            result = Utils.checkURL(new File(parent, filename).toURL());
                             if (result != null) {
                                 break;
                             }

@@ -82,7 +82,9 @@ public class EntityGenerator extends GeneratorSupport {
             }
 
             ClassifierImpl classifier = (ClassifierImpl) modelElement;
-            Utils.createTaggedValue(core, classifier, findTagdef(jdoPackage.getOwnedElement(), "inheritance.strategy"), "no-table");
+            Utils.createTaggedValue(core, classifier, findTagdef(jdoPackage.getOwnedElement(), "inheritance.strategy"), "new-table");
+            Utils.createTaggedValue(core, classifier, findTagdef(jdoPackage.getOwnedElement(), "discriminator.strategy"), "class-name");
+            Utils.createTaggedValue(core, classifier, findTagdef(jdoPackage.getOwnedElement(), "column.name"), "java_type");
 
             createGeneralization(core, odspEntity, classifier);
 
@@ -94,6 +96,7 @@ public class EntityGenerator extends GeneratorSupport {
             Utils.createTaggedValue(core, subclass, findTagdef(jdoPackage.getOwnedElement(), "class.name"), "${parent.name}");
             Utils.createTaggedValue(core, subclass, findTagdef(jdoPackage.getOwnedElement(), "class.persistence-capable-superclass"), ((ModelElementImpl) classifier).getFullyQualifiedName());
             Utils.createTaggedValue(core, subclass, "gentaku.generate", "false");
+            Utils.createTaggedValue(core, subclass, findTagdef(jdoPackage.getOwnedElement(), "inheritance.strategy"), "superclass-table");
 
             // handle the fields
             Collection attributes = CollectionUtils.select(classifier.getFeature(), new InstanceofPredicate(Attribute.class));

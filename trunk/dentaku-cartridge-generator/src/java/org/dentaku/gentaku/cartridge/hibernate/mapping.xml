@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping tagNameBase="org.dentaku.gentaku.hibernate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="gengenMapping.xsd">
+    <element path="/xs:schema/xs:element[@name='hibernate-mapping']" location="root"/>
+    <element path="/xs:schema/xs:element[@name='class']" location="class">
+        <stereotype name="Entity"/>
+    </element>
+    <element path="/xs:schema/xs:element[@name='property']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='many-to-one']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='one-to-one']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='component']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='dynamic-component']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='properties']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='any']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='map']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='set']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='list']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='bag']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='idbag']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='array']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='primitive-array']" location="field"/>
+    <element path="/xs:schema/xs:element[@name='query-list']" location="field"/>
+</mapping>

@@ -71,14 +71,14 @@
                 <bin_dist>true</bin_dist>
             </properties>
         </dependency>
-        <dependency>
-			<groupId>cccssl</groupId>
-            <artifactId>cccssl</artifactId>
-			<version>UNKNOWN</version>
-            <properties>
-                <bin_dist>true</bin_dist>
-            </properties>
-        </dependency>
+        <!--<dependency>-->
+			<!--<groupId>cccssl</groupId>-->
+            <!--<artifactId>cccssl</artifactId>-->
+			<!--<version>UNKNOWN</version>-->
+            <!--<properties>-->
+                <!--<bin_dist>true</bin_dist>-->
+            <!--</properties>-->
+        <!--</dependency>-->
 
         <!--        only for testing-->
         <dependency>
