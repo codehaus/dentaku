@@ -143,7 +143,7 @@ public class MagicDrawRepositoryReader implements RepositoryReader {
             // check file exists
             modelURL = Utils.checkURL(model);
             if (modelURL == null) {
-                modelURL = Utils.checkURL(Utils.getRootDir() + model);
+                modelURL = Utils.checkURL(model);
             }
         } else if (modelURL != null) {
             try {

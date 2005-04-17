@@ -1,7 +1,7 @@
 <project default="dentaku-dist" xmlns:j="jelly:core" xmlns:maven="jelly:maven">
 
     <goal name="dentaku-dist">
-        <attainGoal name/>
+        <attainGoal name="jar:install-snapshot"/>
     </goal>
     <goal name="scratch">
         <attainGoal name="java:compile"/>
@@ -13,6 +13,19 @@
         </taskdef>
         <xmigen schema="${maven.src.dir}/java/org/dentaku/gentaku/cartridge/jdo/xml/jdo_2_0.xsd"
             mapping="${maven.src.dir}/java/org/dentaku/gentaku/cartridge/jdo/xml/mapping.xml"
+            destdir="${maven.build.dir}/xmi" filename="jdo.xmi"/>
+
+    </goal>
+    <goal name="scratch2">
+        <attainGoal name="java:compile"/>
+        <taskdef name="xmigen" classname="org.dentaku.gentaku.tools.cgen.xmi.XMIGenTask">
+            <classpath>
+                <path refid="maven.dependency.classpath"/>
+                <pathelement path="${maven.build.dest}"/>
+            </classpath>
+        </taskdef>
+        <xmigen schema="dentaku-cartridge-generator/java/org/dentaku/gentaku/cartridge/hibernate/hibernate-mapping-3.0.xsd"
+            mapping="dentaku-cartridge-generator/java/org/dentaku/gentaku/cartridge/hibernate/mapping.xml"
             destdir="${maven.build.dir}/xmi" filename="jdo.xmi"/>
 
     </goal>

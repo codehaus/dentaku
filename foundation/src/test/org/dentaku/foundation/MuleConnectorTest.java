@@ -18,6 +18,7 @@ package org.dentaku.foundation;
 
 import org.mule.MuleServer;
 import org.mule.config.ConfigurationBuilder;
+import org.mule.config.ReaderResource;
 import org.mule.config.builders.MuleXmlConfigurationBuilder;
 import org.mule.extras.client.MuleClient;
 import org.mule.umo.UMOMessage;
@@ -31,9 +32,11 @@ public class MuleConnectorTest extends junit.framework.TestCase {
 
     protected void setUp() throws Exception {
         server = new MuleServer();
+        System.setProperty("org.mule.xml.validate", "false");
         ConfigurationBuilder builder = new MuleXmlConfigurationBuilder();
         MuleServer.setConfigBuilder(builder);
-        builder.configure(new Reader[] { new InputStreamReader(getClass().getResourceAsStream("MuleConnectorConfig.xml")) });
+        ReaderResource readerResource = new ReaderResource("whatever", new InputStreamReader(getClass().getResourceAsStream("MuleConnectorConfig.xml")));
+        builder.configure(new ReaderResource[] { readerResource });
         server.start(false);
     }
 

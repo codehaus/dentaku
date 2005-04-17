@@ -30,7 +30,7 @@ public class GenGenTest extends junit.framework.TestCase {
 
     protected void setUp() throws Exception {
         String filename = "example-model/src/uml/model.xml.zip";
-        RepositoryReader rr = new MagicDrawRepositoryReader(Utils.checkURL(new File(Utils.getRootDir(), filename).toURL()));
+        RepositoryReader rr = new MagicDrawRepositoryReader(Utils.checkURL(new File(filename).toURL()));
         JMICapableMetadataProvider mp = new JMIUMLMetadataProvider(rr);
         ((JMIUMLMetadataProvider)mp).start();
         plugin = new GenGenPlugin(mp);

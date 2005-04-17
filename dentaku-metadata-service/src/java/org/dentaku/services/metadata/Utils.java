@@ -35,14 +35,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Utils {
-    public static String getRootDir() {
-        String rootdir = System.getProperty("dentaku.rootdir");
-        if (rootdir == null) {
-            rootdir = System.getProperty("user.dir");
-        }
-        return rootdir + "/";
-    }
-
     public static URL checkURL(URL check) {
         URL result = null;
         if (check != null) {
