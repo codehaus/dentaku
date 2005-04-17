@@ -18,6 +18,9 @@ package org.dentaku.gentaku.tools.cgen;
 
 import junit.framework.TestCase;
 import org.dentaku.gentaku.tools.cgen.xmi.XMIGenTask;
+import org.dentaku.gentaku.tools.cgen.xmi.Module;
+
+import java.io.File;
 
 public class XMIGenTest extends TestCase {
     public XMIGenTask gen;
@@ -25,9 +28,12 @@ public class XMIGenTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         gen = new XMIGenTask();
-        gen.setMapping("dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/jdo/xml/mapping.xml");
-        gen.setSchema("dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/jdo/xml/jdo_2_0.xsd");
+        String root = System.getProperty("dentaku.rootdir");
+        Module m = new Module();
+        m.setMapping(new File(root, "dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/jdo/xml/mapping.xml").getPath());
+        m.setSchema(new File(root, "dentaku-cartridge-generator/src/java/org/dentaku/gentaku/cartridge/jdo/xml/jdo_2_0.xsd").getPath());
         gen.setDestdir("/tmp");
+        gen.addModule(m);
     }
 
     public void testXMIGen() throws Exception {
