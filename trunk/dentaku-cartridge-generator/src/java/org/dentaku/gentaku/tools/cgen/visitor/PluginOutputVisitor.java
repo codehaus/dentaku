@@ -42,12 +42,10 @@ import java.util.*;
 public class PluginOutputVisitor {
     protected Document xsdDoc;
     protected UmlPackage model;
-    protected TagDefinition group;
 
-    public PluginOutputVisitor(Document xsdDoc, UmlPackage model, TagDefinition group) {
+    public PluginOutputVisitor(Document xsdDoc, UmlPackage model) {
         this.xsdDoc = xsdDoc;
         this.model = model;
-        this.group = group;
     }
 
     /**
@@ -61,19 +59,21 @@ public class PluginOutputVisitor {
      */
     public boolean visit(LocalDefaultElement mappingXSD, Branch parentOutput, ModelElement modelElement, String location) throws GenerationException {
         boolean result = false;
-        if (mappingXSD.getName().equals("element")) {
+        if (!mappingXSD.getName().equals("element")) {
+            result = iterateElements(mappingXSD, parentOutput, modelElement, location);
+        } else {
             String ref = mappingXSD.attributeValue("ref");
             if (ref != null) {
                 mappingXSD = (LocalDefaultElement) Util.selectSingleNode(xsdDoc, "/xs:schema/xs:element[@name='" + ref + "']");
             }
 
-            String newLocation = updateLocation(mappingXSD, location);
+            location = updateLocation(mappingXSD, location);
 
-            if (newLocation.equals("root")) {
+            if (location.equals("root")) {
                 // root element is a special case because we always iterate it.  But is this the only occurence not caught
                 // in the following loop?  Smells fishy.  todo This is also broken because the root element cannot have attributes
                 Element newLocalNode = DocumentHelper.createElement(mappingXSD.attributeValue("name"));
-                if (iterateElements(mappingXSD, newLocalNode, modelElement, newLocation)) {
+                if (iterateElements(mappingXSD, newLocalNode, modelElement, location)) {
                     parentOutput.add(newLocalNode);
                     result = true;
                 }
@@ -81,7 +81,7 @@ public class PluginOutputVisitor {
                 // iterate candidate ModelElements that match these criteria
                 // the tag prefix we are looking for in tags named "prefix.tag"
                 String prefix = mappingXSD.attributeValue("name");
-                Collection c = findElementsForLocationAndPrefix(newLocation, prefix, modelElement);
+                Collection c = findElementsForLocationAndPrefix(location, prefix, modelElement);
                 for (Iterator elementIterator = c.iterator(); elementIterator.hasNext();) {
                     ModelElementImpl element = (ModelElementImpl) elementIterator.next();
                     if (element instanceof Namespace || element instanceof Feature) {
@@ -98,7 +98,7 @@ public class PluginOutputVisitor {
                         // that problem solved that the old behavior is the correct behavior.  If it is, the special case noise when a root element is
                         // being rendered can probably be removed as well
                         if (iterateAttributes(mappingXSD, element, newLocalNode)) {
-                            iterateElements(mappingXSD, newLocalNode, modelElement, newLocation);
+                            iterateElements(mappingXSD, newLocalNode, modelElement, location);
                             postGenerate(mappingXSD, parentOutput, modelElement, newLocalNode);
                             parentOutput.add(newLocalNode);
                             result = true;
@@ -108,14 +108,6 @@ public class PluginOutputVisitor {
                     }
                 }
             }
-        } else if (mappingXSD.getName().equals("attributeGroup")) {
-            String ref = mappingXSD.attributeValue("ref");
-            if (ref != null) {
-                mappingXSD = (LocalDefaultElement) Util.selectSingleNode(xsdDoc, "/xs:schema/xs:attributeGroup[@name='" + ref + "']");
-            }
-            result = iterateElements(mappingXSD, parentOutput, modelElement, location);
-        } else {
-            result = iterateElements(mappingXSD, parentOutput, modelElement, location);
         }
         return result;
     }
@@ -206,12 +198,10 @@ public class PluginOutputVisitor {
         for (Iterator it = mappingXSD.selectNodes("*/xs:attribute").iterator(); it.hasNext();) {
             Element node = (Element) it.next();
             String tagName = node.attributeValue("name");
-            // this call is wrong!  With N>1 schemas with overloaded tag names, we need to check that the tag definition is in the schema we are
-            // currently working with.  Where are we going to get that from???
             TaggedValueImpl taggedValue = (TaggedValueImpl) element.getTaggedValue(tagClass + "." + tagName);
-            if (taggedValue != null && taggedValue.getType() == group) {
+            if (taggedValue != null) {
             	if(tagClass.equals("package")) {
-                    newLocalNode.addAttribute(tagName, element.getFullyQualifiedName());
+                    newLocalNode.addAttribute(tagName, element.getFullyQualifiedName());            		
             	} else {
             		newLocalNode.addAttribute(tagName, taggedValue.getValue());
             	}

@@ -28,7 +28,6 @@
 				<xs:element name="generator" type="generatorType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="element" type="elementType" maxOccurs="unbounded"/>
 			</xs:sequence>
-			<xs:attribute name="output" type="xs:string" use="required"/>
 			<xs:attribute name="tagNameBase" type="xs:string" use="required"/>
 		</xs:complexType>
 	</xs:element>
@@ -36,6 +35,13 @@
 		<xs:sequence>
 			<xs:element name="generator" type="generatorType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="Entity"/>
+					<xs:enumeration value="Package"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 </xs:schema>
