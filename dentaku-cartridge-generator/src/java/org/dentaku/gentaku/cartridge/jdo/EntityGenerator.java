@@ -59,12 +59,16 @@ public class EntityGenerator extends GeneratorSupport {
     // add the items that we implicitly generate for Entity objects
     public void preProcessModel(ModelImpl model) throws GenerationException {
         final org.omg.uml.UmlPackage umlPackage = (org.omg.uml.UmlPackage)model.refOutermostPackage();
-        CorePackage core = ((org.omg.uml.UmlPackage) umlPackage).getCore();
+        CorePackage core = umlPackage.getCore();
         Stereotype classifierStereotype = (Stereotype) CollectionUtils.find(core.getStereotype().refAllOfType(), new Predicate() {
             public boolean evaluate(Object object) {
-                return ((ModelElementImpl) object).getName().equals("Entity");
+                return ((ModelElementImpl) object).getName().equals("JDOEntity");
             }
         });
+
+        if (classifierStereotype == null) {
+            return;
+        }
 
         UmlPackage jdoPackage = Utils.findUmlPackage(umlPackage, "org.dentaku.gentaku.jdo", false);
 
@@ -91,10 +95,10 @@ public class EntityGenerator extends GeneratorSupport {
             // update our superclass structure to accurately reflect what we are generating
             String entityName = classifier.getName();
             classifier.setName(entityName + "Base");
-            ClassifierImpl subclass = (ClassifierImpl) Utils.findUmlClass(umlPackage, ((ModelElementImpl) classifier.getNamespace()).getFullyQualifiedName(), entityName, true);
+            ClassifierImpl subclass = Utils.findUmlClass(umlPackage, ((ModelElementImpl) classifier.getNamespace()).getFullyQualifiedName(), entityName, true);
             subclass.getStereotype().add(classifierStereotype);
             Utils.createTaggedValue(core, subclass, findTagdef(jdoPackage.getOwnedElement(), "class.name"), "${parent.name}");
-            Utils.createTaggedValue(core, subclass, findTagdef(jdoPackage.getOwnedElement(), "class.persistence-capable-superclass"), ((ModelElementImpl) classifier).getFullyQualifiedName());
+            Utils.createTaggedValue(core, subclass, findTagdef(jdoPackage.getOwnedElement(), "class.persistence-capable-superclass"), classifier.getFullyQualifiedName());
             Utils.createTaggedValue(core, subclass, "gentaku.generate", "false");
             Utils.createTaggedValue(core, subclass, findTagdef(jdoPackage.getOwnedElement(), "inheritance.strategy"), "superclass-table");
 
@@ -157,7 +161,7 @@ public class EntityGenerator extends GeneratorSupport {
                         }
                     } else {
                         // if no multiplicity, assume
-                        System.out.println("warning - no multiplicty found: " + ((ClassifierImpl) end.getParticipant()).getFullyQualifiedName() + "<->" + ((ClassifierImpl) ((AssociationEndImpl) end).getOtherEnd().getParticipant()).getFullyQualifiedName());
+                        System.out.println("warning - no multiplicty found: " + ((ClassifierImpl) end.getParticipant()).getFullyQualifiedName() + "<->" + ((ClassifierImpl) end.getOtherEnd().getParticipant()).getFullyQualifiedName());
                         core.getATypedFeatureType().add(newAttr, endClass);
                     }
                     core.getAOwnerFeature().add(classifier, newAttr);
@@ -182,7 +186,7 @@ public class EntityGenerator extends GeneratorSupport {
 	 * @return
 	 */
 	private boolean excludedAssocs(AssociationEndImpl end) {
-        UmlAssociation anAssoc = ((AssociationEnd) end).getAssociation();
+        UmlAssociation anAssoc = end.getAssociation();
         Collection stereotypesForAssoc = anAssoc.getStereotype();
 		ArrayList sterotypesForAssocList = new ArrayList(stereotypesForAssoc);
 		for (Iterator ie = sterotypesForAssocList.iterator(); ie.hasNext();) {

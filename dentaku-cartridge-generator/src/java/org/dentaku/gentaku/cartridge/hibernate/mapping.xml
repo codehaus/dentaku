@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mapping tagNameBase="org.dentaku.gentaku.hibernate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="gengenMapping.xsd">
+<mapping output="classes.hbm.xml" tagNameBase="org.dentaku.gentaku.hibernate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="gengenMapping.xsd">
     <element path="/xs:schema/xs:element[@name='hibernate-mapping']" location="root"/>
     <element path="/xs:schema/xs:element[@name='class']" location="class">
-        <stereotype name="Entity"/>
+        <stereotype name="HibernateEntity"/>
+    </element>
+    <element path="/xs:schema/xs:element[@name='class']" location="subclass">
+        <stereotype name="HibernateEntity"/>
+    </element>
+    <element path="/xs:schema/xs:element[@name='class']" location="joined-subclass">
+        <stereotype name="HibernateEntity"/>
     </element>
     <element path="/xs:schema/xs:element[@name='property']" location="field"/>
     <element path="/xs:schema/xs:element[@name='many-to-one']" location="field"/>
