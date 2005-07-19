@@ -66,12 +66,12 @@
         <dependency>
             <groupId>xdoclet-plugins</groupId>
             <artifactId>xdoclet-plugin-web</artifactId>
-            <version>SNAPSHOT</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>xdoclet-plugins</groupId>
             <artifactId>xdoclet-plugin-struts</artifactId>
-            <version>SNAPSHOT</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>jaxen</groupId>
