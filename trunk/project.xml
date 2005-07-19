@@ -3,7 +3,7 @@
     <pomVersion>3</pomVersion>
     <groupId>dentaku</groupId>
     <artifactId>dentaku</artifactId>
-    <currentVersion>0.9-SNAPSHOT</currentVersion>
+    <currentVersion>0.9</currentVersion>
     <name>Dentaku Project</name>
     <organization>
         <name>Dentaku Team</name>
@@ -196,7 +196,7 @@
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
-            <version>1.5.2</version>
+            <version>1.6.1</version>
         </dependency>
         <dependency>
             <groupId>commons-jexl</groupId>
