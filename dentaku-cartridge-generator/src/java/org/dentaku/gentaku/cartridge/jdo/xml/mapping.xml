@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mapping output="package.jdo" tagNameBase="org.dentaku.gentaku.jdo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="gengenMapping.xsd">
+<mapping tagNameBase="org.dentaku.gentaku.jdo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="gengenMapping.xsd">
 	<generator name="entityGenerator" canonicalName="org.dentaku.gentaku.cartridge.jdo.EntityGenerator"/>
 	<element path="/xs:schema/xs:element[@name='jdo']" location="root"/>
 	<element path="/xs:schema/xs:element[@name='package']" location="package">
-		<stereotype name="JDOPackage"/>
+		<stereotype name="Package"/>
 	</element>
 	<element path="/xs:schema/xs:element[@name='class']" location="class">
-		<stereotype name="JDOEntity"/>
+		<stereotype name="Entity"/>
 	</element>
 	<element path="/xs:schema/xs:element[@name='inheritance']" location="class"/>
 	<element path="/xs:schema/xs:element[@name='field']" location="field"/>

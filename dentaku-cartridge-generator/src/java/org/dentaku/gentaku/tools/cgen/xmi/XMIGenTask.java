@@ -49,8 +49,8 @@ import java.util.Stack;
 
 public class XMIGenTask extends Task {
     private UUID uuid = new UUID();
-    private Set visited;
-    private Map typeCache;
+    private Set visited = new HashSet();
+    private final Map typeCache = new HashMap();
     private String destdir;
     public String filename = "MDProfile.xmi";
     private List antSpecifiedModules = new ArrayList();
@@ -70,15 +70,6 @@ public class XMIGenTask extends Task {
 
         // add the XSD and mapping documents as tagged values into the package
         Element gengenPackage = createPackageHierarchy("org.dentaku.gentaku.gengen", model);
-        Element gengenPackageOwnedElement = createOwnedElement(gengenPackage);
-
-        // create the tag groups
-        Element groupStereotype = createIdentifiedEmptyElement(gengenPackageOwnedElement, "Stereotype").addAttribute("name", "tagGroup");
-        groupStereotype.addElement("UML:Stereotype.baseClass", "omg.org/UML/1.4").setText("TagDefinition");
-
-        // create the gengen stereotype marker
-        Element gengenStereotype = createIdentifiedEmptyElement(gengenPackageOwnedElement, "Stereotype").addAttribute("name", "GenGenPackage");
-        gengenStereotype.addElement("UML:Stereotype.baseClass", "omg.org/UML/1.4").setText("Package");
 
         try {
             for (Iterator it = antSpecifiedModules.iterator(); it.hasNext();) {
@@ -88,8 +79,6 @@ public class XMIGenTask extends Task {
                 }
                 Document mappingDoc = reader.read(new File(module.getMapping()));
                 final Document schemaDoc = reader.read(new File(module.getSchema()));
-                visited = new HashSet();
-                typeCache = new HashMap();
 
                 // annotate XSD with mapping document
                 mappingDoc.accept(new VisitorSupport() {
@@ -108,7 +97,7 @@ public class XMIGenTask extends Task {
                 // create the location sets
                 createLocationSets(rootNode, "root", new Stack());
 
-                buildDocument(model, schemaDoc, mappingDoc, rootNode, groupStereotype.addAttribute("name", "tagGroup"), gengenStereotype);
+                buildDocument(model, gengenPackage, schemaDoc, mappingDoc, rootNode);
             }
 
             if (destdir == null)
@@ -169,26 +158,33 @@ public class XMIGenTask extends Task {
 
     // create the package hierarchy.  we have two elements that we need to manage here, the space for the plugin and
     // the space for the generator metadata.  if the paths overlap, there's extra work.
-    private void buildDocument(Element model, Document schemaDoc, Document mappingDoc, LocalDefaultElement rootNode, Element groupStereotype, Element gengenStereotype) {
+    private void buildDocument(Element model, Element gengenPackage, Document schemaDoc, Document mappingDoc, LocalDefaultElement rootNode) {
         Element modelPackage;
 
         String packageName = mappingDoc.getRootElement().attributeValue("tagNameBase");
        // add the package for this package
         modelPackage = createPackageHierarchy(packageName, model);
 
-        Element scratchPackage = createOwnedElement(modelPackage);
-
         // create tagdefs into gengen
-        Element xsdTagdef = createTaggedValueDefinition(scratchPackage, "gengen.XSD", null, new String[]{"Package"}, "String", false); // todo documentation value from XSD
+        Element gengenOwnedElement = createOwnedElement(gengenPackage);
+        Element xsdTagdef = createTaggedValueDefinition(gengenOwnedElement, "gengen.XSD", null, new String[]{"Package"}, "String", false); // todo documentation value from XSD
         Element emptyUMLElement = createEmptyUMLElement(modelPackage, "ModelElement.taggedValue");
         createUMLTaggedValue(emptyUMLElement, xsdTagdef, DocumentHelper.createCDATA(schemaDoc.asXML()));
 
+        // create the gengen stereotype marker
+        Element gengenStereotype = createIdentifiedEmptyElement(gengenOwnedElement, "Stereotype").addAttribute("name", "GenGenPackage");
+        gengenStereotype.addElement("UML:Stereotype.baseClass", "omg.org/UML/1.4").setText("Package");
         // add one to the package we are creating
         modelPackage.addAttribute("stereotype", gengenStereotype.attributeValue("xmi.id"));
 
-        Element mappingTagdef = createTaggedValueDefinition(scratchPackage, "gengen.mapping", null, new String[]{"Package"}, "String", false); // todo documentation value from XSD
+        Element mappingTagdef = createTaggedValueDefinition(gengenOwnedElement, "gengen.mapping", null, new String[]{"Package"}, "String", false); // todo documentation value from XSD
         createUMLTaggedValue(emptyUMLElement, mappingTagdef, DocumentHelper.createCDATA(mappingDoc.asXML()));
 
+        Element scratchPackage = createOwnedElement(modelPackage);
+
+        // create the tag groups
+        Element groupStereotype = createIdentifiedEmptyElement(scratchPackage, "Stereotype").addAttribute("name", "tagGroup");
+        groupStereotype.addElement("UML:Stereotype.baseClass", "omg.org/UML/1.4").setText("TagDefinition");
 
         Element groupTagdef = createTaggedValueDefinition(scratchPackage, "Group", null, new String[]{"TagDefinition"}, "String", false); // todo documentation value from XSD
         groupTagdef.addAttribute("stereotype", groupStereotype.attributeValue("xmi.id"));
@@ -230,14 +226,7 @@ public class XMIGenTask extends Task {
     }
 
     private void processNodeTags(LocalDefaultElement xsdNode, Element enumeration, Element tagPackage, Element literal, LocalDefaultElement parentElement, Element groupTagdef, String[] locations, Branch schemaDoc, String groupPrefix) {
-        if (xsdNode.getName().equals("attributeGroup")) {
-            String ref = xsdNode.attributeValue("ref");
-            if (ref != null) {
-                LocalDefaultElement thisElem = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, "/xs:schema/xs:attributeGroup[@name='" + ref + "']");
-                processNodeTags(thisElem, enumeration, tagPackage, literal, parentElement, groupTagdef, locations, schemaDoc, groupPrefix);
-                return;
-            }
-        } else if (xsdNode.getName().equals("element")) {
+        if (xsdNode.getName().equals("element")) {
             String ref = xsdNode.attributeValue("ref");
             if (ref != null) {
                 LocalDefaultElement thisElem = (LocalDefaultElement) Util.selectSingleNode(schemaDoc, "/xs:schema/xs:element[@name='" + ref + "']");
@@ -281,7 +270,10 @@ public class XMIGenTask extends Task {
         String type = xsdAttributeRoot.attributeValue("type");
         // default value
         String result = "String";
-        if (type == null && xsdAttributeRoot.hasContent()) {
+        if (type != null) {
+            //  it's a non-restricted simple type, do any mapping we want to do here
+            // for now, do nothing and keep default of "String"
+        } else {
             // there is a child element describing the type, we only handle xs:simpleType with a restriction for now
 
             List types = Util.selectNodes(xsdAttributeRoot, "xs:simpleType/xs:restriction/xs:enumeration");
@@ -303,9 +295,6 @@ public class XMIGenTask extends Task {
                 }
             }
 
-        } else {
-            //  it's a non-restricted simple type, do any mapping we want to do here
-            // for now, do nothing and keep default of "String"
         }
         return result;
     }
