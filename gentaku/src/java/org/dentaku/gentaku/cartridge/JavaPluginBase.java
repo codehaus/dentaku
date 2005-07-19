@@ -21,6 +21,7 @@ import org.generama.Plugin;
 import org.generama.TemplateEngine;
 import org.generama.WriterMapper;
 import org.generama.defaults.FileWriterMapper;
+import org.generama.defaults.Outcome;
 import org.netbeans.jmiimpl.omg.uml.foundation.core.ModelElementImpl;
 import org.omg.uml.foundation.core.TaggedValue;
 
@@ -68,7 +69,7 @@ public abstract class JavaPluginBase extends Plugin {
     }
 
     public boolean shouldGenerate(Object metadata) {
-        String stereotypeName = null;
+        String stereotypeName;
         boolean result = false;
         TaggedValue taggedValue = ((ModelElementImpl) metadata).getTaggedValue("gentaku.generate");
         if (!(taggedValue != null && taggedValue.getDataValue().contains("false"))) {
@@ -131,7 +132,7 @@ public abstract class JavaPluginBase extends Plugin {
             this.delegate = delegate;
         }
 
-        public Writer getWriter(Object metadata, Plugin plugin) throws IOException {
+        public Outcome getOutcome(Object metadata, Plugin plugin) throws IOException {
             Writer result = null;
             if (this.delegate instanceof FileWriterMapper) {
                 String pakkage = plugin.getDestinationPackage(metadata);
@@ -147,10 +148,10 @@ public abstract class JavaPluginBase extends Plugin {
                         throw new IOException(e.toString());
                     }
                 }
+                return new Outcome(result, out.toURL());
             } else {
-                result = delegate.getWriter(metadata, plugin);
+                return delegate.getOutcome(metadata, plugin);
             }
-            return result;
         }
 
         public boolean isCreateonly() {
