@@ -66,6 +66,10 @@ public class EntityGenerator extends GeneratorSupport {
             }
         });
 
+        if (classifierStereotype == null) {
+            throw new RuntimeException("No stereotype of Entity found.");
+        }
+
         UmlPackage jdoPackage = Utils.findUmlPackage(umlPackage, "org.dentaku.gentaku.jdo", false);
 
         ClassifierImpl odspEntity = Utils.findUmlClass(umlPackage, "org.dentaku.services.persistence", "Entity", true);
