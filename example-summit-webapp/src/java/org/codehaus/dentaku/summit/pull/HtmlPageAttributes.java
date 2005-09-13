@@ -30,7 +30,7 @@ import org.apache.commons.lang.StringUtils;
  * page for you.  You must use this tool in your layout template to retrieve
  * the attributes.
  * <p>
- * The set/add methods are can be used from a screen template, action, screen
+ * The set/add methods can be used from a screen template, action, screen
  * class, layour template, or anywhere else.  The get methods should be used in
  * your layout template(s) to construct the appropriate HTML tags.
  *<p>
