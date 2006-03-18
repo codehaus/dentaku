@@ -284,21 +284,23 @@ public class XMIGenTask extends Task {
             // there is a child element describing the type, we only handle xs:simpleType with a restriction for now
 
             List types = Util.selectNodes(xsdAttributeRoot, "xs:simpleType/xs:restriction/xs:enumeration");
-            if (checkBooleanType(types)) {
-                result = "Boolean";
-            } else {
-                Integer key = new Integer(types.hashCode());
-                result = (String) typeCache.get(key);
-                if (result == null) {
-                    // we need to generate an enumeration
-                    Element enumeration = createIdentifiedEmptyElement(tagPackage, "Enumeration").addAttribute("name", xsdAttributeRoot.attributeValue("name") + "Type");
-                    Element child = enumeration.addElement("UML:Enumeration.literal", "omg.org/UML/1.4");
-                    for (Iterator it = types.iterator(); it.hasNext();) {
-                        Element element = (Element) it.next();
-                        createIdentifiedEmptyElement(child, "EnumerationLiteral").addAttribute("name", element.attributeValue("value"));
+            if (types.size() > 0) {
+                if (checkBooleanType(types)) {
+                    result = "Boolean";
+                } else {
+                    Integer key = new Integer(types.hashCode());
+                    result = (String) typeCache.get(key);
+                    if (result == null) {
+                        // we need to generate an enumeration
+                        Element enumeration = createIdentifiedEmptyElement(tagPackage, "Enumeration").addAttribute("name", xsdAttributeRoot.attributeValue("name") + "Type");
+                        Element child = enumeration.addElement("UML:Enumeration.literal", "omg.org/UML/1.4");
+                        for (Iterator it = types.iterator(); it.hasNext();) {
+                            Element element = (Element) it.next();
+                            createIdentifiedEmptyElement(child, "EnumerationLiteral").addAttribute("name", element.attributeValue("value"));
+                        }
+                        result = enumeration.attributeValue("xmi.id");
+                        typeCache.put(key, result);
                     }
-                    result = enumeration.attributeValue("xmi.id");
-                    typeCache.put(key, result);
                 }
             }
 
