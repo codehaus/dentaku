@@ -1,0 +1,15 @@
+<rule-set name="request"
+    xmlns="http://drools.org/rules"
+    xmlns:java="http://drools.org/semantics/java">
+    <rule name="test">
+        <parameter identifier="testParameter">
+            <java:class>java.lang.Object</java:class>
+        </parameter>
+
+        <java:condition>testParameter != null</java:condition>
+
+        <java:consequence>
+        System.out.println("it fired!");
+        </java:consequence>
+    </rule>
+</rule-set>

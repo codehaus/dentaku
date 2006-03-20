@@ -1,0 +1,26 @@
+/**
+ * $dontedit
+ */
+package ${plugin.getDestinationPackage($class)};
+
+public class ${plugin.getDestinationClassname($class)}
+#if($class.superclass)
+        extends $class.superclass.fullyQualifiedName
+#end
+        implements java.io.Serializable {
+#foreach ( $att in $class.attributes )
+#set ($atttypename = $att.type.fullyQualifiedName)
+    protected $atttypename ${att.name};
+#end
+#foreach ( $att in $class.attributes )
+#set ($atttypename = $att.type.fullyQualifiedName)
+
+    public $atttypename get${plugin.upperCaseFirstLetter(${att.name})}() {
+        return this.${att.name};
+    }
+
+    public void set${plugin.upperCaseFirstLetter(${att.name})}($atttypename newValue) {
+        this.${att.name} = newValue;
+    }
+#end
+}

@@ -1,0 +1,110 @@
+#set( $Q = '"' )
+
+## Has an ordered list of related classes to all root classes in views
+#set ( $alldepclassviews = $rootClassView.getAllDependentClassEntity() )
+
+package ${metadata.packageName}.tool;
+
+import ${metadata.packageName}.model.*;
+import org.codehaus.plexus.jdo.JDOService;
+import org.codehaus.plexus.summit.pull.RequestTool;
+import org.codehaus.plexus.summit.rundata.RunData;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+
+import javax.jdo.PersistenceManager;
+
+import javax.jdo.Transaction;
+import javax.jdo.Extent;
+import javax.jdo.Query;
+
+import java.util.*;
+
+public class Base${ScreenName}PullTool extends AbstractLogEnabled implements RequestTool {
+
+	private JDOService jdos;
+	
+	public void setRunData(RunData data) {
+		try{
+			jdos = ( JDOService ) data.lookup( JDOService.ROLE );
+		} catch (ComponentLookupException e) {
+			getLogger().error(${Q}Lookup of the JDOService component failed, check components.xml${Q});
+		}
+    }
+
+    public void refresh() {
+        /* empty */
+    }
+
+    public String getDefaultName() {
+		// Need to look for an override value in a variable set from config, by screen or selector?
+        return $Q[None Selected]$Q;
+    }
+
+    public Collection getAll${rootClassView.entityclassname}() {
+        Collection entities;
+		PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+		Transaction tx=pm.currentTransaction();
+
+		// Need to add record paging for large sets
+        try {
+            tx.begin();       
+			Query q = pm.newQuery(${rootClassView.entityclassname}.class);
+			entities = (Collection) q.execute();
+            tx.commit();
+        }
+        finally
+        {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            pm.close();
+			entities = new ArrayList();
+        }
+        return entities;
+    }
+#foreach( $pullclass in $alldepclassviews )
+    public Collection get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}(${pullclass.parentsEntityname} a${pullclass.parentsEntityname})
+    {
+        Collection entities;
+		PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+		Transaction tx=pm.currentTransaction();
+
+		if (a${pullclass.parentsEntityname} == null) {
+			entities = new ArrayList();
+            return entities;
+        }
+
+		// Need to add record paging for large sets
+        try {
+            tx.begin();       
+            Extent e = pm.getExtent(${pullclass.parentsEntityname}.class, true);  
+			Query q = pm.newQuery(e, $Q${pullclass.entityclassname}.contains(a${pullclass.parentsEntityname})$Q);
+			entities = (Collection) q.execute();
+            tx.commit();
+        }
+        finally
+        {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            pm.close();
+			entities = new ArrayList();
+        }
+
+        return entities;
+    }
+	
+#end
+#foreach( $pullclass in $alldepclassviews )
+    public Collection get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}WithDefault(${pullclass.parentsEntityname} a${pullclass.parentsEntityname})
+    {
+        Collection entities;
+		entities = get${pullclass.entityclassname}sFor${pullclass.parentsEntityname}(a${pullclass.parentsEntityname});
+		entities.add(getDefaultName());
+		
+        return entities;
+    }
+	
+#end
+}

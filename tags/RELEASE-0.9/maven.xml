@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<project default="dentaku:build-all" xmlns:j="jelly:core" xmlns:maven="jelly:maven" xmlns:ant="jelly:ant" xmlns:u="jelly:util">
+
+	<goal name="dentaku:build-all">
+		<attainGoal name="multiproject:install-snapshot"/>
+	</goal>
+
+	<goal name="dentaku:eclipse">
+		<j:set var="dentaku_eclipse_goal" value="${goal}"/>
+		<j:set var="goal" value="eclipse"/>
+		<attainGoal name="multiproject:goal"/>
+		<j:set var="goal" value="${dentaku_eclipse_goal}"/>
+	</goal>
+
+</project>

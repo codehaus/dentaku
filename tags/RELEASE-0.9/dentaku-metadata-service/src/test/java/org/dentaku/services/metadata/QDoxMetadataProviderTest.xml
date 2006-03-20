@@ -1,0 +1,31 @@
+<plexus>
+    <logging>
+        <implementation>org.codehaus.plexus.logging.ConsoleLoggerManager</implementation>
+        <logger>
+            <threshold>DEBUG</threshold>
+        </logger>
+    </logging>
+    <components>
+        <component>
+            <role>org.generama.QDoxCapableMetadataProvider</role>
+            <implementation>org.dentaku.services.metadata.QDoxMetadataProvider</implementation>
+            <requirements>
+                <requirement>
+                    <role>org.dentaku.services.metadata.RepositoryReader</role>
+                </requirement>
+            </requirements>
+        </component>
+        <component>
+            <role>org.dentaku.services.metadata.RepositoryReader</role>
+            <implementation>org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader</implementation>
+            <configuration>
+                <model>dentaku-metadata-service/src/test/uml/TestModel.xml.zip</model>
+                <search-paths>
+                    <path-element>
+                        <id>gentaku/src/uml</id>
+                    </path-element>
+                </search-paths>
+            </configuration>
+        </component>
+    </components>
+</plexus>

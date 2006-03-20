@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plexus>
+    <components>
+        <component>
+            <role>org.dentaku.services.persistence.PersistenceFactory</role>
+            <implementation>org.dentaku.cartridge.expected.AddressFactory</implementation>
+            <role-hint>org.dentaku.cartridge.expected.AddressFactory</role-hint>
+        </component>
+        <component>
+            <role>org.dentaku.services.persistence.PersistenceFactory</role>
+            <implementation>org.dentaku.cartridge.expected.UserFactory</implementation>
+            <role-hint>org.dentaku.cartridge.expected.UserFactory</role-hint>
+        </component>
+    </components>
+</plexus>
+

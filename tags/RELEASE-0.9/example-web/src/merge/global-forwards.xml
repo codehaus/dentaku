@@ -1,0 +1,4 @@
+	<!-- ========== GLOBAL FORWARD DEFINITIONS ============================== -->
+	<global-forwards>
+		<forward name="clientList" path="/jin/clientList.do" redirect="true" />
+	</global-forwards>

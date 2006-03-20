@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<j:jelly xmlns:j="jelly:core" xmlns:jxml="jelly:xml" xmlns:d="jelly:define" xmlns:x="jelly:org.xdoclet.plugin.web.jelly.XdocletTaglib" xmlns:werkflow="werkflowTagLib">
+    <d:taglib uri="werkflowTagLib">
+        <d:jellybean name="werkflow" className="org.dentaku.gentaku.cartridge.event.WerkflowTag"/>
+    </d:taglib>
+    <j:set var="class" value="${metadata}"/>
+    <j:set var="targettype" value="${class.fullyQualifiedName}"/>
+    <processes xmlns="werkflow:basic" xmlns:java="werkflow:java" xmlns:python="werkflow:python">
+        <message-types>
+            <message-type id="${class.name}">
+                <python:selector type="${targettype}"/>
+            </message-type>
+        </message-types>
+        <process id="EventDispatch" initiation="call">
+            <attributes>
+                <j:forEach var="targetEnd" items="${class.targetEnds}">
+                    <j:if test="${targetEnd.participant.isClass}">
+                        <attribute id="${targetEnd.name}" in="true">
+                            <java:attr-type type="${targetEnd.participant.fullyQualifiedName}"/>
+                        </attribute>
+                    </j:if>
+                </j:forEach>
+            </attributes>
+            <sequence>
+                <werkflow:werkflow metadata="${class}"/>
+            </sequence>
+        </process>
+    </processes>
+</j:jelly>

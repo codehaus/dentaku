@@ -1,0 +1,10 @@
+package ${plugin.getDestinationPackage($metadata)};
+
+public class ${plugin.getDestinationClassname($metadata)} extends jp.co.excel.digid.bsp.action.TestBase {
+
+    public void testSomething () {
+        setRequestPathInfo("/${plugin.getDestinationClassname($metadata)}");
+        actionPerform();
+//        verifyForward("viewForm");
+    }
+}

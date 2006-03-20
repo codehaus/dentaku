@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <extend>../project.xml</extend>
+  <pomVersion>3</pomVersion>
+  <artifactId>gentaku-summit-cartridge</artifactId>
+  <name>Gentaku Summit Cartridge</name>
+  <currentVersion>SNAPSHOT</currentVersion>
+  <organization>
+    <url>http://dentaku.codehaus.org</url>
+  </organization>
+  <description>This cartridge generates the Velocity screens that will display the entities as modelled. It will generate code that manage the parent child relationships for display and for CRUD. It also generates the Pull tools used to extract the entities on display for the screen. Finally it generates the Action classes that manage the submisssions from each screen, multiple forms is modelled so.</description>
+  <shortDescription>Builds the Velocity screens, pull tools and the action code.</shortDescription>
+  <repository />
+  <developers>
+    <developer>
+      <name>David Wynter</name>
+      <id>1</id>
+      <email>david_wynter (at) yahoo.com</email>
+      <organization>STPenable Ltd</organization>
+      <timezone>GMT+0</timezone>
+    </developer>
+  </developers>
+  <dependencies>
+    <!--        cgen-->
+    <dependency>
+      <groupId>commons-el</groupId>
+      <artifactId>commons-el</artifactId>
+      <version>2.0-SNAPSHOT</version>
+      <type>jar</type>
+    </dependency>
+    <!--        cgen-->
+    <dependency>
+      <groupId>${pom.groupId}</groupId>
+      <artifactId>dentaku-metadata-service</artifactId>
+      <version>SNAPSHOT</version>
+      <type>jar</type>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
+    </dependency>
+    <dependency>
+      <groupId>${pom.groupId}</groupId>
+      <artifactId>dentaku-event-cartridge</artifactId>
+      <version>SNAPSHOT</version>
+      <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>${pom.groupId}</groupId>
+      <artifactId>gentaku</artifactId>
+      <version>SNAPSHOT</version>
+      <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>jpox</groupId>
+      <artifactId>maven-jpox-plugin</artifactId>
+      <version>1.1.0-beta-1</version>
+      <type>plugin</type>
+    </dependency>
+    <dependency>
+      <groupId>${pom.groupId}</groupId>
+      <artifactId>dentaku-cartridge-generator</artifactId>
+      <version>SNAPSHOT</version>
+      <type>jar</type>
+      <properties>
+        <eclipse.dependency>true</eclipse.dependency>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>commons-el</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>SNAPSHOT</version>
+      <type>jar</type>
+    </dependency>
+  </dependencies>
+  <build>
+    <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/java</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+    <unitTest>
+      <includes>
+        <include>**/TestPlugin.java</include>
+      </includes>
+      <resources>
+        <resource>
+          <directory>${basedir}/src/test</directory>
+          <excludes>
+            <exclude>**/*.java</exclude>
+          </excludes>
+          <filtering>false</filtering>
+        </resource>
+      </resources>
+    </unitTest>
+  </build>
+</project>
+

@@ -1,0 +1,19 @@
+<plexus>
+    <logging>
+        <implementation>org.codehaus.plexus.logging.ConsoleLoggerManager</implementation>
+        <logger>
+            <threshold>DEBUG</threshold>
+        </logger>
+    </logging>
+    <components>
+        <component>
+            <role>org.dentaku.services.rules.JSR94RuleProcessor</role>
+            <implementation>org.dentaku.services.rules.DroolsJSR94RuleProcessor</implementation>
+            <configuration>
+                <ruleFilesDirectory>src/test/org/dentaku/services/rules</ruleFilesDirectory>
+                <ruleFilesIncludes>TestRule.drl</ruleFilesIncludes>
+                <bindUri>res:://test1.xml</bindUri>
+            </configuration>
+        </component>
+    </components>
+</plexus>

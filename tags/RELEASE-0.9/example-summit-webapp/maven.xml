@@ -1,0 +1,99 @@
+<project default="dentaku-dist" xmlns:m="jelly:maven" xmlns:ant="jelly:ant" xmlns:deploy="deploy" xmlns:j="jelly:core">
+    <goal name="dentaku-dist">
+        <attainGoal name="jar:install-snapshot"/>
+    </goal> 
+    <preGoal name="java:compile">
+        <attainGoal name="gentaku"/>
+    </preGoal>   
+    <goal name="gentaku">
+        <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
+        <gentaku model="${basedir}/src/uml/$appmodel">
+            <component classname="org.dentaku.gentaku.cartridge.summit.BasePullToolPlugin" destdir="${projectdir}/src"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.PullToolPlugin" destdir="${projectdir}/src"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.CrudActionPlugin" destdir="${projectdir}/src"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.VelocityFormPlugin" destdir="${velocityscreens}"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.GroovyValvePlugin" destdir="${projectdir}/src"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.ComponentConfigPlugin" destdir="${projectdir}/src"/>
+            <component classname="org.dentaku.gentaku.cartridge.summit.MenuPlugin" destdir="${velocitymenu}"/>
+            <component classname="org.dentaku.gentaku.tools.cgen.plugin.GenGenPlugin" destdir="${projectdir}/META-INF" destinationfilename="jdo.xml" encoding="UTF-8"/>
+            <component classname="org.dentaku.gentaku.cartridge.core.POJOPlugin" destdir="${projectdir}/src" stereotype="Entity, POJO"/>
+        </gentaku>
+    </goal>
+    
+    <!-- Perform enhance directly after compilation -->
+    <postGoal name="java:compile">
+        <copy todir="${projectdir}/WEB-INF/classes">
+            <fileset dir="${projectdir}/src/java">
+                <include name="**/*.jdo"/>
+            </fileset>
+        </copy>
+        <attainGoal name="jpox:enhance"/>
+    </postGoal>
+
+    <goal name="assemble-war">
+	    description="Generate a Dentaku Summit based Web application (war)"
+	    <!-- prereqs="war:webapp"> -->
+
+	    <j:set var="webapp.build" value="target/${appname}"/>
+	    <j:set var="webapp.build.lib" value="target/${appname}/WEB-INF/lib"/>
+	    <j:set var="webapp.build.classes" value="target/${appname}/WEB-INF/classes"/>
+	    <j:set var="webapp.build.webinf" value="target/${appname}/WEB-INF"/>
+	
+	    <delete file="${maven.build.dir}/${appname}.war" />
+	
+	    <war warfile="${maven.build.dir}/${appname}.war"
+	         webxml="${maven.war.webxml}">
+	
+	      <!-- we include classes and libs explicitly with the lib and classes tag below.
+	           The web.xml file is defined by the webxml attribute above 
+	      -->
+	
+	      <fileset dir="${webapp.build}">
+	        <exclude name="WEB-INF/lib/**"/>
+	        <exclude name="WEB-INF/classes/**"/>
+	        <exclude name="WEB-INF/web.xml"/>
+	      </fileset>
+	
+	      <lib dir="${webapp.build.lib}"/>
+	
+	      <classes dir="${webapp.build.classes}">
+	        <include name="${maven.war.classes.includes}" />
+	        <exclude name="${maven.war.classes.excludes}" />
+	      </classes>
+	
+	      <metainf dir="${basedir}">
+	        <include name="LICENSE.txt"/>
+	      </metainf>
+	
+	      <manifest>
+	        <attribute name="Built-By" value="${user.name}" />
+	        <section name="${pom.package}">
+	          <attribute name="Specification-Title" value="${appname}" />
+	          <attribute name="Specification-Version"
+	                     value="${pom.currentVersion}" />
+	          <attribute name="Specification-Vendor"
+	                     value="${pom.organization.name}" />
+	          <attribute name="Implementation-Title"
+	                     value="${pom.package}" />
+	          <attribute name="Implementation-Version"
+	                     value="${pom.currentVersion}" />
+	          <attribute name="Implementation-Vendor"
+	                     value="${pom.organization.name}" />
+	          <attribute name="Build-Jdk"
+	                     value="${java.version}"/>
+	        </section>
+	      </manifest>
+	    </war>
+    </goal>     
+       
+    <goal name="assemble-app-jar">
+    	<!-- This assembles the generated class files into an application jar then puts that into an Plexus appserver jar -->
+    	<!-- except there is not enough info on how this all goes together, I don't have the time and they use Maven 2 :( -->
+        <attainGoal name="assemble-app"/>
+    </goal> 
+       
+    <goal name="assemble-app">
+    	<j:set var="excludefiles" value="openide-util,jaxen,mdr,maven-jpox-plugin,commons-jelly,commons-jelly-tags-ant,commons-jelly-tags-define,commons-jelly-tags-util,commons-jelly-tags-xml,commons-jexl,commons-el,,dom4j,ant,xpp3,commons-beanutils,generama,xdoclet,xdoclet-plugin-webwork,qdox,picocontainer,nanocontainer,nanocontainer-ant,org-netbeans-api-mdr,org-netbeans-modules-jmiutils,xstream,jmi,jmiuml14di,jmiutils,common-jelly-tags-define,common-jelly-tags-ant,common-jelly-tags-util,commons-lang,junit,dentaku-metadata-service,dentaku-services,gentaku,xml-apis,xerces,jdom,jsp-api,xdoclet-plugin-qtags,antlr,dentaku-qtags-cartridge,gentaku-summit-cartridge,dentaku-cartridge-generator,dentaku-event-cartridge,dentaku-persistence-service"/>
+    	<deploy:copy-deps todir="${basedir}/app/lib" excludes="${excludefiles}"/>
+	</goal>    
+</project>

@@ -1,0 +1,45 @@
+<project default="doIt">
+    <taskdef name="poo" classname="org.dentaku.gentaku.ant.TestPlexusTask">
+        <classpath>
+            <pathelement location="C:/dev/dentaku/gentaku/target/gentaku-0.9-SNAPSHOT.jar"/>
+            <pathelement location="C:/Docume~1/topping/.maven/repository/plexus/jars/plexus-container-default-1.0-alpha-2-SNAPSHOT.jar"/>
+            <pathelement location="C:/Docume~1/topping/.maven/repository/plexus/jars/plexus-utils-1.0-alpha-1-SNAPSHOT.jar"/>
+            <pathelement location="C:/Docume~1/topping/.maven/repository/classworlds/jars/classworlds-1.1-alpha-1.jar"/>
+        </classpath>
+    </taskdef>
+    <target name="doIt">
+        <poo>
+                <plexus>
+                    <logging>
+                        <implementation>org.codehaus.plexus.logging.ConsoleLoggerManager</implementation>
+                        <logger>
+                            <threshold>DEBUG</threshold>
+                        </logger>
+                    </logging>
+                    <components>
+                        <component>
+                            <role>org.dentaku.services.metadata.JMICapableMetadataProvider</role>
+                            <implementation>org.dentaku.services.metadata.QDoxMetadataProvider</implementation>
+                            <requirements>
+                                <requirement>
+                                    <role>org.dentaku.services.metadata.RepositoryReader</role>
+                                </requirement>
+                            </requirements>
+                        </component>
+                        <component>
+                            <role>org.dentaku.services.metadata.RepositoryReader</role>
+                            <implementation>org.dentaku.services.metadata.nbmdr.MagicDrawRepositoryReader</implementation>
+                            <configuration>
+                                <model>dentaku-metadata-service/src/test/uml/TestModel.xml.zip</model>
+                                <search-paths>
+                                    <path-element>
+                                        <id>gentaku/src/uml</id>
+                                    </path-element>
+                                </search-paths>
+                            </configuration>
+                        </component>
+                    </components>
+                </plexus>
+        </poo>
+    </target>
+</project>

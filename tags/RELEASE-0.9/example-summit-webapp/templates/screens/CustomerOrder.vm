@@ -1,0 +1,145 @@
+## Get the collection of existing IndividualCustomer, and 
+## make the first IndividualCustomer selected, if no IndividualCustomer
+## has already been selected
+#set ( $IndividualCustomers = $CustomerOrderPullTool.getAllIndividualCustomer() )
+#if (!$selectedIndividualCustomer && ($IndividualCustomers.size() > 0) )
+#set ( $selectedIndividualCustomer = $IndividualCustomers.get(0) )
+#end
+	        #set ($IndividualCustomerNames = ["IndividualId"] )
+#set ( $selectedIndividualCustomerId = "#buildKey($IndividualCustomerNames $selectedIndividualCustomer)" )
+#set ( $QuantityList = ["3", "5", "2", "4", "1"] )
+#set ( $TaxRateList = ["22.5", "17.5", "10"] )
+## Get the collection of existing Order, and 
+## make the first Order selected, if no Order
+## has already been selected
+#set ( $Orders = $CustomerOrderPullTool.getOrderForIndividualCustomer("$selectedIndividualCustomerId") )
+#if (!$selectedOrder && ($Orders.size()>0) )
+	#set ( $selectedOrder = $Orders.get(0) )
+#end
+	        #set ($OrderNames = ["OrderId"] )
+#set ( $selectedOrderId = "#buildKey($OrderNames $selectedOrder)" )
+## Get the collection of existing OrderLine, and 
+## make the first OrderLine selected, if no OrderLine
+## has already been selected
+#set ( $OrderLines = $CustomerOrderPullTool.getOrderLineForOrder("$selectedOrderId") )
+#if (!$selectedOrderLine && ($OrderLines.size()>0) )
+	#set ( $selectedOrderLine = $OrderLines.get(0) )
+#end
+	        #set ($OrderLineNames = ["OrderLineId"] )
+#set ( $selectedOrderLineId = "#buildKey($OrderLineNames $selectedOrderLine)" )
+
+<form method="post" action="$link.setPage('CustomerOrder.vm').setAction('CrudCustomerOrder')">
+
+	<input type="hidden" name="IndividualCustomerId" value="$IndividualCustomerId"/>
+	<input type="hidden" name="selectiontype" value="initial"/>
+	<table width="$ui.screenTableWidth" cellspacing="5">
+		<tr>
+		    #LabelCell ("FirstName")
+	        #set ($IndividualCustomerDisp = ["FirstName", "Surname"] )
+            #ViewSelectorName ( "3" "$IndividualCustomerDisp" "$IndividualCustomers" "$!selectedIndividualCustomer" "$IndividualCustomerNames" "")
+		</tr>
+ 		<tr>
+		    #LabelCell ("First Name")
+    	    #TextWidget ( "1" "FirstName" "$!selectedIndividualCustomer.FirstName" "")
+ 		    #LabelCell ("Surname")
+    	    #TextWidget ( "1" "Surname" "$!selectedIndividualCustomer.Surname" "")
+		</tr>
+ 		<tr>
+		    <div class="divtestclass">
+		    #LabelCellClass ("labelbold" "Comment")
+            #TextAreaWidget ( "2"  "Comment" "$!selectedIndividualCustomer.Comment" "50" "")
+ 	        <td></td>
+	    </tr>
+		<tr>
+		    #LabelCell ("Credit checked OK")
+            #CheckboxWidget ( "1" "IsCreditWorthy" "$!selectedIndividualCustomer.IsCreditWorthy" "")
+ 		    #LabelCell ("First registered")
+    	    #TextWidget ( "1" "FirstRegistered" "$!selectedIndividualCustomer.FirstRegistered" "superdate")
+		</tr>
+ 		<tr>
+		    #LabelCell ("Email")
+    	    #TextWidget ( "1" "EmailAddress" "$!selectedIndividualCustomer.EmailAddress" "")
+			</div>
+  	        <td colspan="2"></td>
+	    </tr>
+	    <tr>
+		    #LabelCell ("")
+	        #CrudButtons("3" "IndividualCustomer")
+	    </tr>
+	    <input type="hidden" name="OrderId" value="$!selectedOrderId"/>
+		<tr>
+		    #LabelCell ("OrderId")
+            #ViewSelector ( "1" "OrderId" "$Orders" "$!selectedOrder.OrderId" "")
+ 		    #LabelCell ("Date Received")
+    	    #TextWidget ( "1" "DateReceived" "$!selectedOrder.DateReceived" "")
+		</tr>
+ 		<tr>
+		    #LabelCell ("Date Dispatched")
+    	    #TextWidget ( "1" "DateDispatched" "$!selectedOrder.DateDispatched" "")
+ 		    #LabelCell ("Ex Tax Total")
+    	    #TextWidget ( "1" "ExTaxTotal" "$!selectedOrder.ExTaxTotal" "BoldEdit")
+		</tr>
+ 		<tr>
+		    #LabelCellClass ("BoldLabel" "VAT Total")
+    	    #TextWidget ( "1" "VATTotal" "$!selectedOrder.VATTotal" "")
+ 		    #LabelCell ("Order total")
+    	    #TextWidget ( "1" "OrderTotal" "$!selectedOrder.OrderTotal" "")
+		</tr>
+  	    <tr>
+			#LabelCell ("")
+	        #CrudButtons("3" "Order")
+		</tr>
+		<tr>
+			#LabelCellW ("OrderLine" "$ui.screenLabelWidth")
+	        <td colspan="1">
+			    <table cellpadding="3" border="2">
+				    <tr>
+				        <td><b>Id</b></td>
+				        <td><b>Unit price</b></td>
+				        <td><b>Description</b></td>
+				        <td><b>Quantity</b></td>
+				        <td><b>Tax %</b></td>
+				        <td><b>Item total</b></td>
+				    </tr>
+				    #foreach ($aOrderLine in $OrderLines)
+				    <tr>
+					    <td>${aOrderLine.OrderLineId}</td>
+					    <td>${aOrderLine.UnitPrice}</td>
+					    <td>${aOrderLine.ItemDescription}</td>
+					    <td>${aOrderLine.Quantity}</td>
+					    <td>${aOrderLine.TaxRate}</td>
+					    <td>${aOrderLine.ItemTotal}</td>
+				    </tr>
+				    #end
+			    </table>
+		    </td>
+	    </tr>
+	    <input type="hidden" name="OrderLineId" value="$!selectedOrderLineId"/>
+		<tr>
+		    #LabelCell ("OrderLineId")
+            #ViewSelector ( "1" "OrderLineId" "$OrderLines" "$!selectedOrderLine.OrderLineId" "")
+ 		    #LabelCell ("Unit Price")
+    	    #TextWidget ( "1" "UnitPrice" "$!selectedOrderLine.UnitPrice" "")
+		</tr>
+ 		<tr>
+		    #LabelCell ("Quantity")
+            #ViewList ( "1" "Quantity" $QuantityList "$!selectedOrderLine.Quantity" false 1 "")
+ 	        <td></td>
+	    </tr>
+		<tr>
+		    #LabelCell ("Decription")
+    	    #TextWidget ( "2" "ItemDescription" "$!selectedOrderLine.ItemDescription" "")
+ 	        <td></td>
+	    </tr>
+		<tr>
+		    #LabelCell ("Tax rate")
+            #ViewList ( "1" "TaxRate" $TaxRateList "$!selectedOrderLine.TaxRate" false 1 "")
+ 		    #LabelCell ("Item total")
+    	    #TextWidget ( "1" "ItemTotal" "$!selectedOrderLine.ItemTotal" "")
+		</tr>
+  	    <tr>
+			#LabelCell ("")
+	        #CrudButtons("3" "OrderLine")
+		</tr>
+	</table>
+</form>

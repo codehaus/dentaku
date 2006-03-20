@@ -1,0 +1,356 @@
+#set( $Q = '"' )
+   
+#macro( fetchselector $classView  )
+		#set ( $arraycount = 0 )
+
+		PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+	    String filter = new String(); 
+		#foreach($selectorname in ${classView.selectorNames})
+			#set ( $typecount = 0 )
+			#foreach($typeentry in ${classView.selectorTypes})
+				#if($typecount == $arraycount)
+					#set ( $type = $typeentry )
+				#end
+				#set ( $typecount = $typecount+1 )
+			#end
+			#if($arraycount == 0)
+
+		filter = $Q${selectorname} == ${Q} + aData.getParameters().getString(${Q}${selectorname}${Q});
+			#else
+
+		filter += $Q && ${selectorname} == ${Q} + aData.getParameters().getString(${Q}${selectorname}${Q});
+			#end
+			#set ( $arraycount =  $arraycount + 1 )
+		#end
+
+		Query q = pm.newQuery (${classView.entityclassname}.class, filter);
+		// Have to assume there is only one
+		q.setUnique (true);
+		${classView.entityclassname} aObject = (${classView.entityclassname}) q.execute(); 
+#end
+ 
+/**
+ * $dontedit
+ * Be nice to supply a base class and allow user to extend, 
+ * but most extensions can be managed by adding valves to pipeline 
+ */
+package ${metadata.packageName}.action;
+
+#set ( $entitieswithcrud = $SummitHelper.getCrudList() )
+#set ( $viewrefclasses = $rootClassView.getAllDependentClassEntity() )
+
+
+import org.codehaus.dentaku.summit.actions.CrudAction;
+import ${metadata.packageName}.model.*;
+
+import org.codehaus.dentaku.summit.parameters.DentakuSummitParameterParser;
+import org.codehaus.plexus.summit.rundata.RunData;
+import org.codehaus.plexus.summit.parameters.RequestParameters;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.jdo.JDOService;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.Transaction;
+import javax.jdo.Query;
+
+import org.apache.velocity.context.Context;
+
+/**
+ * Insert/Update/Delete instances of domain records
+ * then populate the context ready to be rendered by the Velocity page.
+ */
+public class Crud${ScreenName} extends CrudAction {
+
+	private JDOService jdos;
+
+    public Crud${ScreenName}() {
+		try{
+			jdos = ( JDOService ) lookup( JDOService.ROLE );
+		} catch (ComponentLookupException e) {
+			getLogger().error(${Q}Lookup of the JDOService component failed, check components.xml${Q});
+		}
+	}
+
+#foreach($viewclass in $entitieswithcrud)
+    /**
+     * Persist a new instance of ${viewclass.entityclassname}
+     */
+    public void doCreate${viewclass.entityclassname}(RunData aData, Context aContext) {
+		doPreAction(aData, aContext);
+		if(aContext.get(${Q}errMessage${Q}) !=null)
+			populateContext(aData, aContext);
+        try {
+            logParameters(aData, ${Q}Crud${viewclass.entityclassname}.create()${Q});
+
+            ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
+
+            // setProperties throws if the id has not been initialised,
+            // as will occur if nothing has been previously selected from
+            // the drop-down list (e.g. when no entities exist in the
+            // record).
+            RequestParameters params = aData.getParameters();
+			DentakuSummitParameterParser parser = new DentakuSummitParameterParser(params);
+            parser.setProperties(instance);
+
+			PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+			Transaction tx=pm.currentTransaction();
+			try {
+                tx.begin();       
+    			pm.makePersistent(instance);
+                tx.commit();
+            }
+            finally
+            {
+                if (tx.isActive()) {
+                    tx.rollback();
+                }
+                pm.close();
+			}
+    		doPostAction(aData, aContext);
+    		if(aContext.get(${Q}errMessage${Q}) != null)
+    			populateContext(aData, aContext);
+			try {
+#foreach ($parentclass in ${viewclass.ancestors})
+		        ${parentclass.entityclassname} a${parentclass.entityclassname} = new ${parentclass.entityclassname}();
+			    parser.setProperties(a${parentclass.entityclassname});
+	            populateContextWithSelected${parentclass.entityclassname}(a${parentclass.entityclassname}, aData, aContext);
+#end
+				populateContextWithSelected${viewclass.entityclassname}(instance, aData, aContext);
+            } catch (Exception e) {
+                handleException(aContext, ${Q}Crud${ScreenName}.doCreate${viewclass.entityclassname}()${Q},
+                    ${Q}Unable to populate context with ${viewclass.entityclassname} details${Q}, e);
+            }
+        } catch (Exception e) {
+            handleException(aContext, ${Q}Crud${ScreenName}.doCreate()${Q},
+                ${Q}Unable to create ${viewclass.entityclassname}${Q}, e);
+        }
+    }
+
+
+    /**
+     * Update an existing instance of ${viewclass.entityclassname}
+     */
+    public void doUpdate${viewclass.entityclassname}(RunData aData, Context aContext) {
+		doPreAction(aData, aContext);
+		if(aContext.get(${Q}errMessage${Q}) !=null)
+			populateContext(aData, aContext);
+        try {
+            logParameters(aData, ${Q}${viewclass.entityclassname}.update()${Q});
+
+            ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
+            RequestParameters params = aData.getParameters();
+			DentakuSummitParameterParser parser = new DentakuSummitParameterParser(params);
+            parser.setProperties(instance);
+
+			PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+			Transaction tx=pm.currentTransaction();
+			try {
+                tx.begin();       
+    			pm.makePersistent(instance);
+                tx.commit();
+            }
+            finally
+            {
+                if (tx.isActive()) {
+                    tx.rollback();
+                }
+                pm.close();
+			}
+
+    		doPostAction(aData, aContext);
+    		if(aContext.get(${Q}errMessage${Q}) != null)
+    			populateContext(aData, aContext);
+
+			try {
+#foreach ($parentclass in ${viewclass.ancestors})
+		        ${parentclass.entityclassname} a${parentclass.entityclassname} = new ${parentclass.entityclassname}();
+				parser.setProperties(a${parentclass.entityclassname});
+	            populateContextWithSelected${parentclass.entityclassname}(a${parentclass.entityclassname}, aData, aContext);
+#end
+				populateContextWithSelected${viewclass.entityclassname}(instance, aData, aContext);
+	        } catch (Exception e) {
+                handleException(aContext, ${Q}Crud${ScreenName}.doUpdate${viewclass.entityclassname}()${Q},
+                    ${Q}Unable to populate context with instance details${Q}, e);
+            }
+        } catch (Exception e) {
+            handleException(aContext, ${Q}Crud${ScreenName}.doUpdate${viewclass.entityclassname}()${Q},
+                ${Q}Unable to update instance${Q}, e);
+        }
+    }
+
+    /**
+     * Delete an instance of ${viewclass.entityclassname}
+     */
+    public void doDelete${viewclass.entityclassname}(RunData aData, Context aContext) {
+		doPreAction(aData, aContext);
+		if(aContext.get(${Q}errMessage${Q}) !=null)
+			populateContext(aData, aContext);
+        try {
+            logParameters(aData, ${Q}Crud${viewclass.entityclassname}.delete()${Q});
+
+            ${viewclass.entityclassname} instance = new ${viewclass.entityclassname}();
+            RequestParameters params = aData.getParameters();
+			DentakuSummitParameterParser parser = new DentakuSummitParameterParser(params);
+            parser.setProperties(instance);
+
+			PersistenceManager pm = jdos.getPersistenceManagerFactory().getPersistenceManager();
+			Transaction tx=pm.currentTransaction();
+			try {
+                tx.begin();       
+    			pm.deletePersistent(instance);
+                tx.commit();
+            }
+            finally
+            {
+                if (tx.isActive()) {
+                    tx.rollback();
+                }
+                pm.close();
+			}
+    		doPostAction(aData, aContext);
+    		if(aContext.get(${Q}errMessage${Q}) != null)
+    			populateContext(aData, aContext);
+
+            contextMessage(aContext,
+                ${Q}Confirmed deletion of record named ${viewclass.entityclassname}${Q});
+			try{
+#foreach ($parentclass in ${viewclass.ancestors})
+		        ${parentclass.entityclassname} a${parentclass.entityclassname} = new ${parentclass.entityclassname}();
+				parser.setProperties(a${parentclass.entityclassname});
+	            populateContextWithSelected${parentclass.entityclassname}(a${parentclass.entityclassname}, aData, aContext);
+#end
+	            populateContextWith${viewclass.entityclassname}(aData, aContext);
+	        } catch (Exception e) {
+                handleException(aContext, ${Q}Crud${ScreenName}.doDelete${viewclass.entityclassname}()${Q},
+                    ${Q}Unable to populate context with instance details${Q}, e);
+            }
+		} catch (Exception e) {
+            handleException(aContext, ${Q}Crud${ScreenName}.doDelete${viewclass.entityclassname}()${Q},
+                ${Q}Unable to delete record${Q}, e);
+            populateContext(aData, aContext);
+        }
+    }
+#end
+
+    /**
+     * Invoked when a form is submitted without a specific doPerform action.
+     *
+     * This action is fired when a specific record is selected in a HTML select
+     * box, and serves to populate the aContext with the object representing
+     * the record. The template then renders the page with the objects fields.
+     */
+    public void doPerform(RunData aData, Context aContext) {
+		doPreAction(aData, aContext);
+		if(aContext.get(${Q}errMessage${Q}) !=null)
+			populateContext(aData, aContext);
+        logParameters(aData, ${Q}Crud${ScreenName}.doPerform()${Q});
+
+        String selectionType = aData.getParameters().getString(${Q}selectionType${Q});
+
+        /*
+           This method is invoked when the user modifies a drop-down list.
+           Not possible to invoke a specific submit input from javascript
+           (e.g. like doSubmit_blah), so instead the javascript sets a
+           hidden parameter to identify which drop-down was used.
+         */
+        if (selectionType.equals(${Q}select${rootClassView.entityclassname}${Q})) {
+            // The user has updated the ${rootClassView.entityclassname} list
+            // In this case we only populate the context
+            // with the selected rootselectable type, and effectively
+            // remove all other selections from the context
+            populateContextWith${rootClassView.entityclassname}(aData, aContext);
+        } 
+#foreach($viewrefclass1 in $viewrefclasses)
+		else if (selectionType.equals(${Q}selected${viewrefclass1.entityclassname}${Q})) {
+            // An event has originated from the ${viewrefclass1.entityclassname} drop-down
+            // In this case, we want to populate the context with
+            // the selection down to the ${viewrefclass1.entityclassname} lists,
+            // but not beyond, since these will be invalid now
+            // that a new ${viewrefclass1.entityclassname} has been chosen.
+            populateContextWith${viewrefclass1.entityclassname}(aData, aContext);
+        } 
+#end
+		doPostAction(aData, aContext);
+		if(aContext.get(${Q}errMessage${Q}) != null)
+			populateContext(aData, aContext);
+	}
+    /**
+     * The selector attribute should always reside in the context so that drop-down
+     * lists can be populated by a pull tool
+     */
+    protected void populateContextWith${rootClassView.entityclassname}(RunData aData, Context aContext) {
+		#fetchselector($rootClassView)
+        if (aObject != null) {
+            aContext.put(${Q}selected${rootClassView.entityclassname}${Q}, aObject);
+            //${rootClassView.entityclassname}.setSelectedObject(aObject);
+        }
+    }
+	protected void populateContextWithSelected${rootClassView.entityclassname}(
+		${rootClassView.entityclassname} instance, RunData aData, Context aContext) {
+		// Updated root object and currently selected child objects put into RunData
+        if (instance != null) {
+            aContext.put(${Q}selected${rootClassView.entityclassname}${Q}, instance);
+            //${rootClassView.entityclassname}.setSelectedObject(instance);
+        }
+#set ( ${childclasses} = ${rootClassView.children} )
+#foreach ( ${childclass} in ${childclasses} )
+		${childclass.entityclassname} instance = new ${childclass.entityclassname}();
+        RequestParameter params = aData.getParameters();
+		DentakuSummitParameterParser parser = new DentakuSummitParameterParser(params);
+		parser.setProperties(instance);
+        populateContextWithSelected${childclass.entityclassname}(instance, aData, aContext);
+#end
+
+	}
+
+#foreach($viewrefclass2 in $viewrefclasses)
+    /**
+     * The selector attribute should always reside in the context so that drop-down
+     * lists can be populated by a pull tool
+     */
+    protected void populateContextWith${viewrefclass2.entityclassname}(RunData aData, Context aContext) {
+		#fetchselector($viewrefclass2)
+        if (aObject != null) {
+            aContext.put(${Q}selected${viewrefclass2.entityclassname}${Q}, aObject);
+            //${viewrefclass2.entityclassname}.setSelectedObject(aObject);
+        }
+    }
+    protected void populateContextWithSelected${viewrefclass2.entityclassname}(${viewrefclass2.entityclassname} instance, RunData aData, Context aContext) {
+        if (instance != null) {
+            aContext.put(${Q}selected${viewrefclass2.entityclassname}${Q}, instance);
+            //${viewrefclass2.entityclassname}.setSelectedObject(instance);
+        }
+    }
+#end
+
+    /**
+     * Normally used for recovering the screen values after an exception
+	 * pays attention to current context.
+	 * Returns objects currently in context along with the error message
+     */
+    protected void populateContext(RunData aData, Context aContext) {
+        // This could be done with javascript, but stick with the convention
+        RequestParameters params = aData.getParameters();
+		DentakuSummitParameterParser parser = new DentakuSummitParameterParser(params);
+		${rootClassView.entityclassname} a${rootClassView.entityclassname} = new ${rootClassView.entityclassname}();
+		try {
+			parser.setProperties(a${rootClassView.entityclassname});
+		} catch (Exception e) {
+			handleException(aContext, ${Q}Crud${ScreenName}.populateContext()${Q},
+                ${Q}Unable to populate context with ${rootClassView.entityclassname}${Q}, e);
+			return;
+		}
+        populateContextWithSelected${rootClassView.entityclassname}(a${rootClassView.entityclassname}, aData, aContext);
+#foreach ($viewrefclass3 in $viewrefclasses)
+		${viewrefclass3.entityclassname} a${viewrefclass3.entityclassname} = new ${viewrefclass3.entityclassname}();
+		try {
+			parser.setProperties(a${viewrefclass3.entityclassname});
+		} catch (Exception e) {
+			handleException(aContext, ${Q}Crud${ScreenName}.populateContext()${Q},
+                ${Q}Unable to populate context with ${viewrefclass3.entityclassname}${Q}, e);
+			return;
+		}
+        populateContextWithSelected${viewrefclass3.entityclassname}(a${viewrefclass3.entityclassname}, aData, aContext);
+#end
+    }
+}

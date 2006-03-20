@@ -1,0 +1,31 @@
+/**
+ * $dontedit
+ */
+package ${plugin.getDestinationPackage($class)};
+
+public abstract class ${class.name}EventBase extends org.dentaku.foundation.event.AbstractEvent {
+    public ${class.name}EventBase() {
+    }
+    
+    public abstract boolean execute(Object o) throws Exception;
+
+    protected ${class.name}EventBase(org.dentaku.foundation.output.OutputContext response) {
+        super(response);
+    }
+
+#foreach ( $targetEnd in $class.targetEnds )
+#if ( ${targetEnd.isClass()} == true)
+#set ($targetFQN = $targetEnd.participant.fullyQualifiedName)
+#set ($targetUQN = $targetEnd.name)
+    private ${targetFQN} ${targetUQN};
+
+    public ${targetFQN} get${plugin.upperCaseFirstLetter(${targetEnd.name})}() {
+        return this.$targetUQN;
+    }
+
+    public void set${plugin.upperCaseFirstLetter(${targetUQN})}(${targetFQN} ${targetUQN}) {
+        this.$targetUQN = $targetUQN;
+    }
+#end
+#end
+}

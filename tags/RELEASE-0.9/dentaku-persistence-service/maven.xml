@@ -1,0 +1,24 @@
+<project default="dentaku-dist" xmlns:m="jelly:maven">
+
+    <goal name="dentaku-dist">
+        <attainGoal name="jar:install-snapshot"/>
+    </goal>
+
+    <goal name="dentaku:test-gentaku">
+        <taskdef name="gentaku" classname="org.dentaku.gentaku.ant.GentakuTask" classpathref="maven.dependency.classpath"/>
+        <gentaku model="${dentaku.rootdir}/dentaku-metadata-service/src/test/uml/TestModel.xml.zip">
+            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityBasePlugin" destdir="${dentaku.test.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.hibernate.EntityFactoryPlugin" destdir="${dentaku.test.src}"/>
+            <component classname="org.dentaku.gentaku.cartridge.entity.PlexusEntityFactoryConfiguration" destdir="${dentaku.test.src}/META-INF/plexus" destinationfilename="components.xml"/>
+       </gentaku>
+        <path id="maven.test.compile.src.set">
+            <pathelement location="src/test/java"/>
+            <pathelement location="${dentaku.test.src}"/>
+        </path>
+    </goal>
+
+    <preGoal name="test:compile">
+        <attainGoal name="dentaku:test-gentaku"/>
+    </preGoal>
+
+</project>

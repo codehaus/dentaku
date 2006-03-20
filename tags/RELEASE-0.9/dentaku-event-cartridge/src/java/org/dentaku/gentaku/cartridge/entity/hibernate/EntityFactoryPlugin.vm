@@ -1,0 +1,156 @@
+/*
+ * $dontedit
+ */
+package ${metadata.packageName};
+
+import org.dentaku.services.persistence.PersistenceException;
+import org.dentaku.services.persistence.PersistenceFactory;
+import org.dentaku.services.persistence.PersistenceManager;
+
+/**
+ * <p>
+ * Factory class.
+ * Is able to find and create objects of type ${class.name}.
+ * Those can be described as follows:
+ * </p>
+#set ($tablename = $plugin.toDatabaseAttributeName(${class.name}, "_"))
+#foreach ( $tgv in $class.taggedValues )
+#if ($tgv.tag != "documentation")
+#if ($tgv.tag == "---")
+    #set ($tag = "")
+#else
+    #set ($tag = $tgv.tag)
+#end
+ * $tag    $tgv.value
+#end
+#end
+ *
+ */
+public class ${class.name}Factory implements PersistenceFactory {
+    protected PersistenceManager pm = null;
+
+    public void setup(PersistenceManager pm) {
+        this.pm = pm;
+    }
+
+   // ---------------- create methods --------------------
+
+   /**
+    * Creates a null ${class.name} object.
+    * @return Object  the created ${class.name}
+    */
+    public org.dentaku.services.persistence.Entity create() throws PersistenceException {
+#if ( $class.isAbstract() == false)
+        return new ${class.name}();
+#else
+        throw new PersistenceException("Can't instantiate abstract object");
+#end
+    }
+
+   /**
+    * Clone the object.
+    * @return ${class.name} the created object
+    */
+    public org.dentaku.services.persistence.Entity create(Object src) throws PersistenceException {
+#if ( $class.isAbstract() == false)
+        ${class.name} source = (${class.name})src;
+        ${class.name} object = new ${class.name}();
+
+#foreach ( $att in $class.attributes)
+#if (!$plugin.matchesStereotype($att, "PrimaryKey"))
+#set ($attname =  ${plugin.fromDatabaseAttributeName(${att.name}, "_")})
+        object.set${plugin.upperCaseFirstLetter(${attname})} (source.get${plugin.upperCaseFirstLetter(${attname})}());
+#end
+#end
+        pm.saveOrUpdate(object);
+
+        return object;
+#else
+        throw new PersistenceException("Can't instantiate abstract object");
+#end
+    }
+
+    // ---------------- finder methods  ----------------------
+#set ($primKey = $class.primaryKeyAttribute)
+#set ($primKeyTypeName = $primKey.type.fullyQualifiedName)
+    /**
+     *
+     * Finds ${class.name} object by its primary key.
+     * In Hibernate, this is just a call to load().
+     *
+     */
+    public org.dentaku.services.persistence.Entity findByPrimaryKey (java.io.Serializable ${primKey.name}) throws PersistenceException {
+        return (org.dentaku.services.persistence.Entity)pm.load(${class.name}.class, ${primKey.name});
+    }
+
+#foreach ( $op in $class.operations)
+#if ($plugin.matchesStereotype($op, "FinderMethod"))
+#set ($returntype = $op.returnType.fullyQualifiedName)
+##
+#set ($parameterList = $op.typedParameterList)
+#if ($parameterList.length() == 0)
+#set ($parameters = "")
+#else
+#set ($parameters = "${parameterList}")
+#end
+##
+    /**
+     *
+     * Finds ${class.name} object(s) using a query.
+     * @todo: remove hibernate dependencies
+     */
+    $op.visibilityName $returntype ${op.name} ($parameters)
+        throws PersistenceException
+    {
+##
+#set($querystring = "")
+#set($querystring = $op.findTagValue("@gentaku.hibernate.query"))
+#if($querystring == "")
+#set($querystring = "from c in class ${class.fullyQualifiedName}")
+#if($op.parameters.size() > 0)
+#set($querystring = "${querystring} where")
+#foreach($prm in $op.parameters)
+#set($querystring="${querystring} c.$prm.name=?")
+#if($velocityCount != $op.parameters.size())
+#set($querystring = "${querystring} and")
+#end
+#end
+#end
+#end
+##
+        $returntype result = null;
+##
+        java.util.ArrayList types = new java.util.ArrayList();
+        java.util.ArrayList values = new java.util.ArrayList();
+#foreach($prm in $op.parameters)
+#set ($index = $velocityCount - 1)
+        types.add(net.sf.hibernate.Hibernate.${plugin.toUpperCase($prm.type.name)});
+        values.add(${prm.name});
+#end
+##
+        return pm.find("$querystring", null, null);
+    }
+
+#end##if stereotype=="FinderMethod"
+#end##foreach operation
+
+    // ---------------- filter methods  ----------------------
+#foreach ( $op in $class.operations)
+#if ($plugin.matchesStereotype($op.id, "FilterMethod"))
+#set ($returntype = $op.type.fullyQualifiedName)
+    /**
+     *
+     * Filter a collection.
+     * @todo: remove hibernate dependencies
+     */
+    $op.visibility java.util.Collection ${op.name} (java.util.Collection c) throws PersistenceException
+    {
+##
+#set($querystring = $op.findTagValue("@gentaku.hibernate.filter"))
+##
+        return pm.filter(c, "$querystring");
+    }
+
+#end##if stereotype=="FilterMethod"
+#end##foreach operation
+}

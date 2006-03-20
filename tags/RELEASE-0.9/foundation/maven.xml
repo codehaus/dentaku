@@ -1,0 +1,6 @@
+<project default="dentaku-dist" xmlns:m="jelly:maven">
+    <goal name="dentaku-dist">
+        <attainGoal name="ejb:install-snapshot"/>
+    </goal>
+    
+</project>

@@ -1,0 +1,14 @@
+/**
+ * This file should be edited for your local implementation
+ */
+#set( $class = $metadata )
+package ${plugin.getDestinationPackage($class)};
+
+public class ${class.name}WorkflowImpl extends ${class.name}Workflow {
+
+#foreach ($action in ${plugin.umlUtils.getWorkflowActions($class)} )
+    public void ${action.entry.name}() {
+        // put your implementation here
+    }
+#end
+}

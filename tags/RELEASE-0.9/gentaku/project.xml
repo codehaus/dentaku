@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+    <extend>${basedir}/../project.xml</extend>
+    <artifactId>gentaku</artifactId>
+    <name>gentaku</name>
+    <package>org.dentaku.gentaku.*</package>
+    <dependencies>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>dentaku-metadata-service</artifactId>
+            <version>SNAPSHOT</version>
+			<properties>
+				<eclipse.dependency>true</eclipse.dependency>
+			</properties>
+        </dependency>
+
+        <!-- Build/Test time only -->
+        <dependency>
+            <id>xmlunit</id>
+            <version>1.0</version>
+            <url></url>
+        </dependency>
+        <dependency>
+            <id>antlr</id>
+            <version>2.7.2</version>
+            <url>http://www.antlr.org/</url>
+        </dependency>
+        <dependency>
+            <id>junit</id>
+            <version>3.8.1</version>
+            <url></url>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <!-- Resources that are packaged up inside the JAR file -->
+        <resources>
+            <resource>
+                <directory>${basedir}/src/java</directory>
+                <includes>
+                    <include>**/*.jelly</include>
+                    <include>**/*.vm</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.dtd</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <!-- Unit test classes -->
+        <unitTest>
+            <includes>
+                <include>**/*Test.java</include>
+            </includes>
+            <resources>
+                <resource>
+                    <directory>${basedir}/src/test</directory>
+                    <includes>
+                        <include>**/*.java</include>
+                        <include>**/*.jelly</include>
+                        <include>**/*.vm</include>
+                        <include>**/*.xml</include>
+                        <include>**/*.properties</include>
+                    </includes>
+                </resource>
+            </resources>
+        </unitTest>
+    </build>
+</project>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<j:jelly xmlns:j="jelly:core" xmlns:jxml="jelly:xml" xmlns:d="jelly:define" xmlns:x="jelly:org.xdoclet.plugin.web.jelly.XdocletTaglib">
+    <plexus>
+        <components>
+            <j:forEach var="object" items="${metadata}">
+                <j:if test="${plugin.shouldGenerate(object)}">
+                    <j:set var="factoryName" value="${object.getFullyQualifiedName()}Factory"/>
+                    <component>
+                        <role>org.dentaku.services.persistence.PersistenceFactory</role>
+                        <implementation>${factoryName}</implementation>
+                        <role-hint>${factoryName}</role-hint>
+                    </component>
+                </j:if>
+            </j:forEach>
+        </components>
+    </plexus>
+</j:jelly>

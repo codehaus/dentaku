@@ -1,0 +1,6 @@
+<project default="dentaku-dist">
+
+    <goal name="dentaku-dist">
+        <attainGoal name="jar:install-snapshot"/>
+    </goal>
+</project>

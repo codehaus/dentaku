@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<project>
+    <extend>${basedir}/../project.xml</extend>
+    <artifactId>dentaku-ear</artifactId>
+    <name>Dentaku ear application</name>
+    <package>org.dentaku.*</package>
+    <dependencies>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>dentaku-foundation</artifactId>
+            <version>SNAPSHOT</version>
+            <type>ejb</type>
+            <properties>
+                <ear.bundle>true</ear.bundle>
+				<eclipse.dependency>true</eclipse.dependency>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>dentaku-services</artifactId>
+            <version>SNAPSHOT</version>
+            <type>ejb</type>
+            <properties>
+                <ear.bundle>true</ear.bundle>
+				<eclipse.dependency>true</eclipse.dependency>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>example-web</artifactId>
+            <version>SNAPSHOT</version>
+            <type>war</type>
+            <properties>
+                <ear.bundle>true</ear.bundle>
+                <ear.appxml.war.context-root>webapp</ear.appxml.war.context-root>
+				<eclipse.dependency>true</eclipse.dependency>
+            </properties>
+        </dependency>
+    </dependencies>
+</project>
